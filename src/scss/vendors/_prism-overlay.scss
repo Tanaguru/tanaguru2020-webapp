@@ -1,0 +1,8 @@
+/**
+ * Overload for Prism styles
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	white-space: normal;
+}

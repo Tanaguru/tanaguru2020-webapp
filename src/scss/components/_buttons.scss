@@ -1,0 +1,203 @@
+/**
+ * Button
+ *
+ * Don't forget hover and focus style #a11y
+ */
+
+// General Buttons Styles
+button,
+.btn {
+	display: inline-block;
+	margin: 0;
+	background-color: transparent;
+	color: inherit;
+	font-family: $font-stack-secondary;
+	line-height: 1;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+
+	&:focus,
+	&:active {
+		outline-style: dashed;
+		outline-width: 1px;
+	}
+}
+
+// Button default
+.btn--default {
+	padding: 1.2rem 2.4rem;
+	border: 1px solid $text-secondary;
+	border-radius: 2.8rem;
+	color: $text-secondary;
+	font-weight: 600;
+
+	&:hover,
+	&:focus {
+		background-color: $text-secondary;
+		color: $color-white;
+
+		.fill-color {
+			fill: $color-white;
+		}
+
+		.stroke-color {
+			stroke: $color-white;
+		}
+	}
+
+	&.btn--icon {
+		span {
+			margin-left: .5rem;
+		}
+	}
+}
+
+.btn--default-inverse {
+	padding: 1.2rem 2.4rem;
+	border: 1px solid $text-secondary;
+	border-radius: 2.8rem;
+	background-color: $text-secondary;
+	color: $color-white;
+	font-weight: 600;
+
+	.fill-color {
+		fill: $color-white;
+	}
+
+	.stroke-color {
+		stroke: $color-white;
+	}
+
+	&:hover,
+	&:focus {
+		background-color: $color-white;
+		color: $text-secondary;
+
+		.fill-color {
+			fill: $text-secondary;
+		}
+
+		.stroke-color {
+			stroke: $text-secondary;
+		}
+	}
+
+	&.btn--icon {
+		span {
+			margin-left: .5rem;
+		}
+	}
+}
+
+// Button with shadow
+.btn--shadow {
+	padding: 1.2rem 2.4rem;
+	border: 0;
+	border-radius: 2.8rem;
+	background-color: $bg-primary;
+	color: $text-secondary;
+	font-weight: 600;
+	box-shadow: 0 2px 16px 0 rgba(5, 90, 127, .1);
+
+	&:hover,
+	&:focus {
+		background-color: $text-secondary;
+		color: $color-white;
+
+		.fill-color {
+			fill: $color-white;
+		}
+
+		.stroke-color {
+			stroke: $color-white;
+		}
+	}
+}
+
+// Button with icon
+.btn--icon {
+	svg,
+	span {
+		vertical-align: middle;
+	}
+
+	> *:last-child {
+		margin-left: .5rem;
+	}
+}
+
+// Button with only text
+.btn--nude {
+	padding: 0;
+	border: 0;
+	color: $text-secondary;
+
+	&:hover,
+	&:focus {
+		span {
+			text-decoration: underline;
+		}
+	}
+}
+
+// Button clipboard (ex: "Copy XPath", "Copy CSS")
+.btn--clipboard {
+	padding: .8rem;
+	border: 1px solid $text-secondary;
+	border-radius: .4rem;
+	color: $text-secondary;
+	font-family: $font-stack-secondary;
+	font-size: 1.2rem;
+	font-weight: 600;
+
+	&:hover,
+	&:focus {
+		background-color: $text-secondary;
+		color: $color-white;
+
+		&:hover,
+		&:focus {
+			background-color: $text-secondary;
+			color: $color-white;
+
+			.fill-color {
+				fill: $color-white;
+			}
+
+			.stroke-color {
+				stroke: $color-white;
+			}
+		}
+	}
+}
+
+// Button to page top
+.btn--top {
+	max-width: 22.4rem;
+	text-align: left;
+
+	span,
+	svg {
+		display: inline-block;
+	}
+}
+
+// Button to hide and show (with arrow up/down icon)
+.btn--tab {
+	svg {
+		&.hide {
+			transform: rotate(-90deg);
+		}
+
+		&.show {
+			transform: rotate(90deg);
+		}
+	}
+}
+
+// Button logout
+.btn--logout {
+	color: $link-hover;
+	text-transform: uppercase;
+}

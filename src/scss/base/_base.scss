@@ -1,0 +1,23 @@
+/**
+ * Base
+ */
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background: $bg-primary;
+}
+
+iframe {
+	border: 0;
+}
+
+/* Force Firefox placeholder opacity to 1 #a11y
+   https://css-tricks.com/almanac/selectors/p/placeholder/ */
+::-moz-placeholder { // sass-lint:disable-line no-vendor-prefixes
+	opacity: 1;
+}

@@ -1,0 +1,47 @@
+/**
+ * Lists
+ */
+
+.actions-list {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: center;
+	margin: 0;
+	padding: 0;
+	font-family: $font-stack-secondary;
+	list-style: none;
+
+	.actions-list__item {
+		&:not(:first-child) {
+			padding-left: .6rem;
+
+			&::before {
+				display: inline-block;
+				width: .2rem;
+				height: 2rem;
+				margin-right: .8rem;
+				background-color: $border-secondary;
+				content: "";
+				vertical-align: middle;
+			}
+		}
+
+		.btn,
+		.link-independent {
+			vertical-align: middle;
+		}
+	}
+}
+
+
+.infos-list {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+
+	.infos-list__exergue {
+		color: $text-secondary;
+		font-family: $font-stack-secondary;
+		font-weight: 600;
+	}
+}

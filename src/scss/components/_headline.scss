@@ -1,0 +1,33 @@
+.headline {
+	&::before,
+	&::after {
+		display: block;
+		height: .4rem;
+		background-color: $color-shadow;
+	}
+
+	&::before {
+		content: none;
+
+		@media #{$media-md-viewport} {
+			width: 6.4rem;
+			margin-bottom: 4.6rem;
+			content: "";
+		}
+	}
+
+	&::after {
+		width: 6.4rem;
+		margin-top: .8rem;
+		content: "";
+
+		@media #{$media-md-viewport} {
+			width: 16rem;
+			margin-top: 4.6rem;
+		}
+	}
+
+	&.headline--top {
+		margin-top: 3.2rem;
+	}
+}

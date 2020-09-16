@@ -1,0 +1,18 @@
+/**
+ * Quotations
+ */
+
+/* Inline quotation */
+q {
+
+	&:lang(fr) {
+
+		&::before {
+			content: "« ";
+		}
+
+		&::after {
+			content: " »";
+		}
+	}
+}

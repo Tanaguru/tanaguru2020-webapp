@@ -1,0 +1,23 @@
+/*!
+Theme Name: Tanaguru Engine
+Author: Tanaguru
+Version: 1.0
+*/
+
+// Import abstracts files
+@import "src/scss/abstracts/all-abstracts";
+
+// Import vendors files
+@import "src/scss/vendors/all-vendors";
+
+// Import base files
+@import "src/scss/base/all-base";
+
+// Import components files
+@import "src/scss/components/all-components";
+
+// Import layout files
+@import "src/scss/layout/all-layout";
+
+// Import themes files
+@import "src/scss/themes/all-themes";

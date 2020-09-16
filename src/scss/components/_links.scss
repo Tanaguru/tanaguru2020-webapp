@@ -1,0 +1,120 @@
+/**
+ * Links
+ *
+ *   - Don't forget hover and focus style #a11y
+ *   - Don't remove the `text-decoration: underline;` by default but only when you need or some links will be forgotten
+ */
+
+a {
+	color: inherit;
+
+	&:focus,
+	&:active {
+		outline-style: dashed;
+		outline-width: 1px;
+	}
+}
+
+$link-border-style: solid;
+$link-border-width: 1px;
+
+.link-simple {
+	&:hover,
+	&:focus {
+		color: $link-hover;
+		text-decoration: none;
+	}
+
+	&.link-simple--icon {
+		text-decoration: none;
+
+		span,
+		svg {
+			vertical-align: middle;
+		}
+
+		> *:last-child {
+			margin-left: .5rem;
+		}
+
+		span {
+			text-decoration: underline;
+		}
+
+		&:hover,
+		&:focus {
+			span {
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+.link-independent {
+	color: $text-secondary;
+	font-family: $font-stack-secondary;
+	text-decoration: none;
+
+	&:hover,
+	&:focus {
+		text-decoration: underline;
+	}
+
+	&.link-independent--icon {
+		span,
+		svg {
+			vertical-align: middle;
+		}
+
+		> *:last-child {
+			margin-left: .5rem;
+		}
+
+		&:hover,
+		&:focus {
+			text-decoration: none;
+
+			span {
+				text-decoration: underline;
+			}
+		}
+	}
+}
+
+.link-accent {
+	color: $color-red;
+	text-decoration: none;
+
+	&:hover,
+	&:focus {
+		text-decoration: underline;
+	}
+
+	.fill-color {
+		fill: $color-red;
+	}
+
+	.stroke-color {
+		stroke: $color-red;
+	}
+
+	&.link-accent--icon {
+		span,
+		svg {
+			vertical-align: middle;
+		}
+
+		> *:last-child {
+			margin-left: .5rem;
+		}
+
+		&:hover,
+		&:focus {
+			text-decoration: none;
+
+			span {
+				text-decoration: underline;
+			}
+		}
+	}
+}

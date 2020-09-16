@@ -1,0 +1,57 @@
+/* Mixins */
+
+// Mixin to generate custom fieldsets
+// @params : $column-aside (width of aside column)
+// @params : $column-main (width of main column)
+@mixin custom-fieldset($column-aside, $column-main) {
+	.custom-fieldset {
+		padding: 0;
+		border: 0;
+
+		@media #{$media-md-viewport} {
+			display: flex;
+		}
+
+		.custom-fieldset__legend {
+			margin: 0;
+			color: $text-secondary;
+			font-weight: 600;
+
+			@media #{$media-md-viewport} {
+				flex: 0 0 $column-aside;
+			}
+		}
+
+		.custom-fieldset__content {
+			margin-bottom: 3.3rem;
+
+			@media #{$media-md-viewport} {
+				flex: 0 1 $column-main;
+			}
+		}
+	}
+}
+
+// Mixin to generate columns
+// @params : $column-left
+// @params : $column-right
+@mixin columns($column-left, $column-right) {
+	.columns {
+		@media #{$media-md-viewport} {
+			display: flex;
+			justify-content: space-between;
+		}
+
+		.column-left {
+			@media #{$media-md-viewport} {
+				flex: 0 0 $column-left;
+			}
+		}
+
+		.column-right {
+			@media #{$media-md-viewport} {
+				flex: 0 0 $column-right;
+			}
+		}
+	}
+}

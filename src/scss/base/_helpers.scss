@@ -1,0 +1,30 @@
+/**
+ * Helpers
+ */
+
+/* Unstyled lists */
+%list-unstyled {
+	margin: 0;
+	padding: 0;
+
+	li {
+
+		&::before {
+			display: none;
+		}
+	}
+}
+
+.list-unstyled {
+	@extend %list-unstyled;
+}
+
+/* Clearfix for floating elements */
+%clearfix {
+
+	&::after {
+		display: block;
+		clear: both;
+		content: "";
+	}
+}

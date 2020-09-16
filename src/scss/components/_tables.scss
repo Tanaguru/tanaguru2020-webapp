@@ -1,0 +1,108 @@
+/**
+ * Tables
+ */
+
+// Generic styles
+.table {
+	width: 100%;
+}
+
+// Specific tables
+.table--default {
+	border: 1px solid $border-secondary;
+	white-space: nowrap;
+	border-collapse: collapse;
+
+	thead {
+		background-color: rgba(5, 90, 127, .08);
+
+		th {
+			padding: .8rem 1.6rem;
+			border-right: 1px solid $border-secondary;
+			color: $text-secondary;
+			font-size: 1.8rem;
+			font-weight: 600;
+			text-align: left;
+		}
+	}
+
+	tr {
+		&:nth-child(even) {
+			background-color: rgba(5, 90, 127, .04);
+		}
+
+		th {
+			padding: 1.6rem;
+			border-right: 1px solid $border-secondary;
+			font-weight: 600;
+			text-align: left;
+		}
+
+		td {
+			padding: 1.6rem;
+			border-right: 1px solid $border-secondary;
+
+			&.td-actions {
+				> *:not(:last-child) {
+					margin-right: 1.6rem;
+				}
+			}
+		}
+	}
+}
+
+.table--tests {
+	border-collapse: collapse;
+
+	.td-test {
+		svg {
+			margin-right: 1.6rem;
+			vertical-align: middle;
+		}
+
+		span {
+			vertical-align: middle;
+		}
+	}
+}
+
+// Table container for responsive display
+// From: https://github.com/ffoodd/sseeeedd/blob/master/src/scss/base/_tables.scss#L44
+.table-container {
+	max-width: 100%;
+	background:
+	linear-gradient(to right, rgba(255, 255, 255, 1) 30%, rgba(255, 255, 255, 0)),
+	linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255 , 1) 70%) 0 100%,
+	radial-gradient(farthest-side at 0% 50%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)),
+	radial-gradient(farthest-side at 100% 50%, rgba(0, 0, 0 , .2), rgba(0, 0, 0, 0)) 0 100%;
+	background-attachment: local, local, scroll, scroll;
+	background-color: $bg-primary;
+	background-repeat: no-repeat;
+	background-position: 0 0, 100%, 0 0, 100%;
+	background-size: 2.5rem 100%, 2.5rem 100%, 1rem 100%, 1rem 100%;
+	overflow-x: auto;
+	overflow-y: hidden;
+}
+
+
+// Specific elements styles
+.td-right {
+	text-align: right;
+}
+
+.heading-hidden {
+	height: 1px;
+	border: 0;
+
+	th {
+		border: 0;
+
+		span {
+			position: absolute;
+			top: -10px;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+		}
+	}
+}

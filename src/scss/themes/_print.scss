@@ -1,0 +1,101 @@
+/**
+ * Print styles
+ *
+ * https://www.alsacreations.com/astuce/lire/1160-une-feuille-de-styles-de-base-pour-le-media-print.html
+ */
+
+// Property units adapted for printing are used
+// sass-lint:disable no-important no-color-literals property-units
+
+@media print {
+	body {
+		width: auto !important;
+		margin: auto !important;
+		background-color: #FFFFFF !important;
+		color: #000000 !important;
+		font-family: serif;
+		font-size: 12pt !important;
+	}
+
+	p,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	blockquote,
+	ul,
+	ol {
+		//margin: auto !important;
+		color: #000000 !important;
+		font-size: 12pt !important;
+	}
+
+	ul {
+		list-style-type: disc;
+
+		&::before {
+			display: none;
+		}
+	}
+
+	.print {
+		display: block; /* Displays elements with a `print` class */
+	}
+
+	p,
+	blockquote {
+		orphans: 3; /* No line alone at the bottom */
+		widows: 3; /* No line alone at the top */
+	}
+
+	blockquote,
+	ul,
+	ol {
+		page-break-inside: avoid; /* No break inside these elements */
+	}
+
+	h1 {
+		page-break-before: always; /* Each heading begins on a new page */
+	}
+
+	h1,
+	h2,
+	h3,
+	caption {
+		page-break-after: avoid; /* No page break after these elements */
+	}
+
+	a {
+		border: 0 !important;
+		color: #000000 !important;
+		text-decoration: underline !important;
+
+		&:not(.header-logo):not(.nav__username):not(.audit-list-infos__domain) {
+			&[href] {
+				&:after {
+					content: " (" attr(href) ")"; /* Displays URLs of links */
+					font-size: 10pt;
+
+				}
+			}
+		}
+	}
+
+	code[class*="language-"],
+	pre[class*="language-"] {
+		font-size: 10pt;
+	}
+
+	/* Hide common useless elements for print */
+	.banner,
+	.navbar,
+	.nav__picture,
+	.breadcrumb,
+	.footer__img,
+	.footer-menu,
+	.btn--top {
+		display: none !important;
+	}
+}

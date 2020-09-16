@@ -1,0 +1,10 @@
+.wrapper {
+	width: 100%;
+	max-width: $wrapper-width;
+	margin: 0 auto;
+	padding: 0 $wrapper-spacing-mobile;
+
+	@media #{$media-wrapper-viewport} {
+		padding: 0 $wrapper-spacing;
+	}
+}

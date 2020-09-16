@@ -1,0 +1,15 @@
+/**
+ * Separator
+ *
+ */
+
+.separator {
+	width: 100%;
+	margin: 0 auto;
+	border: 0;
+	border-top: 2px dashed $border-secondary;
+
+	&.separator--main {
+		max-width: calc(#{$wrapper-width} + 35.6rem);
+	}
+}

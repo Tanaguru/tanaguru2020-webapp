@@ -1,0 +1,97 @@
+/**
+ * Variables (except colors)
+ */
+
+/** ---------------------------------------------------------------------------
+ * Paths
+ */
+// How to use: url("#{$img-path}my-image.svg")
+
+$font-path: "/assets/fonts/";
+$img-path: "/assets/images/";
+
+
+/** ---------------------------------------------------------------------------
+ * Responsive variables (breakpoints & media queries)
+ */
+// How to use: @media #{$media-sm-viewport} { }
+
+// Breakpoints
+// --- Min variables ($screen-xs-min is 0 so we don't need it, right?)
+$screen-xs-min: 30em; // 480px
+$screen-sm-min: 40em; // 640px
+$screen-md-min: 50em; // 800px
+$screen-lg-min: 62em; // 992px
+$screen-wrapper-min: 70em; // 1120px : to match with $wrapper-width
+
+// --- Max variables - /!\ last resort only!
+$screen-xs-max: 39.99em; // 639px
+$screen-sm-max: 49.99em; // 799px
+$screen-md-max: 61.99em; // 991px
+
+// Media queries
+// --- Official media queries
+$media-xs-viewport: only screen and (min-width: #{$screen-xs-min});
+$media-sm-viewport: only screen and (min-width: #{$screen-sm-min});
+$media-md-viewport: only screen and (min-width: #{$screen-md-min});
+$media-lg-viewport: only screen and (min-width: #{$screen-lg-min});
+$media-wrapper-viewport: only screen and (min-width: #{$screen-wrapper-min});
+
+// --- Extra media queries - /!\ last resort only!
+$media-xs-screens-viewport: only screen and (max-width: #{$screen-xs-max}); // Media query to target mobile only
+$media-small-screens-viewport: only screen and (max-width: #{$screen-md-max}); // Media query to target small screens only
+
+
+/** ---------------------------------------------------------------------------
+ * Font stacks (font-family)
+ */
+
+$font-stack-base: "IBM Plex Sans", Arial, Helvetica, sans-serif;
+$font-stack-secondary: "Montserrat", Arial, Helvetica, sans-serif;
+$font-stack-code: "Courier New", Courier, monospace;
+
+
+/** ---------------------------------------------------------------------------
+ * Font sizes variables
+ */
+
+$medium-font-size: 1.8rem;
+$base-font-size: 1.6rem;
+$small-font-size: 1.4rem;
+
+$h1-font-size-desktop: 4.8rem;
+$h1-font-size-mobile: 2.6rem;
+
+$h2-font-size-desktop: 3.2rem;
+$h2-font-size-mobile: 2rem;
+
+$h3-font-size-desktop: 2.2rem;
+$h3-font-size-mobile: 1.8rem;
+
+$h4-font-size-desktop: 2rem;
+$h4-font-size-mobile: 1.7rem;
+
+$h5-font-size-desktop: 1.8rem;
+$h5-font-size-mobile: 1.6rem;
+
+$h6-font-size-desktop: 1.7rem;
+$h6-font-size-mobile: 1.5rem;
+
+/** ---------------------------------------------------------------------------
+ * Global wrapper
+ */
+
+$wrapper-width: 112rem;
+$wrapper-spacing: 0;
+$wrapper-spacing-mobile: 2.4rem;
+
+/** ---------------------------------------------------------------------------
+ * Layouts
+ */
+
+/**
+ * Audit results page - Layout for detailed results
+ */
+
+$left-column-mobile: 4.8rem;
+$left-column-desktop: 9.6rem;

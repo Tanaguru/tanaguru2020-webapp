@@ -1,0 +1,114 @@
+/**
+ * Typography
+ */
+
+html {
+	/* This font-size properties make 1rem = 10px to make styling easier
+	   The first one is for backward compatibility for IE */
+	font-size: 62.5%;
+	font-size: calc(1em * 0.625); // sass-lint:disable-line no-duplicate-properties
+}
+
+body {
+	color: $text-primary;
+	font-family: $font-stack-base;
+	font-size: $small-font-size;
+	font-weight: 400;
+	line-height: 2;
+
+	@media #{$media-md-viewport} {
+		font-size: $base-font-size
+	}
+}
+
+/* Headings */
+%h1-like {
+	color: $text-secondary;
+	font-family: $font-stack-secondary;
+	font-size: $h1-font-size-mobile;
+	font-weight: 600;
+	line-height: 1;
+
+	@media #{$media-md-viewport} {
+		font-size: $h1-font-size-desktop;
+	}
+}
+
+h1 {
+	@extend %h1-like;
+}
+
+%h2-like {
+	color: $text-secondary;
+	font-family: $font-stack-secondary;
+	font-size: $h2-font-size-mobile;
+	font-weight: 600;
+	line-height: 1.4;
+
+	@media #{$media-md-viewport} {
+		font-size: $h2-font-size-desktop;
+	}
+}
+
+h2,
+.h2-like {
+	@extend %h2-like;
+}
+
+%h3-like {
+	color: $text-secondary;
+	font-family: $font-stack-secondary;
+	font-size: $h3-font-size-mobile;
+	font-weight: 600;
+
+	@media #{$media-md-viewport} {
+		font-size: $h3-font-size-desktop;
+	}
+}
+
+h3 {
+	@extend %h3-like;
+}
+
+%h4-like {
+	font-family: $font-stack-secondary;
+	font-size: $h4-font-size-mobile;
+	font-weight: 500;
+
+	@media #{$media-md-viewport} {
+		font-size: $h4-font-size-desktop;
+	}
+}
+
+h4,
+.h4-like {
+	@extend %h4-like;
+}
+
+%h5-like {
+	font-size: $h5-font-size-mobile;
+	font-weight: 500;
+
+	@media #{$media-md-viewport} {
+		font-size: $h5-font-size-desktop;
+	}
+}
+
+h5,
+.h5-like {
+	@extend %h5-like;
+}
+
+%h6-like {
+	font-size: $h6-font-size-mobile;
+	font-weight: 500;
+
+	@media #{$media-md-viewport} {
+		font-size: $h6-font-size-desktop;
+	}
+}
+
+h6,
+.h6-like {
+	@extend %h6-like;
+}

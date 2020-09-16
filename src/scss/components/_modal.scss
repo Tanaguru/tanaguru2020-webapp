@@ -1,0 +1,45 @@
+/**
+ * Lists
+ */
+
+// Import global styles from package
+@import "vue-accessible-modal/src/styles/core";
+
+// Override global styles from package
+.v-modal {
+	z-index: 900;
+
+	.v-modal__backdrop {
+		background-color: #055A7F;
+		opacity: .97;
+	}
+
+	.v-modal__content {
+		max-width: 102.4rem;
+		border-radius: .8rem;
+	}
+}
+
+// Modal styles
+.modal-content {
+	padding: 4.7rem;
+}
+
+.modal-header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+
+	.modal-header__title {
+		margin: 0 1.6rem 0 0;
+	}
+
+	.btn {
+		flex: 0 0 auto;
+		margin-top: .8rem;
+	}
+}
+
+.modal-body {
+	margin-top: 3.2rem;
+}

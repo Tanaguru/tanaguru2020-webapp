@@ -1,0 +1,402 @@
+/**
+ * Forms
+ *
+ * Fields' label or description, fields from all types, fieldset and legend…
+ */
+
+
+/* Select forms */
+// From https://github.com/scottaohara/a11y_styled_form_controls/blob/master/src/assets/css/select.css
+.select {
+	position: relative;
+
+	&::before,
+	&::after {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		content: "";
+		pointer-events: none;
+	}
+
+	&::before {
+		right: 0;
+		width: 5rem;
+		z-index: 1;
+	}
+
+	&::after {
+		right: 2rem;
+		width: 1rem;
+		height: 1rem;
+		margin: auto;
+		transform: rotate(45deg);
+		transform-origin: center right;
+		border-right: 2px solid $text-secondary;
+		border-bottom: 2px solid $text-secondary;
+		z-index: 2;
+	}
+
+	&:focus-within {
+		&::before {
+			background-color: $text-secondary;
+		}
+
+		&::after {
+			border-right: 2px solid $color-white;
+			border-bottom: 2px solid $color-white;
+		}
+	}
+
+	select {
+		width: 100%;
+		max-width: 100%;
+		padding: .8rem 2.4rem .8rem .8rem;
+		border: 1px solid $border-primary;
+		border-radius: .2rem;
+		background: transparent;
+		color: $text-secondary;
+		line-height: normal;
+		box-shadow: none;
+		-moz-appearance: none;
+		-webkit-appearance: none;
+		appearance: none;
+
+		@media #{$media-md-viewport} {
+			padding: .8rem 2.4rem;
+		}
+
+		&:-moz-focusring {
+			color: transparent;
+			text-shadow: 0 0 0 $text-secondary;
+		}
+
+		&:hover {
+			cursor: pointer;
+		}
+
+		&:focus {
+			border-color: $text-secondary;
+			outline: none;
+			box-shadow: outset 0 0 0 1px $text-secondary;
+
+			option:not(:disabled),
+  			optgroup:not(:disabled) {
+				color: $text-secondary;
+				text-shadow: none;
+			}
+		}
+
+		&:disabled {
+			color: rgba(255, 255, 255, .75);
+			cursor: not-allowed;
+			opacity: .75;
+		}
+
+		&::-ms-value {
+			background: transparent;
+		}
+
+		&::-ms-expand {
+			display: none;
+		}
+	}
+
+	option:disabled,
+	optgroup:disabled {
+		color: rgba(50, 50, 50, .75);
+	}
+
+	& + p {
+		margin: .8rem 0;
+	}
+}
+
+/* Text forms */
+.label {
+	display: block;
+	color: $text-secondary;
+	font-weight: 600;
+}
+
+.input {
+	width: 100%;
+	margin-bottom: -1px; // to avoid the moving effect on focus and hover with the border
+	padding: .5rem 0;
+	border: 0;
+	border-bottom: 1px solid $border-primary;
+
+	& + p {
+		margin: .8rem 0;
+	}
+
+	&:hover,
+	&:focus {
+		margin-bottom: -2px; // to avoid the moving effect on focus and hover with the border
+		border-bottom: 2px solid $border-primary;
+		outline: 0;
+	}
+
+	&::placeholder {
+		color: $border-primary;
+	}
+
+	&:required {
+		box-shadow: none; // to remove default browser validation
+	}
+
+	&.has-error {
+		margin-bottom: -2px; // to avoid the moving effect on focus and hover with the border
+		border-bottom: 2px solid $color-warning;
+		color: $color-warning;
+
+		&:hover,
+		&:focus {
+			border-bottom: 2px solid $color-warning;
+		}
+	}
+}
+
+.info-text {
+	margin: 0;
+	color: $text-tertiary;
+	font-size: $small-font-size;
+}
+
+.info-success {
+	margin: 1rem 0 0;
+	color: $color-good;
+	font-size: $small-font-size;
+}
+
+.info-error {
+	margin: 0;
+	color: $color-warning;
+	font-size: $small-font-size;
+
+	span,
+	svg {
+		vertical-align: middle;
+	}
+
+	svg {
+		margin-right: .8rem;
+	}
+}
+
+/* Textarea */
+.textarea-wrapper {
+	display: inline-block;
+	position: relative;
+	line-height: 1;
+
+	.textarea-wrapper__grabber {
+		position: absolute;
+		right: .1rem;
+		bottom: .1rem;
+		width: 3rem;
+		height: 3rem;
+		background-color: $color-white;
+		z-index: 2;
+		pointer-events: none;
+
+		&::after {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 1.8rem;
+			height: 1.8rem;
+			border-right: 2px solid $color-blue;
+			border-bottom: 2px solid $color-blue;
+			content: "";
+		}
+	}
+
+	.textarea-wrapper__textarea {
+		display: block;
+		position: relative;
+		width: 100%;
+		padding: .8rem 1.6rem;
+		border: 1px solid $border-primary;
+		z-index: 1;
+
+		&::placeholder {
+			color: $border-primary;
+		}
+	}
+}
+
+/* Form blocks (label and input) */
+.form-block {
+	margin-bottom: 2.5rem;
+
+	&.form-block--half {
+		@media #{$media-md-viewport} {
+			max-width: 50%;
+		}
+	}
+}
+
+/* Form column layout */
+.form-row {
+	@media #{$media-sm-viewport} {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.form-column {
+		@media #{$media-sm-viewport} {
+			width: 48%;
+		}
+	}
+}
+
+/* Radio forms */
+.radio {
+	.radio__input {
+		position: absolute;
+		opacity: 0;
+
+		&:focus + label::before {
+			outline-style: auto;
+		}
+
+		&:checked + label::after {
+			content: "";
+		}
+
+		&:disabled + label {
+			color: $color-disabled;
+		}
+
+		&:disabled + label::before {
+			background-color: $border-secondary;
+		}
+	}
+
+	.radio__label {
+		display: block;
+		position: relative;
+		padding-left: 2.5rem;
+		font-family: $font-stack-secondary;
+
+		&::before,
+		&::after {
+			display: inline-block;
+			position: absolute;
+		}
+
+		&::before {
+			top: 50%;
+			left: 0;
+			width: 1.7rem;
+			height: 1.7rem;
+			transform: translateY(-50%);
+			border: 1px solid $border-primary;
+			border-radius: 50%;
+			content: "";
+		}
+
+		&::after {
+			top: 50%;
+			left: .4rem;
+			width: 1.1rem;
+			height: 1.1rem;
+			transform: translateY(-50%);
+			border-radius: 50%;
+			background-color: $text-secondary;
+			content: none;
+		}
+	}
+}
+
+/* Checkboxes forms */
+.checkbox-wrapper {
+	padding: 0;
+	border: 0;
+
+	.checkbox-wrapper__legend {
+		margin-bottom: .8rem;
+		color: $text-secondary;
+		font-weight: 600;
+	}
+}
+
+.checkbox {
+	.checkbox__input {
+		position: absolute;
+		opacity: 0;
+
+		& + label::after {
+			content: none;
+		}
+
+		&:checked + label::after {
+			content: "";
+		}
+
+		&:checked + label::before {
+			background: $text-secondary;
+		}
+
+		&:focus + label::before {
+			outline-style: auto;
+		}
+
+		&:disabled + label {
+			color: $color-disabled;
+		}
+
+		&:disabled + label::before {
+			background-color: $border-secondary;
+		}
+	}
+
+	.checkbox__label {
+		display: inline-block;
+		position: relative;
+		padding: 0 0 0 2.5rem;
+
+		&::before,
+		&::after {
+			display: inline-block;
+			position: absolute;
+			content: "";
+		}
+
+		&::before {
+			top: .5rem;
+			left: 0;
+			width: 1.7rem;
+			height: 1.7rem;
+			border: 1px solid $border-primary;
+			border-radius: .2rem;
+			background-color: $bg-primary;
+		}
+
+		&::after {
+			top: .6rem;
+			left: .5rem;
+			width: .6rem;
+			height: 1.2rem;
+			transform: rotate(30deg);
+			border: solid $color-white;
+			border-width: 0 2px 2px 0;
+		}
+	}
+}
+
+/* Input number */
+/* Remove default styles */
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	margin: 0;
+  	appearance: none;
+}
+
+/* Firefox */
+input[type=number] {
+	appearance: textfield;
+}

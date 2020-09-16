@@ -1,0 +1,195 @@
+// style for Audit launch page
+
+.page {
+	position: relative;
+}
+
+// Header
+.launch-header-wrapper {
+	background-color: $bg-primary;
+
+	@media #{$media-md-viewport} {
+		position: sticky;
+		top: 0;
+		z-index: 100;
+	}
+}
+
+.launch-header {
+	.launch-header__inner {
+		@media #{$media-xs-viewport} {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+	}
+
+	.launch-header__tag {
+		display: block;
+		font-size: $small-font-size;
+		font-weight: 400;
+	}
+
+	.launch-header__title {
+		margin: 0;
+		line-height: 1.5;
+	}
+
+	.launch-header__cta {
+		margin: .8rem 0 1.6rem;
+
+		@media #{$media-xs-viewport} {
+			margin: 0;
+			text-align: right;
+		}
+	}
+}
+
+.launch-info {
+	margin: .5rem 0 0;
+	color: $color-good;
+	font-size: $small-font-size;
+	text-align: center;
+
+	span,
+	svg {
+		vertical-align: middle;
+	}
+
+	span {
+		margin-left: .5rem;
+	}
+}
+
+.info-form {
+	margin-top: 4.8rem;
+}
+
+// General layout for each section
+$width-aside: 9.6rem; //
+$mgb-size-mobile: 3.2rem; // padding-bottom after each layout-content block
+$mgb-size-desktop: 5rem; // padding-bottom after each layout-content block
+
+.layout {
+	position: relative;
+	margin: 3.1rem 0;
+
+	@media #{$media-md-viewport} {
+		margin: 9.5rem 0;
+	}
+}
+
+.layout-content {
+	display: flex;
+
+	&:not(:last-child) {
+		margin-bottom: $mgb-size-mobile;
+
+		@media #{$media-md-viewport} {
+			margin-bottom: $mgb-size-desktop;
+		}
+
+		.layout-content__aside {
+			position: relative;
+
+			&::after {
+				display: block;
+				position: absolute;
+				top: 0;
+				left: 50%;
+				width: .1rem;
+				height: calc(100% + #{$mgb-size-desktop});
+				transform: translateX(-50%);
+				border-left: 2px dashed $border-secondary;
+				content: "";
+				z-index: -1;
+			}
+		}
+	}
+
+	.layout-content__aside {
+		display: none;
+
+		@media #{$media-md-viewport} {
+			display: block;
+			flex: 0 0 $width-aside;
+		}
+	}
+
+	.layout-content__main {
+		flex: 1 1 auto;
+
+		.checkbox-guidelines,
+		.select-guidelines {
+			.info-text {
+				margin-bottom: 1.6rem;
+			}
+		}
+
+		.select-guidelines {
+			.select {
+				max-width: 39rem;
+			}
+		}
+	}
+}
+
+.layout-content-heading {
+	margin-bottom: 3.2rem;
+
+	.layout-content-heading__subtitle {
+		margin: 0;
+		font-weight: 400;
+		line-height: 1.5;
+	}
+
+	.layout-content-heading__info {
+		margin: .8rem 0 0;
+	}
+}
+
+.aside-breakpoints {
+	@media #{$media-md-viewport} {
+		margin-left: $width-aside;
+	}
+}
+
+// Custom radio
+.radio-addition {
+	margin: 3.2rem 0;
+	padding: 0;
+	border: 0;
+
+	&::after {
+		display: block;
+		width: 6.4rem;
+		height: .1rem;
+		margin-top: 3.2rem;
+		background-color: $border-secondary;
+		content: "";
+	}
+
+	.radio {
+		display: inline-block;
+
+		&:not(:last-child) {
+			margin-right: 9.6rem;
+		}
+	}
+}
+
+.input-waittime {
+	max-width: 54rem;
+}
+
+.table-files {
+	margin-top: 2.4rem;
+}
+
+.btn-delete {
+	margin-top: 1.6rem;
+}
+
+.launch-footer {
+	text-align: center;
+}

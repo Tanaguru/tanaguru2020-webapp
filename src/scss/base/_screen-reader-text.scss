@@ -1,0 +1,40 @@
+/**
+ * Screen reader text #a11y
+ *
+ * You can name it `.sr-only` but, in WordPress, it must be `.screen-reader-text`.
+ *
+ * Source: https://www.ffoodd.fr/cache-cache-css/
+ */
+
+%screen-reader-text {
+	position: absolute;
+	width: 1px; // sass-lint:disable-line property-units
+	height: 1px; // sass-lint:disable-line property-units
+	padding: 0;
+	border: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+}
+
+.screen-reader-text {
+	@extend %screen-reader-text;
+}
+
+.screen-reader-text-focusable {
+
+	&:focus,
+	&:active {
+		width: auto;
+		height: auto;
+		padding: 1rem;
+		background-color: $bg-primary;
+		color: inherit;
+		white-space: normal;
+		overflow: visible;
+		z-index: 100;
+		clip: auto;
+		clip-path: none;
+	}
+}

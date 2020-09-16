@@ -1,0 +1,67 @@
+/**
+ * Colors variables
+ */
+
+/** ---------------------------------------------------------------------------
+ * Identity colors
+ */
+
+// Brand color
+$color-red: #D90B0B;
+$color-red-dark: #B50000;
+$color-blue: #055A7F;
+$color-ink: #143250;
+$color-ink-light: #3C5064;
+
+// Test colors
+$color-improper: #CE0F75;
+$color-qualify: #933FA7;
+$color-untested: #333333;
+$color-compliant: #297F7D;
+$color-not-applicable: #2D7393;
+$color-ignored: #00508C;
+
+// State colors
+$color-good: #0F8246;
+$color-good-dark: #0A5A2D;
+$color-alert: #D20019;
+$color-alert-dark: #A00014;
+$color-warning: #D22D00;
+$color-warning-dark: #962D00;
+$color-info: #006EBE;
+$color-info-dark: #00508C;
+$color-disabled: rgba(60, 60, 70, .5);
+
+// Primary
+$color-skylight: #F5FAFF;
+$color-skylighter: #FCFCFE;
+$color-white: #FFFFFF;
+$color-bluegrey: #D2DCE6;
+$color-bluegrey-dark: #A0B4C8;
+$color-bluegrey-light: #A0A0A5;
+$color-shadow: rgba(150, 170, 200, .4);
+
+/** ---------------------------------------------------------------------------
+ * Elements main colors
+ */
+
+// Background colors
+$bg-primary: $color-white;
+$bg-secondary: $color-skylight;
+$bg-tertiary: $color-skylighter;
+
+// Text colors
+$text-primary: $color-ink;
+$text-secondary: $color-blue;
+$text-tertiary: $color-ink-light;
+
+// Link colors
+$link-hover: $color-red;
+
+// Border colors
+$border-primary: $color-bluegrey-dark;
+$border-secondary: $color-bluegrey;
+$border-tertiary: $color-bluegrey-light;
+
+// Shadow colors
+$shadow-primary: $color-shadow;

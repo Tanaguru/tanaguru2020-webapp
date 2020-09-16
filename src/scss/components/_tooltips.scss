@@ -1,0 +1,57 @@
+/**
+ * Tooltips
+ */
+
+$width: 30rem;
+
+.tooltip {
+	.btn {
+		svg {
+			width: 3.6rem;
+			height: 3.6rem;
+			margin-right: .5rem;
+
+			@media #{$media-md-viewport} {
+				width: 2.4rem;
+				height: 2.4rem;
+			}
+		}
+	}
+
+	.tooltip__info {
+		position: absolute;
+		width: $width;
+		padding: 1rem;
+		background-color: $bg-primary;
+		color: $text-secondary;
+		font-size: $small-font-size;
+		box-shadow: 0 2px 8px 0 $color-shadow;
+	}
+
+	.tooltip__header {
+		display: block;
+
+		svg,
+		span {
+			vertical-align: middle;
+		}
+	}
+
+	.tooltip__title {
+		font-weight: 600;
+	}
+}
+
+.tooltip-clipboard {
+	display: flex;
+	align-items: center;
+
+	.input {
+		flex: 0 1 auto;
+		margin-right: 1rem;
+	}
+
+	.btn {
+		flex: 0 0 auto;
+	}
+}
