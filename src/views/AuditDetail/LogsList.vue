@@ -3,7 +3,7 @@
         <h2>{{ $t('auditDetail.logs') }} ({{totalElements}})</h2>
         <div class="list-audits" role="list">
             <p class="list-audits__item" role="listitem" v-for="(auditLog, i) in auditLogs" :key="auditLog.id">
-                <span class="list-audits__number">{{minElementIndex + i}}.</span> <b>{{auditLog.level}}</b> - [{{$moment(auditLog.data).format('HH:mm DD-MM-YYYY')}}] {{auditLog.message}}
+                <span class="list-audits__number">{{minElementIndex + i}}.</span> <b>{{auditLog.level}}</b> - [{{$moment(auditLog.date).format('HH:mm DD-MM-YYYY')}}] {{auditLog.message}}
             </p>
         </div>
     </div>

@@ -557,7 +557,7 @@ export default {
 .tabs-synthesis {
     // Common styles with HeaderRow.vue (same location is required because of the same variables used in both files)
 
-    @import "../../../../Tanaguru2020/webapp/node_modules/sass-trigonometry";
+    @import '~sass-trigonometry';
 
     // From https://www.jimmybonney.com/articles/column_header_rotation_css/
     // From https://codepen.io/peterfarrell/pen/yNPrXB
