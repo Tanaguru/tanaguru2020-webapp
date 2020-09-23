@@ -1,0 +1,147 @@
+options:
+  formatter: stylish
+files:
+  include: 'src/**/*.s+(a|c)ss'
+rules:
+  # All rules here: https://github.com/sasstools/sass-lint/tree/master/docs/rules
+
+  # Extends
+  extends-before-mixins: 1
+  extends-before-declarations: 1
+  placeholder-in-extend: 1
+
+  # Mixins
+  mixins-before-declarations: 1
+
+  # Line Spacing
+  one-declaration-per-line: 1
+  empty-line-between-blocks: 1
+  single-line-per-selector: 1
+
+  # Disallows
+  no-color-keywords: 1
+  no-color-literals: 0
+  no-css-comments: 0
+  no-debug: 1
+  no-duplicate-properties: 1
+  no-empty-rulesets: 1
+  no-extends: 0
+  no-ids: 1
+  no-important: 1
+  no-invalid-hex: 1
+  no-mergeable-selectors: 1
+  no-misspelled-properties: 1
+  no-qualifying-elements: 1
+  no-trailing-zero: 1
+  no-trailing-whitespace: 1
+  no-transition-all: 1
+  no-url-protocols: 1
+  no-vendor-prefixes: 1
+  no-warn: 1
+
+  # Nesting
+  force-attribute-nesting: 1
+  force-element-nesting: 1
+  force-pseudo-nesting: 1
+  declarations-before-nesting: 1
+
+  # Name Formats
+  function-name-format:
+    - 1
+    -
+      allow-leading-underscore: false
+      convention: hyphenatedlowercase
+  mixin-name-format:
+    - 1
+    -
+      allow-leading-underscore: false
+      convention: hyphenatedlowercase
+  placeholder-name-format:
+    - 1
+    -
+      allow-leading-underscore: false
+      convention: hyphenatedlowercase
+  variable-name-format:
+    - 1
+    -
+      allow-leading-underscore: false
+      convention: hyphenatedlowercase
+
+  # Style Guide
+  border-zero: 1
+  brace-style: 1
+  class-name-format:
+    - 1
+    -
+      allow-leading-underscore: false
+      convention: hyphenatedlowercase
+  clean-import-paths: 1
+  empty-args: 1
+  hex-length:
+    - 1
+    -
+      style: long
+  hex-notation:
+    - 1
+    -
+      style: uppercase
+  indentation:
+    - 1
+    -
+      size: 'tab'
+  leading-zero: 0
+  nesting-depth:
+    - 1
+    -
+      max-depth: 5
+  property-sort-order:
+    - 1
+    -
+      order: 'smacss' # https://smacss.com/book/formatting
+  quotes:
+    - 1
+    -
+      style: 'double'
+  shorthand-values: 1
+  url-quotes: 1
+  variable-for-property: 1
+  zero-unit: 1
+
+  # CSS rules
+  pseudo-element: 1
+
+  # Properties units
+  property-units:
+    - 1
+    -
+      per-property: {
+        font-size: ['em', 'rem', '%'],
+        line-height: [''], # Line-height is unitless
+        width: ['em', 'rem', '%', 'vh', 'vw', 'vmin', 'vmax'],
+        max-width: ['em', 'rem', '%', 'vh', 'vw', 'vmin', 'vmax'],
+        height: ['em', 'rem', '%', 'vh', 'vw', 'vmin', 'vmax'],
+        max-height: ['em', 'rem', '%', 'vh', 'vw', 'vmin', 'vmax'],
+        margin: ['rem'],
+        margin-top: ['rem'],
+        margin-right: ['rem'],
+        margin-bottom: ['rem'],
+        margin-left: ['rem'],
+        padding: ['rem'],
+        padding-top: ['rem'],
+        padding-right: ['rem'],
+        padding-bottom: ['rem'],
+        padding-left: ['rem']
+      }
+
+  # Inner Spacing
+  space-after-comma: 1
+  space-before-colon: 1
+  space-after-colon: 1
+  space-before-brace: 1
+  space-before-bang: 1
+  space-after-bang: 1
+  space-between-parens: 1
+
+  # Final Items
+  trailing-semicolon: 1
+  final-newline: 1

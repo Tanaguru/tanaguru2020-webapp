@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build --mode production",
-    "sass-lint-vue": "./node_modules/.bin/sass-lint-vue"
+	"sass-lint-vue": "./node_modules/.bin/sass-lint-vue"
   },
   "dependencies": {
     "@bytegem/vue-heroicons": "^0.2.5",
