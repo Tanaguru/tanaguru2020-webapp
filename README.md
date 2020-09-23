@@ -23,3 +23,7 @@ npm run build
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Git process
+- `master` branch is only for release
+- `develop` branch is for coding. Be sure to always work from this branch.
