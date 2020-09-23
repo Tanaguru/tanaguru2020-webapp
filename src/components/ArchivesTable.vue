@@ -26,28 +26,36 @@
                 <td>{{ totalPagesByAudit[audit.id] }}</td>
                 <td>{{ audit.dateEnd ? moment(audit.dateEnd).format('LL') : '' }}</td>
                 <td class="td-actions">
-                    <router-link class="link link-independent link-independent--icon" :to="'/audits/' + audit.id">
-                        <icon-base-decorative>
-                            <icon-arrow-blue/>
-                        </icon-base-decorative>
-                        <span>{{ $t('action.show') }}</span>
-                    </router-link>
-                    <button
-                        class="btn btn--icon btn--nude"
-                        @click="confirmAuditDeletion(audit)">
-                        <icon-base-decorative>
-                            <icon-delete/>
-                        </icon-base-decorative>
-                        <span>{{ $t('action.delete') }}</span>
-                    </button>
-                    <button
-                        class="btn btn--icon btn--nude"
-                        @click="confirmAuditScreenshotDeletion(audit)">
-                        <icon-base-decorative>
-                            <icon-delete/>
-                        </icon-base-decorative>
-                        <span>{{ $t('action.deleteScreenshot') }}</span>
-                    </button>
+					<ul class="actions-list">
+						<li class="actions-list__item">
+							<router-link class="link link-independent link-independent--icon" :to="'/audits/' + audit.id">
+								<icon-base-decorative>
+									<icon-arrow-blue/>
+								</icon-base-decorative>
+								<span>{{ $t('action.show') }}</span>
+							</router-link>
+						</li>
+						<li class="actions-list__item">
+							<button
+								class="btn btn--icon btn--nude"
+								@click="confirmAuditDeletion(audit)">
+								<icon-base-decorative>
+									<icon-delete/>
+								</icon-base-decorative>
+								<span>{{ $t('action.delete') }}</span>
+							</button>
+						</li>
+						<li class="actions-list__item">
+							<button
+								class="btn btn--icon btn--nude"
+								@click="confirmAuditScreenshotDeletion(audit)">
+								<icon-base-decorative>
+									<icon-delete/>
+								</icon-base-decorative>
+								<span>{{ $t('action.deleteScreenshot') }}</span>
+							</button>
+						</li>
+					</ul>
                 </td>
             </tr>
             </tbody>
@@ -95,7 +103,7 @@ export default {
 				this.$emit('delete-audit', audit)
 			})
 			.catch(() => {
-				
+
 			})
 			.finally(() => {
 				this.$modal.close()

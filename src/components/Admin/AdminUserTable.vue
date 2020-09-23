@@ -46,10 +46,9 @@
 										<span>{{$t('action.show')}}</span>
 									</router-link>
 								</li>
-								<li class="actions-list__item">
+								<li class="actions-list__item" v-if="user.id !== $store.state.user.id && $store.state.authorities['DELETE_USER'] && ($store.state.user.appRole.name === 'SUPER_ADMIN' || ($store.state.user.appRole.name === 'ADMIN' && user.appRole.name !=='SUPER_ADMIN'))">
 									<button
 									class="btn btn--icon btn--nude"
-									v-if="user.id !== $store.state.user.id && $store.state.authorities['DELETE_USER'] && ($store.state.user.appRole.name === 'SUPER_ADMIN' || ($store.state.user.appRole.name === 'ADMIN' && user.appRole.name !=='SUPER_ADMIN'))"
 									@click="confirm(user)">
 										<icon-base-decorative><icon-delete/></icon-base-decorative>
 										<span>{{$t('action.delete')}}</span>
@@ -128,7 +127,7 @@ export default {
 				this.$emit('delete-user', user)
 			})
 			.catch(() => {
-				
+
 			})
 			.finally(() => {
 				this.$modal.close()

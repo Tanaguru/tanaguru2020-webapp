@@ -43,8 +43,8 @@
 			border-right: 1px solid $border-secondary;
 
 			&.td-actions {
-				> *:not(:last-child) {
-					margin-right: 1.6rem;
+				.actions-list {
+					flex-wrap: nowrap;
 				}
 			}
 		}
