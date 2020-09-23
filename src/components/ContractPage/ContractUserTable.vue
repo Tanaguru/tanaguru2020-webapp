@@ -50,10 +50,9 @@
 									<span>{{$t('action.show')}}</span>
 								</router-link>
 							</li>
-							<li class="actions-list__item">
+							<li class="actions-list__item" v-if="deletingCondition && contractUser.contractRole.name != 'CONTRACT_OWNER'">
 								<button
 									class="btn btn--icon btn--nude"
-									v-if="deletingCondition && contractUser.contractRole.name != 'CONTRACT_OWNER'"
 									@click="confirm(contractUser)"
 								>
 									<icon-base-decorative><icon-delete/></icon-base-decorative>
@@ -107,7 +106,7 @@ export default {
 				this.$emit('remove-user', contractUser)
 			})
 			.catch(() => {
-				
+
 			})
 			.finally(() => {
 				this.$modal.close()

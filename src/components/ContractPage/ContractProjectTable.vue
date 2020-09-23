@@ -19,7 +19,7 @@
 									<span>{{$t('action.show')}}</span>
 								</router-link>
 							</li>
-							<li>
+							<li class="actions-list__item">
 								<router-link :to="'/projects/' + project.id + '/archives'" class="link link-independent link-independent--icon">
 									<icon-base-decorative><icon-arrow-blue /></icon-base-decorative>
 									<span>{{$t('dashboard.actions.archives')}}</span>
@@ -76,7 +76,7 @@ export default {
 				this.$emit('delete-project', project)
 			})
 			.catch(() => {
-				
+
 			})
 			.finally(() => {
 				this.$modal.close()

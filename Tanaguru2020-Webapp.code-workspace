@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"html.format.endWithNewline": true,
+		"html.format.indentInnerHtml": true,
+		"html.format.wrapLineLength": 0,
+	}
+}

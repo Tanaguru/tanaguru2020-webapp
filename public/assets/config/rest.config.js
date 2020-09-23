@@ -1,1 +1,1 @@
-const API_BASE_URL='http://localhost:9002'
+const API_BASE_URL='http://178.33.132.243:9002'

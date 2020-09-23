@@ -97,14 +97,12 @@ import IconArrowBlue from './icons/IconArrowBlue'
 			}
 
 			select {
-				padding: 0;
 				border: 0;
 				padding: 0 3rem 0 1.6rem;
 			}
 
 			&:focus-within {
 				&::after {
-					border-color: $color-white;
 					border-color: $color-white;
 				}
 			}
