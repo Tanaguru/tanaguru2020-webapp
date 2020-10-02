@@ -9,28 +9,28 @@
 				<p v-if="error" class="info-error" id="login-error" aria-live="polite">{{error}}</p>
 				<div class="form-block">
 					<label class="label" for="username">{{$t('login.labelId')}}</label>
-					<input 
-					class="input" 
-					v-bind:class="{'has-error':error}" 
-					id="username" 
-					autocomplete="username" 
-					required 
-					v-model="username" 
-					type="text" 
+					<input
+					class="input"
+					v-bind:class="{'has-error':error}"
+					id="username"
+					autocomplete="username"
+					required
+					v-model="username"
+					type="text"
 					:placeholder="$t('entity.user.username')"
 					:aria-describedby="error ? 'login-error' : ''"/>
 				</div>
 
 				<div class="form-block">
 					<label class="label" for="password">{{$t('login.labelPassword')}}</label>
-					<input 
-					id="password" 
-					class="input" 
-					v-bind:class="{'has-error':error}" 
-					autocomplete="current-password" 
-					required 
-					v-model="password" 
-					type="password" 
+					<input
+					id="password"
+					class="input"
+					v-bind:class="{'has-error':error}"
+					autocomplete="current-password"
+					required
+					v-model="password"
+					type="password"
 					:placeholder="$t('entity.user.password')"
 					aria-describedby="error ? login-error : ''"/>
 				</div>
@@ -76,7 +76,6 @@ export default {
 			let username = this.username
 			let password = this.password
 			this.$store.dispatch('login', {username, password})
-
 			.then(() => this.$router.push('/'))
 			.catch(err => this.error = this.$i18n.t("login.incorrectLogin"))
 		}

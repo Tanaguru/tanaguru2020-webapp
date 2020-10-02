@@ -32,7 +32,6 @@ import ElementResultService from './services/elementResult.service'
 import TanaguruTestService from './services/tanaguruTest.service'
 import ConfigService from './services/config.service'
 
-
 // optional options
 const options = {
     transition: 'fade',
@@ -46,7 +45,11 @@ Vue.prototype.window = window;
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false
 axios.defaults.baseURL = API_BASE_URL
-axios.defaults.withCredentials = true
+
+const token = localStorage.getItem('token')
+if (token) {
+    Vue.prototype.$http.defaults.headers.common['Authorization'] = 'Bearer ' + token
+}
 
 Vue.component('v-icon', Icon)
 Vue.component('prism', Prism)
@@ -72,28 +75,19 @@ Vue.prototype.statusResultService = new StatusResultService(axios);
 Vue.prototype.configService = new ConfigService(axios);
 
 Vue.prototype.NAVBAR_LINKS = NAVBAR_LINKS;
-
 axios.interceptors.response.use(
     (res) => {
-      bus.$emit('api-call', res);
       return res;
     },
     (err)=>{
-        if(! err.response){
-            store.dispatch('resetSession')
+        if (err.response.status === 401) {
+            store.dispatch('logout')
                 .then(r => router.push('/'));
-        }else{
-            if (err.response.status === 401) {
-                store.dispatch('logout')
-                    .then(r => router.push('/'));
-            } else if (err.response.status === 403) {
-                router.push('/forbidden')
-            }
+        } else if (err.response.status === 403) {
+            router.push('/forbidden')
         }
-
     }
-)
-;
+);
 
 const app = new Vue({
     router,

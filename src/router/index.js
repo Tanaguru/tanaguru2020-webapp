@@ -130,22 +130,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if(
-    !store.getters.isLoggedIn &&
-    !store.state.tryRecoverSession){
-
-    store.dispatch('recoverSession')
-    .then(
-      () =>{
-        goToIfAuthorisation(to, next);
-      }
-    ).catch(err => {
-      goToIfAuthorisation(to, next);
-    });
-  }else{
-
     goToIfAuthorisation(to, next);
-  }
 })
 
 function goToIfAuthorisation(to, next){
@@ -157,9 +142,8 @@ function goToIfAuthorisation(to, next){
 }
 
 function checkAuthorisation(to){
-  var checkAuthorisation = (!to.meta.requireAuthentication || store.getters.isLoggedIn) &&
+  return  (!to.meta.requireAuthentication || store.getters.isLoggedIn) &&
     (!to.meta.requireAuthority || store.state.authorities[to.meta.requireAuthority]);
-    return checkAuthorisation;
 }
 
 export default router

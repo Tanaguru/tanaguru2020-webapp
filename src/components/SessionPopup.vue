@@ -12,22 +12,18 @@
 </template>
 
 <script>
-    export default {
+    import store from "@/store";
+
+	export default {
         name: 'sessionPopup',
-        props: ['bus'],
         data() {
             return {
                 timer: null,
                 sessionDuration: 1800000,
                 currentDate: null,
-                lastApiCallDate: new Date(),
             }
         },
         created() {
-            this.bus.$on('api-call', (req) => {
-                this.lastApiCallDate = new Date()
-            });
-
             this.configService.getSessionDuration(
                 (sessionDuration) => {
                     this.sessionDuration = sessionDuration * 1000
@@ -43,23 +39,19 @@
         computed: {
             isWindowVisible() {
                 // Show window 5 mn before timeout
-                return this.$store.state.user && this.lastApiCallDate && this.currentDate && (this.lastApiCallDate.getTime() + this.sessionDuration - 300000 <= this.currentDate.getTime());
+                return this.$store.state.user && this.$store.state.loginDate.getTime() + this.sessionDuration - 300000 <= this.currentDate.getTime();
             },
 
             isTimedOut(){
-                return this.$store.state.user && this.lastApiCallDate && this.currentDate && (this.lastApiCallDate.getTime() + this.sessionDuration <= this.currentDate.getTime());
+				return this.$store.state.user && this.$store.state.loginDate.getTime() + this.sessionDuration <= this.currentDate.getTime();
             }
         },
         methods: {
             maintainSession() {
-                this.userService.me(
-                    () => {
-                    },
-                    () => {
-                    }
-                );
+				store.dispatch('refreshToken')
             },
             refreshCurrentDate() {
+            	console.log(this.$store.state.loginDate)
                 this.currentDate = new Date();
                 if(this.isTimedOut){
                     this.$store.dispatch("logout")
