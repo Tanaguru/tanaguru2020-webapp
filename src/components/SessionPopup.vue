@@ -39,11 +39,11 @@
         computed: {
             isWindowVisible() {
                 // Show window 5 mn before timeout
-                return this.$store.state.user && this.$store.state.loginDate.getTime() + this.sessionDuration - 300000 >= this.currentDate.getTime();
+                return this.$store.state.user && this.$store.state.loginDate.getTime() + this.sessionDuration - 300000 <= this.currentDate.getTime();
             },
 
             isTimedOut(){
-				return this.$store.state.user && this.$store.state.loginDate.getTime() + this.sessionDuration >= this.currentDate.getTime();
+				return this.$store.state.user && this.$store.state.loginDate.getTime() + this.sessionDuration <= this.currentDate.getTime();
             }
         },
         methods: {
