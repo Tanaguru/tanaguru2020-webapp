@@ -28,7 +28,7 @@ pipeline {
 	  }
 	}
 
-	stage('TEST CICD 1') {
+	stage('TEST CICD 2') {
 	  when {
 		branch 'CICD'
 	  }
@@ -37,7 +37,7 @@ pipeline {
 	  }
 	}
 
-	stage('TEST CICD 1') {
+	stage('TEST CICD 3') {
 	  steps {
 		sh 'echo test'
 	  }
