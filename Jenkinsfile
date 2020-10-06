@@ -1,9 +1,20 @@
 pipeline {
   agent any
   stages {
-	stage('TEST CICD 3') {
+	stage('BUILD') {
+	  agent {
+	  	docker 'node'
+	  }
 	  steps {
-		sh 'docker ps'
+		sh 'npm i'
+		sh 'npm run build'
+	  }
+	}
+
+	stage('TEST CICD') {
+	  agent none
+	  steps {
+		sh 'ls -la'
 	  }
 	}
   }
