@@ -15,10 +15,8 @@ pipeline {
 	stage('TEST CICD') {
 	  agent none
 	  steps {
-	  	dir("dist") {
-		  unstash "dist"
-	    }
-		sh 'ls -la dist'
+	  	unstash "dist"
+		sh 'ls -la dist/'
 	  }
 	}
   }
