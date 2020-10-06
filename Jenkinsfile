@@ -8,7 +8,7 @@ pipeline {
 	  steps {
 		sh 'npm i'
 		sh 'npm run build'
-		stash name: 'dist', includes: 'dist/*'
+		stash name: 'dist', includes: 'dist/**/*'
 	  }
 	}
 
