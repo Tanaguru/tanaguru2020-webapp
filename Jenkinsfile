@@ -36,5 +36,11 @@ pipeline {
 		sh 'echo test CICD'
 	  }
 	}
+
+	stage('TEST CICD 1') {
+	  steps {
+		sh 'echo test'
+	  }
+	}
   }
 }
