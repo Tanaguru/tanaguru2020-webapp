@@ -8,17 +8,17 @@ pipeline {
 	  steps {
 		sh 'npm i'
 		sh 'npm run build'
-		stash name: 'webapp', includes: 'dist/*'
+		stash name: 'dist', includes: 'dist/*'
 	  }
 	}
 
 	stage('TEST CICD') {
 	  agent none
 	  steps {
-	  	dir("webapp") {
-		  unstash "webapp"
+	  	dir("dist") {
+		  unstash "dist"
 	    }
-		sh 'ls -la'
+		sh 'ls -la dist'
 	  }
 	}
   }
