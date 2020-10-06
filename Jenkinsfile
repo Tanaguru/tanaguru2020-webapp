@@ -19,5 +19,22 @@ pipeline {
       }
     }
 
+    stage('TEST CICD 1') {
+      when {
+      	branch 'develop'
+      }
+	  steps {
+		sh 'echo test develop'
+	  }
+	}
+
+	stage('TEST CICD 1') {
+	  when {
+		branch 'CICD'
+	  }
+	  steps {
+		sh 'echo test CICD'
+	  }
+	}
   }
 }
