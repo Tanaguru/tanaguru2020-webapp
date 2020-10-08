@@ -1,7 +1,7 @@
 pipeline {
   agent any
   stages {
-	stage('BUILD') {
+	stage('Build') {
 	  agent {
 	  	docker 'node'
 	  }
@@ -16,12 +16,7 @@ pipeline {
 	stage('Build docker image') {
 	  steps {
 	  	environment {
-	  		WEBAPP_VERSION = sh(cat package.json \
-                                  | grep version \
-                                  | head -1 \
-                                  | awk -F: '{ print $2 }' \
-                                  | sed 's/[",]//g' \
-                                  | tr -d '[[:space:]]')
+	  		WEBAPP_VERSION = sh(returnStdout: true, script: "cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]'")
 	  	}
 		git(url: 'https://github.com/Tanaguru/tanaguru2020-docker', branch: 'master', credentialsId: 'github-rcharre')
 		unstash 'tanaguru2020-webapp'
@@ -31,5 +26,3 @@ pipeline {
 	}
   }
 }
-
-
