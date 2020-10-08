@@ -3,7 +3,10 @@ pipeline {
   stages {
 	stage('Build') {
 		when {
-		  branch 'develop|CICD'
+		  anyOf{
+		  	branch 'develop';
+		  	branch 'CICD'
+		  }
 	  	}
 	  agent {
 	  	docker 'node'
