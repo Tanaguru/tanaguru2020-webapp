@@ -2,12 +2,6 @@ pipeline {
   agent any
   stages {
 	stage('Build') {
-		when {
-		  anyOf{
-		  	branch 'develop';
-		  	branch 'CICD'
-		  }
-	  	}
 	  agent {
 	  	docker 'node'
 	  }
@@ -24,7 +18,7 @@ pipeline {
 	  }
 	}
 
-	stage('Build dev docker image') {
+	stage('Build & deploy dev docker image') {
 	  when {
 	  	branch 'develop'
 	  }
@@ -38,6 +32,8 @@ pipeline {
 			docker build -t tanaguru2020-webapp:dev --build-arg TANAGURU_WEBAPP_ARCHIVE_PATH=tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz ./tanaguru2020-webapp/image/
 		'''
 		sh 'docker image prune -f'
+		sh 'docker stop tanaguru2020-webapp-dev'
+		sh 'docker start tanaguru2020-webapp-dev'
 	  }
 	}
   }
