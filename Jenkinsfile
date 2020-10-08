@@ -15,7 +15,7 @@ pipeline {
 
 	stage('Build docker image') {
 	  steps {
-	  	sh "PACKAGE_VERSION=$(cat package.json \
+	  	sh "WEBAPP_VERSION=\$(cat package.json \
               | grep version \
               | head -1 \
               | awk -F: '{ print \$2 }' \
