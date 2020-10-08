@@ -2,6 +2,9 @@ pipeline {
   agent any
   stages {
 	stage('Build') {
+		when {
+		  branch 'develop|CICD'
+	  	}
 	  agent {
 	  	docker 'node'
 	  }
@@ -18,7 +21,10 @@ pipeline {
 	  }
 	}
 
-	stage('Build docker image') {
+	stage('Build dev docker image') {
+	  when {
+	  	branch 'develop'
+	  }
 	  steps {
 		git(url: 'https://github.com/Tanaguru/tanaguru2020-docker', branch: 'master', credentialsId: 'github-rcharre')
 		unstash 'tanaguru2020-webapp'
