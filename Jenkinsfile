@@ -9,7 +9,7 @@ pipeline {
 	    sh 'npm i'
 	    sh 'npm run build'
 		sh '''
-			WEBAPP_VERSION=$(npm run version)
+			WEBAPP_VERSION=$(npm run version --silent)
 			tar -czvf tanaguru2020-webapp.tar.gz dist
 			echo ${WEBAPP_VERSION} > version.txt
 		'''
