@@ -25,7 +25,7 @@ pipeline {
 		unstash 'version'
 		sh 'mv tanaguru2020-webapp.tar.gz ./tanaguru2020-webapp/image'
 		sh 'WEBAPP_VERSION=$(cat version.txt)'
-		sh 'docker build -t tanaguru2020-webapp-${WEBAPP_VERSION} --build-arg TANAGURU_WEBAPP_ARCHIVE_PATH=tanaguru2020-webapp.tar.gz ./tanaguru2020-webapp/image/''
+		sh 'docker build -t tanaguru2020-webapp-${WEBAPP_VERSION} --build-arg TANAGURU_WEBAPP_ARCHIVE_PATH=tanaguru2020-webapp.tar.gz ./tanaguru2020-webapp/image/'
 
 	  }
 	}
