@@ -8,7 +8,9 @@ pipeline {
 	  steps {
 		sh 'npm i'
 		sh 'npm run build'
-		env.WEBAPP_VERSION = sh(script:'npm run version', returnStdout: true).trim()
+		script{
+			env.WEBAPP_VERSION = sh(script:'npm run version', returnStdout: true).trim()
+		}
 		sh 'tar -czvf tanaguru2020-webapp-${env.WEBAPP_VERSION}.tar.gz dist'
 		stash name: 'tanaguru2020-webapp', includes: 'tanaguru2020-webapp-${env.WEBAPP_VERSION}.tar.gz'
 	  }
