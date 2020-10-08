@@ -15,9 +15,6 @@ pipeline {
 
 	stage('Build docker image') {
 	  steps {
-	  	environment {
-	  		WEBAPP_VERSION = sh(returnStdout: true, script: "cat package.json | grep version | head -1 | awk -F: '{ print \$2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]'")
-	  	}
 		git(url: 'https://github.com/Tanaguru/tanaguru2020-docker', branch: 'master', credentialsId: 'github-rcharre')
 		unstash 'tanaguru2020-webapp'
 		sh 'mv tanaguru2020-webapp.tar.gz ./tanaguru2020-docker/tanaguru2020-webapp/image'
