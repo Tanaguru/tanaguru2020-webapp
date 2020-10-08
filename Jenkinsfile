@@ -7,9 +7,9 @@ pipeline {
 	  }
 	  steps {
 		sh '''
-			WEBAPP_VERSION=$(npm run version)
 			npm i
 			npm run build
+			WEBAPP_VERSION=$(npm run version)
 			tar -czvf tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz dist
 			echo ${WEBAPP_VERSION} > version.txt
 		'''
