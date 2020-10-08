@@ -31,11 +31,5 @@ pipeline {
 		sh 'docker image prune -f'
 	  }
 	}
-
-	stage('Deploy webapp docker image') {
-		steps {
-
-		}
-	}
   }
 }
