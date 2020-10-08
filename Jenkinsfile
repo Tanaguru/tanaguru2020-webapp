@@ -8,7 +8,7 @@ pipeline {
 	  steps {
 		sh 'npm i'
 		sh 'npm run build'
-		sh 'tar -czvf tanaguru2020-webapp.tar.gz tanaguru2020-webapp'
+		sh 'tar -czvf tanaguru2020-webapp.tar.gz dist'
 		stash name: 'tanaguru2020-webapp', includes: 'tanaguru2020-webapp.tar.gz'
 	  }
 	}
