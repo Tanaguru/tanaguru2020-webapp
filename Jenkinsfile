@@ -6,14 +6,14 @@ pipeline {
 	  	docker 'node'
 	  }
 	  steps {
+	    sh 'npm i'
+	    sh 'npm run build'
 		sh '''
-			npm i
-			npm run build
 			WEBAPP_VERSION=$(npm run version)
-			tar -czvf tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz dist
+			tar -czvf tanaguru2020-webapp.tar.gz dist
 			echo ${WEBAPP_VERSION} > version.txt
 		'''
-		stash name: 'tanaguru2020-webapp', includes: 'tanaguru2020-webapp-${env.WEBAPP_VERSION}.tar.gz'
+		stash name: 'tanaguru2020-webapp', includes: 'tanaguru2020-webapp.tar.gz'
 		stash name: 'version', includes: 'version.txt'
 	  }
 	}
@@ -25,8 +25,8 @@ pipeline {
 		unstash 'version'
 		sh '''
 			WEBAPP_VERSION=$(cat version.txt)
-			mv tanaguru2020-webapp-*.tar.gz ./tanaguru2020-webapp/image'
-			docker build -t tanaguru2020-webapp-${WEBAPP_VERSION} --build-arg TANAGURU_WEBAPP_ARCHIVE_PATH=tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz  ./tanaguru2020-docker/tanaguru2020-webapp/image/
+			mv tanaguru2020-webapp.tar.gz ./tanaguru2020-webapp/image'
+			docker build -t tanaguru2020-webapp-${WEBAPP_VERSION} --build-arg TANAGURU_WEBAPP_ARCHIVE_PATH=tanaguru2020-webapp.tar.gz  ./tanaguru2020-docker/tanaguru2020-webapp/image/
 		'''
 	  }
 	}
