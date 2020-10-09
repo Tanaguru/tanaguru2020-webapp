@@ -20,7 +20,7 @@ pipeline {
 
 	stage('Build and deploy'){
 	  steps{
-	  	parallel(
+	  	parallel{
 	  	  stage('Build & deploy dev docker image') {
 			  when {
 				branch 'develop'
@@ -56,7 +56,7 @@ pipeline {
 				sh 'docker image prune -f'
 			  }
 			}
-	  	)
+	  	}
 	  }
 	}
   }
