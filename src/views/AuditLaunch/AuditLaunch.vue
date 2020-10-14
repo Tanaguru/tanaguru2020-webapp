@@ -509,12 +509,12 @@ export default {
                 this.auditConfigurationForm.site.crawlerMaxDuration <= 86400
         },
 
-        //Scenario
+        // Scenario
         isSelectedScenarioValid() {
             return this.auditConfigurationForm.scenario.id != null;
         },
 
-        //Upload
+        // Upload
         isSelectedUploadResourceValid() {
             return this.auditConfigurationForm.resource.id != null 
         },
