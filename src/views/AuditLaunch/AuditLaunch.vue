@@ -516,10 +516,7 @@ export default {
 
         //Upload
         isSelectedUploadResourceValid() {
-            return this.auditConfigurationForm.resource.id != null &&
-                this.resources.find(resource =>{
-                    return resource.id === this.auditConfigurationForm.resource.id
-                });
+            return this.auditConfigurationForm.resource.id != null 
         },
 
         launchCondition() {
