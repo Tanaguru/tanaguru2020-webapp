@@ -51,7 +51,7 @@ pipeline {
                 sh '''
 					WEBAPP_VERSION=$(cat version.txt)
 
-					echo API_BASE_URL=https://dev.tanaguru.com > .env
+					echo API_BASE_URL=https://devapi.tanaguru.com > .env
 
 					docker stop tanaguru2020-webapp-dev || true
 					docker image prune -f
