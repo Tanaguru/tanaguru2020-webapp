@@ -34,7 +34,7 @@ pipeline {
                 sh '''
 					WEBAPP_VERSION=$(cat version.txt)
 					mv tanaguru2020-webapp.tar.gz ./tanaguru2020-webapp/image/tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz
-					docker build -t tanaguru2020-webapp:dev \
+					docker build -t tanaguru2020-webapp:${WEBAPP_VERSION} \
 						--build-arg TANAGURU_WEBAPP_ARCHIVE_PATH=tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz \
 						./tanaguru2020-webapp/image/
         		'''
@@ -53,7 +53,7 @@ pipeline {
 
 					echo API_BASE_URL=https://dev.tanaguru.com > .env
 
-					docker stop tanaguru2020-rest-dev || true
+					docker stop tanaguru2020-webapp-dev || true
 					docker image prune -f
 
 					docker run -d --rm \
