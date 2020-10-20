@@ -18,38 +18,68 @@ pipeline {
 	  }
 	}
 
-	stage('Build & deploy dev docker image') {
-	  when {
-	  	branch 'develop'
-	  }
-	  steps {
-		git(url: 'https://github.com/Tanaguru/tanaguru2020-docker', branch: 'master', credentialsId: 'github-rcharre')
-		unstash 'tanaguru2020-webapp'
-		unstash 'version'
-		sh '''
+	stage('Build docker image') {
+      when {
+        anyOf{
+          branch 'develop';
+          branch 'master';
+        }
+      }
+      steps {
+        git(url: "https://github.com/Tanaguru/tanaguru2020-docker", branch: "master", credentialsId: "github-rcharre")
+        unstash 'tanaguru2020-webapp'
+        unstash 'version'
+
+        sh '''
 			WEBAPP_VERSION=$(cat version.txt)
 			mv tanaguru2020-webapp.tar.gz ./tanaguru2020-webapp/image/tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz
-			docker build -t tanaguru2020-webapp:dev --build-arg TANAGURU_WEBAPP_ARCHIVE_PATH=tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz ./tanaguru2020-webapp/image/
+			docker build -t tanaguru2020-webapp:dev \
+				--build-arg TANAGURU_WEBAPP_ARCHIVE_PATH=tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz \
+				./tanaguru2020-webapp/image/
 		'''
-		sh 'docker image prune -f'
-		sh 'docker stop tanaguru2020-webapp-dev'
-		sh 'docker start tanaguru2020-webapp-dev'
+      }
+    }
+
+	stage('Deploy dev') {
+	  when {
+	  	branch 'CICD'
+	  }
+	  steps {
+		git(url: "https://github.com/Tanaguru/tanaguru2020-docker", branch: "master", credentialsId: "github-rcharre")
+		unstash 'version'
+
+		sh '''
+			WEBAPP_VERSION=$(cat version.txt)
+
+			echo API_BASE_URL=https://dev.tanaguru.com > .env
+
+			docker stop tanaguru2020-rest-dev || true
+			docker image prune -f
+
+			docker run -d --rm \
+				--name tanaguru2020-webapp-dev \
+				--env-file ./.env \
+				--label "traefik.enable=true" \
+				--label "traefik.frontend.redirect.entryPoint=secure" \
+				--label "traefik.http.routers.tanaguru-webapp-dev.entrypoints=secure" \
+				--label "traefik.http.routers.tanaguru-webapp-dev.rule=Host(`dev.tanaguru.com`)" \
+				--label "traefik.http.routers.tanaguru-webapp-dev.tls=true" \
+				--label "traefik.port=80" \
+				--network=web \
+				tanaguru2020-webapp:${REST_VERSION}
+		'''
 	  }
 	}
 
-	stage('Build & deploy master docker image') {
+	stage('Deploy prod') {
     	  when {
     	  	branch 'master'
     	  }
     	  steps {
-    		git(url: 'https://github.com/Tanaguru/tanaguru2020-docker', branch: 'master', credentialsId: 'github-rcharre')
+    		git(url: "https://github.com/Tanaguru/tanaguru2020-docker", branch: "master", credentialsId: "github-rcharre")
     		unstash 'tanaguru2020-webapp'
     		unstash 'version'
-    		sh '''
-    			WEBAPP_VERSION=$(cat version.txt)
-    			mv tanaguru2020-webapp.tar.gz ./tanaguru2020-webapp/image/tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz
-    			docker build -t tanaguru2020-webapp:latest --build-arg TANAGURU_WEBAPP_ARCHIVE_PATH=tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz ./tanaguru2020-webapp/image/
-    		'''
+
     		sh 'docker image prune -f'
     	  }
     	}
