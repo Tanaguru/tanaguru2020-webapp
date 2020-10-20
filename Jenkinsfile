@@ -62,7 +62,7 @@ pipeline {
 						--label "traefik.enable=true" \
 						--label "traefik.frontend.redirect.entryPoint=secure" \
 						--label "traefik.http.routers.tanaguru-webapp-dev.entrypoints=secure" \
-						--label "traefik.http.routers.tanaguru-webapp-dev.rule=Host(`dev.tanaguru.com`)" \
+						--label "traefik.http.routers.tanaguru-webapp-dev.rule=Host(\`dev.tanaguru.com\`)" \
 						--label "traefik.http.routers.tanaguru-webapp-dev.tls=true" \
 						--label "traefik.port=80" \
 						--network=web \
