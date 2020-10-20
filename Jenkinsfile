@@ -66,7 +66,7 @@ pipeline {
 						--label "traefik.http.routers.tanaguru-webapp-dev.tls=true" \
 						--label "traefik.port=80" \
 						--network=web \
-						tanaguru2020-webapp:${REST_VERSION}
+						tanaguru2020-webapp:${WEBAPP_VERSION}
 				'''
             }
         }
