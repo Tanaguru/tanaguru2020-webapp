@@ -22,7 +22,6 @@ pipeline {
             when {
                 anyOf {
                     branch 'develop'
-                    branch 'CICD'
                     branch 'master'
                 }
             }
@@ -43,7 +42,7 @@ pipeline {
 
         stage('Deploy dev') {
             when {
-                branch 'CICD'
+                branch 'develop'
             }
             steps {
                 unstash 'version'
