@@ -102,7 +102,7 @@ pipeline {
 
         stage('Store packages') {
             when {
-                branch 'master'
+                branch 'CICD'
             }
             steps {
                 unstash 'tanaguru2020-webapp'
