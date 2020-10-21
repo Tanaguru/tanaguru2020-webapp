@@ -75,11 +75,59 @@ pipeline {
                 branch 'master'
             }
             steps {
+                unstash 'version'
+
+                sh '''
+					WEBAPP_VERSION=$(cat version.txt)
+
+					echo API_BASE_URL=https://prodapi.tanaguru.com > .env
+
+					docker stop tanaguru2020-webapp-prod || true
+					docker image prune -f
+
+					docker run -d --rm \
+						--name tanaguru2020-webapp-prod \
+						--env-file ./.env \
+						--label "traefik.enable=true" \
+						--label "traefik.frontend.redirect.entryPoint=secure" \
+						--label "traefik.http.routers.tanaguru-webapp-prod.entrypoints=secure" \
+						--label "traefik.http.routers.tanaguru-webapp-prod.rule=Host(\\`prod.tanaguru.com\\`)" \
+						--label "traefik.http.routers.tanaguru-webapp-prod.tls=true" \
+						--label "traefik.port=80" \
+						--network=web \
+						tanaguru2020-webapp:${WEBAPP_VERSION}
+				'''
+            }
+        }
+
+        stage('Store packages') {
+            when {
+                branch 'master'
+            }
+            steps {
                 unstash 'tanaguru2020-webapp'
                 unstash 'version'
 
-                sh 'docker image prune -f'
+                sh '''
+                    WEBAPP_VERSION=$(cat version.txt)
+                    mkdir -p /html/tanaguru2020-webapp/${WEBAPP_VERSION}
+					mv -f tanaguru2020-webapp.tar.gz /html/tanaguru2020-webapp/${WEBAPP_VERSION}/tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz
+                    chown 1000:1000 /html/tanaguru2020-webapp/${WEBAPP_VERSION}/tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz
+                '''
             }
         }
+
+        stage('Push image to registry') {
+        when {
+            branch 'master'
+        }
+        steps {
+            unstash 'version'
+
+            sh '''
+              WEBAPP_VERSION=$(cat version.txt)
+            '''
+        }
+    }
     }
 }
