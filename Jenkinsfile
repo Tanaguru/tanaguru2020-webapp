@@ -120,7 +120,7 @@ pipeline {
 
         stage('Push image to registry') {
         	environment {
-				REGISTRY_USER = "tanaguru"
+				REGISTRY_USER = "admin"
 				REGISTRY_PASS = "9x^VTugHEfQ1e7"
 				REGISTRY_HOST = "registry.tanaguru.com"
 			}
