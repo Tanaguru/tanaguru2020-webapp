@@ -137,7 +137,7 @@ pipeline {
 				  --username="$REGISTRY_USER" \
 				  --password="$REGISTRY_PASS" "$REGISTRY_HOST"
 
-				  docker push "$REGISTRY_HOST"/tanaguru2020-webapp:${WEBAPP_VERSION}
+				  docker push tanaguru2020-webapp:${WEBAPP_VERSION}
 				'''
 			}
 		}
