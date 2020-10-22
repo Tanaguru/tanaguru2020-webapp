@@ -138,6 +138,9 @@ pipeline {
 				  --password="$REGISTRY_PASS" "$REGISTRY_HOST"
 				  docker tag tanaguru2020-webapp:${WEBAPP_VERSION} registry.tanaguru.com/tanaguru2020-webapp:${WEBAPP_VERSION}
 				  docker push registry.tanaguru.com/tanaguru2020-webapp:${WEBAPP_VERSION}
+
+				  docker tag tanaguru2020-webapp:${WEBAPP_VERSION} registry.tanaguru.com/tanaguru2020-webapp:latest
+				  docker push registry.tanaguru.com/tanaguru2020-webapp:latest
 				'''
 			}
 		}
