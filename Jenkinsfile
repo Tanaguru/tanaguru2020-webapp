@@ -23,6 +23,7 @@ pipeline {
                 anyOf {
                     branch 'develop'
                     branch 'master'
+                    branch 'CICD'
                 }
             }
             steps {
@@ -102,7 +103,7 @@ pipeline {
 
         stage('Store packages') {
             when {
-                branch 'CICD'
+                branch 'master'
             }
             steps {
                 unstash 'tanaguru2020-webapp'
@@ -118,16 +119,27 @@ pipeline {
         }
 
         stage('Push image to registry') {
-        when {
-            branch 'master'
-        }
-        steps {
-            unstash 'version'
+        	environment {
+				REGISTRY_USER = "tanaguru"
+				REGISTRY_PASS = "9x^VTugHEfQ1e7"
+				REGISTRY_HOST = "registry.tanaguru.com"
+			}
+			when {
+				branch 'CICD'
+			}
+			steps {
+				unstash 'version'
 
-            sh '''
-              WEBAPP_VERSION=$(cat version.txt)
-            '''
-        }
-    }
+				sh '''
+				  WEBAPP_VERSION=$(cat version.txt)
+
+				  docker login \
+				  --username="$REGISTRY_USER" \
+				  --password="$REGISTRY_PASS" "$REGISTRY_HOST"
+
+				  docker push "$REGISTRY_HOST"/tanaguru2020-webapp:${WEBAPP_VERSION}
+				'''
+			}
+		}
     }
 }
