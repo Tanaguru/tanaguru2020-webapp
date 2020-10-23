@@ -1,11 +1,12 @@
 {
   "name": "tanaguru2020-webapp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build --mode production",
-    "sass-lint-vue": "./node_modules/.bin/sass-lint-vue"
+    "sass-lint-vue": "./node_modules/.bin/sass-lint-vue",
+    "version": "echo $npm_package_version"
   },
   "dependencies": {
     "@bytegem/vue-heroicons": "^0.2.5",
