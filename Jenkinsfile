@@ -1,3 +1,9 @@
+def COLOR_MAP = [
+    'SUCCESS': 'good', 
+    'FAILURE': 'danger',
+    'UNSTABLE': 'warning',
+]
+
 pipeline {
     agent any
     stages {
@@ -23,7 +29,6 @@ pipeline {
                 anyOf {
                     branch 'develop'
                     branch 'master'
-                    branch 'CICD'
                 }
             }
             steps {
@@ -125,7 +130,7 @@ pipeline {
 				REGISTRY_HOST = "registry.tanaguru.com"
 			}
 			when {
-				branch 'CICD'
+				branch 'master'
 			}
 			steps {
 				unstash 'version'
@@ -144,5 +149,13 @@ pipeline {
 				'''
 			}
 		}
+    }
+
+    post {
+        always {
+            slackSend channel: '#jenkins',
+                color: COLOR_MAP[currentBuild.currentResult],
+                message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\nMore info at: ${env.BUILD_URL}"
+        }
     }
 }
