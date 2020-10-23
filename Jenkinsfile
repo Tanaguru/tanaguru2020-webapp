@@ -23,7 +23,6 @@ pipeline {
                 anyOf {
                     branch 'develop'
                     branch 'master'
-                    branch 'CICD'
                 }
             }
             steps {
@@ -125,7 +124,7 @@ pipeline {
 				REGISTRY_HOST = "registry.tanaguru.com"
 			}
 			when {
-				branch 'CICD'
+				branch 'master'
 			}
 			steps {
 				unstash 'version'
