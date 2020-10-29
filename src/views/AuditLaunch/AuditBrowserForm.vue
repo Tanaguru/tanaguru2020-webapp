@@ -7,7 +7,7 @@
         <div class="layout-content__main">
             <div class="form-block">
                 <fieldset class="checkbox-wrapper checkbox-guidelines">
-					<legend class="checkbox-wrapper__legend">{{ $t('audit.guidelines.reference.title') }} *
+					<legend class="checkbox-wrapper__legend">{{ $t('audit.guidelines.browser.title') }} *
 						<span v-if="isValid" class="screen-reader-text">{{ $t('audit.form.help.checked') }}</span>
 
 						<span v-else class="screen-reader-text">{{ $t('audit.form.help.empty') }}</span>

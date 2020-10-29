@@ -240,7 +240,7 @@
                     <span>{{$t('form.missingFields')}}</span>
                 </p>
             </div>
-        </form>  
+        </form>
         <BackToTop/>
     </main>
 </template>
@@ -276,7 +276,6 @@ import AuditSiteCrawlerExclusionRegexForm from "./AuditSiteExclusionRegexForm";
 import AuditUploadForm from "./AuditUploadForm";
 import AuditScenarioForm from "./AuditScenarioForm";
 import AuditBreakpointsForm from "./AuditBreakpointsForm";
-import moment from 'moment';
 import UrlHelper from "../../helper/urlhelper"
 import BreakpointHelper from "../../helper/breakpointHelper"
 import AuditWaitTimeForm from "./AuditWaitTimeForm";
@@ -285,6 +284,7 @@ import AuditEnableScreenshotForm from "./AuditEnableScreenshotForm";
 export default {
     name: 'auditLaunch',
     components: {
+		AuditBrowserForm,
         AuditEnableScreenshotForm,
         AuditWaitTimeForm,
         AuditBreakpointsForm,
@@ -508,8 +508,7 @@ export default {
 
         isBreakpointsValid() {
             return this.auditConfigurationForm.common.breakpoints.filter(breakpoint => {
-                return ! BreakpointHelper.isBreakpointValid(breakpoint);
-                return ! BreakpointHelper.isBreakpointEmpty(breakpoint);
+                return !BreakpointHelper.isBreakpointValid(breakpoint) || BreakpointHelper.isBreakpointEmpty(breakpoint);
             }).length === 0;
         },
 
@@ -519,7 +518,7 @@ export default {
                 return ! UrlHelper.checkValidUrl(url, this.project.domain, true)
             }).length === 0;
         },
-        
+
         //Sites
         isSiteSeedsValid() {
             return this.auditConfigurationForm.site.seeds.filter(seed => {
@@ -551,7 +550,7 @@ export default {
 
         //Upload
         isSelectedUploadResourceValid() {
-            return this.auditConfigurationForm.resource.id != null 
+            return this.auditConfigurationForm.resource.id != null
         },
 
         launchCondition() {
