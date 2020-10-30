@@ -51,7 +51,7 @@
                     <div class="form-row">
                         <div class="form-column">
                             <div class="form-block"
-                                 v-show="isCurrentUser == false && $store.state.user.appRole.name != 'USER'">
+                                 v-show="isCurrentUser == false && $store.state.auth.user.appRole.name != 'USER'">
                                 <label class="label" for="status-select">{{ $t('entity.user.role.role') }} *</label>
                                 <div class="select">
                                     <select name="status-select" id="status-select" v-model="modifyUserForm.appRole">
@@ -65,9 +65,9 @@
 
                         <div class="form-column">
                             <fieldset class="checkbox-wrapper"
-                                      v-show="isCurrentUser == false && $store.state.user.appRole.name != 'USER'">
+                                      v-show="isCurrentUser == false && $store.state.auth.user.appRole.name != 'USER'">
                                 <legend class="checkbox-wrapper__legend">{{ $t('entity.user.status') }} *</legend>
-                                <div class="checkbox" v-if="$store.state.authorities['MODIFY_USER']">
+                                <div class="checkbox" v-if="$store.state.auth.authorities['MODIFY_USER']">
                                     <input class="checkbox__input" type="checkbox" name="enabled" id="enabled"
                                            v-model="modifyUserForm.enabled">
                                     <label class="checkbox__label" for="enabled">{{ $t('entity.user.enabled') }}</label>
@@ -97,7 +97,7 @@
 
                 <button
                     class="btn btn--default btn-modify"
-                    v-if="$store.state.authorities['MODIFY_USER'] || isCurrentUser"
+                    v-if="$store.state.auth.authorities['MODIFY_USER'] || isCurrentUser"
                     @click="showModifyUserForm()">
                     {{ $t('action.modify') }}
                 </button>
@@ -158,7 +158,7 @@
         <article id="user-contracts">
             <h2 class="user__title-2">{{ $t('user.contracts') }}</h2>
             <ProfileContractTable v-if="contracts.length > 0" :contracts="contracts"/>
-            <p v-else-if="$route.params.id == $store.state.user.id">{{ $t('user.noContract') }}</p>
+            <p v-else-if="$route.params.id == $store.state.auth.user.id">{{ $t('user.noContract') }}</p>
             <p v-else>{{ $t('user.adminNoContract') }}</p>
 
         </article>
@@ -255,7 +255,7 @@ export default {
                         this.user.appRole.name,
                         this.user.enabled,
                         (user) => {
-                            this.$store.state.user = user;
+                            this.$store.state.auth.user = user;
                             this.user = user;
                             this.modifyUserForm.active = false;
                             this.modifyUserForm.successMsg = this.$i18n.t("form.savedChange")
@@ -326,9 +326,9 @@ export default {
         }
     },
     created() {
-        this.isCurrentUser = this.$store.state.user.id == this.$route.params.id;
+        this.isCurrentUser = this.$store.state.auth.user.id == this.$route.params.id;
         if (this.$route.params.id) {
-            if (!this.isCurrentUser && !this.$store.state.authorities['SHOW_USER']) {
+            if (!this.isCurrentUser && !this.$store.state.auth.authorities['SHOW_USER']) {
                 this.$router.replace('/');
             } else {
                 this.userService.findById(
@@ -336,7 +336,7 @@ export default {
                     (user) => {
                         this.user = user
 
-                        if (this.$store.state.user.appRole.name === 'USER') {
+                        if (this.$store.state.auth.user.appRole.name === 'USER') {
                             this.breadcrumbProps.push({
                                 name: 'Configuration',
                                 path: '/configuration'

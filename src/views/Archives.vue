@@ -174,7 +174,7 @@ export default {
             var condition = false;
             if (this.currentUserRole == 'PROJECT_MANAGER') {
                 condition = true
-            } else if (this.$store.state.user.appRole.overrideProjectRole.name == 'PROJECT_MANAGER') {
+            } else if (this.$store.state.auth.user.appRole.overrideProjectRole.name == 'PROJECT_MANAGER') {
                 condition = true
             }
             return condition
@@ -239,7 +239,7 @@ export default {
                     this.project.id,
                     (users) => {
                         let currentUser = users.filter(user =>
-                            user.contractAppUser.user.id == this.$store.state.user.id
+                            user.contractAppUser.user.id == this.$store.state.auth.user.id
                         )
                         this.currentUserRole = currentUser[0].projectRole.name
                     },

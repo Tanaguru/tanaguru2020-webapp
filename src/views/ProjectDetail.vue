@@ -125,7 +125,7 @@
 				(project) => {
 					this.project = project
 
-					if(this.$store.state.user.appRole.name == 'USER'){
+					if(this.$store.state.auth.user.appRole.name == 'USER'){
 						this.breadcrumbProps.push({
 							name : 'Configuration',
 							path : '/configuration'
@@ -150,7 +150,7 @@
 						(users) => {
 							this.projectUsers = users
 							let currentUser = this.projectUsers.filter(user =>
-								user.contractAppUser.user.id == this.$store.state.user.id
+								user.contractAppUser.user.id == this.$store.state.auth.user.id
 							)
 							this.currentUserRole = currentUser[0].projectRole.name
 						},
@@ -173,7 +173,7 @@
 		computed: {
 			auditCondition(){
 				let condition = false
-				if(this.$store.state.user.appRole.name == 'SUPER_ADMIN' || this.$store.state.user.appRole.name == 'ADMIN'){
+				if(this.$store.state.auth.user.appRole.name == 'SUPER_ADMIN' || this.$store.state.auth.user.appRole.name == 'ADMIN'){
 					condition = true
 				}
 				else if(this.currentUserRole == 'PROJECT_MANAGER' || this.currentUserRole
@@ -185,7 +185,7 @@
 
 			managerCondition(){
 				let condition = false
-				if(this.$store.state.user.appRole.name == 'SUPER_ADMIN' || this.$store.state.user.appRole.name == 'ADMIN'){
+				if(this.$store.state.auth.user.appRole.name == 'SUPER_ADMIN' || this.$store.state.auth.user.appRole.name == 'ADMIN'){
 					condition = true
 				}
 				else if(this.currentUserRole == 'PROJECT_MANAGER'){

@@ -9,7 +9,7 @@
 
 			<p>{{$t('form.help')}}</p>
 
-			<div v-if="$store.state.authorities['CREATE_USER']" id="contract-user-form">
+			<div v-if="$store.state.auth.authorities['CREATE_USER']" id="contract-user-form">
 				<form @submit.prevent="createUser" novalidate>
 					<div class="form-row">
 						<div class="form-column">
@@ -217,7 +217,7 @@
                     this.userCreateForm.usernameError = "";
                     this.userCreateForm.emailError = "";
                     this.userCreateForm.passwordError = "";
- 
+
                     this.userService.create(
                         this.userCreateForm.username,
                         this.userCreateForm.email,
@@ -247,7 +247,7 @@
                                 this.userCreateForm.error = this.$i18n.t("form.genericError");
                             }
                         }
-                    ) 
+                    )
 
                     this.userCreateForm.username = "";
                     this.userCreateForm.password = "";

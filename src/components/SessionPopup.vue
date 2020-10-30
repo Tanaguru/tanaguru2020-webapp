@@ -1,5 +1,5 @@
 <template>
-    <div id="session-popup" v-if="$store.state.user && isWindowVisible" class="session-popup">
+    <div id="session-popup" v-if="$store.state.auth.user && isWindowVisible" class="session-popup">
         <div class="session-popup__inner" aria-live="assertive">
 			<p>{{$t('global.session.expiresSoon')}}</p>
 
@@ -39,11 +39,11 @@
         computed: {
             isWindowVisible() {
                 // Show window 5 mn before timeout
-                return this.$store.state.user && this.$store.state.loginDate.getTime() + this.sessionDuration - 300000 <= this.currentDate.getTime();
+                return this.$store.state.auth.user && this.$store.state.auth.loginDate.getTime() + this.sessionDuration - 300000 <= this.currentDate.getTime();
             },
 
             isTimedOut(){
-				return this.$store.state.user && this.$store.state.loginDate.getTime() + this.sessionDuration <= this.currentDate.getTime();
+				return this.$store.state.auth.user && this.$store.state.auth.loginDate.getTime() + this.sessionDuration <= this.currentDate.getTime();
             }
         },
         methods: {
@@ -51,7 +51,7 @@
 				store.dispatch('refreshToken')
             },
             refreshCurrentDate() {
-            	console.log(this.$store.state.loginDate)
+            	console.log(this.$store.state.auth.loginDate)
                 this.currentDate = new Date();
                 if(this.isTimedOut){
                     this.$store.dispatch("logout")
