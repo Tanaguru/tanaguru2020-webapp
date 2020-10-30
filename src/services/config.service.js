@@ -20,7 +20,7 @@ export default class ConfigService extends Service{
 
     getActiveBrowsers(then, error){
         return this.axios({
-            url: this.controllerName + '/active-browsers',
+            url: this.controllerName + '/browsers-enabled',
             method: 'get',
         })
         .then(resp => {

@@ -5,36 +5,25 @@
             :value="isValid"/>
 
         <div class="layout-content__main">
-            <div class="form-block">
-                <fieldset class="checkbox-wrapper checkbox-guidelines">
-					<legend class="checkbox-wrapper__legend">{{ $t('audit.guidelines.browser.title') }} *
-						<span v-if="isValid" class="screen-reader-text">{{ $t('audit.form.help.checked') }}</span>
+			<div class="layout-content-heading">
+				<h3 class="layout-content-heading__subtitle layout-subtitle"
+					aria-describedby="pages-explanations">{{ $t('audit.browsers.subtitle') }}</h3>
 
-						<span v-else class="screen-reader-text">{{ $t('audit.form.help.empty') }}</span>
-					</legend>
+				<p class="layout-content-heading__info" id='pages-explanations'>
+					{{ $t('audit.browsers.explanation') }}</p>
 
-					<p class="info-text">{{ $t('audit.guidelines.browsers.explanation') }}</p>
-
-				    <div v-for="browser of browsers" class="checkbox" :key="browser">
-                        <input
-                            :class="['checkbox__input', {'has-error':!isValid}]"
-                            type="checkbox"
-                            :value="browser" :id="'checkbox-' + browser"
-                            name="input-reference"
-                            v-model="selectedBrowser"
-                            @change="$emit('input', selectedBrowser)"
-                        />
-                        <label :for="'checkbox-' + reference.id" class="checkbox__label">{{ browser }}</label>
-                    </div>
-                </fieldset>
-
-                <p v-if="!isValid" class="info-error">
-                    <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
-                        <icon-alert/>
-                    </icon-base-decorative>
-                    <span>{{ $t("audit.form.error.auditBrowsers") }}</span>
-                </p>
-            </div>
+				<fieldset class="radio-addition">
+					<legend class="screen-reader-text">{{ $t('audit.browsers.radioLegend') }}</legend>
+					<div class="radio" v-for="browser in browsers" :key="browser">
+						<input class="radio__input" :id="browser" type="radio"
+							   :value="browser"
+							   @change="$emit('input', selectedBrowser)"
+							   v-model="selectedBrowser"/>
+						<label class="radio__label"
+							   :for="browser">{{ $t('audit.browsers.' + browser) }}</label>
+					</div>
+				</fieldset>
+			</div>
         </div>
     </div>
 </template>

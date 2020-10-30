@@ -214,6 +214,7 @@
 
                     <audit-browser-form
                         :is-valid="isBrowserValid"
+						:browsers="activeBrowsers"
                         v-model="auditConfigurationForm.common.browser"
                         :has-been-sent="hasTryToLaunch"/>
                 </section>
@@ -391,7 +392,6 @@ export default {
         this.projectService.findById(
             this.$route.params.id,
             (project) => {
-                let currentDate = new Date();
                 this.auditConfigurationForm.common.name = project.name + ' ' + this.moment().format("DD-MM-YYYY HH:mm");
                 this.auditConfigurationForm.page.urls.push(project.domain);
                 this.auditConfigurationForm.site.seeds.push(project.domain);
@@ -439,7 +439,7 @@ export default {
                 'WAIT_TIME': this.auditConfigurationForm.common.waitTime,
                 'WEBDRIVER_RESOLUTIONS': this.auditConfigurationForm.common.breakpoints.join(';'),
                 'ENABLE_SCREENSHOT': this.auditConfigurationForm.common.enableScreenshot,
-                'BROWSER': this.auditConfigurationForm.common.browser
+                'WEBDRIVER_BROWSER': this.auditConfigurationForm.common.browser
             };
             switch (this.auditConfigurationForm.common.type) {
                 case 'site':
@@ -477,8 +477,6 @@ export default {
                 }
             )
         },
-
-
     },
     computed: {
          //Commons
