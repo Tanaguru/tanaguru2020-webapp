@@ -17,7 +17,7 @@
 
 				<button
 					class="btn btn--default"
-					v-if="$store.state.user.appRole.name == 'SUPER_ADMIN'"
+					v-if="$store.state.auth.user.appRole.name == 'SUPER_ADMIN'"
 					@click="showModifyContractForm()">
 					{{$t('action.modify')}}
 				</button>
@@ -223,7 +223,7 @@ export default {
     },
     computed: {
         promoteCondition(){
-			return this.$store.state.user.appRole.overrideContractRole.authorities.some(authority => {
+			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
                 return authority.name === 'PROMOTE_MEMBER'
             }) ||
             (this.currentContractUser &&  this.currentContractUser.contractRole.authorities.some(authority => {
@@ -232,7 +232,7 @@ export default {
         },
 
         addingCondition(){
-			return this.$store.state.user.appRole.overrideContractRole.authorities.some(authority => {
+			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
 				return authority.name === 'CREATE_PROJECT'
 			}) ||
             (this.currentContractUser && this.currentContractUser.contractRole.authorities.some(authority => {
@@ -241,7 +241,7 @@ export default {
         },
 
         deletingProjectCondition(){
-			return this.$store.state.user.appRole.overrideProjectRole.authorities.some(authority => {
+			return this.$store.state.auth.user.appRole.overrideProjectRole.authorities.some(authority => {
                 return authority.name === 'DELETE_PROJECT'
             }) ||
             (this.currentContractUser && this.currentContractUser.projectRole.authorities.some(authority => {
@@ -250,7 +250,7 @@ export default {
         },
 
         deletingUserCondition(){
-			return this.$store.state.user.appRole.overrideProjectRole.authorities.some(authority => {
+			return this.$store.state.auth.user.appRole.overrideProjectRole.authorities.some(authority => {
                 return authority.name === 'REMOVE_MEMBER'
             }) ||
             (this.currentContractUser && this.currentContractUser.projectRole.authorities.some(authority => {
@@ -418,7 +418,7 @@ export default {
             this.$route.params.id,
             (contract) => {
                 this.contract = contract
-                if(this.$store.state.user.appRole.name == 'USER'){
+                if(this.$store.state.auth.user.appRole.name == 'USER'){
                     this.breadcrumbProps.push({
                         name : 'Configuration',
                         path : '/configuration'
@@ -443,7 +443,7 @@ export default {
                             	this.contractOwner = contractUser;
 							}
 
-                            if(contractUser.user.id === this.$store.state.user.id){
+                            if(contractUser.user.id === this.$store.state.auth.user.id){
                                 this.currentContractUser = contractUser;
                             }
                         });

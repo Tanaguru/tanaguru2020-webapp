@@ -123,4 +123,17 @@ export default class TestHierarchyService extends Service{
                 error(err)
             });
     }
+
+    deleteReference(referenceId, then, error){
+        return this.axios({
+            url: this.controllerName + "/reference/" + referenceId,
+            method: 'delete',
+        })
+        .then(resp => {
+            then()
+        })
+        .catch(err => {
+            error(err);
+        });
+    }
 }

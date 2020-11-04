@@ -1,7 +1,7 @@
 <template>
     <article class="admin-contracts">
 		<header>
-			<h1 v-if="$store.state.user.appRole.name == 'USER'">{{$t('page.configContract')}}</h1>
+			<h1 v-if="$store.state.auth.user.appRole.name == 'USER'">{{$t('page.configContract')}}</h1>
 			<h1 v-else>{{$t('page.adminContract')}}</h1>
 		</header>
 
@@ -102,7 +102,7 @@
         computed:{
             newContractCondition(){
                 let condition = null
-                if(this.$store.state.user.appRole.name == 'SUPER_ADMIN'){
+                if(this.$store.state.auth.user.appRole.name == 'SUPER_ADMIN'){
                     condition = true
                 }
                 else {

@@ -41,7 +41,7 @@ export default {
     computed: {
 		currentUser() {
 			if(this.$store.getters.isLoggedIn) {
-				return this.$store.state.user.username;
+				return this.$store.state.auth.user.username;
 			}
 		}
 	},

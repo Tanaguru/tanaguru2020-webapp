@@ -1,5 +1,5 @@
 <template>
-    <dashboard v-if="$store.state.user"/>
+    <dashboard v-if="$store.state.auth.user"/>
     <Login v-else/>
 </template>
 
