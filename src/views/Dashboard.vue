@@ -162,7 +162,7 @@
 						this.currentContractId,
 						(users) => {
 							let currentUser = users.filter(user =>
-								user.id == this.$store.state.user.id
+								user.id == this.$store.state.auth.user.id
 							)
 							this.currentUserRole = currentUser[0].contractRole.name
 						},
@@ -202,7 +202,7 @@
 			createProjectCondition(){
 				let condition = false;
 				if(this.currentContractId){
-					if(this.$store.state.user.appRole.overrideContractRole.name == 'CONTRACT_OWNER' || this.$store.state.user.appRole.overrideContractRole.name == 'CONTRACT_MANAGER'){
+					if(this.$store.state.auth.user.appRole.overrideContractRole.name == 'CONTRACT_OWNER' || this.$store.state.auth.user.appRole.overrideContractRole.name == 'CONTRACT_MANAGER'){
 						condition = true
 					}
 					else if(this.currentUserRole == 'CONTRACT_OWNER' || this.currentUserRole == 'CONTRACT_MANAGER'){

@@ -42,7 +42,7 @@
 								<li class="actions-list__item">
 									<button
 										class="btn btn--icon btn--nude"
-										v-show="$store.state.authorities['DELETE_CONTRACT']"
+										v-show="$store.state.auth.authorities['DELETE_CONTRACT']"
 										@click="confirm(contract)">
 										<icon-base-decorative><icon-delete/></icon-base-decorative>
 										<span>{{$t('action.delete')}}</span>
@@ -124,7 +124,7 @@ export default {
 				this.$emit('delete-contract', contract)
 			})
 			.catch(() => {
-				
+
 			})
 			.finally(() => {
 				this.$modal.close()

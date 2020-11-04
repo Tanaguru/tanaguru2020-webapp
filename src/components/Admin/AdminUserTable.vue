@@ -46,7 +46,7 @@
 										<span>{{$t('action.show')}}</span>
 									</router-link>
 								</li>
-								<li class="actions-list__item" v-if="user.id !== $store.state.user.id && $store.state.authorities['DELETE_USER'] && ($store.state.user.appRole.name === 'SUPER_ADMIN' || ($store.state.user.appRole.name === 'ADMIN' && user.appRole.name !=='SUPER_ADMIN'))">
+								<li class="actions-list__item" v-if="user.id !== $store.state.auth.user.id && $store.state.auth.authorities['DELETE_USER'] && ($store.state.auth.user.appRole.name === 'SUPER_ADMIN' || ($store.state.auth.user.appRole.name === 'ADMIN' && user.appRole.name !=='SUPER_ADMIN'))">
 									<button
 									class="btn btn--icon btn--nude"
 									@click="confirm(user)">

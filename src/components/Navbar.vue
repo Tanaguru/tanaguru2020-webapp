@@ -62,7 +62,7 @@ export default {
 						(
 								!navbarLink.requiredAuthorities ||
 								navbarLink.requiredAuthorities.every((authority) =>{
-									return Object.keys(this.$store.state.authorities).includes(authority);
+									return Object.keys(this.$store.state.auth.authorities).includes(authority);
 								})
 						);
 

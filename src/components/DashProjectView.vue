@@ -388,7 +388,7 @@ export default {
 	computed: {
 		auditLaunchCondition(){
 			let condition = false;
-			if(this.$store.state.user.appRole.overrideProjectRole.name === 'PROJECT_MANAGER' || this.$store.state.user.appRole.overrideProjectRole.name === 'PROJECT_USER'){
+			if(this.$store.state.auth.user.appRole.overrideProjectRole.name === 'PROJECT_MANAGER' || this.$store.state.auth.user.appRole.overrideProjectRole.name === 'PROJECT_USER'){
 				condition = true
 			}
 			else if(this.currentUserRole === "PROJECT_MANAGER" || this.currentUserRole === "PROJECT_USER" ){
@@ -560,7 +560,7 @@ export default {
 			(users) => {
 				this.users = users
 				let currentUser = this.users.filter(user =>
-					user.contractAppUser.user.id === this.$store.state.user.id
+					user.contractAppUser.user.id === this.$store.state.auth.user.id
 				)
 				this.currentUserRole = currentUser[0].projectRole.name
 			},

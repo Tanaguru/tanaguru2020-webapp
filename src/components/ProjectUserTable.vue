@@ -34,7 +34,7 @@
                         <button
 							class="btn btn--clipboard"
 							@click="editUser(user)"
-                            v-if="user.contractAppUser.user.id != $store.state.user.id && managerCondition && user.projectRole.name != 'PROJECT_MANAGER'"
+                            v-if="user.contractAppUser.user.id != $store.state.auth.user.id && managerCondition && user.projectRole.name != 'PROJECT_MANAGER'"
 						>
 							{{$t('action.promote')}}
 						</button>
@@ -47,7 +47,7 @@
                         </router-link>
                         <button
                             class="btn btn--icon btn--nude"
-                            v-if="user.contractAppUser.user.id != $store.state.user.id && managerCondition"
+                            v-if="user.contractAppUser.user.id != $store.state.auth.user.id && managerCondition"
                             @click="confirm(user)"
                         >
                             <icon-base-decorative><icon-delete/></icon-base-decorative>
@@ -99,7 +99,7 @@ export default {
 				this.$emit('remove-user', user)
 			})
 			.catch(() => {
-				
+
 			})
 			.finally(() => {
 				this.$modal.close()
