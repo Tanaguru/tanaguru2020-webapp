@@ -347,6 +347,7 @@
 			},
 			"browsers": {
 				"title": "Navigateur",
+				"subtitle": "Choix du navigateur",
 				"explanation": "La navigateur à utiliser pour l'audit.",
 				"radioLegend": "Option de choix de navigateur",
 				"firefox": "Mozilla Firefox",

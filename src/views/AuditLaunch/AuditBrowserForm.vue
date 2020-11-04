@@ -10,7 +10,7 @@
 					aria-describedby="pages-explanations">{{ $t('audit.definition.browsers.subtitle') }}</h3>
 
 				<p class="layout-content-heading__info" id='pages-explanations'>
-					{{ $t('audit.browsers.explanation') }}</p>
+					{{ $t('audit.definition.browsers.explanation') }}</p>
 
 				<fieldset class="radio-addition">
 					<legend class="screen-reader-text">{{ $t('audit.definition.browsers.radioLegend') }}</legend>

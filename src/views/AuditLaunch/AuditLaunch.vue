@@ -209,7 +209,7 @@
             <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
                 <section class="layout">
                     <audit-form-section-header
-                        :title="$t('audit.browser.title')"
+                        :title="$t('audit.definition.browser.title')"
                         :number="6"/>
 
                     <audit-browser-form
