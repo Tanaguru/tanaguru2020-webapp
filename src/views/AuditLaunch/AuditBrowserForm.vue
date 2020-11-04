@@ -7,20 +7,20 @@
         <div class="layout-content__main">
 			<div class="layout-content-heading">
 				<h3 class="layout-content-heading__subtitle layout-subtitle"
-					aria-describedby="pages-explanations">{{ $t('audit.browsers.subtitle') }}</h3>
+					aria-describedby="pages-explanations">{{ $t('audit.definition.browsers.subtitle') }}</h3>
 
 				<p class="layout-content-heading__info" id='pages-explanations'>
 					{{ $t('audit.browsers.explanation') }}</p>
 
 				<fieldset class="radio-addition">
-					<legend class="screen-reader-text">{{ $t('audit.browsers.radioLegend') }}</legend>
+					<legend class="screen-reader-text">{{ $t('audit.definition.browsers.radioLegend') }}</legend>
 					<div class="radio" v-for="browser in browsers" :key="browser">
 						<input class="radio__input" :id="browser" type="radio"
 							   :value="browser"
 							   @change="$emit('input', selectedBrowser)"
 							   v-model="selectedBrowser"/>
 						<label class="radio__label"
-							   :for="browser">{{ $t('audit.browsers.' + browser) }}</label>
+							   :for="browser">{{ $t('audit.definition.browsers.' + browser) }}</label>
 					</div>
 				</fieldset>
 			</div>
