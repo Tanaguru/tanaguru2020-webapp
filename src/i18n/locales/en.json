@@ -344,6 +344,13 @@
 				"radioLegend": "Option to add screenshots",
 				"radioYes": "Yes",
 				"radioNo": "No"
+			},
+			"browsers": {
+				"title": "Browser",
+				"explanation": "The browser to use for the audit.",
+				"radioLegend": "Option to choose browser",
+				"firefox": "Mozilla Firefox",
+				"chrome": "Google Chrome"
 			}
 		},
 		"guidelines": {
@@ -355,13 +362,6 @@
 			"mainReference": {
 				"title": "Choice of main guidelines",
 				"explanation": "The repository that will be displayed in the dashboard."
-			},
-			"browsers": {
-				"title": "Browser",
-				"explanation": "The browser to use for the audit.",
-				"radioLegend": "Option to choose browser",
-				"firefox": "Mozilla Firefox",
-				"chrome": "Google Chrome"
 			},
 			"level": {
 				"title": "Conformity level",

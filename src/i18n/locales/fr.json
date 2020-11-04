@@ -344,6 +344,13 @@
 				"radioLegend": "Option d'ajout de captures d'écran",
 				"radioYes": "Oui",
 				"radioNo": "Non"
+			},
+			"browsers": {
+				"title": "Navigateur",
+				"explanation": "La navigateur à utiliser pour l'audit.",
+				"radioLegend": "Option de choix de navigateur",
+				"firefox": "Mozilla Firefox",
+				"chrome": "Google Chrome"
 			}
 		},
 		"guidelines": {
