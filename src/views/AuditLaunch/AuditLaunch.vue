@@ -204,6 +204,22 @@
                 </section>
             </div>
 
+            <hr role="presentation" class="separator separator--main" v-if="auditConfigurationForm.common.type != null"/>
+
+            <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
+                <section class="layout">
+                    <audit-form-section-header
+                        :title="$t('audit.browser.title')"
+                        :number="6"/>
+
+                    <audit-browser-form
+                        :is-valid="isBrowserValid"
+						:browsers="activeBrowsers"
+                        v-model="auditConfigurationForm.common.browser"
+                        :has-been-sent="hasTryToLaunch"/>
+                </section>
+            </div>
+
             <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
                 <button class="btn btn--default-inverse btn--icon" type="button" @click="startAudit"
                         :enabled="launchCondition">
@@ -225,7 +241,7 @@
                     <span>{{$t('form.missingFields')}}</span>
                 </p>
             </div>
-        </form>  
+        </form>
         <BackToTop/>
     </main>
 </template>
@@ -248,6 +264,7 @@ import IconArrowBlue from '../../components/icons/IconArrowBlue';
 import AuditTypeForm from "./AuditTypeForm";
 import AuditNameForm from "./AuditNameForm";
 import AuditReferencesForm from "./AuditReferencesForm";
+import AuditBrowserForm from "./AuditBrowserForm";
 import AuditMainReferenceForm from "./AuditMainReferenceForm";
 import AuditFormSectionHeader from "./AuditFormSectionHeader";
 import AuditSiteSeedsForm from "./AuditSiteSeedsForm";
@@ -260,7 +277,6 @@ import AuditSiteCrawlerExclusionRegexForm from "./AuditSiteExclusionRegexForm";
 import AuditUploadForm from "./AuditUploadForm";
 import AuditScenarioForm from "./AuditScenarioForm";
 import AuditBreakpointsForm from "./AuditBreakpointsForm";
-import moment from 'moment';
 import UrlHelper from "../../helper/urlhelper"
 import BreakpointHelper from "../../helper/breakpointHelper"
 import AuditWaitTimeForm from "./AuditWaitTimeForm";
@@ -269,6 +285,7 @@ import AuditEnableScreenshotForm from "./AuditEnableScreenshotForm";
 export default {
     name: 'auditLaunch',
     components: {
+		AuditBrowserForm,
         AuditEnableScreenshotForm,
         AuditWaitTimeForm,
         AuditBreakpointsForm,
@@ -312,6 +329,7 @@ export default {
 
             project: null,
             references: [],
+            activeBrowsers: [],
 
             seedMustBeInDomain: true,
             hasTryToLaunch: false,
@@ -323,7 +341,8 @@ export default {
                     waitTime: 500,
                     breakpoints: [1920],
                     type: null,
-                    enableScreenshot: false
+                    enableScreenshot: false,
+                    browser: null
                 },
                 site: {
                     seeds: [],
@@ -373,7 +392,6 @@ export default {
         this.projectService.findById(
             this.$route.params.id,
             (project) => {
-                let currentDate = new Date();
                 this.auditConfigurationForm.common.name = project.name + ' ' + this.moment().format("DD-MM-YYYY HH:mm");
                 this.auditConfigurationForm.page.urls.push(project.domain);
                 this.auditConfigurationForm.site.seeds.push(project.domain);
@@ -391,6 +409,18 @@ export default {
                 console.error(error)
             }
         );
+
+        this.configService.getActiveBrowsers(
+            (activeBrowsers) => {
+                this.activeBrowsers = activeBrowsers
+                if(this.activeBrowsers.length > 0){
+                    this.auditConfigurationForm.common.browser = this.activeBrowsers[0];
+                }
+            },
+            (error) => {
+                console.error(error)
+            }
+        )
     },
 
     methods: {
@@ -408,7 +438,8 @@ export default {
             const parameters = {
                 'WAIT_TIME': this.auditConfigurationForm.common.waitTime,
                 'WEBDRIVER_RESOLUTIONS': this.auditConfigurationForm.common.breakpoints.join(';'),
-                'ENABLE_SCREENSHOT': this.auditConfigurationForm.common.enableScreenshot
+                'ENABLE_SCREENSHOT': this.auditConfigurationForm.common.enableScreenshot,
+                'WEBDRIVER_BROWSER': this.auditConfigurationForm.common.browser
             };
             switch (this.auditConfigurationForm.common.type) {
                 case 'site':
@@ -446,8 +477,6 @@ export default {
                 }
             )
         },
-
-
     },
     computed: {
          //Commons
@@ -471,10 +500,13 @@ export default {
             return Number.isInteger(this.auditConfigurationForm.common.waitTime) && this.auditConfigurationForm.common.waitTime > 0  && this.auditConfigurationForm.common.waitTime <= 10000 ;
         },
 
+        isBrowserValid(){
+            return this.activeBrowsers.includes(this.auditConfigurationForm.common.browser);
+        },
+
         isBreakpointsValid() {
             return this.auditConfigurationForm.common.breakpoints.filter(breakpoint => {
-                return ! BreakpointHelper.isBreakpointValid(breakpoint);
-                return ! BreakpointHelper.isBreakpointEmpty(breakpoint);
+                return !BreakpointHelper.isBreakpointValid(breakpoint) || BreakpointHelper.isBreakpointEmpty(breakpoint);
             }).length === 0;
         },
 
@@ -484,7 +516,7 @@ export default {
                 return ! UrlHelper.checkValidUrl(url, this.project.domain, true)
             }).length === 0;
         },
-        
+
         //Sites
         isSiteSeedsValid() {
             return this.auditConfigurationForm.site.seeds.filter(seed => {
@@ -516,7 +548,7 @@ export default {
 
         //Upload
         isSelectedUploadResourceValid() {
-            return this.auditConfigurationForm.resource.id != null 
+            return this.auditConfigurationForm.resource.id != null
         },
 
         launchCondition() {
@@ -526,7 +558,8 @@ export default {
                 this.isSelectedReferencesValid &&
                 this.isMainReferenceValid &&
                 this.isBreakpointsValid &&
-                this.isWaitTimeValid;
+                this.isWaitTimeValid &&
+                this.isBrowserValid;
 
             switch (this.auditConfigurationForm.common.type) {
                 case 'scenario':

@@ -1,620 +1,620 @@
 {
-  "global": {
-    "siteName": "Tanaguru Engine",
-    "skiplink": "Aller au contenu",
-    "help": "Aide",
-    "language": {
-      "label": "Choisissez votre langue",
-      "french": "Français",
-      "english": "English"
-    },
-    "session": {
-      "expiresSoon": "La session arrive bientôt à expiration, veuillez cliquer ci dessous pour la prolonger.",
-      "maintainButtonLabel": "Prolonger la durée de la session."
-    },
-    "logoAlt": "Tanaguru - Retour à l'accueil",
-    "footerContent": "©2009-{date} Tanaguru.com - Propulsé par Tanaguru",
-    "breadcrumbsHelp": "Vous êtes ici"
-  },
-  "page": {
-    "adminContract": "Administration des contrats",
-    "configContract": "Gestion des contrats",
-    "adminUser": "Administration des utilisateurs",
-    "dashboard": "Tableau de bord",
-    "auditLaunch": "Lancer un audit",
-    "archives": "Archives",
-    "legals": "Mentions légales",
-    "privacy": "Politique de confidentialité",
-    "credits": "Crédits",
-    "access": "Accessibilité",
-    "sitemap": "Plan du site",
-    "history": "Historique d'audits",
-    "notFound": "Oups ! Cette page est introuvable.",
-    "forbidden": "Accès refusé"
-  },
-  "title": {
-    "home": "Accueil",
-    "login": "Connexion",
-    "dashboard": "Tableau de bord",
-    "auditConfiguration": "Configuration de l'audit",
-    "contractDetail": "Détails du contrat",
-    "administration": "Administration",
-    "configuration": "Gestion",
-    "archives": "Archives",
-    "auditDetail": "Détails de l'audit",
-    "history": "Historique des audits",
-    "auditResult": "Résultats de l'audit",
-    "profile": "Profil",
-    "auditSummary": "Synthèse de l'audit",
-    "notFound": "Page non trouvée !",
-    "forbidden": "Page non autorisée !"
-  },
-  "action": {
-    "show": "Voir",
-    "hide": "Replier",
-    "delete": "Supprimer",
-    "deleteScreenshot": "Supprimer les captures d'écran",
-    "remove": "Retirer",
-    "add": "Ajouter",
-    "addUser": "Ajouter un utilisateur",
-    "create": "Créer",
-    "modify": "Modifier",
-    "login": "Se connecter",
-    "signIn": "Inscription",
-    "logout": "Déconnexion",
-    "start": "Démarrer",
-    "search": "Chercher",
-    "auditStart": "Lancer l'audit",
-    "auditNewStart": "Lancer un nouvel audit",
-    "goTop": "Revenir <br /> en haut de page",
-    "archives": "Accéder aux archives",
-    "changePassword": "Changer mon mot de passe",
-    "resetPassword": "Réinitialiser mon mot de passe",
-    "saveChange": "Sauver les modifications",
-    "history": "Voir l'historique",
-    "promote": "Changer le rôle",
-    "close": "Fermer",
-    "closeModal": "Fermer la modale",
-    "backHome": "Retour à l'accueil",
-    "loadMore": "Afficher plus",
-    "backToPageList": "Retour à la liste des pages",
-    "confirm": "Confirmer",
-    "cancel": "Annuler"
-  },
-  "entity": {
-    "generic": {
-      "actions": "Actions",
-      "anomalies": "anomalies"
-    },
-    "user": {
-      "user": "Utilisateur",
-      "users": "Utilisateurs",
-      "role": {
-        "role": "Rôle",
-        "superAdmin": "Super Admin",
-        "admin": "Admin",
-        "user": "User",
-        "projectManager": "Project Manager",
-        "projectUser": "Project User",
-        "projectGuest": "Project Guest",
-        "contractManager": "Contract Manager",
-        "contractUser": "Contract User",
-        "contractGuest": "Contract Guest"
-      },
-      "dateCreation": "Date de creation",
-      "username": "Nom d'utilisateur",
-      "email": "Adresse mail",
-      "password": "Mot de passe",
-      "newPassword": "Nouveau mot de passe",
-      "passwordConfirm": "Confirmation du mot de passe",
-      "enabled": "Activé",
-      "status": "Statut",
-      "selectStatus": "Sélectionner le statut",
-      "emailError": "Le champ ne peut pas être vide."
-    },
-    "contract": {
-      "contracts": "Contrats",
-      "contract": "Contrat",
-      "name": "Nom",
-      "dateEnd": "Date de fin",
-      "dateStart": "Date de début",
-      "owner": "Propriétaire",
-      "selectOwner": "Sélectionner le propriétaire du contrat"
-    },
-    "project": {
-      "name": "Nom",
-      "domain": "Nom de domaine",
-      "contract": "Nom du contrat"
-    },
-    "audit": {
-      "name": "Nom",
-      "type": "Type",
-      "nbPage": "Nombre de pages",
-      "status": "Statut",
-      "dateStart": "Date de début",
-      "dateEnd": "Date de fin",
-      "id": "Id n°",
-      "url": "Domaine",
-      "repository": "Référentiel",
-      "parameters": "Paramètres de l'audit",
-      "page": "Audit de page",
-      "site": "Audit de site",
-      "upload": "Audit de fichier",
-      "scenario": "Audit de scénario",
-      "assisted": "Audit assisté",
-      "result": {
-        "passed": "Conforme",
-        "inapplicable": "Non appliquable",
-        "ignored": "Anomalies ignorées",
-        "failed": "Non conforme",
-        "untested": "Non testé",
-        "cantTell": "À qualifier"
-      }
-    }
-  },
-  "menu": {
-    "title": "Menu",
-    "close": "Fermer",
-    "open": "Ouvrir le menu de navigation"
-  },
-  "chart": {
-    "progress": {
-      "helpText": "{percentage}% de tests validés"
-    }
-  },
-  "form": {
-    "help": "Les champs obligatoires sont signalés par le symbole *.",
-    "savedChange": "Modification(s) enregistrée(s).",
-    "genericError": "Une erreur est survenue.",
-    "projectCreation": "Le project a été créé.",
-    "contractCreation": "Le contrat a été créé.",
-    "userCreation": "L'utilisateur a été créé.",
-    "userContractAddition": "L'utilisateur a été ajouté au contrat.",
-    "userProjectAddition": "L'utilisateur a été ajouté au projet.",
-    "inexistantUser": "Cet utilisateur n'existe pas.",
-    "notAMember": "Cet utilisateur ne peut être ajouté au projet",
-    "incorrectConfirmation": "Le mot de passe et sa confirmation ne correspondent pas.",
-    "missingFields": "Merci de bien vouloir compléter les champs vides.",
-    "existingEmail": "Cette adresse e-mail est déjà enregistrée.",
-    "existingUsername": "Ce nom d'utilisateur n'est pas disponible",
-    "invalidUsername": "Le nom d'utilisateur doit contenir plus de 4 charactères et moins de 30.",
-    "invalidPassword": "Le mot de passe ne rempli pas les critères indiqués.",
-    "nameError": "Le nom doit être inférieur à 50 caractères.",
-    "nameConstraint": "50 caractères maximum",
-    "usernameError": "Le nom d'utilisateur doit contenir moins de 30 caractères.",
-    "usernameConstraint": "30 caractères maximum",
-    "passwordConstraint": "Doit contenir au minimum 8 caractères dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial.",
-    "passwordError": "Votre mot de passe doit contenir au minimum 8 caractères dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial.",
-    "emailConstraint": "La saisie doit être au format e-mail.",
-    "emptyInput": "Veuillez remplir ce champ.",
-    "resetPasswordMailSuccess": "Un email contenant les instructions pour réinitialiser votre mot de pas a été envoyé.",
-    "resetPasswordMailError": "Une erreur est survenue lors de l'envoie de l'email, veuillez rééssayer plus tard.",
-    "urlError": "Veuillez saisie une URL valide (exemple : http://www.tanaguru.com)"
-  },
-  "archives": {
-    "legendPage": "Tableau des audits de page réalisés",
-    "legendSite": "Tableau des audits de site réalisés",
-    "legendUpload": "Tableau des audits de fichier réalisés",
-    "legendScenario": "Tableau des audits de scénario réalisés",
-    "noAudit": "Aucun audit de ce type n'a été réalisé pour ce projet."
-  },
-  "history": {
-    "tableCaption": "Historique des audits réalisés sur cette page"
-  },
-  "login": {
-    "title": "Connexion<br />à votre compte",
-    "labelId": "Votre identifiant",
-    "labelPassword": "Votre mot de passe",
-    "password": "Mot de passe oublié ?",
-    "incorrectLogin": "L'identifiant et/ou le mot de passe sont incorrect(s)."
-  },
-  "resultAudit": {
-    "displayOptions": {
-      "title": "Options d'affichage",
-      "hide": "Replier les paramètres",
-      "show": "Afficher les paramètres",
-      "sticky": "Fixer cet encadré",
-      "unsticky": "Détacher cet encadré",
-      "legendReference": "Choix de référentiel :",
-      "legendSort": "Trier par :",
-      "sortAnomalies": "Anomalies",
-      "sortRepository": "Référentiel",
-      "search": {
-        "filter": "Filtrer par",
-        "filterInfo": "nombre de tags actuellement sélectionnés :",
-        "help": "Sélectionnez les tags qui vous intéressent dans la liste déroulante en appuyant sur la flèche ou en saisissant du texte à l'intérieur du champ. Cliquez ou pressez la touche entrée pour valider vos choix. Il n'y a pas de limite au nombre de tags que vous pouvez sélectionner.",
-        "tagsList": "Liste de {length} propositions.",
-        "selectedTags": "Tags sélectionnés"
-      }
-    },
-    "actions": {
-      "export": "Exporter",
-      "share": "Partager",
-      "print": "Imprimer",
-      "launch": "Relancer l'audit"
-    },
-    "copyLink": {
-      "copy": "Copier le lien",
-      "success": "Copié !",
-      "successHelp": "Le lien a bien été copié",
-      "fail": "Erreur",
-      "failHelp": "Impossible de copier le lien"
-    },
-    "elmtTested": "éléments testés",
-    "date": "Depuis le",
-    "overview": {
-      "title": "Vue d'ensemble de l'audit",
-      "parameters": "Paramètres des statistiques",
-      "tests": {
-        "title": "Nombre de tests",
-        "tooltipHelp": "Informations sur le nombre de tests",
-        "tooltipTitle": "Nombre de tests",
-        "tooltipContent": "Détails de la répartition des tests par type de résultats. Ces chiffres ne tiennent pas compte du nombre d'occurrence d'éléments par tests. Par exemple, un même test invalidé à plusieurs reprises n'est comptabilisé qu'une seule fois.",
-        "table": {
-          "caption": "Résultats des tests en fonction du type de tests",
-          "columnTest": "Intitulé du test",
-          "columnResult": "Résultat"
-        }
-      },
-      "anomalies": {
-        "title": "Nombre d'anomalies par thème",
-        "tooltipHelp": "Informations sur le nombre d'anomalies par principe",
-        "tooltipTitle": "Nombre d'anomalies par principe",
-        "tooltipContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et rhoncus sem. Duis et sapien id magna vulputate dictum."
-      }
-    },
-    "testResult": {
-      "title": "Résultats détaillés",
-      "mainTabShow": "Tout déplier",
-      "mainTabHide": "Tout replier",
-      "detailTabShow": "Déplier les résultats détaillés",
-      "detailTabHide": "Replier les résultats détaillés",
-      "explanation": "Explication",
-      "ruleLink": "Accéder à la règle",
-      "ruleInfo": "Comprendre la règle",
-      "errors": "{nbAnomaly} erreurs sur {nbElementTested} éléments testés",
-      "status": "Statut",
-      "accessibleName": "Nom accessible",
-      "isNotVisibleDueTo": "Non visible via",
-      "isNotExposedDueTo": "Non exposé via",
-      "canBeReachedUsingKeyboardWith": "Atteignable au clavier via",
-      "outer": "Balise",
-      "details": "Détails",
-      "xpath": "XPath",
-      "xpathCopy": "Copier le XPath",
-      "css": "Sélecteur CSS",
-      "cssCopy": "Copier le sélecteur",
-      "checkboxAnomaly": "Ne plus relever cette anomalie",
-      "hide": "Masquer",
-      "show": "Afficher",
-      "anomaly": "Anomalie n°"
-    }
-  },
-  "dashboard": {
-    "actions": {
-      "new": "Nouveau projet",
-      "alphabetical": "Trier par ordre alphabétique",
-      "chronological": "Trier du plus récent au plus ancien",
-      "credits": "Crédits: 300 audits restants",
-      "archives": "Archives"
-    },
-    "title": {
-      "myProjects": "Mes projets",
-      "sharedProjects": "Projets partagés"
-    },
-    "project": {
-      "contract": "Contrat :",
-      "anomaly": "anomalies",
-      "url": "Domaine :",
-      "date": "Date de validité :",
-      "repository": "Référentiel :",
-      "anomalyPage": "Nombre moyen d'anomalies par page :",
-      "anomalyAudit": "Nombre moyen d'anomalies sur le dernier audit :",
-      "elementsTested": "Nombre d'éléments testés :",
-      "auditsLaunched": "Nombre d'audits lancés :",
-      "team": "Équipe",
-      "btnTeam": "Afficher toute l'équipe",
-      "noAudit": "Vous n'avez pas encore réalisé d'audit.",
-      "noProject": "Vous n'avez aucun projet pour le moment.",
-      "noSharedProject": "Personne n'a encore partagé de projet avec vous.",
-      "legend": "Légende des résultats",
-      "update": "Dernière mise à jour :",
-      "author": "Réalisé par",
-      "lastPageAudit": "Dernier audit de page",
-      "lastSiteAudit": "Dernier audit de site",
-      "lastScenarioAudit": "Dernier audit de scénario",
-      "lastUploadAudit": "Dernier audit de fichier",
-      "lastAssistedAudit": "Dernier audit assisté"
-    }
-  },
-  "audit": {
-    "definition": {
-      "title": "Définition de l'audit",
-      "radioLegend": "Type d'audit",
-      "radioType": {
-        "newAuditSite": "Audit de site",
-        "newAuditPage": "Audit de page",
-        "newAuditUpload": "Audit de fichier",
-        "newAuditScenario": "Audit de scenario"
-      },
-      "labelName": "Nom de l'audit",
-      "screenshot": {
-        "title": "Captures d'écran",
-        "explanation": "Souhaitez-vous ajouter des captures d'écran à votre audit ?",
-        "radioLegend": "Option d'ajout de captures d'écran",
-        "radioYes": "Oui",
-        "radioNo": "Non"
-      }
-    },
-    "guidelines": {
-      "title": "Référentiels",
-      "reference": {
-        "title": "Bases de référence",
-        "explanation": "Choisissez le ou les référentiels que vous souhaitez apliquer à votre audit."
-      },
-      "mainReference": {
-        "title": "Choix du référentiel principal",
-        "explanation": "Il s'agit du référentiel qui sera affiché dans le tableau de bord."
-      },
-      "level": {
-        "title": "Niveau de conformité",
-        "levelA": "A",
-        "levelAA": "AA",
-        "levelAAA": "AAA"
-      }
-    },
-    "tests": {
-      "title": "Liste des tests",
-      "explanation": "La configuration ci-dessous peut-être modifiée dans les paramètres du projet.",
-      "category1": {
-        "title": "Catégorie de tests 1",
-        "checkbox1": "",
-        "checkbox2": "",
-        "checkbox3": "",
-        "checkbox4": ""
-      }
-    },
-    "pages": {
-      "title": "Configuration de l'audit de pages",
-      "subtitle": "Pages à tester",
-      "explanation": "Saissisez au moins une adresse de page. Exemple de format attendu : 'https://www.tanaguru.com'",
-      "radioLegend": "Options d'ajout de pages",
-      "array": "Saisie page par page",
-      "plainText": "Saisie libre",
-      "byPage": {
-        "page": "Page",
-        "name": "Nom de la page",
-        "url": "URL",
-        "button": "Ajouter une page"
-      },
-      "byUrl": {
-        "label": "URLs",
-        "labelHelp": "Les URLs des pages à auditer doivent être séparés par un ';'"
-      }
-    },
-    "resolution": {
-      "title": "Résolution",
-      "explanation": "Résolution de la page et de ses points de rupture",
-      "option": "Laisser l'outil gérer la résolution",
-      "default": "Résolution de base",
-      "breakpoint": "Point de rupture",
-      "label": "Largeur de l'écran en pixels",
-      "labelHelp": "Valeur maximum: 2048 pixels",
-      "button": "Ajouter un point de rupture"
-    },
-    "waitTime": {
-      "title": "Temps d'attente <span class=\"small\">(pour les frameworks Angular JS, React...)</span>",
-      "label": "Temps d’attente avant le chargement du code HTML (en millisecondes)",
-      "formHelp": "La valeur doit être comprise entre 0 (non inclus) et 10 000 millisecondes (ms). Exemple: 2 secondes = 2000 ms. Valeur à saisir dans le champ : 2000"
-    },
-    "site": {
-      "title": "Configuration de l'audit de site",
-      "parameters": {
-        "labelSiteSeeds": "Racines du site",
-        "labelSiteSeedsHelp": "Racines du site séparées par un ';'",
-        "labelMaxDepth": "Profondeur maximum",
-        "labelMaxDepthHelp": "Pronfondeur maximum du crawler en pages (la valeur doit être un nombre entier compris entre 1 et 10).",
-        "labelMaxDuration": "Durée maximum",
-        "labelMaxDurationHelp": "Durée maximum du crawler en secondes (la valeur doit être un nombre compris entre 0.1 et 86400).",
-        "labelMaxDocument": "Pages maximum",
-        "labelMaxDocumentHelp": "Nombre maximum de page à auditer (la valeur doit être un nombre entier compris entre 1 et 1000).",
-        "labelInclusionRegex": "Inclusion des urls contenant",
-        "labelInclusionRegexHelp": "Plusieurs expressions peuvent être saisies, séparées par un ';'",
-        "labelExclusionRegex": "Exclusion des urls contenant",
-        "labelExclusionRegexHelp": "Plusieurs expressions peuvent être saisies, séparées par un ';'"
-      }
-    },
-    "resource": {
-      "title": "Configuration de l'audit de fichier",
-      "subtitle": "Fichier",
-      "name": "Nom",
-      "file": "Fichier",
-      "selectResource": "Sélectionner un fichier",
-      "noResource": "Aucune ressource trouvée"
-    },
-    "scenario": {
-      "title": "Configuration de l'audit de scenario",
-      "subtitle": "Scenario",
-      "name": "Nom",
-      "file": "Fichier",
-      "selectScenario": "Sélectionner un scénario",
-      "noScenario": "Aucun scenario trouvé"
-    },
-    "form": {
-      "help": {
-        "checked": "Rempli",
-        "empty": "A remplir",
-        "ready": "Prêt au lancement"
-      },
-      "error": {
-        "auditType": "Veuillez choisir un type d'audit.",
-        "auditName": "Veuillez donner un nom à votre audit.",
-        "typeError": "Veuillez choisir le type d’audit à lancer. ",
-        "waitTimeError": "Veuillez entrer un nombre compris entre 0 (non inclus) et 10 000. ",
-        "scenarioError": "Fichier de scenario invalide. ",
-        "scenarioNameError": "Veuillez donner un nom à votre scenario",
-        "uploadError": "Veuillez choisir un fichier. ",
-        "emptyResourceId": "Veuillez choisir une ressource.",
-        "invalidResourceError": "Le fichier choisi est invalide",
-        "emptyScenarioId": "Veuillez choisir un scenario.",
-        "fileNameError": "Veuillez donner un nom à votre fichier",
-        "seedsError": "Veuillez entrer une URL. Vous ne pouvez pas auditer un site différent de celui associé au projet. ",
-        "emptyUrlError": "Le premier emplacement doit être rempli. ",
-        "emptyUrlsError": "Vous devez ajouter au moins une URL. ",
-        "scenarioSuccess": "Le scénario a bien été ajouté. ",
-        "resourceSuccess": "Le fichier a été ajouté. ",
-        "bpError": "Point de rupture invalide, veuillez entrer un nombre compris entre 1 et 2048.",
-        "auditReferences": "Veuillez choisir au moins un référentiel.",
-        "crawlerDuration": "Veuillez entrer un nombre compris entre 0 (non inclus) et 86400, pour la durée en secondes du crawler.",
-        "crawlerDepth": "Veuillez entrer un nombre entier, compris entre 1 et 10 pages, pour la profondeur du crawler.",
-        "crawlerDocument": "Veuillez entrer un nombre entier compris entre 1 et 1000 pour le nombre de pages à auditer."
-      }
-    }
-  },
-  "contracts": {
-    "createContract": "Créer un nouveau contrat",
-    "contractsList": "Liste des contrats",
-    "noContract": "Vous n'avez pas encore de contrat.",
-    "infoSearch": "Le tableau ci-dessous contient tous les contrats existants. Utilisez la barre de recherche pour commencer à taper le nom de celui que vous recherchez et filtrez les lignes du tableau qui ne correspondent pas. Nombre actuel de contrats répertoriés."
-  },
-  "contract": {
-    "infos": "Détails du contrat",
-    "users": "Utilisateurs du contrat",
-    "createProject": "Créer un nouveau projet associé",
-    "projectsList": "Liste des projets associés",
-    "legendUsers": "Tableau des utilisateurs du contrat",
-    "legendProjects": "Tableau des projets associés au contrat",
-    "contracts": "contrat(s)"
-  },
-  "users": {
-    "createUser": "Créer un nouvel utilisateur",
-    "usersList": "Liste des utilisateurs",
-    "infoSearch": "Le tableau ci-dessous contient tous les utilisateurs existants. Utilisez la barre de recherche pour commencer à taper le nom ou l'adresse e-mail de la personne que vous recherchez et filtrer les lignes du tableau qui ne correspondent pas. Nombre actuel d'utilisateurs répertoriés",
-    "legendUsers": "Tableau des utilisateurs",
-    "usersNb": "utilisateur(s)"
-  },
-  "user": {
-    "profile": "Profil",
-    "contracts": "Contrats associés à ce profil",
-    "noContract": "Vous n'avez pas encore été ajouté à un contrat.",
-    "adminNoContract": "Cet utilisateur n'a pas encore été ajouté à un contrat.",
-    "results": "résultat(s)",
-    "password": "Changer mon mot de passe"
-  },
-  "project": {
-    "infos": "Informations du projet",
-    "users": "Utilisateurs du projet",
-    "legendUsers": "Tableau des utilisateurs du projet",
-    "selectUser": "Sélectionnez un utilisateur"
-  },
-  "home": {
-    "mainTitle": "Boostez votre<br />accessibilité web",
-    "intro": "Vérifiez l’accessibilité de vos gabarits, site web, parcours utilisateurs et tunnels d’achat en quelques clics.",
-    "labelForm": "Adresse du site à tester",
-    "helpForm": "Format attendu : https://www.votresite.com",
-    "services": {
-      "mainTitle": "Avec Tanaguru Engine,<br /> automatisez vos audits d'accessibilité",
-      "intro": "Plusieurs type d’analyse, pour tous les usages, de manière fiable, simple et rapide.",
-      "block1": {
-        "title": "Gabarits, pages web<br />et fichiers offline",
-        "content": "Pages publiées, gabarits en cours de création, et mêmes documents offline, Tanaguru Engine analyse en quelques instants les fichiers que vous souhaitez rendre accessibles."
-      },
-      "block2": {
-        "title": "Tout un site,<br />en quelques clics",
-        "content": "Portail institutionnel, blog ou site vitrine... Grâce à son robot d’exploration, Tanaguru Engine audit la totalité de toutes vos pages en seulement quelques clics."
-      },
-      "block3": {
-        "title": "Parcours utilisateur, applications et tunnels d'achat",
-        "content": "Applications Javascript, intranets ou parcours d’achat d’un site e-commerce... L’audit de scénario permet de réaliser des parcours d’analyse pour tous les cas de figure."
-      },
-      "block4": {
-        "title": "Une chaîne d'intégration en déploiement continu",
-        "content": "Grâce au programme open-source Jenkins, nous automatisons le déploiement de Tanaguru Engine pour vous faire bénéficier rapidement des dernières mises à jour.",
-        "link": "Télécharger Tanaguru Engine"
-      },
-      "block5": {
-        "title": "Testez vos pages directement dans votre navigateur",
-        "content": "Pour faciliter vos audits, Tanaguru Engine existe également sous la forme d’une extension gratuite pour Firefox.",
-        "link1": "Comment utiliser la web extension ?",
-        "link2": "Télécharger la web extension"
-      }
-    },
-    "update": {
-      "mainTitle": "Quoi de neuf ?",
-      "intro": "La dernière version de Tanguru Engine embarque de nouvelles fonctionnalités, pour rendre vos audits d’accessibilité toujours plus efficace et facile.",
-      "block1": {
-        "title": "Choix du référentiel RGAA 4 ou WCAG 2.1",
-        "content": "Vous avez besoin de choisir votre référentiel ? Tanaguru intègre dès maintenant ce paramètre pour vos audits et tests selon votre besoin : RGAA 4 ou WCAG 2.1."
-      },
-      "block2": {
-        "title": "Audit et propagation de composants transverses",
-        "content": "Testez des composants et éléments transverses, tels que les headers, footer, menus... Propagez les résultats et vos recommandations sur le reste du site."
-      },
-      "block3": {
-        "title": "Détection automatique des points de rupture",
-        "content": "L’outil de configuration détecte les points de rupture à partir de vos feuilles de styles pour les prendre en compte dans les résolutions de l’audit."
-      },
-      "block4": {
-        "title": "Suivre l’évolution du nombre d’anomalies moyen",
-        "content": "Vous avez commencé à implémenter les correctifs suite à un premier test ? Tanaguru Engine calcule automatiquement l’évolution des anomalies entre deux audits."
-      },
-      "block5": {
-        "title": "Travaillez en équipe et partagez vos résultats",
-        "content": "Gérer les contributions et recommandations de correctifs ou partager les résultats d’audit avec vos collaboratrices et collaborateurs devient un jeu d’enfant."
-      },
-      "block6": {
-        "title": "Outil d’audit manuel : une refonte complète",
-        "content": "Système de filtre et barre de progression, priorité de correction et impact utilisateur... Une longue liste que nous vous laissons découvrir par vous-même."
-      },
-      "cta": "Découvrir toutes les fonctionnalités de Tanaguru Engine"
-    },
-    "cta": {
-      "title": "Prêt·es à booster votre accessibilité ?",
-      "button": "Créer un compte"
-    }
-  },
-  "forbidden": {
-    "message": "Vous ne disposez pas de droits d'accès suffisants pour accéder à cette page."
-  },
-  "pagination": {
-    "first": "Première page",
-    "last": "Dernière page",
-    "next": "Page suivante",
-    "previous": "Page précédente"
-  },
-  "auditDetail": {
-    "tabs": {
-      "logs": "Logs",
-      "synthesis": "Synthèse"
-    },
-    "pages": "Pages de l'audit",
-    "logs": "Historique de l'audit",
-    "synthesis": {
-      "pages": "Nombre de pages à auditer",
-      "guidelines": "Référentiel",
-      "table": {
-        "title": "Récapitulatif des pages auditées",
-        "title-info": "Cliquer sur les icônes pour obtenir plus de détails sur le statut du test.",
-        "btnShow": "Test {status} - Afficher le détail"
-      },
-      "modal": {
-        "criteria": "Critère",
-        "rule": "Allez à la règle concernée",
-        "seeDetails": "Voir le résultat détaillé de la page"
-      }
-    },
-    "status": {
-      "done": "Terminé",
-      "error": "Erreur",
-      "pending": "En attente",
-      "running": "En cours"
-    }
-  },
-  "deletionModal": {
-    "delete": "Êtes-vous sûr(e) de vouloir supprimer définitivement ",
-    "remove": "Êtes-vous sûr(e) de vouloir supprimer ",
-    "project": " de ce projet ?",
-    "contract": " de ce contratmail ?",
-    "deleteScreenshot": "Êtes-vous sûr(e) de vouloir supprimer définitivement les captures d'écran de cet audit ?"
-  }
+	"global": {
+		"siteName": "Tanaguru Engine",
+		"skiplink": "Aller au contenu",
+		"help": "Aide",
+		"language": {
+			"label": "Choisissez votre langue",
+			"french": "Français",
+			"english": "English"
+		},
+		"session": {
+			"expiresSoon": "La session arrive bientôt à expiration, veuillez cliquer ci dessous pour la prolonger.",
+			"maintainButtonLabel": "Prolonger la durée de la session."
+		},
+		"logoAlt": "Tanaguru - Retour à l'accueil",
+		"footerContent": "©2009-{date} Tanaguru.com - Propulsé par Tanaguru",
+		"breadcrumbsHelp": "Vous êtes ici"
+	},
+	"page": {
+		"adminContract": "Administration des contrats",
+		"configContract": "Gestion des contrats",
+		"adminUser": "Administration des utilisateurs",
+		"dashboard": "Tableau de bord",
+		"auditLaunch": "Lancer un audit",
+		"archives": "Archives",
+		"legals": "Mentions légales",
+		"privacy": "Politique de confidentialité",
+		"credits": "Crédits",
+		"access": "Accessibilité",
+		"sitemap": "Plan du site",
+		"history": "Historique d'audits",
+		"notFound": "Oups ! Cette page est introuvable.",
+		"forbidden": "Accès refusé"
+	},
+	"title": {
+		"home": "Accueil",
+		"login": "Connexion",
+		"dashboard": "Tableau de bord",
+		"auditConfiguration": "Configuration de l'audit",
+		"contractDetail": "Détails du contrat",
+		"administration": "Administration",
+		"configuration": "Gestion",
+		"archives": "Archives",
+		"auditDetail": "Détails de l'audit",
+		"history": "Historique des audits",
+		"auditResult": "Résultats de l'audit",
+		"profile": "Profil",
+		"auditSummary": "Synthèse de l'audit",
+		"notFound": "Page non trouvée !",
+		"forbidden": "Page non autorisée !"
+	},
+	"action": {
+		"show": "Voir",
+		"hide": "Replier",
+		"delete": "Supprimer",
+		"deleteScreenshot": "Supprimer les captures d'écran",
+		"remove": "Retirer",
+		"add": "Ajouter",
+		"addUser": "Ajouter un utilisateur",
+		"create": "Créer",
+		"modify": "Modifier",
+		"login": "Se connecter",
+		"signIn": "Inscription",
+		"logout": "Déconnexion",
+		"start": "Démarrer",
+		"search": "Chercher",
+		"auditStart": "Lancer l'audit",
+		"auditNewStart": "Lancer un nouvel audit",
+		"goTop": "Revenir <br /> en haut de page",
+		"archives": "Accéder aux archives",
+		"changePassword": "Changer mon mot de passe",
+		"resetPassword": "Réinitialiser mon mot de passe",
+		"saveChange": "Sauver les modifications",
+		"history": "Voir l'historique",
+		"promote": "Changer le rôle",
+		"close": "Fermer",
+		"closeModal": "Fermer la modale",
+		"backHome": "Retour à l'accueil",
+		"loadMore": "Afficher plus",
+		"backToPageList": "Retour à la liste des pages",
+		"confirm": "Confirmer",
+		"cancel": "Annuler"
+	},
+	"entity": {
+		"generic": {
+			"actions": "Actions",
+			"anomalies": "anomalies"
+		},
+		"user": {
+			"user": "Utilisateur",
+			"users": "Utilisateurs",
+			"role": {
+				"role": "Rôle",
+				"superAdmin": "Super Admin",
+				"admin": "Admin",
+				"user": "User",
+				"projectManager": "Project Manager",
+				"projectUser": "Project User",
+				"projectGuest": "Project Guest",
+				"contractManager": "Contract Manager",
+				"contractUser": "Contract User",
+				"contractGuest": "Contract Guest"
+			},
+			"dateCreation": "Date de creation",
+			"username": "Nom d'utilisateur",
+			"email": "Adresse mail",
+			"password": "Mot de passe",
+			"newPassword": "Nouveau mot de passe",
+			"passwordConfirm": "Confirmation du mot de passe",
+			"enabled": "Activé",
+			"status": "Statut",
+			"selectStatus": "Sélectionner le statut",
+			"emailError": "Le champ ne peut pas être vide."
+		},
+		"contract": {
+			"contracts": "Contrats",
+			"contract": "Contrat",
+			"name": "Nom",
+			"dateEnd": "Date de fin",
+			"dateStart": "Date de début",
+			"owner": "Propriétaire",
+			"selectOwner": "Sélectionner le propriétaire du contrat"
+		},
+		"project": {
+			"name": "Nom",
+			"domain": "Nom de domaine",
+			"contract": "Nom du contrat"
+		},
+		"audit": {
+			"name": "Nom",
+			"type": "Type",
+			"nbPage": "Nombre de pages",
+			"status": "Statut",
+			"dateStart": "Date de début",
+			"dateEnd": "Date de fin",
+			"id": "Id n°",
+			"url": "Domaine",
+			"repository": "Référentiel",
+			"parameters": "Paramètres de l'audit",
+			"page": "Audit de page",
+			"site": "Audit de site",
+			"upload": "Audit de fichier",
+			"scenario": "Audit de scénario",
+			"assisted": "Audit assisté",
+			"result": {
+				"passed": "Conforme",
+				"inapplicable": "Non appliquable",
+				"ignored": "Anomalies ignorées",
+				"failed": "Non conforme",
+				"untested": "Non testé",
+				"cantTell": "À qualifier"
+			}
+		}
+	},
+	"menu": {
+		"title": "Menu",
+		"close": "Fermer",
+		"open": "Ouvrir le menu de navigation"
+	},
+	"chart": {
+		"progress": {
+			"helpText": "{percentage}% de tests validés"
+		}
+	},
+	"form": {
+		"help": "Les champs obligatoires sont signalés par le symbole *.",
+		"savedChange": "Modification(s) enregistrée(s).",
+		"genericError": "Une erreur est survenue.",
+		"projectCreation": "Le project a été créé.",
+		"contractCreation": "Le contrat a été créé.",
+		"userCreation": "L'utilisateur a été créé.",
+		"userContractAddition": "L'utilisateur a été ajouté au contrat.",
+		"userProjectAddition": "L'utilisateur a été ajouté au projet.",
+		"inexistantUser": "Cet utilisateur n'existe pas.",
+		"notAMember": "Cet utilisateur ne peut être ajouté au projet",
+		"incorrectConfirmation": "Le mot de passe et sa confirmation ne correspondent pas.",
+		"missingFields": "Merci de bien vouloir compléter les champs vides.",
+		"existingEmail": "Cette adresse e-mail est déjà enregistrée.",
+		"existingUsername": "Ce nom d'utilisateur n'est pas disponible",
+		"invalidUsername": "Le nom d'utilisateur doit contenir plus de 4 charactères et moins de 30.",
+		"invalidPassword": "Le mot de passe ne rempli pas les critères indiqués.",
+		"nameError": "Le nom doit être inférieur à 50 caractères.",
+		"nameConstraint": "50 caractères maximum",
+		"usernameError": "Le nom d'utilisateur doit contenir moins de 30 caractères.",
+		"usernameConstraint": "30 caractères maximum",
+		"passwordConstraint": "Doit contenir au minimum 8 caractères dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial.",
+		"passwordError": "Votre mot de passe doit contenir au minimum 8 caractères dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial.",
+		"emailConstraint": "La saisie doit être au format e-mail.",
+		"emptyInput": "Veuillez remplir ce champ.",
+		"resetPasswordMailSuccess": "Un email contenant les instructions pour réinitialiser votre mot de pas a été envoyé.",
+		"resetPasswordMailError": "Une erreur est survenue lors de l'envoie de l'email, veuillez rééssayer plus tard.",
+		"urlError": "Veuillez saisie une URL valide (exemple : http://www.tanaguru.com)"
+	},
+	"archives": {
+		"legendPage": "Tableau des audits de page réalisés",
+		"legendSite": "Tableau des audits de site réalisés",
+		"legendUpload": "Tableau des audits de fichier réalisés",
+		"legendScenario": "Tableau des audits de scénario réalisés",
+		"noAudit": "Aucun audit de ce type n'a été réalisé pour ce projet."
+	},
+	"history": {
+		"tableCaption": "Historique des audits réalisés sur cette page"
+	},
+	"login": {
+		"title": "Connexion<br />à votre compte",
+		"labelId": "Votre identifiant",
+		"labelPassword": "Votre mot de passe",
+		"password": "Mot de passe oublié ?",
+		"incorrectLogin": "L'identifiant et/ou le mot de passe sont incorrect(s)."
+	},
+	"resultAudit": {
+		"displayOptions": {
+			"title": "Options d'affichage",
+			"hide": "Replier les paramètres",
+			"show": "Afficher les paramètres",
+			"sticky": "Fixer cet encadré",
+			"unsticky": "Détacher cet encadré",
+			"legendReference": "Choix de référentiel :",
+			"legendSort": "Trier par :",
+			"sortAnomalies": "Anomalies",
+			"sortRepository": "Référentiel",
+			"search": {
+				"filter": "Filtrer par",
+				"filterInfo": "nombre de tags actuellement sélectionnés :",
+				"help": "Sélectionnez les tags qui vous intéressent dans la liste déroulante en appuyant sur la flèche ou en saisissant du texte à l'intérieur du champ. Cliquez ou pressez la touche entrée pour valider vos choix. Il n'y a pas de limite au nombre de tags que vous pouvez sélectionner.",
+				"tagsList": "Liste de {length} propositions.",
+				"selectedTags": "Tags sélectionnés"
+			}
+		},
+		"actions": {
+			"export": "Exporter",
+			"share": "Partager",
+			"print": "Imprimer",
+			"launch": "Relancer l'audit"
+		},
+		"copyLink": {
+			"copy": "Copier le lien",
+			"success": "Copié !",
+			"successHelp": "Le lien a bien été copié",
+			"fail": "Erreur",
+			"failHelp": "Impossible de copier le lien"
+		},
+		"elmtTested": "éléments testés",
+		"date": "Depuis le",
+		"overview": {
+			"title": "Vue d'ensemble de l'audit",
+			"parameters": "Paramètres des statistiques",
+			"tests": {
+				"title": "Nombre de tests",
+				"tooltipHelp": "Informations sur le nombre de tests",
+				"tooltipTitle": "Nombre de tests",
+				"tooltipContent": "Détails de la répartition des tests par type de résultats. Ces chiffres ne tiennent pas compte du nombre d'occurrence d'éléments par tests. Par exemple, un même test invalidé à plusieurs reprises n'est comptabilisé qu'une seule fois.",
+				"table": {
+					"caption": "Résultats des tests en fonction du type de tests",
+					"columnTest": "Intitulé du test",
+					"columnResult": "Résultat"
+				}
+			},
+			"anomalies": {
+				"title": "Nombre d'anomalies par thème",
+				"tooltipHelp": "Informations sur le nombre d'anomalies par principe",
+				"tooltipTitle": "Nombre d'anomalies par principe",
+				"tooltipContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et rhoncus sem. Duis et sapien id magna vulputate dictum."
+			}
+		},
+		"testResult": {
+			"title": "Résultats détaillés",
+			"mainTabShow": "Tout déplier",
+			"mainTabHide": "Tout replier",
+			"detailTabShow": "Déplier les résultats détaillés",
+			"detailTabHide": "Replier les résultats détaillés",
+			"explanation": "Explication",
+			"ruleLink": "Accéder à la règle",
+			"ruleInfo": "Comprendre la règle",
+			"errors": "{nbAnomaly} erreurs sur {nbElementTested} éléments testés",
+			"status": "Statut",
+			"accessibleName": "Nom accessible",
+			"isNotVisibleDueTo": "Non visible via",
+			"isNotExposedDueTo": "Non exposé via",
+			"canBeReachedUsingKeyboardWith": "Atteignable au clavier via",
+			"outer": "Balise",
+			"details": "Détails",
+			"xpath": "XPath",
+			"xpathCopy": "Copier le XPath",
+			"css": "Sélecteur CSS",
+			"cssCopy": "Copier le sélecteur",
+			"checkboxAnomaly": "Ne plus relever cette anomalie",
+			"hide": "Masquer",
+			"show": "Afficher",
+			"anomaly": "Anomalie n°"
+		}
+	},
+	"dashboard": {
+		"actions": {
+			"new": "Nouveau projet",
+			"alphabetical": "Trier par ordre alphabétique",
+			"chronological": "Trier du plus récent au plus ancien",
+			"credits": "Crédits: 300 audits restants",
+			"archives": "Archives"
+		},
+		"title": {
+			"myProjects": "Mes projets",
+			"sharedProjects": "Projets partagés"
+		},
+		"project": {
+			"contract": "Contrat :",
+			"anomaly": "anomalies",
+			"url": "Domaine :",
+			"date": "Date de validité :",
+			"repository": "Référentiel :",
+			"anomalyPage": "Nombre moyen d'anomalies par page :",
+			"anomalyAudit": "Nombre moyen d'anomalies sur le dernier audit :",
+			"elementsTested": "Nombre d'éléments testés :",
+			"auditsLaunched": "Nombre d'audits lancés :",
+			"team": "Équipe",
+			"btnTeam": "Afficher toute l'équipe",
+			"noAudit": "Vous n'avez pas encore réalisé d'audit.",
+			"noProject": "Vous n'avez aucun projet pour le moment.",
+			"noSharedProject": "Personne n'a encore partagé de projet avec vous.",
+			"legend": "Légende des résultats",
+			"update": "Dernière mise à jour :",
+			"author": "Réalisé par",
+			"lastPageAudit": "Dernier audit de page",
+			"lastSiteAudit": "Dernier audit de site",
+			"lastScenarioAudit": "Dernier audit de scénario",
+			"lastUploadAudit": "Dernier audit de fichier",
+			"lastAssistedAudit": "Dernier audit assisté"
+		}
+	},
+	"audit": {
+		"definition": {
+			"title": "Définition de l'audit",
+			"radioLegend": "Type d'audit",
+			"radioType": {
+				"newAuditSite": "Audit de site",
+				"newAuditPage": "Audit de page",
+				"newAuditUpload": "Audit de fichier",
+				"newAuditScenario": "Audit de scenario"
+			},
+			"labelName": "Nom de l'audit",
+			"screenshot": {
+				"title": "Captures d'écran",
+				"explanation": "Souhaitez-vous ajouter des captures d'écran à votre audit ?",
+				"radioLegend": "Option d'ajout de captures d'écran",
+				"radioYes": "Oui",
+				"radioNo": "Non"
+			}
+		},
+		"guidelines": {
+			"title": "Référentiels",
+			"reference": {
+				"title": "Bases de référence",
+				"explanation": "Choisissez le ou les référentiels que vous souhaitez apliquer à votre audit."
+			},
+			"mainReference": {
+				"title": "Choix du référentiel principal",
+				"explanation": "Il s'agit du référentiel qui sera affiché dans le tableau de bord."
+			},
+			"level": {
+				"title": "Niveau de conformité",
+				"levelA": "A",
+				"levelAA": "AA",
+				"levelAAA": "AAA"
+			}
+		},
+		"tests": {
+			"title": "Liste des tests",
+			"explanation": "La configuration ci-dessous peut-être modifiée dans les paramètres du projet.",
+			"category1": {
+				"title": "Catégorie de tests 1",
+				"checkbox1": "",
+				"checkbox2": "",
+				"checkbox3": "",
+				"checkbox4": ""
+			}
+		},
+		"pages": {
+			"title": "Configuration de l'audit de pages",
+			"subtitle": "Pages à tester",
+			"explanation": "Saissisez au moins une adresse de page. Exemple de format attendu : 'https://www.tanaguru.com'",
+			"radioLegend": "Options d'ajout de pages",
+			"array": "Saisie page par page",
+			"plainText": "Saisie libre",
+			"byPage": {
+				"page": "Page",
+				"name": "Nom de la page",
+				"url": "URL",
+				"button": "Ajouter une page"
+			},
+			"byUrl": {
+				"label": "URLs",
+				"labelHelp": "Les URLs des pages à auditer doivent être séparés par un ';'"
+			}
+		},
+		"resolution": {
+			"title": "Résolution",
+			"explanation": "Résolution de la page et de ses points de rupture",
+			"option": "Laisser l'outil gérer la résolution",
+			"default": "Résolution de base",
+			"breakpoint": "Point de rupture",
+			"label": "Largeur de l'écran en pixels",
+			"labelHelp": "Valeur maximum: 2048 pixels",
+			"button": "Ajouter un point de rupture"
+		},
+		"waitTime": {
+			"title": "Temps d'attente <span class=\"small\">(pour les frameworks Angular JS, React...)</span>",
+			"label": "Temps d’attente avant le chargement du code HTML (en millisecondes)",
+			"formHelp": "La valeur doit être comprise entre 0 (non inclus) et 10 000 millisecondes (ms). Exemple: 2 secondes = 2000 ms. Valeur à saisir dans le champ : 2000"
+		},
+		"site": {
+			"title": "Configuration de l'audit de site",
+			"parameters": {
+				"labelSiteSeeds": "Racines du site",
+				"labelSiteSeedsHelp": "Racines du site séparées par un ';'",
+				"labelMaxDepth": "Profondeur maximum",
+				"labelMaxDepthHelp": "Pronfondeur maximum du crawler en pages (la valeur doit être un nombre entier compris entre 1 et 10).",
+				"labelMaxDuration": "Durée maximum",
+				"labelMaxDurationHelp": "Durée maximum du crawler en secondes (la valeur doit être un nombre compris entre 0.1 et 86400).",
+				"labelMaxDocument": "Pages maximum",
+				"labelMaxDocumentHelp": "Nombre maximum de page à auditer (la valeur doit être un nombre entier compris entre 1 et 1000).",
+				"labelInclusionRegex": "Inclusion des urls contenant",
+				"labelInclusionRegexHelp": "Plusieurs expressions peuvent être saisies, séparées par un ';'",
+				"labelExclusionRegex": "Exclusion des urls contenant",
+				"labelExclusionRegexHelp": "Plusieurs expressions peuvent être saisies, séparées par un ';'"
+			}
+		},
+		"resource": {
+			"title": "Configuration de l'audit de fichier",
+			"subtitle": "Fichier",
+			"name": "Nom",
+			"file": "Fichier",
+			"selectResource": "Sélectionner un fichier",
+			"noResource": "Aucune ressource trouvée"
+		},
+		"scenario": {
+			"title": "Configuration de l'audit de scenario",
+			"subtitle": "Scenario",
+			"name": "Nom",
+			"file": "Fichier",
+			"selectScenario": "Sélectionner un scénario",
+			"noScenario": "Aucun scenario trouvé"
+		},
+		"form": {
+			"help": {
+				"checked": "Rempli",
+				"empty": "A remplir",
+				"ready": "Prêt au lancement"
+			},
+			"error": {
+				"auditType": "Veuillez choisir un type d'audit.",
+				"auditName": "Veuillez donner un nom à votre audit.",
+				"typeError": "Veuillez choisir le type d’audit à lancer. ",
+				"waitTimeError": "Veuillez entrer un nombre compris entre 0 (non inclus) et 10 000. ",
+				"scenarioError": "Fichier de scenario invalide. ",
+				"scenarioNameError": "Veuillez donner un nom à votre scenario",
+				"uploadError": "Veuillez choisir un fichier. ",
+				"emptyResourceId": "Veuillez choisir une ressource.",
+				"invalidResourceError": "Le fichier choisi est invalide",
+				"emptyScenarioId": "Veuillez choisir un scenario.",
+				"fileNameError": "Veuillez donner un nom à votre fichier",
+				"seedsError": "Veuillez entrer une URL. Vous ne pouvez pas auditer un site différent de celui associé au projet. ",
+				"emptyUrlError": "Le premier emplacement doit être rempli. ",
+				"emptyUrlsError": "Vous devez ajouter au moins une URL. ",
+				"scenarioSuccess": "Le scénario a bien été ajouté. ",
+				"resourceSuccess": "Le fichier a été ajouté. ",
+				"bpError": "Point de rupture invalide, veuillez entrer un nombre compris entre 1 et 2048.",
+				"auditReferences": "Veuillez choisir au moins un référentiel.",
+				"crawlerDuration": "Veuillez entrer un nombre compris entre 0 (non inclus) et 86400, pour la durée en secondes du crawler.",
+				"crawlerDepth": "Veuillez entrer un nombre entier, compris entre 1 et 10 pages, pour la profondeur du crawler.",
+				"crawlerDocument": "Veuillez entrer un nombre entier compris entre 1 et 1000 pour le nombre de pages à auditer."
+			}
+		}
+	},
+	"contracts": {
+		"createContract": "Créer un nouveau contrat",
+		"contractsList": "Liste des contrats",
+		"noContract": "Vous n'avez pas encore de contrat.",
+		"infoSearch": "Le tableau ci-dessous contient tous les contrats existants. Utilisez la barre de recherche pour commencer à taper le nom de celui que vous recherchez et filtrez les lignes du tableau qui ne correspondent pas. Nombre actuel de contrats répertoriés."
+	},
+	"contract": {
+		"infos": "Détails du contrat",
+		"users": "Utilisateurs du contrat",
+		"createProject": "Créer un nouveau projet associé",
+		"projectsList": "Liste des projets associés",
+		"legendUsers": "Tableau des utilisateurs du contrat",
+		"legendProjects": "Tableau des projets associés au contrat",
+		"contracts": "contrat(s)"
+	},
+	"users": {
+		"createUser": "Créer un nouvel utilisateur",
+		"usersList": "Liste des utilisateurs",
+		"infoSearch": "Le tableau ci-dessous contient tous les utilisateurs existants. Utilisez la barre de recherche pour commencer à taper le nom ou l'adresse e-mail de la personne que vous recherchez et filtrer les lignes du tableau qui ne correspondent pas. Nombre actuel d'utilisateurs répertoriés",
+		"legendUsers": "Tableau des utilisateurs",
+		"usersNb": "utilisateur(s)"
+	},
+	"user": {
+		"profile": "Profil",
+		"contracts": "Contrats associés à ce profil",
+		"noContract": "Vous n'avez pas encore été ajouté à un contrat.",
+		"adminNoContract": "Cet utilisateur n'a pas encore été ajouté à un contrat.",
+		"results": "résultat(s)",
+		"password": "Changer mon mot de passe"
+	},
+	"project": {
+		"infos": "Informations du projet",
+		"users": "Utilisateurs du projet",
+		"legendUsers": "Tableau des utilisateurs du projet",
+		"selectUser": "Sélectionnez un utilisateur"
+	},
+	"home": {
+		"mainTitle": "Boostez votre<br />accessibilité web",
+		"intro": "Vérifiez l’accessibilité de vos gabarits, site web, parcours utilisateurs et tunnels d’achat en quelques clics.",
+		"labelForm": "Adresse du site à tester",
+		"helpForm": "Format attendu : https://www.votresite.com",
+		"services": {
+			"mainTitle": "Avec Tanaguru Engine,<br /> automatisez vos audits d'accessibilité",
+			"intro": "Plusieurs type d’analyse, pour tous les usages, de manière fiable, simple et rapide.",
+			"block1": {
+				"title": "Gabarits, pages web<br />et fichiers offline",
+				"content": "Pages publiées, gabarits en cours de création, et mêmes documents offline, Tanaguru Engine analyse en quelques instants les fichiers que vous souhaitez rendre accessibles."
+			},
+			"block2": {
+				"title": "Tout un site,<br />en quelques clics",
+				"content": "Portail institutionnel, blog ou site vitrine... Grâce à son robot d’exploration, Tanaguru Engine audit la totalité de toutes vos pages en seulement quelques clics."
+			},
+			"block3": {
+				"title": "Parcours utilisateur, applications et tunnels d'achat",
+				"content": "Applications Javascript, intranets ou parcours d’achat d’un site e-commerce... L’audit de scénario permet de réaliser des parcours d’analyse pour tous les cas de figure."
+			},
+			"block4": {
+				"title": "Une chaîne d'intégration en déploiement continu",
+				"content": "Grâce au programme open-source Jenkins, nous automatisons le déploiement de Tanaguru Engine pour vous faire bénéficier rapidement des dernières mises à jour.",
+				"link": "Télécharger Tanaguru Engine"
+			},
+			"block5": {
+				"title": "Testez vos pages directement dans votre navigateur",
+				"content": "Pour faciliter vos audits, Tanaguru Engine existe également sous la forme d’une extension gratuite pour Firefox.",
+				"link1": "Comment utiliser la web extension ?",
+				"link2": "Télécharger la web extension"
+			}
+		},
+		"update": {
+			"mainTitle": "Quoi de neuf ?",
+			"intro": "La dernière version de Tanguru Engine embarque de nouvelles fonctionnalités, pour rendre vos audits d’accessibilité toujours plus efficace et facile.",
+			"block1": {
+				"title": "Choix du référentiel RGAA 4 ou WCAG 2.1",
+				"content": "Vous avez besoin de choisir votre référentiel ? Tanaguru intègre dès maintenant ce paramètre pour vos audits et tests selon votre besoin : RGAA 4 ou WCAG 2.1."
+			},
+			"block2": {
+				"title": "Audit et propagation de composants transverses",
+				"content": "Testez des composants et éléments transverses, tels que les headers, footer, menus... Propagez les résultats et vos recommandations sur le reste du site."
+			},
+			"block3": {
+				"title": "Détection automatique des points de rupture",
+				"content": "L’outil de configuration détecte les points de rupture à partir de vos feuilles de styles pour les prendre en compte dans les résolutions de l’audit."
+			},
+			"block4": {
+				"title": "Suivre l’évolution du nombre d’anomalies moyen",
+				"content": "Vous avez commencé à implémenter les correctifs suite à un premier test ? Tanaguru Engine calcule automatiquement l’évolution des anomalies entre deux audits."
+			},
+			"block5": {
+				"title": "Travaillez en équipe et partagez vos résultats",
+				"content": "Gérer les contributions et recommandations de correctifs ou partager les résultats d’audit avec vos collaboratrices et collaborateurs devient un jeu d’enfant."
+			},
+			"block6": {
+				"title": "Outil d’audit manuel : une refonte complète",
+				"content": "Système de filtre et barre de progression, priorité de correction et impact utilisateur... Une longue liste que nous vous laissons découvrir par vous-même."
+			},
+			"cta": "Découvrir toutes les fonctionnalités de Tanaguru Engine"
+		},
+		"cta": {
+			"title": "Prêt·es à booster votre accessibilité ?",
+			"button": "Créer un compte"
+		}
+	},
+	"forbidden": {
+		"message": "Vous ne disposez pas de droits d'accès suffisants pour accéder à cette page."
+	},
+	"pagination": {
+		"first": "Première page",
+		"last": "Dernière page",
+		"next": "Page suivante",
+		"previous": "Page précédente"
+	},
+	"auditDetail": {
+		"tabs": {
+			"logs": "Logs",
+			"synthesis": "Synthèse"
+		},
+		"pages": "Pages de l'audit",
+		"logs": "Historique de l'audit",
+		"synthesis": {
+			"pages": "Nombre de pages à auditer",
+			"guidelines": "Référentiel",
+			"table": {
+				"title": "Récapitulatif des pages auditées",
+				"title-info": "Cliquer sur les icônes pour obtenir plus de détails sur le statut du test.",
+				"btnShow": "Test {status} - Afficher le détail"
+			},
+			"modal": {
+				"criteria": "Critère",
+				"rule": "Allez à la règle concernée",
+				"seeDetails": "Voir le résultat détaillé de la page"
+			}
+		},
+		"status": {
+			"done": "Terminé",
+			"error": "Erreur",
+			"pending": "En attente",
+			"running": "En cours"
+		}
+	},
+	"deletionModal": {
+		"delete": "Êtes-vous sûr(e) de vouloir supprimer définitivement ",
+		"remove": "Êtes-vous sûr(e) de vouloir supprimer ",
+		"project": " de ce projet ?",
+		"contract": " de ce contratmail ?",
+		"deleteScreenshot": "Êtes-vous sûr(e) de vouloir supprimer définitivement les captures d'écran de cet audit ?"
+	}
 }

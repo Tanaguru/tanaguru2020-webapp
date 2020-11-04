@@ -10,11 +10,24 @@ export default class ConfigService extends Service{
             url: this.controllerName + '/session-duration',
             method: 'get',
         })
-            .then(resp => {
-                then(resp.data)
-            })
-            .catch(err => {
-                error(err);
-            });
+        .then(resp => {
+            then(resp.data)
+        })
+        .catch(err => {
+            error(err);
+        });
+    }
+
+    getActiveBrowsers(then, error){
+        return this.axios({
+            url: this.controllerName + '/browsers-enabled',
+            method: 'get',
+        })
+        .then(resp => {
+            then(resp.data)
+        })
+        .catch(err => {
+            error(err);
+        });
     }
 }
