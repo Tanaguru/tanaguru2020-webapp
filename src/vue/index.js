@@ -1,10 +1,7 @@
 import Vue from 'vue'
-import VueAccessibleModal from "vue-accessible-modal";
 import Moment from "moment";
 import VueMeta from "vue-meta";
 import axios from "../axios";
-import Icon from "vue-awesome/components/Icon";
-import Prism from "vue-prism-component";
 import UserService from "../services/user.service";
 import ContractService from "../services/contract.service";
 import ProjectService from "../services/project.service";
@@ -22,27 +19,21 @@ import ElementResultService from "../services/elementResult.service";
 import TanaguruTestService from "../services/tanaguruTest.service";
 import StatusResultService from "../services/statusResult.service";
 import ConfigService from "../services/config.service";
+import 'prismjs'
+import 'prismjs/themes/prism.css'
+import 'prismjs/components/prism-scss.min'
+import Prism from 'vue-prism-component'
+import Icon from "vue-awesome/components/Icon";
 
-// optional options
-const options = {
-    transition: 'fade',
-}
-
-Vue.use(VueAccessibleModal, options)
-Vue.prototype.$moment = Moment
 Vue.use(VueMeta)
+Vue.component('v-icon', Icon)
+Vue.component('prism', Prism)
 
+Vue.prototype.$moment = Moment
 Vue.prototype.window = window;
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false
-
-const token = localStorage.getItem('token')
-if (token) {
-    Vue.prototype.$http.defaults.headers.common['Authorization'] = 'Bearer ' + token
-}
-
-Vue.component('v-icon', Icon)
-Vue.component('prism', Prism)
+Vue.prototype.NAVBAR_LINKS = NAVBAR_LINKS;
 
 Vue.prototype.userService = new UserService(axios);
 Vue.prototype.contractService = new ContractService(axios);
@@ -62,6 +53,10 @@ Vue.prototype.tanaguruTestService = new TanaguruTestService(axios);
 Vue.prototype.statusResultService = new StatusResultService(axios);
 Vue.prototype.configService = new ConfigService(axios);
 
-Vue.prototype.NAVBAR_LINKS = NAVBAR_LINKS;
+const token = localStorage.getItem('token')
+if (token) {
+    Vue.prototype.$http.defaults.headers.common['Authorization'] = 'Bearer ' + token
+}
 
+export const bus = new Vue()
 export default Vue

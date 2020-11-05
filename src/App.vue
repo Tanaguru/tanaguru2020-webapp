@@ -11,7 +11,7 @@
 import Header from './components/Header'
 import Footer from './components/Footer'
 import SessionPopup from "./components/SessionPopup";
-import {bus} from './main';
+import {bus} from './vue';
 export default {
   components: {
     SessionPopup,
