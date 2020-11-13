@@ -1,5 +1,5 @@
 def COLOR_MAP = [
-    'SUCCESS': 'good', 
+    'SUCCESS': 'good',
     'FAILURE': 'danger',
     'UNSTABLE': 'warning',
 ]
@@ -122,6 +122,32 @@ pipeline {
                 '''
             }
         }
+
+        stage('Push beta image to registry') {
+                	environment {
+        				REGISTRY_USER = "admin"
+        				REGISTRY_PASS = "9x^VTugHEfQ1e7"
+        				REGISTRY_HOST = "registry.tanaguru.com"
+        			}
+        			when {
+        				branch 'beta'
+        			}
+        			steps {
+        				unstash 'version'
+
+        				sh '''
+        				  WEBAPP_VERSION=$(cat version.txt)
+
+        				  docker login \
+        				  --username="$REGISTRY_USER" \
+        				  --password="$REGISTRY_PASS" "$REGISTRY_HOST"
+
+        				  docker tag tanaguru2020-webapp:${WEBAPP_VERSION} registry.tanaguru.com/tanaguru2020-webapp:beta
+        				  docker push registry.tanaguru.com/tanaguru2020-webapp:beta
+        				'''
+        			}
+        		}
+            }
 
         stage('Push image to registry') {
         	environment {
