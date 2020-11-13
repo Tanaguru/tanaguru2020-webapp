@@ -4,7 +4,7 @@
 			<span class="audit-headline__id">{{ $t('entity.audit.id') }}{{audit.id}}</span>
 			<h1 class="audit-headline__title">{{ audit.name }}</h1>
 			<ul class="actions-list">
-				<!-- AUDIT ACTIONS -- TODO -- 
+				<!-- AUDIT ACTIONS -- TODO --
 				<li class="actions-list__item">
 					<button class="btn btn--icon btn--nude">
 						<icon-base-decorative width="16" height="16" viewBox="0 0 16 16"><icon-export /></icon-base-decorative>
@@ -135,7 +135,7 @@
 </template>
 
 <script>
-	import { bus } from '../../main'
+	import { bus } from '../../vue'
     import IconBaseDecorative from "../../components/icons/IconBaseDecorative";
     import IconArrowBlue from "../../components/icons/IconArrowBlue";
     import IconExport from "../../components/icons/IconExport";
@@ -199,7 +199,7 @@
             /* unselect the range */
             shareCodeUrl.setAttribute('type', 'hidden')
             window.getSelection().removeAllRanges()
-        },  
+        },
     },
     methods: {
         moment: function (date) {
@@ -214,7 +214,7 @@
             ), 50)
         }
     },
-    
+
 }
 
 </script>

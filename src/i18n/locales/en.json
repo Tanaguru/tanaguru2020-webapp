@@ -347,6 +347,7 @@
 			},
 			"browsers": {
 				"title": "Browser",
+				"subtitle": "Browser choice",
 				"explanation": "The browser to use for the audit.",
 				"radioLegend": "Option to choose browser",
 				"firefox": "Mozilla Firefox",

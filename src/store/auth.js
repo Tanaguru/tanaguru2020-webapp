@@ -4,7 +4,7 @@ export default {
     state: {
         status: localStorage.getItem('status') || '',
         token: localStorage.getItem('token') || '',
-        loginDate: localStorage.getItem('loginDate') !== null ? JSON.parse(localStorage.getItem('loginDate')) : null,
+        loginDate: localStorage.getItem('loginDate') !== null ? new Date(JSON.parse(localStorage.getItem('loginDate'))) : null,
         user : localStorage.getItem('user') !== null ? JSON.parse(localStorage.getItem('user')) : null,
         authorities: localStorage.getItem('authorities') !== null ? JSON.parse(localStorage.getItem('authorities')) : {}
     },
