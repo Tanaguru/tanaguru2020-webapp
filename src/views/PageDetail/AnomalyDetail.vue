@@ -24,11 +24,10 @@
                     <prism language="html" class="extract-code__frame">{{outer}}</prism>
                 </div>
 
-                <div class="details-extract" v-if="anomaly.accessibleName || anomaly.canBeReachedUsingKeyboardWith.length > 0 || anomaly.isNotExposedDueTo.length > 0 || anomaly.isNotVisibleDueTo.length > 0">
+                <div class="details-extract">
                     <p class="details-extract__title">{{$t('resultAudit.testResult.details')}}</p>
-
                     <ul class="details-list">
-                        <li class="details-list__item" v-if="anomaly.accessibleName">{{$t('resultAudit.testResult.accessibleName')}} : <span>{{anomaly.accessibleName}}</span></li>
+                        <li class="details-list__item" v-if="hasAccessibleNameTag && anomaly.accessibleName">{{$t('resultAudit.testResult.accessibleName')}} : <span>{{anomaly.accessibleName}}</span></li>
                         <li class="details-list__item" v-if="anomaly.canBeReachedUsingKeyboardWith && anomaly.canBeReachedUsingKeyboardWith.length > 0">{{$t('resultAudit.testResult.canBeReachedUsingKeyboardWith')}} : <span>{{anomaly.canBeReachedUsingKeyboardWith}}</span></li>
                         <li class="details-list__item" v-if="anomaly.isNotExposedDueTo && anomaly.isNotExposedDueTo.length > 0">{{$t('resultAudit.testResult.isNotExposedDueTo')}} : <span>{{anomaly.isNotExposedDueTo}}</span></li>
                         <li class="details-list__item" v-if="anomaly.isNotVisibleDueTo && anomaly.isNotVisibleDueTo.length > 0">{{$t('resultAudit.testResult.isNotVisibleDueTo')}} : <span>{{anomaly.isNotVisibleDueTo}}</span></li>
@@ -99,7 +98,7 @@
             IconNotApplicable,
             IconQualify,
         },
-        props: ['anomaly', 'index', 'pageContent'],
+        props: ['anomaly', 'index', 'pageContent', 'hasAccessibleNameTag'],
         data(){
             return{
                 xpathOpen: false,
@@ -107,7 +106,7 @@
                 resolvedContent: ''
             }
         },
-        computed: {
+		computed: {
             outer(){
                 let result = "";
                 if(this.anomaly && this.pageContent && this.pageContent.dom){

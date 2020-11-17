@@ -7,7 +7,12 @@
 		</div>
 		<div class="footer__content">
 			<div class="wrapper">
-				<p class="footer-copyright">{{$t('global.footerContent', {date: new Date().getFullYear()})}}</p>
+				<p class="footer-copyright">{{$t('global.footerContent',
+					{
+						date: new Date().getFullYear(),
+						appVersion: $store.getters.appVersion,
+						serverVersion: $store.getters.serverVersion
+					})}}</p>
 				<ul class="footer-menu list-unstyled">
 					<li class="footer-menu__item">
 						<a href="#" class="link-simple">{{$t('page.legals')}}</a>
