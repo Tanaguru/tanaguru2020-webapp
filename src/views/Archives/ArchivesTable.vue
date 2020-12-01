@@ -20,7 +20,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="audit of audits" :key="audit.id" v-if="totalPagesByAudit[audit.id]">
+            <tr v-for="audit of audits" :key="audit.id" v-if="audit.type == type && totalPagesByAudit[audit.id]">
                 <th scope="row">{{ audit.name }}</th>
                 <td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
                 <td>{{ totalPagesByAudit[audit.id] }}</td>
@@ -86,9 +86,9 @@ export default {
             totalPagesByAudit: {}
         }
     },
-    props: ['audits', 'deleteCondition'],
+    props: ['audits', 'type', 'deleteCondition'],
     methods: {
-        confirm(audit) {
+        confirmAuditDeletion(audit) {
 			this.$modal
 			.confirm(DeletionModal, this.$t('deletionModal.delete') + audit.name.toUpperCase() + this.$t('deletionModal.project'), {
 				label: "deletion-modal",
@@ -100,15 +100,35 @@ export default {
 				}
 			})
 			.then(() => {
-				this.$emit('delete-audit', audit)
+                this.$emit('delete-audit', audit)
+			    this.$modal.close()
 			})
 			.catch(() => {
-
+                this.$modal.close()
 			})
-			.finally(() => {
-				this.$modal.close()
+			.finally(() => {})
+        },
+        
+        confirmAuditScreenshotDeletion(audit) {
+            this.$modal
+			.confirm(DeletionModal, this.$t('deletionModal.delete') + "all screenshots from" + audit.name.toUpperCase(), {
+				label: "screenshot-deletion-modal",
+				classes: "modal",
+				attributes: {
+					id: "screenshot-deletion-modal",
+					role: "dialog",
+					tabindex: "0"
+				}
 			})
-		},
+			.then(() => {
+                this.$emit('delete-screenshot', audit)
+			    this.$modal.close()
+			})
+			.catch(() => {
+                this.$modal.close()
+			})
+			.finally(() => {})
+        },
 
         moment: function (date) {
             this.$moment.locale(this.$i18n.locale)
