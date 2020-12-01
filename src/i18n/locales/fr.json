@@ -196,7 +196,9 @@
 		"legendSite": "Tableau des audits de site réalisés",
 		"legendUpload": "Tableau des audits de fichier réalisés",
 		"legendScenario": "Tableau des audits de scénario réalisés",
-		"noAudit": "Aucun audit de ce type n'a été réalisé pour ce projet."
+		"noAudit": "Aucun audit de ce type n'a été réalisé pour ce projet.",
+		"done": "C'est fait!",
+    	"actionConfirmed": "Cela peut prendre quelques instants pour s'afficher mais votre changement à été pris en compte."
 	},
 	"history": {
 		"tableCaption": "Historique des audits réalisés sur cette page"

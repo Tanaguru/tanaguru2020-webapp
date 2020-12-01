@@ -31,28 +31,28 @@
 					<textarea class="textarea-wrapper__textarea"
 						rows="5"
 						cols="80"
-						:class="{'has-error':showError}"
+						:class="{'has-error': errorCondition}"
 						name="urls"
 						id="urls"
 						required
 						:value="inputPlainText"
 						@input="onPlainTextChange($event.target.value)"
-                        :aria-describedby="showError ? 'free-url-error' : ''"
+                        :aria-describedby="(hasBeenSent && inputPlainText && !checkValidPlainText(inputPlainText, projectDomain, isSeedMustBeInDomain)) || emptyCondition ? 'free-url-error' : ''"
 					></textarea>
 
-                    <p v-if="showError" class="info-error" id="free-url-error" aria-live="polite">
+                    <p v-if="hasBeenSent && inputPlainText && !checkValidPlainText(inputPlainText, projectDomain, isSeedMustBeInDomain)" class="info-error" id="free-url-error" aria-live="polite">
                         <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                             <icon-alert/>
                         </icon-base-decorative>
-                        <span v-if="inputPlainText.length == 0"> {{ $t('audit.form.error.emptyUrlsError') }}</span>
-                        <span v-else>The pages should belong to the domain declared in the project.</span>
+                        <span v-if="emptyCondition"> {{ $t('audit.form.error.emptyUrlsError') }}</span>
+                        <span v-else>{{ $t('audit.form.error.seedsError') }}</span>
                     </p>
 				</div>
 
                 <p class="form-help">{{ $t('audit.pages.byUrl.labelHelp') }}</p>
             </div>
 
-            <div class="page-by-page" v-else-if="selectedInputMode == 'array'">
+            <!-- <div class="page-by-page" v-else-if="selectedInputMode == 'array'">
                 <div
                     role="group"
                     :arialabelledby="`page-${i+1}`"
@@ -108,7 +108,7 @@
                     </icon-base-decorative>
                     <span>{{ $t('audit.pages.byPage.button') }}</span>
                 </button>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -173,6 +173,13 @@
             },
             checkValidUrl: UrlHelper.checkValidUrl,
 
+            checkValidPlainText(inputPlainText, projectDomain, isSeedMustBeInDomain) {
+                let array = this.inputPlainText.split(';')
+                array.forEach(url => {
+                    UrlHelper.checkValidUrl
+                });
+            },
+
             describedBy(url, i){
                 let describedBy = ''
                 if(this.hasBeenSent && !this.checkValidUrl){
@@ -184,9 +191,26 @@
                 return describedBy
             }
         },
-        computed:{
-            showError(){
-                return (this.hasBeenSent) && !this.isValid;
+        computed: {
+            emptyCondition(){
+				let condition = false
+				if(!this.inputPlainText){
+					condition = true
+				}
+				else { condition = false }
+				return condition;
+			},
+
+            errorCondition(){
+                let condition = false
+                if(this.hasBeenSent && !this.checkValidPlainText()){
+                    condition = true
+                }
+                else if(this.emptyCondition) {
+                    condition = true
+                }
+                else { condition = false }
+                return condition
             }
         }
     }

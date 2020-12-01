@@ -90,6 +90,7 @@
 
                     <audit-site-seeds-form
                         v-if="project.domain"
+                        :project-domain="project.domain"
                         :is-valid="isSiteSeedsValid"
                         v-model="auditConfigurationForm.site.seeds"
                         :has-been-sent="hasTryToLaunch"/>
@@ -430,6 +431,7 @@ export default {
         },
 
         startAudit: function () {
+            console.log(this.auditConfigurationForm.page.urls)
             this.hasTryToLaunch = true;
             if (!this.launchCondition) {
                 return;
@@ -519,7 +521,7 @@ export default {
 
         //Sites
         isSiteSeedsValid() {
-            return this.auditConfigurationForm.site.seeds.filter(seed => {
+            return this.auditConfigurationForm.site.seeds.filter((seed) => {
                 return ! UrlHelper.checkValidUrl(seed, this.project.domain, true)
             }).length === 0;
         },
@@ -541,12 +543,12 @@ export default {
                 this.auditConfigurationForm.site.crawlerMaxDuration <= 86400
         },
 
-        //Scenario
+        // Scenario
         isSelectedScenarioValid() {
             return this.auditConfigurationForm.scenario.id != null;
         },
 
-        //Upload
+        // Upload
         isSelectedUploadResourceValid() {
             return this.auditConfigurationForm.resource.id != null
         },

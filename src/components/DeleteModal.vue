@@ -1,21 +1,34 @@
 <template>
 	<div class="modal-content">
 		<header class="modal-header" id="modalTitle">
-			<button type="button" class="btn btn--nude btn--icon" @click="rejectHandler" :aria-label="$t('action.closeModal')">
+			<button type="button" class="btn btn--nude btn--icon" @click="closeModal" :aria-label="$t('action.closeModal')">
 				<icon-base-decorative width="18" height="18"><icon-close /></icon-base-decorative>
 				<span>{{$t('action.close')}}</span>
 			</button>
 		</header>
-		<section class="modal-body" id="modalDescription">
+		<!-- first screen -->
+		<section v-if="unconfirmed" class="modal-body" id="modalDescription">
             <p>{{ message }}</p>
 			<div id="buttons">
-				<button type="button" class="btn btn--default btn--icon" @click="resolveHandler">
+				<button type="button" class="btn btn--default btn--icon" @click="confirmDeletion">
 					<icon-base-decorative width="18" height="18"><icon-checked /></icon-base-decorative>
 					<span>{{$t('action.confirm')}}</span>
 				</button>
 				<button type="button" class="btn btn--default btn--icon" @click="rejectHandler" :aria-label="$t('action.closeModal')">
 					<icon-base-decorative width="18" height="18"><icon-close /></icon-base-decorative>
 					<span>{{$t('action.cancel')}}</span>
+				</button>
+			</div>
+		</section>
+
+		<!-- After confirm screen -->
+		<section v-else class="modal-body" id="modalEndMessage">
+            <p>{{$t('archives.done')}}</p>
+			<p>{{$t('archives.actionConfirmed')}}</p>
+			<div id="buttons">
+				<button type="button" class="btn btn--default btn--icon" @click="resolveHandler" :aria-label="$t('action.closeModal')">
+					<icon-base-decorative width="18" height="18"><icon-close /></icon-base-decorative>
+					<span>Close</span>
 				</button>
 			</div>
 		</section>
@@ -33,6 +46,11 @@ import IconChecked from './icons/IconChecked'
 		IconBaseDecorative,
 		IconClose,
 		IconChecked
+	},
+	data() {
+		return {
+			unconfirmed: true
+		}
 	},
     props: {
         message: {
@@ -57,6 +75,17 @@ import IconChecked from './icons/IconChecked'
 			// this value will be passed to `catch`
 			this.reject()
 		},
+		confirmDeletion() {
+			this.unconfirmed = false
+		},
+		closeModal() {
+			if(this.unconfirmed === true){
+				this.$modal.close()
+			}
+			else {
+				this.resolveHandler()
+			}
+		}
     },
   };
 </script>

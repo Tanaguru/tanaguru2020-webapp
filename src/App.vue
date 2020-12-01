@@ -2,7 +2,7 @@
   <div id="app">
     <Header></Header>
     <router-view :key="$route.fullPath"></router-view>
-	<Footer></Footer>
+	  <Footer></Footer>
     <session-popup :bus="bus"/>
   </div>
 </template>
@@ -25,7 +25,7 @@ export default {
 	  }
 	},
 	created() {
-  		this.$store.dispatch('getServerVersion');
+      this.$store.dispatch('getServerVersion');
 	}
 }
 </script>

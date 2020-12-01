@@ -125,13 +125,12 @@ export default {
 			})
 			.then(() => {
 				this.$emit('delete-user', user)
-			})
-			.catch(() => {
-
-			})
-			.finally(() => {
 				this.$modal.close()
 			})
+			.catch(() => {
+				this.$modal.close()
+			})
+			.finally(() => {})
 		},
 	}
 }
