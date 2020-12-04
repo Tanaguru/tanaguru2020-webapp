@@ -1,0 +1,7 @@
+{
+	"createUser": "Créer un nouvel utilisateur",
+	"usersList": "Liste des utilisateurs",
+	"infoSearch": "Le tableau ci-dessous contient tous les utilisateurs existants. Utilisez la barre de recherche pour commencer à taper le nom ou l'adresse e-mail de la personne que vous recherchez et filtrer les lignes du tableau qui ne correspondent pas. Nombre actuel d'utilisateurs répertoriés",
+	"legendUsers": "Tableau des utilisateurs",
+	"usersNb": "utilisateur(s)"
+}

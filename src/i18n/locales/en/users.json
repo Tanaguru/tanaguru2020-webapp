@@ -1,0 +1,7 @@
+{
+	"createUser": "Create a new user",
+	"usersList": "Users list",
+	"infoSearch": "The table underneath contains all existing users. Use the search bar to start typing the name or email adress of the person you are looking for and filter out the table rows that don't match. Current number of users listed",
+	"legendUsers": "Users table",
+	"usersNb": "user(s)"
+}

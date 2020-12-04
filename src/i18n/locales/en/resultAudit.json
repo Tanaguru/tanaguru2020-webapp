@@ -1,0 +1,82 @@
+{
+	"displayOptions": {
+		"title": "Display options",
+		"hide": "Hide parameters",
+		"show": "Show parameters",
+		"sticky": "Pin this block",
+		"unsticky": "Detach this block",
+		"legendReference": "Choose your reference:",
+		"legendSort": "Sort by:",
+		"sortAnomalies": "Anomalies",
+		"sortRepository": "Repository",
+		"search": {
+			"filter": "Filtrer par",
+			"filterInfo": "current number of selected tags:",
+			"help": "Select the tags you are interested in from the list that will unroll when pressing the arrow down key or typing inside the input. Use click or enter to validate your choices. There is no limit to the amount of tags you can select.",
+			"tagsList": "List of {length} propositions.",
+			"selectedTags": "Selected tags"
+		}
+	},
+	"actions": {
+		"export": "Export",
+		"share": "Share",
+		"print": "Print",
+		"launch": "Relaunch audit"
+	},
+	"copyLink": {
+		"copy": "Copy link",
+		"success": "Copied !",
+		"successHelp": "The link has been successfully copied",
+		"fail": "Failed",
+		"failHelp": "The link can't be copied"
+	},
+	"elmtTested": "elements tested",
+	"date": "Since",
+	"overview": {
+		"title": "Audit overview",
+		"parameters": "Stats parameters",
+		"tests": {
+			"title": "Number of tests",
+			"tooltipHelp": "Information about the number of tests",
+			"tooltipTitle": "Number of tests",
+			"tooltipContent": "Details of the number of different tests per result type. Please be advised that a single test will only be counted once even if repeated several times throughout the audit.",
+			"table": {
+				"caption": "Test results depending on the type of test",
+				"columnTest": "Test name",
+				"columnResult": "Result"
+			}
+		},
+		"anomalies": {
+			"title": "Number of anomalies by principle",
+			"tooltipHelp": "Information about the number of anomalies by principle",
+			"tooltipTitle": "Number of anomalies by principle",
+			"tooltipContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et rhoncus sem. Duis et sapien id magna vulputate dictum."
+		}
+	},
+	"testResult": {
+		"title": "Detailed results",
+		"mainTabShow": "Show all",
+		"mainTabHide": "Hide all",
+		"detailTabShow": "Show result details",
+		"detailTabHide": "Hide result details",
+		"explanation": "Explanation",
+		"ruleLink": "Go to criteria",
+		"ruleInfo": "Understanding criteria",
+		"errors": "{nbAnomaly} errors on {nbElementTested} tested elements",
+		"status": "Status",
+		"accessibleName": "Accessible name",
+		"isNotVisibleDueTo": "Is not visible due to",
+		"isNotExposedDueTo": "Is not exposed due to",
+		"canBeReachedUsingKeyboardWith": "Can be reach using keyboard with",
+		"outer": "Outer",
+		"details": "Details",
+		"xpath": "Xpath",
+		"xpathCopy": "Copy XPath",
+		"css": "CSS selector",
+		"cssCopy": "Copy selector",
+		"checkboxAnomaly": "No longer notice this anomaly",
+		"hide": "Masquer",
+		"show": "Afficher",
+		"anomaly": "Anomaly #"
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"referencesList": "Liste des référentiels",
+	"referenceCreateForm": "Créer un référentiel",
+	"legendReferences": "Tableau des référentiels",
+	"form": {
+		"codeResetLabel": "Libellé du référentiel",
+		"emptyLabel": "Le libellé doit être renseigné",
+		"labelAlreadyExists": "Ce libellé existe déjà",
+		"testListFile": "Fichier de la liste de tests",
+		"referenceFile": "Fichier du référentiel pour",
+		"disabled": "Il y a une erreur dans le formulaire",
+		"ready": "Le référentiel est prêt à être créé",
+		"invalidTestFile": "Le fichier de la liste de tests est invalide",
+		"invalidReferenceFile": "Le fichier du référentiel est invalide",
+		"duplicatedRank": "Duplicata de rang dans le fichier",
+		"duplicatedCode": "Duplicata de code dans le fichier"
+	},
+	"overview": "Aperçu du référentiel",
+	"overviewSelect": "Sélectionner un référentiel"
+}

@@ -1,0 +1,66 @@
+{
+	"mainTitle": "Boostez votre<br />accessibilité web",
+	"intro": "Vérifiez l’accessibilité de vos gabarits, site web, parcours utilisateurs et tunnels d’achat en quelques clics.",
+	"labelForm": "Adresse du site à tester",
+	"helpForm": "Format attendu : https://www.votresite.com",
+	"services": {
+		"mainTitle": "Avec Tanaguru Engine,<br /> automatisez vos audits d'accessibilité",
+		"intro": "Plusieurs type d’analyse, pour tous les usages, de manière fiable, simple et rapide.",
+		"block1": {
+			"title": "Gabarits, pages web<br />et fichiers offline",
+			"content": "Pages publiées, gabarits en cours de création, et mêmes documents offline, Tanaguru Engine analyse en quelques instants les fichiers que vous souhaitez rendre accessibles."
+		},
+		"block2": {
+			"title": "Tout un site,<br />en quelques clics",
+			"content": "Portail institutionnel, blog ou site vitrine... Grâce à son robot d’exploration, Tanaguru Engine audit la totalité de toutes vos pages en seulement quelques clics."
+		},
+		"block3": {
+			"title": "Parcours utilisateur, applications et tunnels d'achat",
+			"content": "Applications Javascript, intranets ou parcours d’achat d’un site e-commerce... L’audit de scénario permet de réaliser des parcours d’analyse pour tous les cas de figure."
+		},
+		"block4": {
+			"title": "Une chaîne d'intégration en déploiement continu",
+			"content": "Grâce au programme open-source Jenkins, nous automatisons le déploiement de Tanaguru Engine pour vous faire bénéficier rapidement des dernières mises à jour.",
+			"link": "Télécharger Tanaguru Engine"
+		},
+		"block5": {
+			"title": "Testez vos pages directement dans votre navigateur",
+			"content": "Pour faciliter vos audits, Tanaguru Engine existe également sous la forme d’une extension gratuite pour Firefox.",
+			"link1": "Comment utiliser la web extension ?",
+			"link2": "Télécharger la web extension"
+		}
+	},
+	"update": {
+		"mainTitle": "Quoi de neuf ?",
+		"intro": "La dernière version de Tanguru Engine embarque de nouvelles fonctionnalités, pour rendre vos audits d’accessibilité toujours plus efficace et facile.",
+		"block1": {
+			"title": "Choix du référentiel RGAA 4 ou WCAG 2.1",
+			"content": "Vous avez besoin de choisir votre référentiel ? Tanaguru intègre dès maintenant ce paramètre pour vos audits et tests selon votre besoin : RGAA 4 ou WCAG 2.1."
+		},
+		"block2": {
+			"title": "Audit et propagation de composants transverses",
+			"content": "Testez des composants et éléments transverses, tels que les headers, footer, menus... Propagez les résultats et vos recommandations sur le reste du site."
+		},
+		"block3": {
+			"title": "Détection automatique des points de rupture",
+			"content": "L’outil de configuration détecte les points de rupture à partir de vos feuilles de styles pour les prendre en compte dans les résolutions de l’audit."
+		},
+		"block4": {
+			"title": "Suivre l’évolution du nombre d’anomalies moyen",
+			"content": "Vous avez commencé à implémenter les correctifs suite à un premier test ? Tanaguru Engine calcule automatiquement l’évolution des anomalies entre deux audits."
+		},
+		"block5": {
+			"title": "Travaillez en équipe et partagez vos résultats",
+			"content": "Gérer les contributions et recommandations de correctifs ou partager les résultats d’audit avec vos collaboratrices et collaborateurs devient un jeu d’enfant."
+		},
+		"block6": {
+			"title": "Outil d’audit manuel : une refonte complète",
+			"content": "Système de filtre et barre de progression, priorité de correction et impact utilisateur... Une longue liste que nous vous laissons découvrir par vous-même."
+		},
+		"cta": "Découvrir toutes les fonctionnalités de Tanaguru Engine"
+	},
+	"cta": {
+		"title": "Prêt·es à booster votre accessibilité ?",
+		"button": "Créer un compte"
+	}
+}

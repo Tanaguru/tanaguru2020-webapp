@@ -1,0 +1,17 @@
+{
+	"home": "Home",
+	"login": "Connection",
+	"dashboard": "Dashboard",
+	"auditConfiguration": "Audit configuration",
+	"contractDetail": "Contract details",
+	"administration": "Administration",
+	"configuration": "Configuration",
+	"archives": "Archives",
+	"auditDetail": "Audit details",
+	"history": "Audits history",
+	"auditResult": "Audit results",
+	"profile": "Profile",
+	"auditSummary": "Audit synthesis",
+	"notFound": "Page not found !",
+	"forbidden": "Unauthorized page !"
+}
