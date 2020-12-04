@@ -20,7 +20,7 @@
             return {
                 timer: null,
                 sessionDuration: 1800000,
-                currentDate: null,
+                currentDate: new Date(),
             }
         },
         created() {
@@ -33,7 +33,6 @@
                 }
             )
 
-            this.currentDate = new Date();
             this.timer = setInterval(this.refreshCurrentDate, 10000);
         },
         computed: {
