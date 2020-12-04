@@ -13,7 +13,7 @@
 			"maintainButtonLabel": "Prolonger la durée de la session."
 		},
 		"logoAlt": "Tanaguru - Retour à l'accueil",
-		"footerContent": "©2009-{date} Tanaguru.com - Propulsé par Tanaguru",
+		"footerContent": "©2009-{date} Tanaguru.com - Propulsé par Tanaguru - Tanaguru app v{appVersion} - Tanaguru engine v{serverVersion}",
 		"breadcrumbsHelp": "Vous êtes ici"
 	},
 	"page": {

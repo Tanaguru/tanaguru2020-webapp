@@ -19,11 +19,14 @@ export default {
 	  Footer,
     bus
   },
-    data(){
-      return {
-          bus:bus
-      }
-    }
+	data(){
+	  return {
+		  bus:bus
+	  }
+	},
+	created() {
+  		this.$store.dispatch('getServerVersion');
+	}
 }
 </script>
 
