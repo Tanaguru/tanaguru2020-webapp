@@ -1,0 +1,7 @@
+{
+	"delete": "Do you really want to delete ",
+	"remove": "Do you really want to remove ",
+	"project": " from this project ?",
+	"contract": " from this contract ?",
+	"deleteScreenshot": "Do you really want to delete screenshots from this audit ?"
+}

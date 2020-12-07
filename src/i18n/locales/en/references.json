@@ -1,0 +1,20 @@
+{
+	"referencesList": "References list",
+	"referenceCreateForm": "Create a new reference",
+	"legendReferences": "References table",
+	"form": {
+		"codeResetLabel": "Reference label",
+		"emptyLabel": "Label must be fulfilled",
+		"labelAlreadyExists": "Label already exists",
+		"testListFile": "Test list file",
+		"referenceFile": "Reference file for",
+		"disabled": "There is an error in the form",
+		"ready": "Ready to create the new reference",
+		"invalidTestFile": "The test file is invalid",
+		"invalidReferenceFile": "The reference file is invalid",
+		"duplicatedRank": "Duplicated rank in file",
+		"duplicatedCode": "Duplicated code in file"
+	},
+	"overview": "Reference overview",
+	"overviewSelect": "Select the reference"
+}

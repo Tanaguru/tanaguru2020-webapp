@@ -1,29 +1,71 @@
 <template>
-  <div id="app">
-    <Header></Header>
-    <router-view :key="$route.fullPath"></router-view>
-	<Footer></Footer>
-    <session-popup :bus="bus"/>
-  </div>
+	<div id="app">
+		<tng-header></tng-header>
+		<router-view :key="$route.fullPath"></router-view>
+		<tng-footer></tng-footer>
+
+		<session-popup v-if="$store.state.auth.user && isWindowVisible"/>
+	</div>
 </template>
 
 <script>
-import Header from './components/Header'
-import Footer from './components/Footer'
 import SessionPopup from "./components/SessionPopup";
 import {bus} from './vue';
+import TngHeader from "@/components/Header";
+import TngFooter from "@/components/Footer";
+
 export default {
-  components: {
-    SessionPopup,
-    Header,
-	  Footer,
-    bus
-  },
-    data(){
-      return {
-          bus:bus
-      }
-    }
+	components: {
+		TngFooter,
+		TngHeader,
+		SessionPopup,
+		bus
+	},
+	data() {
+		return {
+			bus: bus,
+			sessionTimer: null,
+			sessionDuration: 3600000,
+			currentDate: new Date(),
+		}
+	},
+	created() {
+		this.$store.dispatch('getServerVersion');
+		this.configService.getSessionDuration(
+			(sessionDuration) => {
+				this.sessionDuration = sessionDuration * 1000
+			},
+			(error) => {
+				console.error(error)
+			}
+		)
+		this.sessionTimer = setInterval(this.refreshCurrentDate, 10000);
+	},
+	computed: {
+		isWindowVisible() {
+			// Show window 5 mn before timeout
+			return this.$store.state.auth.user &&
+				this.$store.state.auth.loginDate &&
+				this.currentDate.getTime() > this.$store.state.auth.loginDate.getTime() + this.sessionDuration - 300000;
+		},
+
+		isTimedOut() {
+			return this.$store.state.auth.user &&
+				this.$store.state.auth.loginDate &&
+				this.currentDate.getTime() > this.$store.state.auth.loginDate.getTime() + this.sessionDuration;
+		}
+	},
+	methods: {
+		refreshCurrentDate() {
+			this.currentDate = new Date();
+			if (this.isTimedOut) {
+				this.$store.dispatch("logout")
+			}
+		}
+	},
+	beforeDestroy() {
+		clearInterval(this.timer)
+	},
 }
 </script>
 

@@ -25,7 +25,12 @@ export default {
                 this.loaded = true;
                 this.$emit("load", e.target.result);
             }
-            reader.readAsText(file);
+            try{
+				reader.readAsText(file);
+			}catch (err){
+				this.$emit("load", null);
+			}
+
         }
     },
 }

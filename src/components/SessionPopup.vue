@@ -1,5 +1,5 @@
 <template>
-    <div id="session-popup" v-if="$store.state.auth.user && isWindowVisible" class="session-popup">
+    <div id="session-popup" class="session-popup">
         <div class="session-popup__inner" aria-live="assertive">
 			<p>{{$t('global.session.expiresSoon')}}</p>
 
@@ -12,58 +12,16 @@
 </template>
 
 <script>
-    import store from "@/store";
+
+	import store from "@/store";
 
 	export default {
         name: 'sessionPopup',
-        data() {
-            return {
-                timer: null,
-                sessionDuration: 1800000,
-                currentDate: null,
-            }
-        },
-        created() {
-            this.configService.getSessionDuration(
-                (sessionDuration) => {
-                    this.sessionDuration = sessionDuration * 1000
-                },
-                (error) => {
-                    console.error(error)
-                }
-            )
-
-            this.currentDate = new Date();
-            this.timer = setInterval(this.refreshCurrentDate, 10000);
-        },
-        computed: {
-            isWindowVisible() {
-                // Show window 5 mn before timeout
-                return this.$store.state.auth.user &&
-					this.$store.state.auth.loginDate &&
-					this.$store.state.auth.loginDate.getTime() + this.sessionDuration - 300000 <= this.currentDate.getTime();
-            },
-
-            isTimedOut(){
-				return this.$store.state.auth.user &&
-					this.$store.state.auth.loginDate &&
-					this.$store.state.auth.loginDate.getTime() + this.sessionDuration <= this.currentDate.getTime();
-            }
-        },
         methods: {
-            maintainSession() {
+			maintainSession() {
 				store.dispatch('refreshToken')
-            },
-            refreshCurrentDate() {
-                this.currentDate = new Date();
-                if(this.isTimedOut){
-                    this.$store.dispatch("logout")
-                }
-            }
-        },
-        beforeDestroy() {
-            clearInterval(this.timer)
-        },
+			},
+		}
     }
 
 </script>

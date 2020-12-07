@@ -1,0 +1,78 @@
+{
+	"generic": {
+		"actions": "Actions",
+		"anomalies": "anomalies"
+	},
+	"user": {
+		"user": "User",
+		"users": "Users",
+		"role": {
+			"role": "Role",
+			"superAdmin": "Super Admin",
+			"admin": "Admin",
+			"user": "User",
+			"projectManager": "Project Manager",
+			"projectUser": "Project User",
+			"projectGuest": "Project Guest",
+			"contractManager": "Contract Manager",
+			"contractUser": "Contract User",
+			"contractGuest": "Contract Guest"
+		},
+		"dateCreation": "Date of creation",
+		"username": "Username",
+		"email": "Email",
+		"password": "Password",
+		"newPassword": "New password",
+		"passwordConfirm": "Password confirmation",
+		"enabled": "Enabled",
+		"status": "Status",
+		"selectStatus": "Select status",
+		"emailError": "Email adress cannot be empty."
+	},
+	"contract": {
+		"contracts": "Contracts",
+		"contract": "Contract",
+		"name": "Name",
+		"dateEnd": "End date",
+		"dateStart": "Start date",
+		"owner": "Owner",
+		"selectOwner": "Select the contract's owner"
+	},
+	"project": {
+		"name": "Name",
+		"domain": "Domain name",
+		"contract": "Contract name"
+	},
+	"audit": {
+		"name": "Name",
+		"type": "Type",
+		"nbPage": "Number of pages",
+		"status": "Status",
+		"dateStart": "Start date",
+		"dateEnd": "End date",
+		"id": "Id n°",
+		"url": "Domain",
+		"repository": "Repository",
+		"parameters": "Audit parameters",
+		"page": "Page audit",
+		"site": "Site audit",
+		"upload": "File audit",
+		"scenario": "Scenario audit",
+		"assisted": "Assisted audit",
+		"result": {
+			"passed": "Passed",
+			"inapplicable": "Inapplicable",
+			"failed": "Failed",
+			"untested": "Not tested",
+			"cantTell": "Pre-qualify",
+			"ignored": "Anomalies ignored"
+		}
+	},
+	"reference": {
+		"references": "References",
+		"name": "Name"
+	},
+	"test": {
+		"tests": "Tests"
+	}
+}

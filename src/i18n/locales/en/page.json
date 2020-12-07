@@ -1,0 +1,17 @@
+{
+	"adminContract": "Contract administration",
+	"configContract": "Contract configuration",
+	"adminUser": "User administration",
+	"dashboard": "Dashboard",
+	"auditLaunch": "Launch an audit",
+	"archives": "Archives",
+	"legals": "Terms of use",
+	"privacy": "Privacy policy",
+	"credits": "Credits",
+	"access": "Accessibility",
+	"sitemap": "Site Map",
+	"history": "Audit history",
+	"notFound": "Oops ! This page does not exist.",
+	"forbidden": "Access denied",
+	"adminReferences": "Reference administration"
+}

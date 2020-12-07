@@ -1,0 +1,152 @@
+{
+	"definition": {
+		"title": "Audit definition",
+		"radioLegend": "Audit type",
+		"radioType": {
+			"newAuditSite": "Site audit",
+			"newAuditPage": "Page audit",
+			"newAuditUpload": "File audit",
+			"newAuditScenario": "Scenario audit"
+		},
+		"labelName": "Audit name",
+		"screenshot": {
+			"title": "Screenshots",
+			"explanation": "Would you like to add screenshots to your audit?",
+			"radioLegend": "Option to add screenshots",
+			"radioYes": "Yes",
+			"radioNo": "No"
+		},
+		"browsers": {
+			"title": "Browser",
+			"subtitle": "Browser choice",
+			"explanation": "The browser to use for the audit.",
+			"radioLegend": "Option to choose browser",
+			"firefox": "Mozilla Firefox",
+			"chrome": "Google Chrome"
+		}
+	},
+	"guidelines": {
+		"title": "Guidelines",
+		"reference": {
+			"title": "References base",
+			"explanation": "Choose the guidelines you want to apply to your audit."
+		},
+		"mainReference": {
+			"title": "Choice of main guidelines",
+			"explanation": "The repository that will be displayed in the dashboard."
+		},
+		"level": {
+			"title": "Conformity level",
+			"levelA": "A",
+			"levelAA": "AA",
+			"levelAAA": "AAA"
+		}
+	},
+	"tests": {
+		"title": "List of tests",
+		"explanation": "The following configuration can be modified in the project's settings.",
+		"category1": {
+			"title": "Tests category 1",
+			"checkbox1": "",
+			"checkbox2": "",
+			"checkbox3": "",
+			"checkbox4": ""
+		}
+	},
+	"pages": {
+		"title": "Audit pages configuration",
+		"subtitle": "Pages to test",
+		"explanation": "Enter at least one page adress. Expected format is : 'http://www.tanaguru.com'",
+		"radioLegend": "Page addition options",
+		"array": "Page by page",
+		"plainText": "Free-form text input",
+		"byPage": {
+			"page": "Page",
+			"name": "Page name",
+			"url": "URL",
+			"button": "Add another page"
+		},
+		"byUrl": {
+			"label": "Page URLs",
+			"labelHelp": "Website urls separated by a ';'"
+		}
+	},
+	"resolution": {
+		"title": "Screen resolution",
+		"explanation": "Breakpoints and pages resolution",
+		"option": "Automatic resolution",
+		"default": "Default resolution",
+		"breakpoint": "Breakpoint",
+		"label": "Screen length in pixel",
+		"labelHelp": "Maximum value : 2048 pixels",
+		"button": "Add a breakpoint"
+	},
+	"waitTime": {
+		"title": "Wait time <span class=\"small\">(for JS frameworks like Angular, React...)</span>",
+		"label": "Wait time before auditing after the dom loaded (in milliseconds)",
+		"formHelp": "The value must be a number between 0 (excluded) and 10 000 milliseconds (ms). Example: 2 seconds = 2000 ms. Input content : 2000"
+	},
+	"site": {
+		"title": "Audit site configuration",
+		"parameters": {
+			"labelSiteSeeds": "Site seeds",
+			"labelSiteSeedsHelp": "Website seeds separated by a ';'",
+			"labelMaxDepth": "Max Depth",
+			"labelMaxDepthHelp": "Crawler max depth in pages (the value must be an integer between 1 and 10)",
+			"labelMaxDuration": "Max duration",
+			"labelMaxDurationHelp": "Crawler max duration in seconds (the value must be a number between 0.1 and 86400).",
+			"labelMaxDocument": "Max Document",
+			"labelMaxDocumentHelp": "Crawler max pages (the value must be an integer between 1 and 1000).",
+			"labelInclusionRegex": "Inclusion regex",
+			"labelInclusionRegexHelp": "Only audit URLs containing one or more given strings separated by a ';'",
+			"labelExclusionRegex": "Exclusion regex",
+			"labelExclusionRegexHelp": "Exclude URLs containing one or more given strings separated by a ';'"
+		}
+	},
+	"resource": {
+		"title": "File audit configuration",
+		"subtitle": "Upload",
+		"name": "Name",
+		"file": "File",
+		"selectResource": "Select a resource",
+		"noResource": "No resource found"
+	},
+	"scenario": {
+		"title": "Scenario audit configuration",
+		"subtitle": "Scenario",
+		"name": "Name",
+		"file": "File",
+		"selectScenario": "Select a scenario",
+		"noScenario": "No scenario found"
+	},
+	"form": {
+		"help": {
+			"checked": "Filled",
+			"empty": "To fill",
+			"ready": "Ready to launch"
+		},
+		"error": {
+			"auditType": "Please choose a type for your audit.",
+			"auditName": "Please enter a name for your audit.",
+			"typeError": "Please select the type of audit you wish to execute.",
+			"waitTimeError": "Please enter a numeric value between 0 (excluded) and 10 000.",
+			"scenarioError": "Invalid scenario file. ",
+			"scenarioNameError": "Please give a name to your scenario",
+			"uploadError": "Please choose a file. ",
+			"emptyResourceId": "Please choose a resource.",
+			"invalidResourceError": "The choosen file is invalid",
+			"emptyScenarioId": "Please choose a scenario.",
+			"fileNameError": "Please give a name to your file",
+			"seedsError": "Please enter an URL. You cannot audit a different website than the one declared on the project.",
+			"emptyUrlError": "The first slot has to be filled. ",
+			"emptyUrlsError": "Please enter at least one url. ",
+			"scenarioSuccess": "The scenario has been added. ",
+			"resourceSuccess ": "The file has been added. ",
+			"bpError": "Invalid breakpoint, please enter a numeric value between 1 and 2048.",
+			"auditReferences": "Please choose at least one guidelines.",
+			"crawlerDuration": "Please enter a numeric value between 0.1 et 86400 for the crawler max duration in seconds.",
+			"crawlerDepth": "Please enter an integer between 1 and 10 for the crawler max depth in pages.",
+			"crawlerDocument": "Please enter an integer between 1 and 1000 for the crawler max pages."
+		}
+	}
+}

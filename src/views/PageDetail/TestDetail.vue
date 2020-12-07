@@ -15,8 +15,7 @@
                 <div class="result-header-content">
                     <h3 class="result-header-content__name">{{test.name}}</h3>
                     <span v-show="false" class="results-type-details__errors">{{$t('resultAudit.testResult.errors', {nbAnomaly: testResult.nbElementFailed, nbElementTested: testResult.nbElementTested})}}</span>
-                    <p class="result-header-content__explanation" v-if="testResult.explanation">{{$t('resultAudit.testResult.explanation')}} : {{testResult.explanation}}</p>
-
+                    <p class="result-header-content__explanation" v-if="test.description">{{$t('resultAudit.testResult.explanation')}} : {{test.description}}</p>
                     <p v-if="displayMode==='anomaly' && test.rules"
                        class="result-header-content__details results-type-details"
                        v-for="testHierarchy of test.rules" :key="testHierarchy.id">
@@ -55,6 +54,7 @@
                     :key='i'
                     :page-content="pageContent"
                     :anomaly="anomaly"
+					:has-accessible-name-tag="hasAccessibleNameTag"
                     :index="i" />
 
             <div v-if="!lastPageLoaded && !isLoading">
@@ -141,6 +141,9 @@
             }
         },
         computed: {
+			hasAccessibleNameTag(){
+				return this.test.tags.includes('accessiblename')
+			},
             nbElementForStatus(){
                 let result = 0;
                 switch (this.testResult.status) {
