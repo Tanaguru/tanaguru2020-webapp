@@ -150,7 +150,7 @@ import IconNotApplicable from '../../components/icons/IconNotApplicable';
 import IconQualify from '../../components/icons/IconQualify';
 import AnomalyModal from '../../components/AnomalyModal';
 import moment from 'moment';
-import CircularProgressChart from '../../components/CircularProgressChart';
+import CircularProgressChart from '../../components/charts/CircularProgressChart';
 import PageResultOverview from "../PageDetail/PageResultOverview";
 import Pagination from "../../components/Pagination";
 import HeaderRow from "./HeaderRow.vue"

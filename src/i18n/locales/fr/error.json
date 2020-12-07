@@ -1,0 +1,6 @@
+{
+	"forbidden": {
+		"message": "Vous ne disposez pas de droits d'accès suffisants pour accéder à cette page."
+	},
+	"parseJson": "Unable to parse json"
+}

@@ -244,7 +244,7 @@ export default {
                         this.currentUserRole = currentUser[0].projectRole.name
                     },
                     (error) => {
-                        console.log(error)
+                        console.error(error)
                     }
                 )
             },
@@ -257,8 +257,6 @@ export default {
             this.$route.params.id,
             (audits) => {
                 this.audits = audits
-                console.log('audits :', audits)
-
                 this.pageAudits = audits.filter(audit =>
                     audit.type == 'PAGE',
                 ),

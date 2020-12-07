@@ -1,0 +1,37 @@
+{
+	"actions": {
+		"new": "New project",
+		"alphabetical": "Sort alphabetically",
+		"chronological": "Sort from last to first",
+		"credits": "Credits: 300 audits left",
+		"archives": "Archives"
+	},
+	"title": {
+		"myProjects": "My projects",
+		"sharedProjects": "Shared projects"
+	},
+	"project": {
+		"contract": "Contract:",
+		"anomaly": "anomalies",
+		"url": "Domain:",
+		"date": "Validity date:",
+		"repository": "Repository:",
+		"anomalyPage": "Average number of anomalies per page:",
+		"anomalyAudit": "Average number of anomalies on the last audit:",
+		"elementsTested": "Number of elements tested:",
+		"auditsLaunched": "Number of audits launched:",
+		"team": "Team",
+		"btnTeam": "Display team",
+		"noAudit": "You have not yet performed an audit.",
+		"noProject": "No projects yet.",
+		"noSharedProject": "No one has shared a project with you yet.",
+		"legend": "Results legend",
+		"update": "Last update:",
+		"author": "By",
+		"lastPageAudit": "Last page audit",
+		"lastSiteAudit": "Last site audit",
+		"lastScenarioAudit": "Last scenario audit",
+		"lastUploadAudit": "Last file audit",
+		"lastAssistedAudit": "Last assisted audit"
+	}
+}

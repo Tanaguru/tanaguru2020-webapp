@@ -80,7 +80,7 @@ export default {
             (audit) => {
                 this.audit = audit
             },
-            (error) => {console.log(error)}
+            (error) => {console.error(error)}
         )
     }
 }

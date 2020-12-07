@@ -1,0 +1,7 @@
+{
+	"legendPage": "Table of page audits performed",
+	"legendSite": "Table of site audits performed",
+	"legendUpload": "Table of file audits performed",
+	"legendScenario": "Table of scenario audits performed",
+	"noAudit": "No such audit was carried out for this project."
+}

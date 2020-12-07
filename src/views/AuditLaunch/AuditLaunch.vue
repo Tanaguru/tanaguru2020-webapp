@@ -261,26 +261,26 @@ import IconUnchecked from '../../components/icons/IconUnchecked';
 import IconTop from '../../components/icons/IconTop';
 import IconDelete from '../../components/icons/IconDelete';
 import IconArrowBlue from '../../components/icons/IconArrowBlue';
-import AuditTypeForm from "./AuditTypeForm";
-import AuditNameForm from "./AuditNameForm";
-import AuditReferencesForm from "./AuditReferencesForm";
-import AuditBrowserForm from "./AuditBrowserForm";
-import AuditMainReferenceForm from "./AuditMainReferenceForm";
+import AuditTypeForm from "./form/AuditTypeForm";
+import AuditNameForm from "./form/AuditNameForm";
+import AuditReferencesForm from "./form/AuditReferencesForm";
+import AuditBrowserForm from "./form/AuditBrowserForm";
+import AuditMainReferenceForm from "./form/AuditMainReferenceForm";
 import AuditFormSectionHeader from "./AuditFormSectionHeader";
-import AuditSiteSeedsForm from "./AuditSiteSeedsForm";
-import AuditSiteCrawlerDurationForm from "./AuditSiteCrawlerDurationForm";
-import AuditPageUrlsForm from "./AuditPageUrlsForm";
-import AuditSiteCrawlerMaxDepthForm from "./AuditSiteCrawlerDepthForm";
-import AuditSiteCrawlerMaxDocumentForm from "./AuditSiteCrawlerDocumentForm";
-import AuditSiteCrawlerInclusionRegexForm from "./AuditSiteInclusionRegexForm";
-import AuditSiteCrawlerExclusionRegexForm from "./AuditSiteExclusionRegexForm";
-import AuditUploadForm from "./AuditUploadForm";
-import AuditScenarioForm from "./AuditScenarioForm";
-import AuditBreakpointsForm from "./AuditBreakpointsForm";
+import AuditSiteSeedsForm from "./form/AuditSiteSeedsForm";
+import AuditSiteCrawlerDurationForm from "./form/AuditSiteCrawlerDurationForm";
+import AuditPageUrlsForm from "./form/AuditPageUrlsForm";
+import AuditSiteCrawlerMaxDepthForm from "./form/AuditSiteCrawlerDepthForm";
+import AuditSiteCrawlerMaxDocumentForm from "./form/AuditSiteCrawlerDocumentForm";
+import AuditSiteCrawlerInclusionRegexForm from "./form/AuditSiteInclusionRegexForm";
+import AuditSiteCrawlerExclusionRegexForm from "./form/AuditSiteExclusionRegexForm";
+import AuditUploadForm from "./form/AuditUploadForm";
+import AuditScenarioForm from "./form/AuditScenarioForm";
+import AuditBreakpointsForm from "./form/AuditBreakpointsForm";
 import UrlHelper from "../../helper/urlhelper"
 import BreakpointHelper from "../../helper/breakpointHelper"
-import AuditWaitTimeForm from "./AuditWaitTimeForm";
-import AuditEnableScreenshotForm from "./AuditEnableScreenshotForm";
+import AuditWaitTimeForm from "./form/AuditWaitTimeForm";
+import AuditEnableScreenshotForm from "./form/AuditEnableScreenshotForm";
 
 export default {
     name: 'auditLaunch',
@@ -385,7 +385,7 @@ export default {
 
             },
             (error) => {
-                console.log(error);
+                console.error(error);
             }
         );
 

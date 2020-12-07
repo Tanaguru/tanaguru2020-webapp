@@ -1,0 +1,77 @@
+<template>
+    <main class="wrapper" id="page" role="main">
+		<Tabs>
+			<Tab :name="$t('entity.contract.contracts')" selected="true" class="tabs-wrapper">
+				<adminContractList :users="users" />
+			</Tab>
+
+			<Tab :name="$t('entity.user.users')" class="tabs-wrapper">
+				<adminUserList :users="users"  @create-user="createUser" />
+			</Tab>
+
+
+			<Tab v-if="showReferenceTab"
+				 :name="$t('entity.reference.references')" class="tabs-wrapper">
+				<reference-tab />
+			</Tab>
+		</Tabs>
+    </main>
+</template>
+
+<script>
+import Tab from './AdminTab';
+import Tabs from './AdminTabs';
+import adminUserList from './User/AdminUserList';
+import adminContractList from './Contract/AdminContractList';
+import ReferenceTab from "@/views/Admin/Reference/ReferenceTab";
+
+export default {
+    name: 'Admin',
+    components : {
+		ReferenceTab,
+        Tab,
+        Tabs,
+        adminUserList,
+        adminContractList
+	},
+	data(){
+		return {
+			users: []
+		}
+	},
+	metaInfo(){
+		return {
+			// if no subcomponents specify a metaInfo.title, this title will be used
+			title: this.$i18n.t("global.siteName") + ' - ' + this.$i18n.t("title.administration"),
+			meta: [
+				{
+					name: 'robots', content: 'noindex'
+				}
+			]
+		}
+	},
+	methods:{
+		createUser(user){
+			this.users.push(user)
+		}
+	},
+	created(){
+		if(this.$store.state.auth.user.appRole.name == 'USER'){
+			this.$router.replace('/configuration')
+		}
+
+		this.userService.findAll(
+			users => {
+				this.users = users
+			},
+			err => console.error(err)
+		);
+	},
+
+	computed : {
+    	showReferenceTab(){
+    		return REFERENCE_PANEL
+		}
+	}
+}
+</script>

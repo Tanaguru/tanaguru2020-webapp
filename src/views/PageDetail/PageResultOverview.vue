@@ -148,8 +148,8 @@
 </template>
 
 <script>
-    import BarChart from "../../components/BarChart";
-    import PolarChart from "../../components/PolarChart";
+    import BarChart from "../../components/charts/BarChart";
+    import PolarChart from "../../components/charts/PolarChart";
     import IconBaseDecorative from "../../components/icons/IconBaseDecorative";
     import IconBaseInformative from "../../components/icons/IconBaseInformative";
     import IconArrowBlue from "../../components/icons/IconArrowBlue";

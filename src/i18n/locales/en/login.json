@@ -1,0 +1,7 @@
+{
+	"title": "Login<br />to your account",
+	"labelId": "Your username",
+	"labelPassword": "Your password",
+	"password": "Forgot your password ?",
+	"incorrectLogin": "Incorrect username and/or password."
+}

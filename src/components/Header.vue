@@ -19,7 +19,7 @@ import DesktopMenu from './NavMenu/DesktopMenu'
 import MobileMenu from './NavMenu/MobileMenu'
 
 export default {
-	name: 'Header',
+	name: 'tngHeader',
 	components: {
 		Banner,
 		DesktopMenu,
