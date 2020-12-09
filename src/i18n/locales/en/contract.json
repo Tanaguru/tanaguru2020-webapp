@@ -1,0 +1,9 @@
+{
+	"infos": "Contract details",
+	"users": "Contract users",
+	"createProject": "Create a new project associated with the contract",
+	"projectsList": "Projects associated with the contract",
+	"legendUsers": "Contract's users table",
+	"legendProjects": "Contract's projects table",
+	"contracts": "contract(s)"
+}

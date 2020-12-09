@@ -136,14 +136,15 @@ pipeline {
 				unstash 'version'
 
 				sh '''
+				  TIMESTAMP=$(date +"%Y-%m-%d")
 				  WEBAPP_VERSION=$(cat version.txt)
 
 				  docker login \
 				  --username="$REGISTRY_USER" \
 				  --password="$REGISTRY_PASS" "$REGISTRY_HOST"
 
-				  docker tag tanaguru2020-webapp:${WEBAPP_VERSION} registry.tanaguru.com/tanaguru2020-webapp:beta
-				  docker push registry.tanaguru.com/tanaguru2020-webapp:beta
+				  docker tag tanaguru2020-webapp:${WEBAPP_VERSION} registry.tanaguru.com/tanaguru2020-webapp:beta-$TIMESTAMP
+				  docker push registry.tanaguru.com/tanaguru2020-webapp:beta-$TIMESTAMP
 				'''
 			}
 		}

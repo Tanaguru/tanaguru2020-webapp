@@ -1,0 +1,6 @@
+{
+	"createContract": "Create a new contract",
+	"contractsList": "Contracts list",
+	"noContract": "You have no contracts yet.",
+	"infoSearch": "The table underneath contains all existing contracts. Use the search bar to start typing the name of the one you are looking for and filter out the table rows that don't match. Current number of contracts listed"
+}

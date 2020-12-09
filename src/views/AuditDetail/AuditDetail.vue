@@ -61,8 +61,8 @@
 
 <script>
 import Breadcrumbs from "../../components/Breadcrumbs";
-import Tab from '../../components/Admin/AdminTab';
-import Tabs from '../../components/Admin/AdminTabs';
+import Tab from '../Admin/AdminTab';
+import Tabs from '../Admin/AdminTabs';
 import Logs from './LogsList';
 import Synthesis from './Synthesis';
 import LogsList from "./LogsList";

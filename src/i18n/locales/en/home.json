@@ -1,0 +1,66 @@
+{
+	"mainTitle": "Boost your<br />web accessibility",
+	"intro": "Check the accessibility of your templates, website, user journeys and shopping funnels with a few clicks.",
+	"labelForm": "Website's url to test",
+	"helpForm": "Expected format : https://www.votresite.com",
+	"services": {
+		"mainTitle": "With Tanaguru Engine,<br />automate your accessibility audits",
+		"intro": "Several types of analysis, for all uses, in a reliable, simple and fast way.",
+		"block1": {
+			"title": "Templates, web pages<br />and offline files",
+			"content": "Published pages, templates being created, and even offline documents, Tanaguru Engine analyzes the files you want to make accessible in a few moments."
+		},
+		"block2": {
+			"title": "A whole site, <br /> in a few clicks",
+			"content": "Institutional portal, blog or showcase site ... Thanks to its crawler, Tanaguru Engine audits all of all your pages in just a few clicks."
+		},
+		"block3": {
+			"title": "User journey, applications and shopping tunnels",
+			"content": "Javascript applications, intranets or an e-commerce site purchase path ... Scenario audit allows analysis to be carried out for all scenarios."
+		},
+		"block4": {
+			"title": "An integration chain in continuous deployment",
+			"content": "Thanks to the open-source Jenkins program, we automate the deployment of Tanaguru Engine so you can quickly benefit from the latest updates.",
+			"link": "Download Tanaguru Engine"
+		},
+		"block5": {
+			"title": "Test your pages directly in your browser",
+			"content": "To facilitate your audits, Tanaguru Engine is also available as a free extension for Firefox.",
+			"link1": "How to use the web extension?",
+			"link2": "Download the web extension"
+		}
+	},
+	"update": {
+		"mainTitle": "What's up?",
+		"intro": "The latest version of Tanguru Engine comes with new features to make your accessibility audits even more efficient and easy.",
+		"block1": {
+			"title": "Choice of RGAA 4 or WCAG 2.1 standard",
+			"content": "Do you need to choose your guidelines? Tanaguru is now integrating this parameter for your audits and tests according to your needs: RGAA 4 or WCAG 2.1."
+		},
+		"block2": {
+			"title": "Audit and propagation of transversal components",
+			"content": "Test components and transversal elements, such as headers, footers, menus ... Propagate the results and your recommendations on the rest of the site."
+		},
+		"block3": {
+			"title": "Automatic detection of breakpoints",
+			"content": "The configuration tool detects breakpoints from your style sheets to take them into account in audit resolutions."
+		},
+		"block4": {
+			"title": "Monitor the evolution of the average number of anomalies",
+			"content": "Have you started implementing the fixes after a first test? Tanaguru Engine automatically calculates the evolution of anomalies between two audits."
+		},
+		"block5": {
+			"title": "Work as a team and share your results",
+			"content": "Managing contributions and recommendations for fixes or sharing audit results with your employees becomes a piece of cake."
+		},
+		"block6": {
+			"title": "Manual audit tool: a complete overhaul",
+			"content": "Filter system and progress bar, correction priority and user impact ... A long list that we let you discover for yourself."
+		},
+		"cta": "Discover all the features of Tanaguru Engine"
+	},
+	"cta": {
+		"title": "Ready to boost your accessibility?",
+		"button": "Create an account"
+	}
+}

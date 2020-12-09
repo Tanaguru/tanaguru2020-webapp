@@ -1,0 +1,28 @@
+{
+	"tabs": {
+		"logs": "Logs",
+		"synthesis": "Synthèse"
+	},
+	"pages": "Pages de l'audit",
+	"logs": "Historique de l'audit",
+	"synthesis": {
+		"pages": "Nombre de pages à auditer",
+		"guidelines": "Référentiel",
+		"table": {
+			"title": "Récapitulatif des pages auditées",
+			"title-info": "Cliquer sur les icônes pour obtenir plus de détails sur le statut du test.",
+			"btnShow": "Test {status} - Afficher le détail"
+		},
+		"modal": {
+			"criteria": "Critère",
+			"rule": "Allez à la règle concernée",
+			"seeDetails": "Voir le résultat détaillé de la page"
+		}
+	},
+	"status": {
+		"done": "Terminé",
+		"error": "Erreur",
+		"pending": "En attente",
+		"running": "En cours"
+	}
+}

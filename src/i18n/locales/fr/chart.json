@@ -1,0 +1,5 @@
+{
+	"progress": {
+		"helpText": "{percentage}% de tests validés"
+	}
+}

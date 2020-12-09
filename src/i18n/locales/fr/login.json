@@ -1,0 +1,7 @@
+{
+	"title": "Connexion<br />à votre compte",
+	"labelId": "Votre identifiant",
+	"labelPassword": "Votre mot de passe",
+	"password": "Mot de passe oublié ?",
+	"incorrectLogin": "L'identifiant et/ou le mot de passe sont incorrect(s)."
+}

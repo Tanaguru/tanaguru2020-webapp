@@ -5,7 +5,7 @@
 
 <script>
 
-import dashboard from './Dashboard';
+import dashboard from './Dashboard/Dashboard';
 import Login from "./Login";
 export default {
     name: 'home',

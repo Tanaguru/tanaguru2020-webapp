@@ -23,7 +23,7 @@ export default {
                     commit('version_success', {version})
                 })
                 .catch(error => {
-                    console.log(error)
+                    console.error(error)
                     commit('version_error')
                 })
         }

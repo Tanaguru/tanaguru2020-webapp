@@ -143,7 +143,7 @@
     import IconShare from "../../components/icons/IconShare";
     import IconPrint from "../../components/icons/IconPrint";
     import IconLaunch from "../../components/icons/IconLaunch";
-    import CircularProgressChart from "../../components/CircularProgressChart";
+    import CircularProgressChart from "../../components/charts/CircularProgressChart";
 	import moment from 'moment';
 	import backgroundImg from '../../../public/assets/images/logo-desktop.svg';
     export default {

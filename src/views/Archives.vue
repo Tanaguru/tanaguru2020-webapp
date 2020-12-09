@@ -189,7 +189,7 @@ export default {
                         this.currentUserRole = currentUser[0].projectRole.name
                     },
                     (error) => {
-                        console.log(error)
+                        console.error(error)
                     }
                 )
             },

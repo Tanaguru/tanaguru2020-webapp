@@ -37,7 +37,7 @@
 
 <script>
   export default {
-      name: 'footer',
+      name: 'tngFooter',
       data(){
         return{
           locale : "en"
