@@ -68,10 +68,10 @@
 
 <script>
 import moment from 'moment';
-import IconBaseDecorative from './icons/IconBaseDecorative'
-import IconArrowBlue from './icons/IconArrowBlue'
-import IconDelete from './icons/IconDelete'
-import DeletionModal from './DeleteModal'
+import IconBaseDecorative from '../../components/icons/IconBaseDecorative'
+import IconArrowBlue from '../../components/icons/IconArrowBlue'
+import IconDelete from '../../components/icons/IconDelete'
+import DeletionModal from '../../components/DeleteModal'
 
 export default {
     name: 'ArchivesTable',

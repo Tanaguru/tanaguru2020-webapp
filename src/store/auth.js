@@ -26,7 +26,6 @@ export default {
                 state.authorities[authority.name] = true;
             }
             localStorage.setItem('authorities', JSON.stringify(state.authorities))
-
             axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
         },
         auth_error(state){
@@ -45,7 +44,7 @@ export default {
             state.token = ''
             state.loginDate = null
             state.user = null
-            state.authorities = []
+            state.authorities = {}
             localStorage.removeItem('loginDate')
             localStorage.removeItem('user')
             localStorage.removeItem('token')

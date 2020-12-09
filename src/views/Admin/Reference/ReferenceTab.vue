@@ -21,7 +21,7 @@
 						<td class="td-title">{{reference.name}} ({{reference.code}})</td>
 						<td class="td-actions">
 							<button
-								v-if="$store.state.auth.authorities['DELETE_CONTRACT']"
+								v-if="$store.state.auth.authorities['DELETE_REFERENCE']"
 								type="button"
 								class="btn btn--icon btn--nude"
 								@click="removeReference(reference)">
@@ -36,7 +36,7 @@
 			<p v-else>{{$t('references.noReference')}}</p>
 		</section>
 
-		<section v-if="$store.state.auth.authorities['CREATE_CONTRACT']">
+		<section v-if="$store.state.auth.authorities['CREATE_REFERENCE']">
 			<h2>{{$t('references.referenceCreateForm')}}</h2>
 			<tanaguru-test-import :existing-references="references" @addReference="onAddReference"></tanaguru-test-import>
 		</section>

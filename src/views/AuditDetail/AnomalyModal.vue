@@ -14,7 +14,7 @@
                 <p id="status--inapplicable" class="status status--inapplicable"
                 v-if="criteriaResult.status == 'inapplicable'">{{ criteriaResult.status }}</p>
             </h1>
-            
+
             <button type="button" class="btn btn--nude btn--icon" @click="closeModal"
                     :aria-label="$t('action.closeModal')">
                 <icon-base-decorative width="18" height="18">
@@ -45,7 +45,7 @@
                 <li class="list-anomaly__item" v-if="testResultByStatus['inapplicable']">
                     <span class="error-nbr error-nbr--inapplicable">
                         {{ criteriaResult.nbTI }}
-                        
+
                         <icon-base-informative icon-label="results inapplicable" width="20" height="20">
                             <icon-not-applicable/>
                         </icon-base-informative>
@@ -59,7 +59,7 @@
                 <li class="list-anomaly__item" v-if="testResultByStatus['passed']">
                     <span class="error-nbr error-nbr--passed">
                         {{ criteriaResult.nbTP }}
-                        
+
                         <icon-base-informative icon-label="results passed" width="20" height="20">
                             <icon-compliant/>
                         </icon-base-informative>
@@ -73,7 +73,7 @@
                 <li class="list-anomaly__item" v-if="testResultByStatus['failed']">
                     <span class="error-nbr error-nbr--failed">
                         {{ criteriaResult.nbTF }}
-                        
+
                         <icon-base-informative icon-label="results failed" width="20" height="20">
                             <icon-improper/>
                         </icon-base-informative>
@@ -87,7 +87,7 @@
                 <li class="list-anomaly__item" v-if="testResultByStatus['cantTell']">
                     <span class="error-nbr error-nbr--cantTell">
                         {{ criteriaResult.nbTCT }}
-                        
+
                         <icon-base-informative icon-label="results cantTell" width="20" height="20">
                             <icon-qualify/>
                         </icon-base-informative>
@@ -103,14 +103,14 @@
 </template>
 
 <script>
-import IconBaseDecorative from './icons/IconBaseDecorative'
-import IconBaseInformative from './icons/IconBaseInformative'
-import IconArrowBlue from './icons/IconArrowBlue'
-import IconClose from './icons/IconClose'
-import IconCompliant from './icons/IconCompliant'
-import IconImproper from './icons/IconImproper'
-import IconNotApplicable from './icons/IconNotApplicable'
-import IconQualify from './icons/IconQualify'
+import IconBaseDecorative from '../../components/icons/IconBaseDecorative'
+import IconBaseInformative from '../../components/icons/IconBaseInformative'
+import IconArrowBlue from '../../components/icons/IconArrowBlue'
+import IconClose from '../../components/icons/IconClose'
+import IconCompliant from '../../components/icons/IconCompliant'
+import IconImproper from '../../components/icons/IconImproper'
+import IconNotApplicable from '../../components/icons/IconNotApplicable'
+import IconQualify from '../../components/icons/IconQualify'
 
 export default {
     name: 'AnomalyModal',

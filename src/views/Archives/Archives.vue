@@ -116,16 +116,16 @@
 
 
 <script>
-import Breadcrumbs from '../components/Breadcrumbs';
-import ArchivesTable from '../components/ArchivesTable';
-import IconBaseDecorative from '../components/icons/IconBaseDecorative';
-import IconAuditAssisted from '../components/icons/IconAuditAssisted';
-import IconAuditSite from '../components/icons/IconAuditSite';
-import IconAuditPage from '../components/icons/IconAuditPage';
-import IconAuditScenario from '../components/icons/IconAuditScenario';
-import IconAuditFile from '../components/icons/IconAuditFile';
-import IconArrowBlue from '../components/icons/IconArrowBlue';
-import IconDelete from '../components/icons/IconDelete';
+import Breadcrumbs from '../../components/Breadcrumbs';
+import ArchivesTable from './ArchivesTable';
+import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
+import IconAuditAssisted from '../../components/icons/IconAuditAssisted';
+import IconAuditSite from '../../components/icons/IconAuditSite';
+import IconAuditPage from '../../components/icons/IconAuditPage';
+import IconAuditScenario from '../../components/icons/IconAuditScenario';
+import IconAuditFile from '../../components/icons/IconAuditFile';
+import IconArrowBlue from '../../components/icons/IconArrowBlue';
+import IconDelete from '../../components/icons/IconDelete';
 
 
 export default {

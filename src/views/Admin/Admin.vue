@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import Tab from './AdminTab';
-import Tabs from './AdminTabs';
+import Tab from '../../components/Tab';
+import Tabs from '../../components/Tabs';
 import adminUserList from './User/AdminUserList';
 import adminContractList from './Contract/AdminContractList';
 import ReferenceTab from "@/views/Admin/Reference/ReferenceTab";

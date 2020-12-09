@@ -45,7 +45,7 @@ export default {
     methods: {
         updateLocale : function(){
             this.$i18n.locale = this.locale;
-            this.moment.locale(this.locale)
+            this.$moment.locale(this.locale)
 		},
         logout : function(event){
             this.$store.dispatch('logout')

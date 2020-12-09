@@ -10,7 +10,7 @@ import AuditHistory from "@/views/AuditHistory";
 import PageDetail from "@/views/PageDetail/PageDetail";
 import Admin from "@/views/Admin/Admin";
 import Config from "@/views/Configuration";
-import Archives from "@/views/Archives";
+import Archives from "@/views/Archives/Archives";
 import ResetPassword from "@/views/ResetPassword";
 import ForgotPassword from "@/views/ForgotPassword";
 import NotFound from "@/views/Errors/NotFound";
@@ -79,8 +79,7 @@ export default [
         name: 'Admin',
         component: Admin,
         meta :{
-            requireAuthentication : true,
-            requireAuthority : 'SHOW_USER',
+            requireAuthentication : true
         }
     },{
         path: '/configuration',
