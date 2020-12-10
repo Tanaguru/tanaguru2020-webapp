@@ -18,7 +18,8 @@
                     <select id="main-reference-select"
                             v-model="mainReference">
                         <option v-for="reference in selectedReferences"
-                                :value="reference">{{ reference.name }} ({{ reference.code }})
+                                :value="reference"
+                                :key="reference.name">{{ reference.name }} ({{ reference.code }})
                         </option>
                     </select>
                 </div>
@@ -38,7 +39,6 @@
 import IconBaseDecorative from "../../../components/icons/IconBaseDecorative";
 import IconAlert from "../../../components/icons/IconAlert";
 import InputValidationDisplay from "../InputValidationDisplay";
-
 export default {
     name: 'AuditMainReferenceForm',
     components: {
@@ -66,9 +66,8 @@ export default {
         }
     },
 }
-
 </script>
 
 <style lang="scss">
-@import "src/views/AuditLaunch/AuditLaunch.style";
+@import "../AuditLaunch.style";
 </style>
