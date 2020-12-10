@@ -119,7 +119,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/views/AuditLaunch/AuditLaunch.style";
+@import "../AuditLaunch.style";
 
 // Custom radio buttons
 .radio-custom {

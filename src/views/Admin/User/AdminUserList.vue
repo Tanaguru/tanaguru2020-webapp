@@ -76,7 +76,7 @@
                                         id="role-select"
                                         v-bind:class="{'has-error': userCreateForm.roleError}"
                                         name="status-select"
-                                        :describedBy="userCreateForm.roleError ? 'role-error' : ''"
+                                        :aria-describedBy="userCreateForm.roleError ? 'role-error' : ''"
                                         v-model="userCreateForm.appRole"
                                         :key="'role-error'"
                                         required>

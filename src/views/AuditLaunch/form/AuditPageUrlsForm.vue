@@ -31,28 +31,35 @@
 					<textarea class="textarea-wrapper__textarea"
 						rows="5"
 						cols="80"
-						:class="{'has-error': errorCondition}"
+						:class="{'has-error': showFreeformError}"
 						name="urls"
 						id="urls"
 						required
 						:value="inputPlainText"
 						@input="onPlainTextChange($event.target.value)"
-                        :aria-describedby="(hasBeenSent && inputPlainText && !checkValidPlainText(inputPlainText, projectDomain, isSeedMustBeInDomain)) || emptyCondition ? 'free-url-error' : ''"
+                        @focus="hideErrors()"
+                        @blur="showErrors()"
+                        :aria-describedby="showFreeformError ? 'free-url-error' : ''"
 					></textarea>
 
-                    <p v-if="hasBeenSent && inputPlainText && !checkValidPlainText(inputPlainText, projectDomain, isSeedMustBeInDomain)" class="info-error" id="free-url-error" aria-live="polite">
+                    <p v-if="showErrorMsgs && !inputPlainText" role="alert" class="info-error" id='empty-freeform-urls-error'>
                         <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                             <icon-alert/>
                         </icon-base-decorative>
-                        <span v-if="emptyCondition"> {{ $t('audit.form.error.emptyUrlsError') }}</span>
-                        <span v-else>{{ $t('audit.form.error.seedsError') }}</span>
+                        <span>{{ $t('form.emptyInput') }}</span>
+                    </p>
+                    <p v-if="showErrorMsgs && inputPlainText && !validUrlsInFreeForm" role="alert" class="info-error" id='invalid-freeform-urls-error'>
+                        <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
+                            <icon-alert/>
+                        </icon-base-decorative>
+                        <span>{{ $t('audit.form.error.seedsError') }}</span>
                     </p>
 				</div>
 
                 <p class="form-help">{{ $t('audit.pages.byUrl.labelHelp') }}</p>
             </div>
 
-            <!-- <div class="page-by-page" v-else-if="selectedInputMode == 'array'">
+            <div class="page-by-page" v-else-if="selectedInputMode == 'array'">
                 <div
                     role="group"
                     :arialabelledby="`page-${i+1}`"
@@ -71,24 +78,26 @@
                         </label>
                         <input class="input"
                                 :class="{'has-error': describedBy(url, i)}"
-                                type='text'
+                                type='text' 
                                 :id='`page-url-${i}`'
                                 @input="onArrayChange(i, $event.target.value)"
+                                @focus="hideItemListError(i)"
+                                @blur="showItemListError(i)"
                                 :value="url"
                                 :required="i === 0"
                                 :aria-describedby="describedBy(url, i)"/>
 
-                        <p v-if="hasBeenSent && !url" class="info-error" :id='`empty-url-error-${i}`'>
+                        <p v-if="showItemError.includes(i) && !url" role="alert" class="info-error" :id='`empty-url-error-${i}`'>
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-alert/>
                             </icon-base-decorative>
                             <span>{{ $t('form.emptyInput') }}</span>
                         </p>
-                        <p v-if="hasBeenSent && url && !checkValidUrl(url, projectDomain, isSeedMustBeInDomain)" class="info-error" :id='`valid-url-error-${i}`'>
+                        <p v-if="showItemError.includes(i) && url && !checkValidUrl(url, projectDomain, isSeedMustBeInDomain)" role="alert" class="info-error" :id='`valid-url-error-${i}`'>
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-alert/>
                             </icon-base-decorative>
-                            <span>Has to contain declared domain url</span>
+                            <span>{{ $t('audit.form.error.seedsError') }}</span>
                         </p>
 
                         <button class="btn btn--icon btn--clipboard btn-delete" v-if="i != 0" type="button" @click="removeField(i)">
@@ -108,23 +117,21 @@
                     </icon-base-decorative>
                     <span>{{ $t('audit.pages.byPage.button') }}</span>
                 </button>
-            </div> -->
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-
     import InputValidationDisplay from "../InputValidationDisplay";
     import IconBaseDecorative from "../../../components/icons/IconBaseDecorative";
     import IconAlert from "../../../components/icons/IconAlert";
     import IconPlus from "../../../components/icons/IconPlus";
     import IconDelete from "../../../components/icons/IconDelete";
     import UrlHelper from "../../../helper/urlhelper";
-
     export default {
         name: 'auditPageUrlsForm',
-        props: ['value', 'isValid', 'isSeedMustBeInDomain', 'projectDomain', 'hasBeenSent'],
+        props: ['value', 'isValid', 'isSeedMustBeInDomain', 'projectDomain'],
         components: {
             InputValidationDisplay,
             IconBaseDecorative,
@@ -139,7 +146,8 @@
                 inputArray: this.value,
                 inputModes:['array', 'plainText'],
                 selectedInputMode: null,
-                errorMsg: ""
+                showErrorMsgs: false,
+                showItemError: []
             }
         },
         created() {
@@ -152,7 +160,6 @@
                 this.inputArray = this.inputPlainText.split(';');
                 this.$emit('input', this.inputArray);
             },
-
             addField() {
                 this.hasInput = true;
                 this.inputArray.push('');
@@ -172,54 +179,61 @@
                 this.$emit('input', this.inputArray);
             },
             checkValidUrl: UrlHelper.checkValidUrl,
-
-            checkValidPlainText(inputPlainText, projectDomain, isSeedMustBeInDomain) {
-                let array = this.inputPlainText.split(';')
-                array.forEach(url => {
-                    UrlHelper.checkValidUrl
-                });
-            },
-
             describedBy(url, i){
                 let describedBy = ''
-                if(this.hasBeenSent && !this.checkValidUrl){
+                if(this.showItemError.includes(i) && !this.checkValidUrl){
                     describedBy = "valid-url-error-" + i
                 }
-                else if(this.hasBeenSent && !url){
+                else if(this.showItemError.includes(i) && !url){
                     describedBy = "empty-url-error-" + i
                 }
                 return describedBy
+            },
+            hideErrors() {
+                this.showErrorMsgs = false
+            },
+            showErrors() {
+                this.showErrorMsgs = true
+            },
+            showItemListError(i) {
+                this.showItemError.push(i)
+            },
+            hideItemListError(i) {
+                if(!this.checkValidUrl) {
+                    let j = this.showItemError.indexOf(i);
+                    if(j >= 0) {
+                        this.showItemError.splice(i,1);
+                    }
+                }
             }
         },
-        computed: {
-            emptyCondition(){
-				let condition = false
-				if(!this.inputPlainText){
-					condition = true
-				}
-				else { condition = false }
-				return condition;
-			},
-
-            errorCondition(){
-                let condition = false
-                if(this.hasBeenSent && !this.checkValidPlainText()){
-                    condition = true
+        computed:{
+            validUrlsInFreeForm() {
+                let allValid = true;
+                let projectDomain = this.projectDomain
+                let areUrlsValid = this.inputArray.every(function(url) {
+                    return url.includes(projectDomain)
+                });
+                if(areUrlsValid) {
+                    allValid = true;
+                } else { allValid = false }
+                return allValid;
+            }, 
+            showFreeformError(){
+                let error = false;
+                if(this.showErrorMsgs) {
+                    if(!this.inputPlainText || !this.validUrlsInFreeForm) {
+                        error = true;
+                    } 
                 }
-                else if(this.emptyCondition) {
-                    condition = true
-                }
-                else { condition = false }
-                return condition
+                return error;
             }
-        }
+        },
     }
-
 </script>
 
 <style lang="scss" scoped>
-    @import "src/views/AuditLaunch/AuditLaunch.style";
-
+    @import "../AuditLaunch.style";
     .page-by-page {
         @include custom-fieldset(9.375%, 87.5%);
     }
