@@ -10,7 +10,7 @@
 	"inexistantUser": "This user does not exist.",
 	"notAMember": "This user can't be added to this project.",
 	"incorrectConfirmation": "The password and its confirmation don't match.",
-	"missingFields": "Please fill out missing fields.",
+	"missingFields": "Please correct empty fields or incorrect inputs.",
 	"existingEmail": "This e-mail adress has already been registered.",
 	"existingUsername": "This username already exists.",
 	"invalidUsername": "The username should be longer than 4 characters and shorter than 30.",

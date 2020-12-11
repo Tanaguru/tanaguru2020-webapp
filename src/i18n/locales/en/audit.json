@@ -126,6 +126,7 @@
 			"ready": "Ready to launch"
 		},
 		"error": {
+			"formError": "The form has not been properly filled. Check your answers for mistakes or empty fields.",
 			"auditType": "Please choose a type for your audit.",
 			"auditName": "Please enter a name for your audit.",
 			"typeError": "Please select the type of audit you wish to execute.",
