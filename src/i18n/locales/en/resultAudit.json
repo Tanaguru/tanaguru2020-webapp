@@ -30,6 +30,20 @@
 		"fail": "Failed",
 		"failHelp": "The link can't be copied"
 	},
+	"copyCss": {
+		"copy": "Copy CSS selector",
+		"success": "Copied !",
+		"successHelp": "The selector has been successfully copied",
+		"fail": "Failed",
+		"failHelp": "The selector can't be copied"
+	},
+	"copyXpath": {
+		"copy": "Copy X-path",
+		"success": "Copied !",
+		"successHelp": "The X-path has been successfully copied",
+		"fail": "Failed",
+		"failHelp": "The X-path can't be copied"
+	},
 	"elmtTested": "elements tested",
 	"date": "Since",
 	"overview": {
