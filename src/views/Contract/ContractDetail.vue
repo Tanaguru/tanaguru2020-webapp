@@ -129,7 +129,7 @@
                                 required
                             >
 							<p class="info-text" id="domain-constraint">(example : http://www.website.com/)</p>
-							<p class="info-error" id="domain-error">{{projectCreateForm.domainError}}</p>
+							<p v-show="projectCreateForm.domainError" class="info-error" id="domain-error">{{projectCreateForm.domainError}}</p>
 						</div>
 					</div>
 				</div>
@@ -312,14 +312,18 @@ export default {
 			this.projectCreateForm.successMsg = '';
 
 			if(this.projectCreateForm.name.length === 0){
-				this.projectCreateForm.domainError = this.$i18n.t("form.emptyInput");
-				return;
-			}
+				this.projectCreateForm.nameError = this.$i18n.t("form.emptyInput");
+            }
 
+            
 			try {
-				let parsedUrl = new URL(this.projectCreateForm.domain);
+                let parsedUrl = new URL(this.projectCreateForm.domain);
 			} catch (_) {
-				this.projectCreateForm.domainError = this.$i18n.t("form.urlError");
+                if(this.projectCreateForm.domain.length === 0 ) {
+                    this.projectCreateForm.domainError = this.$i18n.t("form.emptyInput");
+                } else {
+                    this.projectCreateForm.domainError = this.$i18n.t("form.urlError");
+                }
 				return;
 			}
 
@@ -329,7 +333,12 @@ export default {
 				this.contract.id,
 				(project) => {
 					this.projects.push(project)
-					this.projectCreateForm.successMsg = this.$i18n.t('form.projectCreation')
+                    this.projectCreateForm.successMsg = this.$i18n.t('form.projectCreation')
+                    this.projectCreateForm.error = "";
+                    this.projectCreateForm.name = "";
+                    this.projectCreateForm.domain = "";
+                    this.projectCreateForm.nameError = "";
+			        this.projectCreateForm.domainError = ""
 
 				},
 				(error) => {
