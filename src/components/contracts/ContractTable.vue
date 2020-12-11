@@ -25,7 +25,7 @@
 						</li>
 						<li class="actions-list__item">
 							<button
-								class="btn btn--icon btn--nude"
+								class="btn btn--icon btn--nude btn-delete"
 								v-if="$store.state.auth.authorities['DELETE_CONTRACT']"
 								@click="deleteContract(contract)">
 								<icon-base-decorative>

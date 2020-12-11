@@ -25,6 +25,12 @@ import TanaguruTestService from "../../src/services/tanaguruTest.service";
 import StatusResultService from "../../src/services/statusResult.service";
 import ConfigService from "../../src/services/config.service";
 
+import VueAccessibleModal from "vue-accessible-modal";
+
+const options = {
+    transition: 'fade',
+}
+
 const tanaguruLocalVueHelper = {
     getTanaguruLocalVue(){
         const localVue = createLocalVue()
@@ -32,6 +38,7 @@ const tanaguruLocalVueHelper = {
         localVue.use(VueI18n)
         localVue.use(VueRouter)
         localVue.use(VueMeta)
+        localVue.use(VueAccessibleModal, options)
 
         localVue.prototype.$moment = Moment
         localVue.prototype.window = window;

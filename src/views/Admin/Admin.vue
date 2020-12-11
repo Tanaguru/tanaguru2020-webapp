@@ -21,8 +21,8 @@
 <script>
 import Tab from '../../components/Tab';
 import Tabs from '../../components/Tabs';
-import adminUserList from './User/AdminUserList';
-import adminContractList from './Contract/AdminContractList';
+import adminUserList from './User/UserTab';
+import adminContractList from './Contract/ContractTab';
 import ReferenceTab from "@/views/Admin/Reference/ReferenceTab";
 
 export default {

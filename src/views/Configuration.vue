@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import adminContractList from './Admin/Contract/AdminContractList'
+import adminContractList from './Admin/Contract/ContractTab'
 
 export default {
     name: 'Config',
