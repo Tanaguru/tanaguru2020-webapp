@@ -15,19 +15,20 @@
                     </div>
 
                     <div class="launch-header__cta">
-                        <button class="btn btn--default-inverse btn--icon" type="button" @click="startAudit">
+                        <button class="btn btn--default-inverse btn--icon" type="button" @click="startAudit" @focus="showLaunchMsg" @blur="hideLaunchMsg">
                             <icon-base-decorative>
                                 <icon-launch/>
                             </icon-base-decorative>
                             <span>{{ $t('action.auditStart') }}</span>
+                            <span v-if="!launchCondition" class="screen-reader-text">{{ $t('form.missingFields') }}</span>
                         </button>
-                        <p class="launch-info" v-if="launchCondition">
+                        <p class="launch-info" v-if="launchCondition && launchMsg">
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-valid/>
                             </icon-base-decorative>
                             <span>{{ $t('audit.form.help.ready') }}</span>
                         </p>
-                        <p v-else v-show="hasTryToLaunch" class="info-error">
+                        <p v-else-if="launchMsg" class="info-error">
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-alert/>
                             </icon-base-decorative>
@@ -42,6 +43,12 @@
             <div class="wrapper">
                 <p class="info-form">{{ $t('form.help') }}</p>
                 <section class="layout">
+                    <p v-if="!launchCondition && hasTryToLaunch" role="alert" id="incomplete-form" class="info-error">
+                        <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
+                            <icon-alert/>
+                        </icon-base-decorative>
+                        <span>{{ $t('audit.form.error.formError') }}</span>
+                    </p>
                     <audit-form-section-header
                         :title="$t('audit.definition.title')"
                         :number="1"/>
@@ -204,21 +211,37 @@
                 </section>
             </div>
 
+            <hr role="presentation" class="separator separator--main" v-if="auditConfigurationForm.common.type != null"/>
+
+            <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
+                <section class="layout">
+                    <audit-form-section-header
+                        :title="$t('audit.definition.browser.title')"
+                        :number="6"/>
+
+                    <audit-browser-form
+                        :is-valid="isBrowserValid"
+						:browsers="activeBrowsers"
+                        v-model="auditConfigurationForm.common.browser"
+                        :has-been-sent="hasTryToLaunch"/>
+                </section>
+            </div>
+
             <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
                 <button class="btn btn--default-inverse btn--icon" type="button" @click="startAudit"
-                        :enabled="launchCondition">
+                        @focus="showLaunchMsg" @blur="hideLaunchMsg">
                     <icon-base-decorative>
                         <icon-launch/>
                     </icon-base-decorative>
                     <span>{{$t('action.auditStart')}}</span>
                 </button>
-                <p class="launch-info" v-if="launchCondition">
+                <p class="launch-info" v-if="launchCondition && launchMsg">
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-valid/>
                     </icon-base-decorative>
                     <span>{{$t('audit.form.help.ready')}}</span>
                 </p>
-                <p v-else v-show="hasTryToLaunch" class="info-error">
+                <p v-else-if="launchMsg" v-show="hasTryToLaunch" class="info-error">
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-alert/>
                     </icon-base-decorative>
@@ -265,9 +288,11 @@ import UrlHelper from "../../helper/urlhelper"
 import BreakpointHelper from "../../helper/breakpointHelper"
 import AuditWaitTimeForm from "./form/AuditWaitTimeForm";
 import AuditEnableScreenshotForm from "./form/AuditEnableScreenshotForm";
+import AuditBrowserForm from "./form/AuditBrowserForm";
 export default {
     name: 'auditLaunch',
     components: {
+        AuditBrowserForm,
         AuditEnableScreenshotForm,
         AuditWaitTimeForm,
         AuditBreakpointsForm,
@@ -308,10 +333,14 @@ export default {
                     path: '/'
                 },
             ],
+
             project: null,
+            launchMsg: false,
+            hasTryToLaunch: false,
+
+            activeBrowsers: [],
             references: [],
             seedMustBeInDomain: true,
-            hasTryToLaunch: false,
             auditConfigurationForm: {
                 common: {
                     name: '',
@@ -320,7 +349,8 @@ export default {
                     waitTime: 500,
                     breakpoints: [1920],
                     type: "page",
-                    enableScreenshot: false
+                    enableScreenshot: false,
+                    browser: 'chrome'
                 },
                 site: {
                     seeds: [],
@@ -373,6 +403,7 @@ export default {
                 this.auditConfigurationForm.page.urls.push(project.domain);
                 this.auditConfigurationForm.site.seeds.push(project.domain);
                 this.project = project;
+
                 this.breadcrumbProps.push({
                     name: project.contract.name,
                     path: '/contracts/' + project.contract.id
@@ -385,11 +416,29 @@ export default {
                 console.error(error)
             }
         );
+
+        this.configService.getActiveBrowsers(
+            (activeBrowsers) => {
+                this.activeBrowsers = activeBrowsers
+                if(this.activeBrowsers.length > 0){
+                    this.auditConfigurationForm.common.browser = this.activeBrowsers[0];
+                }
+            },
+            (error) => {
+                console.error(error)
+            }
+        )
     },
     methods: {
         moment: function (date) {
             this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
+        },
+        showLaunchMsg() {
+            this.launchMsg = true;
+        },
+        hideLaunchMsg() {
+            this.launchMsg = false;
         },
         startAudit: function () {
             this.hasTryToLaunch = true;
@@ -399,7 +448,8 @@ export default {
             const parameters = {
                 'WAIT_TIME': this.auditConfigurationForm.common.waitTime,
                 'WEBDRIVER_RESOLUTIONS': this.auditConfigurationForm.common.breakpoints.join(';'),
-                'ENABLE_SCREENSHOT': this.auditConfigurationForm.common.enableScreenshot
+                'ENABLE_SCREENSHOT': this.auditConfigurationForm.common.enableScreenshot,
+                'WEBDRIVER_BROWSER': this.auditConfigurationForm.common.browser
             };
             switch (this.auditConfigurationForm.common.type) {
                 case 'site':
@@ -451,6 +501,9 @@ export default {
         isWaitTimeValid() {
             return Number.isInteger(this.auditConfigurationForm.common.waitTime) && this.auditConfigurationForm.common.waitTime > 0  && this.auditConfigurationForm.common.waitTime <= 10000 ;
         },
+        isBrowserValid(){
+            return this.activeBrowsers.includes(this.auditConfigurationForm.common.browser);
+        },
         isBreakpointsValid() {
             return this.auditConfigurationForm.common.breakpoints.filter(breakpoint => {
                 return ! BreakpointHelper.isBreakpointValid(breakpoint);
@@ -458,17 +511,15 @@ export default {
             }).length === 0;
         },
         //Pages
+        checkValidUrl: UrlHelper.checkValidUrl,
         isPageUrlsValid() {
-            return this.auditConfigurationForm.page.urls.filter((url) => {
-                return ! UrlHelper.checkValidUrl(url, this.project.domain, true)
-            }).length === 0;
+            return this.auditConfigurationForm.page.urls.every(url => url.includes(this.project.domain))
         },
         
         //Sites
         isSiteSeedsValid() {
-            return this.auditConfigurationForm.site.seeds.filter(seed => {
-                return ! UrlHelper.checkValidUrl(seed, this.project.domain, true)
-            }).length === 0;
+            
+            return this.auditConfigurationForm.site.seeds.every(seed => seed.includes(this.project.domain))
         },
         isCrawlerMaxDepthValid() {
             return Number.isInteger(this.auditConfigurationForm.site.crawlerMaxDepth) &&
@@ -500,7 +551,8 @@ export default {
                 this.isSelectedReferencesValid &&
                 this.isMainReferenceValid &&
                 this.isBreakpointsValid &&
-                this.isWaitTimeValid;
+                this.isWaitTimeValid &&
+                this.isBrowserValid;
             switch (this.auditConfigurationForm.common.type) {
                 case 'scenario':
                     result &= this.isSelectedScenarioValid;

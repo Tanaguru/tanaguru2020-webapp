@@ -126,6 +126,7 @@
 			"ready": "Prêt au lancement"
 		},
 		"error": {
+			"formError": "Le formulaire n'a pas été rempli correctement, vérifiez vos réponses pour complétez ou corrigez les champs vides ou mal renseignés.",
 			"auditType": "Veuillez choisir un type d'audit.",
 			"auditName": "Veuillez donner un nom à votre audit.",
 			"typeError": "Veuillez choisir le type d’audit à lancer. ",

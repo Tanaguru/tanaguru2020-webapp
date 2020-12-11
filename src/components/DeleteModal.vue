@@ -23,8 +23,8 @@
 
 		<!-- After confirm screen -->
 		<section v-else class="modal-body" id="modalEndMessage">
-            <p>{{$t('archives.done')}}</p>
-			<p>{{$t('archives.actionConfirmed')}}</p>
+            <p>{{$t('deletionModal.done')}}</p>
+			<p>{{$t('deletionModal.actionConfirmed')}}</p>
 			<div id="buttons">
 				<button type="button" class="btn btn--default btn--icon" @click="resolveHandler" :aria-label="$t('action.closeModal')">
 					<icon-base-decorative width="18" height="18"><icon-close /></icon-base-decorative>

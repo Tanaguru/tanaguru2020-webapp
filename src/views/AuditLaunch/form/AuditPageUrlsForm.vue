@@ -1,8 +1,8 @@
 <template>
     <div class="layout-content">
         <input-validation-display
-                class="layout-content__aside"
-                :value="isValid"/>
+            class="layout-content__aside"
+            :value="isValid"/>
 
         <div class="layout-content__main">
             <div class="layout-content-heading">

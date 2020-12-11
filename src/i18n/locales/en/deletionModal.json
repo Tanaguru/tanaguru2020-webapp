@@ -3,5 +3,7 @@
 	"remove": "Do you really want to remove ",
 	"project": " from this project ?",
 	"contract": " from this contract ?",
-	"deleteScreenshot": "Do you really want to delete screenshots from this audit ?"
+	"deleteScreenshot": "Do you really want to delete screenshots from this audit ?",
+	"done": "Done!",
+	"actionConfirmed": "It may take a moment to show up on the page but your action has been taken into account."
 }
