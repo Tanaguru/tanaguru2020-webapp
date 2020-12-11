@@ -30,6 +30,20 @@
 		"fail": "Erreur",
 		"failHelp": "Impossible de copier le lien"
 	},
+	"copyCss": {
+		"copy": "Copier le selecteur CSS",
+		"success": "Copié !",
+		"successHelp": "Le sélecteur a bien été copié",
+		"fail": "Erreur",
+		"failHelp": "Impossible de copier le sélecteur"
+	},
+	"copyXpath": {
+		"copy": "Copier le X-path",
+		"success": "Copié !",
+		"successHelp": "Le X-path a bien été copié",
+		"fail": "Erreur",
+		"failHelp": "Impossible de copier le X-path"
+	},
 	"elmtTested": "éléments testés",
 	"date": "Depuis le",
 	"overview": {
