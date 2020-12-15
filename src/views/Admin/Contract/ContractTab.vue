@@ -90,7 +90,7 @@ export default {
 						.includes(this.searchContract.toLowerCase())) :
 				this.contracts;
 
-			return contractList.reverse();
+			return contractList;
 		}
 	},
 	methods: {
