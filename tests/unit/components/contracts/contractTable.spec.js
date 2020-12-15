@@ -3,7 +3,6 @@ import tanaguruLocalVueHelper from "../../../helper/localVueHelper";
 import i18n from "@/i18n";
 import Vuex from "vuex";
 import ContractTable from "@/components/contracts/ContractTable";
-import DeletionModal from "@/components/DeleteModal";
 
 const localVue = tanaguruLocalVueHelper.getTanaguruLocalVue()
 const NO_AUTHORITY_STORE = new Vuex.Store({
@@ -68,23 +67,6 @@ describe('ContractTable', () => {
 
         const deleteButton = wrapper.find('.actions-list__item .btn-delete ')
         expect(deleteButton.exists()).toBe(true);
-    })
-
-    it('should show confirmation modal when trying to delete contract', async () => {
-        const wrapper = shallowMount(ContractTable, {
-            i18n,
-            localVue,
-            store: DELETE_CONTRACT_STORE,
-            stubs: ['router-link', 'router-view'],
-            propsData: {
-                contracts: NOT_EMPTY_CONTRACT_LIST
-            }
-        })
-
-        const deleteButton = wrapper.find('.actions-list__item .btn-delete ')
-        await deleteButton.trigger('click')
-        const deleteModal = document.querySelector('#deletion-modal')
-        expect(deleteModal).not.toBe(null)
     })
 })
 

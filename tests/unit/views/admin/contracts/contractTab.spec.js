@@ -112,5 +112,46 @@ describe('ContractTab', () => {
             })
             expect(wrapper.findComponent(ContractTable).exists()).toBe(true)
         })
+
+        it('should filter contracts with filter input string', () => {
+            const wrapper = shallowMount(ContractTab, {
+                i18n,
+                localVue,
+                store: NO_AUTHORITY_STORE,
+                stubs: ['router-link', 'router-view'],
+                mocks: {
+                    contractService: {
+                        findAll(then, error){
+                            then(NOT_EMPTY_CONTRACT_LIST)
+                        }
+                    }
+                }
+            })
+
+            wrapper.setData({
+                searchContract: 'test1'
+            })
+            expect(wrapper.vm.filteredContracts.length).toBe(1);
+        })
+    })
+
+    it('should add contract to list when a new contract is created', () => {
+        const wrapper = shallowMount(ContractTab, {
+            i18n,
+            localVue,
+            store: CREATE_CONTRACT_STORE,
+            stubs: ['router-link', 'router-view'],
+            mocks: {
+                contractService: {
+                    findAll(then, error){
+                        then(EMPTY_CONTRACT_LIST)
+                    }
+                }
+            }
+        })
+
+        const contractForm = wrapper.findComponent(ContractCreationForm)
+        contractForm.vm.$emit('createContract', {name: 'test'})
+        expect(wrapper.vm.contracts.length).toBe(1)
     })
 })
