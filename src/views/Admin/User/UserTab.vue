@@ -4,7 +4,7 @@
 			<h1>{{$t('page.adminUser')}}</h1>
 		</header>
 
-		<section v-if="$store.state.auth.authorities['CREATE_USER']">
+		<section v-if="this.$store.state.auth.authorities && $store.state.auth.authorities['CREATE_USER']">
 			<h2 class="admin-users__title-2">{{$t('users.createUser')}}</h2>
 			<user-creation-form id="contract-user-form" @createUser="onCreateUser"></user-creation-form>
 		</section>
@@ -68,7 +68,8 @@
 			filteredUsers(){
 				let users = this.search ?
 					this.users.filter(user =>
-						user.username.toLowerCase().includes(this.search.toLowerCase()) || user.email.toLowerCase().includes(this.search.toLowerCase())):
+						user.username.toLowerCase().includes(this.search.toLowerCase()) ||
+						user.email.toLowerCase().includes(this.search.toLowerCase())):
 					this.users
 
 				return users.reverse();

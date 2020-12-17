@@ -84,13 +84,11 @@ export default {
 				this.$store.state.auth.authorities['CREATE_CONTRACT'];
 		},
 		filteredContracts() {
-			let contractList = this.searchContract ?
+			return this.searchContract ?
 				this.contracts.filter(contract =>
 					contract.name.toLowerCase()
 						.includes(this.searchContract.toLowerCase())) :
 				this.contracts;
-
-			return contractList;
 		}
 	},
 	methods: {

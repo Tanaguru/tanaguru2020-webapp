@@ -31,7 +31,7 @@
 							v-if="user.id !== $store.state.auth.user.id &&
 								$store.state.auth.authorities['DELETE_USER']">
 							<button
-								class="btn btn--icon btn--nude"
+								class="btn btn--icon btn--nude btn-delete"
 								@click="confirm(user)">
 								<icon-base-decorative><icon-delete/></icon-base-decorative>
 								<span>{{$t('action.delete')}}</span>
