@@ -62,7 +62,7 @@ pipeline {
 
 				script{
 					def TIMESTAMP =sh(
-						script: 'date +"%Y-%m-%d"'
+						script: 'date +"%Y-%m-%d"',
 						returnStdout: true
 					).trim()
 
