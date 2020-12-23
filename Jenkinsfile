@@ -72,7 +72,7 @@ pipeline {
 						"--build-arg TANAGURU_WEBAPP_ARCHIVE_PATH=tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz ./tanaguru2020-webapp/image/")
 
 					docker.withRegistry('https://registry.tanaguru.com', 'registry') {
-						image.push()
+						docker.image("tanaguru2020-webapp:${WEBAPP_VERSION}").push()
 					}
 				}
 
