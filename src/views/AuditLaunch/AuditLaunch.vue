@@ -42,7 +42,7 @@
         <form novalidate>
             <div class="wrapper">
                 <p class="info-form">{{ $t('form.help') }}</p>
-                <section class="layout">
+                <section class="layout" id="section-definition">
                     <p v-if="!launchCondition && hasTryToLaunch" role="alert" id="incomplete-form" class="info-error">
                         <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                             <icon-alert/>
@@ -74,7 +74,7 @@
 
             <div class="wrapper"
                 v-if="isAuditTypeValid && auditConfigurationForm.common.type === 'page'">
-                <section class="layout">
+                <section class="layout"  id="section-page">
                     <audit-form-section-header
                         :title="$t('audit.pages.title')"
                         :number="2"/>
@@ -89,7 +89,7 @@
 
             <div class="wrapper"
                 v-if="isAuditTypeValid && auditConfigurationForm.common.type === 'site'">
-                <section class="layout">
+                <section class="layout"  id="section-site">
                     <audit-form-section-header
                         :title="$t('audit.site.title')"
                         :number="2"/>
@@ -129,7 +129,7 @@
 
             <div class="wrapper"
                 v-if="isAuditTypeValid && auditConfigurationForm.common.type === 'scenario'">
-                <section class="layout">
+                <section class="layout"  id="section-scenario">
                     <audit-form-section-header
                         :title="$t('audit.scenario.title')"
                         :number="2"/>
@@ -145,7 +145,7 @@
 
             <div class="wrapper"
                 v-if="isAuditTypeValid && auditConfigurationForm.common.type === 'upload'">
-                <section class="layout">
+                <section class="layout"  id="section-upload">
                     <audit-form-section-header
                         :title="$t('audit.resource.title')"
                         :number="2"/>
@@ -158,10 +158,10 @@
                 </section>
             </div>
 
-            <hr role="presentation" class="separator separator--main" v-if="auditConfigurationForm.common.type != null"/>
+            <hr role="presentation" class="separator separator--main" v-if="isAuditTypeValid"/>
 
-            <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
-                <section class="layout">
+            <div class="wrapper" v-if="isAuditTypeValid">
+                <section class="layout"  id="section-references">
                     <audit-form-section-header
                         :title="$t('audit.guidelines.title')"
                         :number="3"/>
@@ -182,10 +182,10 @@
                 </section>
             </div>
 
-            <hr role="presentation" class="separator separator--main" v-if="auditConfigurationForm.common.type != null"/>
+            <hr role="presentation" class="separator separator--main" v-if="isAuditTypeValid"/>
 
-            <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
-                <section class="layout">
+            <div class="wrapper" v-if="isAuditTypeValid" >
+                <section class="layout" id="section-resolution">
                     <audit-form-section-header
                         :title="$t('audit.resolution.title')"
                         :number="4"/>
@@ -196,10 +196,10 @@
                 </section>
             </div>
 
-            <hr role="presentation" class="separator separator--main" v-if="auditConfigurationForm.common.type != null"/>
+            <hr role="presentation" class="separator separator--main" v-if="isAuditTypeValid"/>
 
-            <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
-                <section class="layout">
+            <div class="wrapper" v-if="isAuditTypeValid">
+                <section class="layout" id="section-waitTime">
                     <audit-form-section-header
                         :title="$t('audit.waitTime.title')"
                         :number="5"/>
@@ -211,10 +211,10 @@
                 </section>
             </div>
 
-            <hr role="presentation" class="separator separator--main" v-if="auditConfigurationForm.common.type != null"/>
+            <hr role="presentation" class="separator separator--main" v-if="isAuditTypeValid"/>
 
-            <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
-                <section class="layout">
+            <div class="wrapper" v-if="isAuditTypeValid">
+                <section class="layout" id="section-browser">
                     <audit-form-section-header
                         :title="$t('audit.definition.browser.title')"
                         :number="6"/>
@@ -227,7 +227,7 @@
                 </section>
             </div>
 
-            <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
+            <div class="wrapper" v-if="isAuditTypeValid">
                 <button class="btn btn--default-inverse btn--icon" type="button" @click="startAudit"
                         @focus="showLaunchMsg" @blur="hideLaunchMsg">
                     <icon-base-decorative>
@@ -248,7 +248,7 @@
                     <span>{{$t('form.missingFields')}}</span>
                 </p>
             </div>
-        </form>  
+        </form>
         <BackToTop/>
     </main>
 </template>
@@ -399,7 +399,7 @@ export default {
             this.$route.params.id,
             (project) => {
                 let currentDate = new Date();
-                this.auditConfigurationForm.common.name = project.name + ' ' + this.moment().format("DD-MM-YYYY HH:mm");
+                this.auditConfigurationForm.common.name = project.name + ' ' + this.$moment().format("DD-MM-YYYY HH:mm");
                 this.auditConfigurationForm.page.urls.push(project.domain);
                 this.auditConfigurationForm.site.seeds.push(project.domain);
                 this.project = project;
@@ -430,10 +430,6 @@ export default {
         )
     },
     methods: {
-        moment: function (date) {
-            this.$moment.locale(this.$i18n.locale)
-            return this.$moment(date);
-        },
         showLaunchMsg() {
             this.launchMsg = true;
         },
@@ -515,10 +511,10 @@ export default {
         isPageUrlsValid() {
             return this.auditConfigurationForm.page.urls.every(url => url.includes(this.project.domain))
         },
-        
+
         //Sites
         isSiteSeedsValid() {
-            
+
             return this.auditConfigurationForm.site.seeds.every(seed => seed.includes(this.project.domain))
         },
         isCrawlerMaxDepthValid() {
@@ -542,7 +538,7 @@ export default {
         },
         //Upload
         isSelectedUploadResourceValid() {
-            return this.auditConfigurationForm.resource.id != null 
+            return this.auditConfigurationForm.resource.id != null
         },
         launchCondition() {
             let result =

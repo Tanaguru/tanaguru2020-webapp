@@ -101,8 +101,8 @@
 			</fieldset>
 
 			<button class="btn btn--default btn-create" type="submit">{{ $t('action.create') }}</button>
-			<p class="info-success" v-show="userCreateForm.successMsg">{{ userCreateForm.successMsg }}</p>
-			<p v-if="userCreateForm.error" class="info-error">{{ userCreateForm.error }}</p>
+			<p class="info-success" id="form-success" v-if="userCreateForm.successMsg">{{ userCreateForm.successMsg }}</p>
+			<p v-if="userCreateForm.error" class="info-error" id="form-error">{{ userCreateForm.error }}</p>
 		</form>
 	</div>
 </template>
@@ -221,16 +221,15 @@ export default {
 						this.userCreateForm.successMsg = this.$i18n.t("form.userCreation")
 					},
 					(error) => {
+						this.userCreateForm.error = this.$i18n.t("form.genericError");
 						if(error.response.data.error){
 							switch(error.response.data.error){
-								case 'USERNAME_ALREADY_EXISTS':
+								case this.userService.USERNAME_ALREADY_EXISTS:
 									this.userCreateForm.usernameError = this.$i18n.t("form.existingUsername");
-									this.userCreateForm.error = this.$i18n.t("form.genericError");
 									break;
 
-								case 'EMAIL_ALREADY_EXISTS':
+								case this.userService.EMAIL_ALREADY_EXISTS:
 									this.userCreateForm.emailError = this.$i18n.t("form.existingEmail");
-									this.userCreateForm.error = this.$i18n.t("form.genericError");
 									break;
 
 								default:

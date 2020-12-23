@@ -34,10 +34,20 @@ const DELETE_USER_STORE = new Vuex.Store({
 
 const NOT_EMPTY_USER_LIST = [
     {
-        name: 'test1'
+        id: 0,
+        name: 'test1',
+        enabled: false,
+        appRole:{
+            name: 'USER'
+        }
     },
     {
-        name: 'test2'
+        id: 1,
+        name: 'test2',
+        enabled: true,
+        appRole:{
+            name: 'USER'
+        }
     }
 ]
 
@@ -65,7 +75,7 @@ describe('UserTable', () => {
             }
         })
 
-        const deleteButton = wrapper.find('.actions-list__item .btn-delete')
+        const deleteButton = wrapper.find('.btn-delete')
         expect(deleteButton.exists()).toBe(true);
     })
 })
