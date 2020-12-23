@@ -60,7 +60,7 @@ pipeline {
 				'''
 
 				WEBAPP_VERSION = sh(
-					script: "$(cat version.txt)",
+					script: "\$(cat version.txt)",
 					returnStdout: true
 				)
 
