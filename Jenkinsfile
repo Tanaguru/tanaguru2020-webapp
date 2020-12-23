@@ -46,6 +46,29 @@ pipeline {
             }
         }
 
+        stage('Build alt') {
+			when {
+				branch 'refactoring-and-tests'
+			}
+			steps {
+				git(url: "https://github.com/Tanaguru/tanaguru2020-docker", branch: "master", credentialsId: "github-rcharre")
+				unstash 'tanaguru2020-webapp'
+				unstash 'version'
+
+				sh '''
+					mv tanaguru2020-webapp.tar.gz ./tanaguru2020-webapp/image/tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz
+				'''
+
+				WEBAPP_VERSION = sh(
+					script: "$(cat version.txt)",
+					returnStdout: true
+				)
+
+				image = docker.build("tanaguru2020-webapp:${WEBAPP_VERSION}",
+					"--build-arg TANAGURU_WEBAPP_ARCHIVE_PATH=tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz ./tanaguru2020-webapp/image/")
+			}
+		}
+
         stage('Deploy dev') {
             when {
                 branch 'develop'
