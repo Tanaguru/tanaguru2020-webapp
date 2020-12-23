@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import Tab from './AdminTab';
-import Tabs from './AdminTabs';
-import adminUserList from './User/AdminUserList';
-import adminContractList from './Contract/AdminContractList';
+import Tab from '../../components/Tab';
+import Tabs from '../../components/Tabs';
+import adminUserList from './User/UserTab';
+import adminContractList from './Contract/ContractTab';
 import ReferenceTab from "@/views/Admin/Reference/ReferenceTab";
 
 export default {

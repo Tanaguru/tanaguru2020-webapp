@@ -74,13 +74,12 @@ export default {
 			})
 			.then(() => {
 				this.$emit('delete-project', project)
-			})
-			.catch(() => {
-
-			})
-			.finally(() => {
 				this.$modal.close()
 			})
+			.catch(() => {
+				this.$modal.close()
+			})
+			.finally(() => {})
 		},
     }
 }

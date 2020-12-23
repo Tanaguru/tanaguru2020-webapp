@@ -124,55 +124,50 @@ pipeline {
         }
 
         stage('Push beta image to registry') {
-			environment {
-				REGISTRY_USER = "admin"
-				REGISTRY_PASS = "9x^VTugHEfQ1e7"
-				REGISTRY_HOST = "registry.tanaguru.com"
-			}
 			when {
 				branch 'beta'
 			}
 			steps {
 				unstash 'version'
 
-				sh '''
-				  TIMESTAMP=$(date +"%Y-%m-%d")
-				  WEBAPP_VERSION=$(cat version.txt)
+				script{
+					def TIMESTAMP =sh(
+						script: "date +%Y-%m-%d",
+						returnStdout: true
+					).trim()
 
-				  docker login \
-				  --username="$REGISTRY_USER" \
-				  --password="$REGISTRY_PASS" "$REGISTRY_HOST"
+					def WEBAPP_VERSION = sh(
+						script: "cat version.txt",
+						returnStdout: true
+					).trim()
 
-				  docker tag tanaguru2020-webapp:${WEBAPP_VERSION} registry.tanaguru.com/tanaguru2020-webapp:beta-$TIMESTAMP
-				  docker push registry.tanaguru.com/tanaguru2020-webapp:beta-$TIMESTAMP
-				'''
+					def image = docker.image("tanaguru2020-webapp:${WEBAPP_VERSION}")
+					docker.withRegistry('https://registry.tanaguru.com', 'registry') {
+						image.push('beta-${TIMESTAMP}')
+					}
+				}
 			}
 		}
 
         stage('Push image to registry') {
-        	environment {
-				REGISTRY_USER = "admin"
-				REGISTRY_PASS = "9x^VTugHEfQ1e7"
-				REGISTRY_HOST = "registry.tanaguru.com"
-			}
 			when {
 				branch 'master'
 			}
 			steps {
 				unstash 'version'
 
-				sh '''
-				  WEBAPP_VERSION=$(cat version.txt)
+				script{
+					def WEBAPP_VERSION = sh(
+						script: "cat version.txt",
+						returnStdout: true
+					).trim()
 
-				  docker login \
-				  --username="$REGISTRY_USER" \
-				  --password="$REGISTRY_PASS" "$REGISTRY_HOST"
-				  docker tag tanaguru2020-webapp:${WEBAPP_VERSION} registry.tanaguru.com/tanaguru2020-webapp:${WEBAPP_VERSION}
-				  docker push registry.tanaguru.com/tanaguru2020-webapp:${WEBAPP_VERSION}
-
-				  docker tag tanaguru2020-webapp:${WEBAPP_VERSION} registry.tanaguru.com/tanaguru2020-webapp:latest
-				  docker push registry.tanaguru.com/tanaguru2020-webapp:latest
-				'''
+					def image = docker.image("tanaguru2020-webapp:${WEBAPP_VERSION}")
+					docker.withRegistry('https://registry.tanaguru.com', 'registry') {
+						image.push()
+						image.push('latest')
+					}
+				}
 			}
 		}
     }

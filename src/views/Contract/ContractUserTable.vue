@@ -104,13 +104,12 @@ export default {
 			})
 			.then(() => {
 				this.$emit('remove-user', contractUser)
-			})
-			.catch(() => {
-
-			})
-			.finally(() => {
 				this.$modal.close()
 			})
+			.catch(() => {
+				this.$modal.close()
+			})
+			.finally(() => {})
 		},
 
         promoteUser(user) {
