@@ -59,7 +59,7 @@ pipeline {
 					mv tanaguru2020-webapp.tar.gz ./tanaguru2020-webapp/image/tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz
 				'''
 
-				WEBAPP_VERSION = sh(
+				def WEBAPP_VERSION = sh(
 					script: "\$(cat version.txt)",
 					returnStdout: true
 				)
