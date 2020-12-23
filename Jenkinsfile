@@ -64,6 +64,8 @@ pipeline {
 						returnStdout: true
 					)
 
+					WEBAPP_VERSION = WEBAPP_VERSION.trim()
+
 					def image = docker.build("tanaguru2020-webapp:${WEBAPP_VERSION}",
 						"--build-arg TANAGURU_WEBAPP_ARCHIVE_PATH=tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz ./tanaguru2020-webapp/image/")
 				}
