@@ -60,15 +60,6 @@ pipeline {
 					mv tanaguru2020-webapp.tar.gz ./tanaguru2020-webapp/image/tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz
 				'''
 
-
-
-                				  docker login \
-                				  --username="$REGISTRY_USER" \
-                				  --password="$REGISTRY_PASS" "$REGISTRY_HOST"
-
-                				  docker tag tanaguru2020-webapp:${WEBAPP_VERSION} registry.tanaguru.com/tanaguru2020-webapp:beta-$TIMESTAMP
-                				  docker push registry.tanaguru.com/tanaguru2020-webapp:beta-$TIMESTAMP
-
 				script{
 					def TIMESTAMP =sh(
 						script: 'date +"%Y-%m-%d"'
