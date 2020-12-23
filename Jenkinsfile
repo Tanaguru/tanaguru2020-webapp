@@ -60,19 +60,31 @@ pipeline {
 					mv tanaguru2020-webapp.tar.gz ./tanaguru2020-webapp/image/tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz
 				'''
 
+
+
+                				  docker login \
+                				  --username="$REGISTRY_USER" \
+                				  --password="$REGISTRY_PASS" "$REGISTRY_HOST"
+
+                				  docker tag tanaguru2020-webapp:${WEBAPP_VERSION} registry.tanaguru.com/tanaguru2020-webapp:beta-$TIMESTAMP
+                				  docker push registry.tanaguru.com/tanaguru2020-webapp:beta-$TIMESTAMP
+
 				script{
+					def TIMESTAMP =sh(
+						script: 'date +"%Y-%m-%d"'
+						returnStdout: true
+					).trim()
+
 					def WEBAPP_VERSION = sh(
 						script: "cat version.txt",
 						returnStdout: true
-					)
-
-					WEBAPP_VERSION = WEBAPP_VERSION.trim()
+					).trim()
 
 					def image = docker.build("tanaguru2020-webapp:${WEBAPP_VERSION}",
 						"--build-arg TANAGURU_WEBAPP_ARCHIVE_PATH=tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz ./tanaguru2020-webapp/image/")
 
 					docker.withRegistry('https://registry.tanaguru.com', 'registry') {
-						docker.image("tanaguru2020-webapp:${WEBAPP_VERSION}").push()
+						docker.image("tanaguru2020-webapp:${WEBAPP_VERSION}").push('beta-${TIMESTAMP}')
 					}
 				}
 
