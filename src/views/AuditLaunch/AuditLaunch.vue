@@ -495,7 +495,9 @@ export default {
             return !!this.auditConfigurationForm.common.mainReference;
         },
         isWaitTimeValid() {
-            return Number.isInteger(this.auditConfigurationForm.common.waitTime) && this.auditConfigurationForm.common.waitTime > 0  && this.auditConfigurationForm.common.waitTime <= 10000 ;
+            return Number.isInteger(this.auditConfigurationForm.common.waitTime) &&
+				this.auditConfigurationForm.common.waitTime > 0  &&
+				this.auditConfigurationForm.common.waitTime <= 10000 ;
         },
         isBrowserValid(){
             return this.activeBrowsers.includes(this.auditConfigurationForm.common.browser);
