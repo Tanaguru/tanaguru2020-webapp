@@ -4,7 +4,7 @@
 		<router-view :key="$route.fullPath"></router-view>
 		<tng-footer></tng-footer>
 
-		<session-popup v-if="$store.state.auth.user && isWindowVisible"/>
+		<session-popup v-if="isSessionPopupVisible"/>
 	</div>
 </template>
 
@@ -42,14 +42,14 @@ export default {
 		this.sessionTimer = setInterval(this.refreshCurrentDate, 10000);
 	},
 	computed: {
-		isWindowVisible() {
+		isSessionPopupVisible() {
 			// Show window 5 mn before timeout
 			return this.$store.state.auth.user &&
 				this.$store.state.auth.loginDate &&
 				this.currentDate.getTime() > this.$store.state.auth.loginDate.getTime() + this.sessionDuration - 300000;
 		},
 
-		isTimedOut() {
+		isSessionTimedOut() {
 			return this.$store.state.auth.user &&
 				this.$store.state.auth.loginDate &&
 				this.currentDate.getTime() > this.$store.state.auth.loginDate.getTime() + this.sessionDuration;
@@ -58,7 +58,7 @@ export default {
 	methods: {
 		refreshCurrentDate() {
 			this.currentDate = new Date();
-			if (this.isTimedOut) {
+			if (this.isSessionTimedOut) {
 				this.$store.dispatch("logout")
 			}
 		}
