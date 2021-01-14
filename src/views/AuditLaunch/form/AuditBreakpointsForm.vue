@@ -10,51 +10,43 @@
                     <div role="group"
                          :aria-labelledby="`breakpoint-${i}`"
                          class="custom-fieldset">
-                        <p class="custom-fieldset__legend" :id="`breakpoint-${i}`" v-if='i === 0'>
+                        <p class="custom-fieldset__legend" :id="`breakpoint-${i}`">
                             {{$t('audit.resolution.default')}}
-                            <span v-if="i === 0 && breakpoint !== '' " class="screen-reader-text">{{$t('audit.form.help.checked')}}</span>
+                            <span v-if="!breakpoint" class="screen-reader-text">{{$t('audit.form.help.checked')}}</span>
                             <span v-else class="screen-reader-text">{{$t('audit.form.help.empty')}}</span>
                         </p>
 
-						<p class="custom-fieldset__legend" :id='`breakpoint-${i}`' v-else>
-                            {{$t('audit.resolution.breakpoint')}} {{i}}
-							<span v-if="breakpoint !== '' " class="screen-reader-text">{{$t('audit.form.help.checked')}}</span>
-                            <span v-else class="screen-reader-text">{{$t('audit.form.help.empty')}}</span>
-
-						</p>
                         <div class="custom-fieldset__content">
 							<label class="label" :for="`breakpoint-length-${i}`">{{$t('audit.resolution.label')}} *</label>
 
 							<input
                                 class="input"
-                                v-bind:class="{'has-error': bpErrors.includes(i) && hasEmptyErrorRule(breakpoint, i) || bpErrors.includes(i) && hasValidErrorRule(breakpoint) }"
+                                v-bind:class="{'has-error': !isBreakPointValid(breakpoint)}"
                                 type="number"
                                 name="breakpoint-length"
                                 :id="`breakpoint-length-${i}`"
                                 :required="i === 0"
                                 :value="breakpoint"
                                 @input="onChangeBreakpoint(i, $event.target.value)"
-                                @focus="hideBpError(i)"
-                                @blur="showBpError(i)"
                                 :aria-describedby="describedBy(breakpoint, i)"
 							/>
 
 							<p class="info-text" :id='`precision-length-${i}`'>{{$t('audit.resolution.labelHelp')}}</p>
 
-                             <p v-if="bpErrors.includes(i) && !breakpoint" role="alert" class="info-error" :id='`empty-error-${i}`'>
+                             <p v-if="!breakpoint" role="alert" class="info-error" :id='`empty-error-${i}`'>
 								<icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
 									<icon-alert/>
 								</icon-base-decorative>
 								<span>{{ $t('form.emptyInput') }}</span>
 							</p>
-							<p v-else-if="bpErrors.includes(i) && !isBreakPointValid(breakpoint)" role="alert" class="info-error" :id='`valid-error-${i}`'>
+							<p v-else-if="!isBreakPointValid(breakpoint)" role="alert" class="info-error" :id='`valid-error-${i}`'>
 								<icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
 									<icon-alert/>
 								</icon-base-decorative>
 								<span>{{ $t('audit.form.error.bpError') }}</span>
 							</p>
 
-							<button class="btn btn--icon btn--clipboard btn-delete" type="button" v-if="i != 0" @click="removeBreakpoint(i)">
+							<button class="btn btn--icon btn--clipboard btn-delete" type="button" v-if="i !== 0" @click="removeBreakpoint(i)">
 								<icon-base-decorative width="18" height="18">
 									<icon-delete />
 								</icon-base-decorative>
@@ -101,7 +93,6 @@
         data() {
             return {
                 breakpoints: this.value,
-                bpErrors: []
             }
         },
         methods: {
@@ -118,44 +109,15 @@
                 this.$set(this.breakpoints, index, value);
                 this.$emit('input', this.breakpoints);
             },
-            fullName: function (user) {
-                return user.first_name + ' ' + user.last_name;
-            },
-            hasValidErrorRule(breakpoint){
-                let rule = false;
-                if(!this.isBreakPointValid(breakpoint)) {
-                    rule = true
-                }
-                return rule;
-            },
-            hasEmptyErrorRule(breakpoint, i){
-                let rule = false;
-                if(!breakpoint) {
-                    rule = true
-                }
-                return rule;
-            },
+
             describedBy(breakpoint, i){
-                let describedBy = 'precision-length-' + i
-                if(this.bpErrors.includes(i) && this.hasValidErrorRule){
-                    describedBy = "precision-length-" + i + " valid-error-" + i
-                }
-                else if(this.bpErrors.includes(i) && this.hasEmptyErrorRule){
-                    describedBy = "precision-length-" + i + "empty-error-" + i
-                }
-                return describedBy
+                return 'precision-length-' + i +
+					!breakpoint ?
+						"empty-error-" + i :
+						this.isBreakPointValid(breakpoint) ?
+							'' :
+							'valid-error-' + i
             },
-            showBpError(i) {
-                this.bpErrors.push(i)
-            },
-            hideBpError(i) {
-                if(this.isBreakPointValid){
-                    let j = this.bpErrors.indexOf(i);
-                    if(j >= 0) {
-                        this.bpErrors.splice(i,1);
-                    }
-                }
-            }
         }
     }
 </script>
