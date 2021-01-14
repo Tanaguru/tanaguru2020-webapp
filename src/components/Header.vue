@@ -19,7 +19,7 @@ import DesktopMenu from './NavMenu/DesktopMenu'
 import MobileMenu from './NavMenu/MobileMenu'
 
 export default {
-	name: 'Header',
+	name: 'tngHeader',
 	components: {
 		Banner,
 		DesktopMenu,
@@ -41,7 +41,7 @@ export default {
     computed: {
 		currentUser() {
 			if(this.$store.getters.isLoggedIn) {
-				return this.$store.state.user.username;
+				return this.$store.state.auth.user.username;
 			}
 		}
 	},

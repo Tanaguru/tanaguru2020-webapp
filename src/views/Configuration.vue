@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import adminContractList from '../components/Admin/AdminContractList'
+import adminContractList from './Admin/Contract/ContractTab'
 
 export default {
     name: 'Config',
@@ -28,7 +28,7 @@ export default {
 		}
 	},
 	created(){
-		if(this.$store.state.user.appRole.name != 'USER'){
+		if(this.$store.state.auth.user.appRole.name != 'USER'){
 			this.$router.replace('/administration')
 		}
 	}

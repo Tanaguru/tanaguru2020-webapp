@@ -502,7 +502,7 @@
                 }
 
                 breadcrumb.push({
-                    name: this.page.name.split("_")[0],
+                    name: this.page.name,
                 });
                 return breadcrumb;
             }

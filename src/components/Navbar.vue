@@ -45,7 +45,7 @@ export default {
     methods: {
         updateLocale : function(){
             this.$i18n.locale = this.locale;
-            this.moment.locale(this.locale)
+            this.$moment.locale(this.locale)
 		},
         logout : function(event){
             this.$store.dispatch('logout')
@@ -62,7 +62,7 @@ export default {
 						(
 								!navbarLink.requiredAuthorities ||
 								navbarLink.requiredAuthorities.every((authority) =>{
-									return Object.keys(this.$store.state.authorities).includes(authority);
+									return Object.keys(this.$store.state.auth.authorities).includes(authority);
 								})
 						);
 

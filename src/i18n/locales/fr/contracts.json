@@ -1,0 +1,6 @@
+{
+	"createContract": "Créer un nouveau contrat",
+	"contractsList": "Liste des contrats",
+	"noContract": "Vous n'avez pas encore de contrat.",
+	"infoSearch": "Le tableau ci-dessous contient tous les contrats existants. Utilisez la barre de recherche pour commencer à taper le nom de celui que vous recherchez et filtrez les lignes du tableau qui ne correspondent pas. Nombre actuel de contrats répertoriés."
+}

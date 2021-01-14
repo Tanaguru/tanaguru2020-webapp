@@ -148,9 +148,9 @@ import IconImproper from '../../components/icons/IconImproper';
 import IconInforound from '../../components/icons/IconInforound';
 import IconNotApplicable from '../../components/icons/IconNotApplicable';
 import IconQualify from '../../components/icons/IconQualify';
-import AnomalyModal from '../../components/AnomalyModal';
+import AnomalyModal from './AnomalyModal';
 import moment from 'moment';
-import CircularProgressChart from '../../components/CircularProgressChart';
+import CircularProgressChart from '../../components/charts/CircularProgressChart';
 import PageResultOverview from "../PageDetail/PageResultOverview";
 import Pagination from "../../components/Pagination";
 import HeaderRow from "./HeaderRow.vue"

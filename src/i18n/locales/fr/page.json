@@ -1,0 +1,17 @@
+{
+	"adminContract": "Administration des contrats",
+	"configContract": "Gestion des contrats",
+	"adminUser": "Administration des utilisateurs",
+	"dashboard": "Tableau de bord",
+	"auditLaunch": "Lancer un audit",
+	"archives": "Archives",
+	"legals": "Mentions légales",
+	"privacy": "Politique de confidentialité",
+	"credits": "Crédits",
+	"access": "Accessibilité",
+	"sitemap": "Plan du site",
+	"history": "Historique d'audits",
+	"notFound": "Oups ! Cette page est introuvable.",
+	"forbidden": "Accès refusé",
+	"adminReferences": "Administration des référentiels"
+}

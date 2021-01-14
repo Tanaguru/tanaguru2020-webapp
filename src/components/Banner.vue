@@ -47,6 +47,7 @@ import IconArrowBlue from './icons/IconArrowBlue'
       methods: {
         updateLocale : function(){
           this.$i18n.locale = this.locale;
+		  this.$moment.locale(this.locale)
         },
       },
 	  components: {

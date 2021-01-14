@@ -4,13 +4,13 @@
 			<span class="audit-headline__id">{{ $t('entity.audit.id') }}{{audit.id}}</span>
 			<h1 class="audit-headline__title">{{ audit.name }}</h1>
 			<ul class="actions-list">
-				<!-- AUDIT ACTIONS -- TODO -- 
+				<!-- AUDIT ACTIONS -- TODO --
 				<li class="actions-list__item">
 					<button class="btn btn--icon btn--nude">
 						<icon-base-decorative width="16" height="16" viewBox="0 0 16 16"><icon-export /></icon-base-decorative>
 						<span>{{$t('resultAudit.actions.export')}}</span>
 					</button>
-				</li>
+				</li>-->
 				<li class="actions-list__item tooltip">
 					<button
 						class="btn btn--icon btn--nude"
@@ -33,6 +33,7 @@
 						<div aria-live="polite" class="screen-reader-text">{{ screenReaderInfo }}</div>
 					</div>
 				</li>
+				<!--
 				<li class="actions-list__item">
 					<button class="btn btn--icon btn--nude">
 						<icon-base-decorative width="16" height="16" viewBox="0 0 20 20"><icon-launch /></icon-base-decorative>
@@ -135,14 +136,14 @@
 </template>
 
 <script>
-	import { bus } from '../../main'
+	import { bus } from '../../vue'
     import IconBaseDecorative from "../../components/icons/IconBaseDecorative";
     import IconArrowBlue from "../../components/icons/IconArrowBlue";
     import IconExport from "../../components/icons/IconExport";
     import IconShare from "../../components/icons/IconShare";
     import IconPrint from "../../components/icons/IconPrint";
     import IconLaunch from "../../components/icons/IconLaunch";
-    import CircularProgressChart from "../../components/CircularProgressChart";
+    import CircularProgressChart from "../../components/charts/CircularProgressChart";
 	import moment from 'moment';
 	import backgroundImg from '../../../public/assets/images/logo-desktop.svg';
     export default {
@@ -178,29 +179,9 @@
 				)
 				return auditPages;
 				return otherPages
-			}
-        },*/
-        copyShareCode() {
-            let shareCodeUrl = document.querySelector('#shareCodeUrl')
-            shareCodeUrl.setAttribute('type', 'text')
-            shareCodeUrl.select()
-            try {
-                var successful = document.execCommand('copy');
-                var msg = successful ? 'successful' : 'unsuccessful';
-                this.copyButtonText = this.$i18n.t("resultAudit.copyLink.success")
-                this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.sucessHelp")
-                setTimeout(() => (
-                    this.showSharecodeTooltip = false
-                ), 400)
-            } catch (err) {
-                this.copyButtonText = this.$i18n.t("resultAudit.copyLink.fail")
-                this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.failHelp")
-            }
-            /* unselect the range */
-            shareCodeUrl.setAttribute('type', 'hidden')
-            window.getSelection().removeAllRanges()
-        },  
-    },
+			}*/
+        },
+
     methods: {
         moment: function (date) {
             this.$moment.locale(this.$i18n.locale)
@@ -212,9 +193,30 @@
             setTimeout(() => (
                 window.print()
             ), 50)
-        }
+        },
+
+		copyShareCode() {
+			let shareCodeUrl = document.querySelector('#shareCodeUrl')
+			shareCodeUrl.setAttribute('type', 'text')
+			shareCodeUrl.select()
+			try {
+				var successful = document.execCommand('copy');
+				var msg = successful ? 'successful' : 'unsuccessful';
+				this.copyButtonText = this.$i18n.t("resultAudit.copyLink.success")
+				this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.sucessHelp")
+				setTimeout(() => (
+					this.showSharecodeTooltip = false
+				), 400)
+			} catch (err) {
+				this.copyButtonText = this.$i18n.t("resultAudit.copyLink.fail")
+				this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.failHelp")
+			}
+			/* unselect the range */
+			shareCodeUrl.setAttribute('type', 'hidden')
+			window.getSelection().removeAllRanges()
+		},
     },
-    
+
 }
 
 </script>

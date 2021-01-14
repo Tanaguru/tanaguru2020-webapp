@@ -1,0 +1,96 @@
+{
+	"displayOptions": {
+		"title": "Options d'affichage",
+		"hide": "Replier les paramètres",
+		"show": "Afficher les paramètres",
+		"sticky": "Fixer cet encadré",
+		"unsticky": "Détacher cet encadré",
+		"legendReference": "Choix de référentiel :",
+		"legendSort": "Trier par :",
+		"sortAnomalies": "Anomalies",
+		"sortRepository": "Référentiel",
+		"search": {
+			"filter": "Filtrer par",
+			"filterInfo": "nombre de tags actuellement sélectionnés :",
+			"help": "Sélectionnez les tags qui vous intéressent dans la liste déroulante en appuyant sur la flèche ou en saisissant du texte à l'intérieur du champ. Cliquez ou pressez la touche entrée pour valider vos choix. Il n'y a pas de limite au nombre de tags que vous pouvez sélectionner.",
+			"tagsList": "Liste de {length} propositions.",
+			"selectedTags": "Tags sélectionnés"
+		}
+	},
+	"actions": {
+		"export": "Exporter",
+		"share": "Partager",
+		"print": "Imprimer",
+		"launch": "Relancer l'audit"
+	},
+	"copyLink": {
+		"copy": "Copier le lien",
+		"success": "Copié !",
+		"successHelp": "Le lien a bien été copié",
+		"fail": "Erreur",
+		"failHelp": "Impossible de copier le lien"
+	},
+	"copyCss": {
+		"copy": "Copier le selecteur CSS",
+		"success": "Copié !",
+		"successHelp": "Le sélecteur a bien été copié",
+		"fail": "Erreur",
+		"failHelp": "Impossible de copier le sélecteur"
+	},
+	"copyXpath": {
+		"copy": "Copier le X-path",
+		"success": "Copié !",
+		"successHelp": "Le X-path a bien été copié",
+		"fail": "Erreur",
+		"failHelp": "Impossible de copier le X-path"
+	},
+	"elmtTested": "éléments testés",
+	"date": "Depuis le",
+	"overview": {
+		"title": "Vue d'ensemble de l'audit",
+		"parameters": "Paramètres des statistiques",
+		"tests": {
+			"title": "Nombre de tests",
+			"tooltipHelp": "Informations sur le nombre de tests",
+			"tooltipTitle": "Nombre de tests",
+			"tooltipContent": "Détails de la répartition des tests par type de résultats. Ces chiffres ne tiennent pas compte du nombre d'occurrence d'éléments par tests. Par exemple, un même test invalidé à plusieurs reprises n'est comptabilisé qu'une seule fois.",
+			"table": {
+				"caption": "Résultats des tests en fonction du type de tests",
+				"columnTest": "Intitulé du test",
+				"columnResult": "Résultat"
+			}
+		},
+		"anomalies": {
+			"title": "Nombre d'anomalies par thème",
+			"tooltipHelp": "Informations sur le nombre d'anomalies par principe",
+			"tooltipTitle": "Nombre d'anomalies par principe",
+			"tooltipContent": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut et rhoncus sem. Duis et sapien id magna vulputate dictum."
+		}
+	},
+	"testResult": {
+		"title": "Résultats détaillés",
+		"mainTabShow": "Tout déplier",
+		"mainTabHide": "Tout replier",
+		"detailTabShow": "Déplier les résultats détaillés",
+		"detailTabHide": "Replier les résultats détaillés",
+		"explanation": "Explication",
+		"ruleLink": "Accéder à la règle",
+		"ruleInfo": "Comprendre la règle",
+		"errors": "{nbAnomaly} erreurs sur {nbElementTested} éléments testés",
+		"status": "Statut",
+		"accessibleName": "Nom accessible",
+		"isNotVisibleDueTo": "Non visible via",
+		"isNotExposedDueTo": "Non exposé via",
+		"canBeReachedUsingKeyboardWith": "Atteignable au clavier via",
+		"outer": "Balise",
+		"details": "Détails",
+		"xpath": "XPath",
+		"xpathCopy": "Copier le XPath",
+		"css": "Sélecteur CSS",
+		"cssCopy": "Copier le sélecteur",
+		"checkboxAnomaly": "Ne plus relever cette anomalie",
+		"hide": "Masquer",
+		"show": "Afficher",
+		"anomaly": "Anomalie n°"
+	}
+}

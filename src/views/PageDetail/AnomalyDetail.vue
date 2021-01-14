@@ -24,11 +24,10 @@
                     <prism language="html" class="extract-code__frame">{{outer}}</prism>
                 </div>
 
-                <div class="details-extract" v-if="anomaly.accessibleName || anomaly.canBeReachedUsingKeyboardWith.length > 0 || anomaly.isNotExposedDueTo.length > 0 || anomaly.isNotVisibleDueTo.length > 0">
+                <div class="details-extract">
                     <p class="details-extract__title">{{$t('resultAudit.testResult.details')}}</p>
-
                     <ul class="details-list">
-                        <li class="details-list__item" v-if="anomaly.accessibleName">{{$t('resultAudit.testResult.accessibleName')}} : <span>{{anomaly.accessibleName}}</span></li>
+                        <li class="details-list__item" v-if="hasAccessibleNameTag && anomaly.accessibleName">{{$t('resultAudit.testResult.accessibleName')}} : <span>{{anomaly.accessibleName}}</span></li>
                         <li class="details-list__item" v-if="anomaly.canBeReachedUsingKeyboardWith && anomaly.canBeReachedUsingKeyboardWith.length > 0">{{$t('resultAudit.testResult.canBeReachedUsingKeyboardWith')}} : <span>{{anomaly.canBeReachedUsingKeyboardWith}}</span></li>
                         <li class="details-list__item" v-if="anomaly.isNotExposedDueTo && anomaly.isNotExposedDueTo.length > 0">{{$t('resultAudit.testResult.isNotExposedDueTo')}} : <span>{{anomaly.isNotExposedDueTo}}</span></li>
                         <li class="details-list__item" v-if="anomaly.isNotVisibleDueTo && anomaly.isNotVisibleDueTo.length > 0">{{$t('resultAudit.testResult.isNotVisibleDueTo')}} : <span>{{anomaly.isNotVisibleDueTo}}</span></li>
@@ -37,6 +36,7 @@
 
                 <div class="details-tab">
                     <div class="details-tab__header">
+						<!-- Show Xpath button -->
                         <button
                             class="details-tab-btn btn btn--nude btn--icon btn--tab"
                             aria-label="show-hide-xpath"
@@ -48,7 +48,21 @@
                             <icon-base-decorative :class="xpathOpen === true ? 'hide' : 'show'"><icon-arrow-blue /></icon-base-decorative>
                         </button>
 
-                        <button class="btn btn--clipboard">{{$t('resultAudit.testResult.xpathCopy')}}</button>
+						<!-- Display Xpath copying tooltip -->
+                        <button class="btn btn--clipboard" @click="showXpathTooltip = !showXpathTooltip">{{$t('resultAudit.testResult.xpathCopy')}}</button>
+
+						<!-- Copy Xpath tooltip -->
+						<div class="tooltip__info" role="tooltip" v-show="showXpathTooltip">
+							<div class="tooltip-clipboard">
+								<input class="input" :id="'test-xpath-'+index" :value="anomaly.xpath">
+								<button
+									@click.stop.prevent="copyXpath"
+									class="btn btn--clipboard">
+									{{ copyXpathButtonText }}
+								</button>
+							</div>
+							<div aria-live="polite" class="screen-reader-text">{{ screenReaderInfoXpath }}</div>
+						</div>
                     </div>
 
                     <p :id="index + '-xpath-t-' + anomaly.status" class="details-tab__content" :hidden="!xpathOpen">{{$t('resultAudit.testResult.xpath')}} : {{anomaly.xpath}}</p>
@@ -58,6 +72,7 @@
 
                 <div class="details-tab">
                     <div class="details-tab__header">
+						<!-- Show CSS button -->
                         <button
                             class="details-tab-btn btn btn--nude btn--icon btn--tab"
                             aria-label="show-hide-css-selector"
@@ -69,7 +84,21 @@
                             <icon-base-decorative :class="cssSelectorOpen === true ? 'hide' : 'show'"><icon-arrow-blue /></icon-base-decorative>
                         </button>
 
-                        <button class="btn btn--clipboard">{{$t('resultAudit.testResult.cssCopy')}}</button>
+						<!-- Display CSS copying tooltip -->
+                        <button class="btn btn--clipboard" @click="showCssTooltip = !showCssTooltip">{{$t('resultAudit.testResult.cssCopy')}}</button>
+
+						<!-- Copy CSS tooltip -->
+						<div class="tooltip__info" role="tooltip" v-show="showCssTooltip">
+							<div class="tooltip-clipboard">
+								<input class="input" :id="'test-css-'+index" :value="anomaly.cssSelector">
+								<button
+									@click.stop.prevent="copyCss"
+									class="btn btn--clipboard">
+									{{ copyCssButtonText }}
+								</button>
+							</div>
+							<div aria-live="polite" class="screen-reader-text">{{ screenReaderInfoCss }}</div>
+						</div>
                     </div>
 
                     <p :id="index + '-css-selector'" class="details-tab__content" :hidden="!cssSelectorOpen">{{anomaly.cssSelector}}</p>
@@ -99,15 +128,24 @@
             IconNotApplicable,
             IconQualify,
         },
-        props: ['anomaly', 'index', 'pageContent'],
+        props: ['anomaly', 'index', 'pageContent', 'hasAccessibleNameTag'],
         data(){
             return{
                 xpathOpen: false,
                 cssSelectorOpen: false,
-                resolvedContent: ''
+				resolvedContent: '',
+				
+				// Copy CSS 
+				showCssTooltip: false,
+                copyCssButtonText: this.$i18n.t("resultAudit.copyCss.copy"),
+				screenReaderInfoCss: '',
+				// Copy XPATH
+				showXpathTooltip: false,
+                copyXpathButtonText: this.$i18n.t("resultAudit.copyXpath.copy"),
+				screenReaderInfoXpath: '',
             }
         },
-        computed: {
+		computed: {
             outer(){
                 let result = "";
                 if(this.anomaly && this.pageContent && this.pageContent.dom){
@@ -135,7 +173,57 @@
             },
             toggleCssSelector(){
                 this.cssSelectorOpen = !this.cssSelectorOpen
-            },
+			},
+			
+			// Copy CSS selector function
+			copyCss() {
+				// get element to copy value
+				let testCss = document.querySelector('#test-css-'+this.index)
+				testCss.setAttribute('type', 'text')
+				testCss.select()
+				// If success
+				try {
+					var successful = document.execCommand('copy');
+					var msg = successful ? 'successful' : 'unsuccessful';
+					this.copyCssButtonText = this.$i18n.t("resultAudit.copyCss.success")
+					this.screenReaderInfoCss = this.$i18n.t("resultAudit.copyCss.sucessHelp")
+					setTimeout(() => (
+						this.showCssTooltip = false
+					), 400)
+				// If failure
+				} catch (err) {
+					this.copyCssButtonText = this.$i18n.t("resultAudit.copyCss.fail")
+					this.screenReaderInfoCss = this.$i18n.t("resultAudit.copyCss.failHelp")
+				}
+				/* unselect the range */
+				testCss.setAttribute('type', 'hidden')
+				window.getSelection().removeAllRanges()
+			},
+
+			// Copy XPATH selector function
+			copyXpath() {
+				// get element to copy value
+				let testXpath = document.querySelector('#test-xpath-'+this.index)
+				testXpath.setAttribute('type', 'text')
+				testXpath.select()
+				// If success
+				try {
+					var successful = document.execCommand('copy');
+					var msg = successful ? 'successful' : 'unsuccessful';
+					this.copyXpathButtonText = this.$i18n.t("resultAudit.copyXpath.success")
+					this.screenReaderInfoXpath = this.$i18n.t("resultAudit.copyXpath.sucessHelp")
+					setTimeout(() => (
+						this.showXpathTooltip = false
+					), 400)
+				// If failure
+				} catch (err) {
+					this.copyXpathButtonText = this.$i18n.t("resultAudit.copyXpath.fail")
+					this.screenReaderInfoXpath = this.$i18n.t("resultAudit.copyXpath.failHelp")
+				}
+				/* unselect the range */
+				testXpath.setAttribute('type', 'hidden')
+				window.getSelection().removeAllRanges()
+			},
         }
   }
 </script>
