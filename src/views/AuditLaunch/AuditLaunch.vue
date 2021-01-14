@@ -67,6 +67,11 @@
 
                     <audit-enable-screenshot-form
                         v-model="auditConfigurationForm.common.enableScreenshot"/>
+
+					<audit-css-query-form
+						v-model="auditConfigurationForm.common.cssQuery"
+						:is-valid="isCssQueryValid"
+						:has-been-sent="hasTryToLaunch"/>
                 </section>
             </div>
 
@@ -289,10 +294,12 @@ import BreakpointHelper from "../../helper/breakpointHelper"
 import AuditWaitTimeForm from "./form/AuditWaitTimeForm";
 import AuditEnableScreenshotForm from "./form/AuditEnableScreenshotForm";
 import AuditBrowserForm from "./form/AuditBrowserForm";
+import AuditCssQueryForm from './form/AuditCssQueryForm.vue';
 export default {
     name: 'auditLaunch',
     components: {
-        AuditBrowserForm,
+		AuditBrowserForm,
+        AuditCssQueryForm,
         AuditEnableScreenshotForm,
         AuditWaitTimeForm,
         AuditBreakpointsForm,
@@ -350,7 +357,8 @@ export default {
                     breakpoints: [1920],
                     type: "page",
                     enableScreenshot: false,
-                    browser: 'chrome'
+					browser: 'chrome',
+					cssQuery: ''
                 },
                 site: {
                     seeds: [],
@@ -445,8 +453,10 @@ export default {
                 'WAIT_TIME': this.auditConfigurationForm.common.waitTime,
                 'WEBDRIVER_RESOLUTIONS': this.auditConfigurationForm.common.breakpoints.join(';'),
                 'ENABLE_SCREENSHOT': this.auditConfigurationForm.common.enableScreenshot,
-                'WEBDRIVER_BROWSER': this.auditConfigurationForm.common.browser
-            };
+				'WEBDRIVER_BROWSER': this.auditConfigurationForm.common.browser,
+				'CSS_QUERY': this.auditConfigurationForm.common.cssQuery
+			};
+
             switch (this.auditConfigurationForm.common.type) {
                 case 'site':
                     parameters['SITE_SEEDS'] = this.auditConfigurationForm.site.seeds.join(';');
@@ -499,13 +509,23 @@ export default {
         },
         isBrowserValid(){
             return this.activeBrowsers.includes(this.auditConfigurationForm.common.browser);
+		},
+		isCssQueryValid() {
+			try{
+				if(this.auditConfigurationForm.common.cssQuery != ''){
+					document.querySelectorAll(this.auditConfigurationForm.common.cssQuery);
+				}
+				return true;
+			}catch(error){
+				return false;
+			}
         },
         isBreakpointsValid() {
             return this.auditConfigurationForm.common.breakpoints.filter(breakpoint => {
                 return ! BreakpointHelper.isBreakpointValid(breakpoint);
                 return ! BreakpointHelper.isBreakpointEmpty(breakpoint);
             }).length === 0;
-        },
+		},
         //Pages
         checkValidUrl: UrlHelper.checkValidUrl,
         isPageUrlsValid() {
@@ -548,7 +568,8 @@ export default {
                 this.isMainReferenceValid &&
                 this.isBreakpointsValid &&
                 this.isWaitTimeValid &&
-                this.isBrowserValid;
+				this.isBrowserValid &&
+				this.isCssQueryValid;
             switch (this.auditConfigurationForm.common.type) {
                 case 'scenario':
                     result &= this.isSelectedScenarioValid;

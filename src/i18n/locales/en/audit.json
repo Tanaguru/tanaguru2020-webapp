@@ -23,6 +23,10 @@
 			"radioLegend": "Option to choose browser",
 			"firefox": "Mozilla Firefox",
 			"chrome": "Google Chrome"
+		},
+		"cssQuery": {
+			"title": "Css selector(s)",
+			"help": "Example of css selectors : #id ; .class ; element.class ; * ; element ; element,element,.. "
 		}
 	},
 	"guidelines": {
@@ -147,7 +151,8 @@
 			"auditReferences": "Please choose at least one guidelines.",
 			"crawlerDuration": "Please enter a numeric value between 0.1 et 86400 for the crawler max duration in seconds.",
 			"crawlerDepth": "Please enter an integer between 1 and 10 for the crawler max depth in pages.",
-			"crawlerDocument": "Please enter an integer between 1 and 1000 for the crawler max pages."
+			"crawlerDocument": "Please enter an integer between 1 and 1000 for the crawler max pages.",
+			"cssQuery": "Please enter a correct css selector."
 		}
 	}
 }
