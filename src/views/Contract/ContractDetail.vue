@@ -115,6 +115,21 @@
 						</div>
 					</div>
 
+                    <div class="form-column" v-if="!contract.restrictDomain">
+						<div class="form-block">
+							<label class="label" for="restrictProject">Restrict project to a defined domain</label>
+							<input
+                                class="input"
+                                type="checkbox"
+                                name="restrictProject"
+                                id="restrictProject"
+                                v-model="projectCreateForm.restrictProject"
+                            >
+						</div>
+					</div>
+                </div>
+
+				<div class="form-row" v-show="contract.restrictDomain || projectCreateForm.restrictProject">
 					<div class="form-column">
 						<div class="form-block">
 							<label class="label" for="domain">{{$t('entity.project.domain')}} *</label>
@@ -129,7 +144,7 @@
                                 required
                             >
 							<p class="info-text" id="domain-constraint">(example : http://www.website.com/)</p>
-							<p v-show="projectCreateForm.domainError" class="info-error" id="domain-error">{{projectCreateForm.domainError}}</p>
+							<p class="info-error" id="domain-error">{{projectCreateForm.domainError}}</p>
 						</div>
 					</div>
 				</div>
@@ -205,7 +220,8 @@ export default {
                 successMsg: "",
                 domainError: "",
                 error: "",
-                nameError: ""
+                nameError: "",
+                restrictProject: false
             },
             promoteSuccessMsg: ""
         }
@@ -230,7 +246,6 @@ export default {
                 return authority.name === 'PROMOTE_MEMBER'
             }));
         },
-
         addingCondition(){
 			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
 				return authority.name === 'CREATE_PROJECT'
@@ -239,7 +254,6 @@ export default {
                 return authority.name === 'CREATE_PROJECT'
             }));
         },
-
         deletingProjectCondition(){
 			return this.$store.state.auth.user.appRole.overrideProjectRole.authorities.some(authority => {
                 return authority.name === 'DELETE_PROJECT'
@@ -248,7 +262,6 @@ export default {
                 return authority.name === 'DELETE_PROJECT'
             }));
         },
-
         deletingUserCondition(){
 			return this.$store.state.auth.user.appRole.overrideProjectRole.authorities.some(authority => {
                 return authority.name === 'REMOVE_MEMBER'
@@ -257,7 +270,6 @@ export default {
                 return authority.name === 'REMOVE_MEMBER'
             }));
         },
-
         nameDescribedBy(){
             let description = 'name-constraint';
             if(this.modifyContractForm.nameError){
@@ -265,7 +277,6 @@ export default {
             }
             return description;
         },
-
         domainDescribedBy(){
             let description = 'domain-constraint';
             if(this.projectCreateForm.domainError){
@@ -279,20 +290,17 @@ export default {
             this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
         },
-
         showModifyContractForm(){
             this.modifyContractForm.name = this.contract.name;
             this.modifyContractForm.dateEnd = this.contract.dateEnd;
             this.modifyContractForm.active = true;
         },
-
         modifyContract(){
             if(this.modifyContractForm.name == '' || this.modifyContractForm.name.length > 50){
                 this.modifyContractForm.nameError = this.$i18n.t('form.invalidUsername')
             }
             else {
                 this.modifyContractForm.error = ""
-
                 this.contractService.modifyById(
                     this.contract.id,
                     this.modifyContractForm.name,
@@ -307,39 +315,28 @@ export default {
                 this.modifyContractForm.successMsg = this.$i18n.t('form.savedChanges')
             }
         },
-
         createProject: function(){
 			this.projectCreateForm.successMsg = '';
-
 			if(this.projectCreateForm.name.length === 0){
 				this.projectCreateForm.nameError = this.$i18n.t("form.emptyInput");
-            }
-
-            
-			try {
-                let parsedUrl = new URL(this.projectCreateForm.domain);
-			} catch (_) {
-                if(this.projectCreateForm.domain.length === 0 ) {
-                    this.projectCreateForm.domainError = this.$i18n.t("form.emptyInput");
-                } else {
-                    this.projectCreateForm.domainError = this.$i18n.t("form.urlError");
-                }
 				return;
 			}
-
+            if(this.projectCreateForm.restrictProject || this.contract.restrictDomain ) {
+                try {
+                    let parsedUrl = new URL(this.projectCreateForm.domain);
+                } catch (_) {
+                    this.projectCreateForm.domainError = this.$i18n.t("form.urlError");
+                    return;
+                }
+            }
 			this.projectService.create(
 				this.projectCreateForm.name,
 				this.projectCreateForm.domain,
-				this.contract.id,
+                this.contract.id,
+                this.projectCreateForm.restrictProject,
 				(project) => {
 					this.projects.push(project)
-                    this.projectCreateForm.successMsg = this.$i18n.t('form.projectCreation')
-                    this.projectCreateForm.error = "";
-                    this.projectCreateForm.name = "";
-                    this.projectCreateForm.domain = "";
-                    this.projectCreateForm.nameError = "";
-			        this.projectCreateForm.domainError = ""
-
+					this.projectCreateForm.successMsg = this.$i18n.t('form.projectCreation')
 				},
 				(error) => {
 					this.projectCreateForm.error = this.$i18n.t('form.genericError')
@@ -348,12 +345,12 @@ export default {
 					}
 				}
 			);
-
 			this.projectCreateForm.error = "";
-			this.projectCreateForm.name = ""
-			this.projectCreateForm.domain = ""
+			this.projectCreateForm.nameError = "";
+			this.projectCreateForm.domainError = "";
+			this.projectCreateForm.name = "";
+			this.projectCreateForm.domain = "";
         },
-
         deleteProject(project){
             const index = this.projects.indexOf(project);
             if(index > -1){
@@ -366,7 +363,6 @@ export default {
                 )
             }
         },
-
         addUser(){
             if(this.userAdditionForm.username.length == 0){
                 this.userAdditionForm.error = this.$i18n.t('form.emptyInput')
@@ -374,7 +370,6 @@ export default {
                 let existantUser = this.users.find(user =>
                 user.username === this.userAdditionForm.username
                 )
-
                 if(existantUser){
                     let newUser = existantUser.id
                     this.contractService.addMember(
@@ -392,7 +387,6 @@ export default {
                 }
             }
         },
-
         promoteUser(contractUser){
 			this.contractService.promoteMember(
 					contractUser.user.id,
@@ -404,7 +398,6 @@ export default {
 					(error) => console.error(error)
 			)
         },
-
         removeUser(contractUser){
 			this.contractService.removeMember(
 				contractUser.user.id,
@@ -422,7 +415,6 @@ export default {
                 this.users = users
             }
         )
-
         this.contractService.findById(
             this.$route.params.id,
             (contract) => {
@@ -442,7 +434,6 @@ export default {
                     name : this.contract.name,
                     path : '/contracts/'+ this.contract.id
                 });
-
                 this.userService.findAllByContract(
                     this.contract.id,
                     (contractUsers) => {
@@ -451,8 +442,7 @@ export default {
                             if(contractUser.contractRole.name === 'CONTRACT_OWNER'){
                             	this.contractOwner = contractUser;
 							}
-
-                            if(contractUser.user.id === this.$store.state.auth.user.id){
+                            if(contractUser.user.id === this.$store.state.user.id){
                                 this.currentContractUser = contractUser;
                             }
                         });
@@ -462,7 +452,6 @@ export default {
             },
             (error) => { this.$router.replace('/404') }
         );
-
         this.projectService.findByContractId(
             this.$route.params.id,
             (projects) => {this.projects = projects},
@@ -478,15 +467,12 @@ export default {
 		margin-top: 6.2rem;
 		margin-bottom: 3.1rem;
 	}
-
 	.form-users {
 		margin-bottom: 4.6rem;
 	}
-
 	.infos-list {
 		margin-bottom: 2.4rem;
 	}
-
 	.select {
 		max-width: 35rem;
 	}
