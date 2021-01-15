@@ -5,21 +5,22 @@ export default class ProjectService extends Service{
         super('projects', axios)
     }
 
-    create(name, domain, contractId, then, error){
-      const project = {
-          'name' : name,
-          'domain' : domain,
-          'contractId' : contractId
-      };
-
-        return this.axios({
-          url: this.controllerName + "/", 
-          method: 'post',
-          data: project
-      })
-      .then((project) => {then(project.data)})
-      .catch((err) => {error(err)});
-  }
+    create(name, domain, contractId, restrictDomain, then, error){
+        const project = {
+            'name' : name,
+            'domain' : domain,
+            'contractId' : contractId,
+            'restrictDomain' : restrictDomain
+        };
+  
+          return this.axios({
+            url: this.controllerName + "/", 
+            method: 'post',
+            data: project
+        })
+        .then((project) => {then(project.data)})
+        .catch((err) => {error(err)});
+    }
 
     findByContractId(id, then, error){
         return this.axios({

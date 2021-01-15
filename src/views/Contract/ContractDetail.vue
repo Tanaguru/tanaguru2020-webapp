@@ -129,10 +129,13 @@
 					</div>
                 </div>
 
-				<div class="form-row" v-show="contract.restrictDomain || projectCreateForm.restrictProject">
+				<div class="form-row">
 					<div class="form-column">
 						<div class="form-block">
-							<label class="label" for="domain">{{$t('entity.project.domain')}} *</label>
+							<label class="label" for="domain">
+                                {{$t('entity.project.domain')}} 
+                                <span v-if="contract.restrictDomain || projectCreateForm.restrictProject"> *</span>
+                            </label>
 							<input
                                 class="input"
                                 type="url"

@@ -1,12 +1,12 @@
 <template>
   <div>
     <p>{{ $t('form.help') }}</p>
-    <form @submit.prevent="createContract" novalidate>
-      <div class="form-row">
-        <div class="form-column">
-          <div class="form-block">
-            <label class="label" for="name">{{ $t('entity.contract.name') }} *</label>
-            <input
+    <form @submit.prevent="createContract" novalidate >
+				<div class="form-row">
+					<div class="form-column">
+						<div class="form-block">
+							<label class="label" for="name">{{$t('entity.contract.name')}} *</label>
+							<input
                 class="input"
                 v-bind:class="{'has-error': contractCreateForm.nameError}"
                 :aria-describedby="nameDescribedBy"
@@ -16,16 +16,15 @@
                 :placeholder="$t('entity.contract.name')"
                 v-model="contractCreateForm.name"
                 required>
-            <p class="info-text" id="contract-name-constraint">{{ $t('form.nameConstraint') }}</p>
-            <p v-if="contractCreateForm.nameError" id="name-error" class="info-error">
-              {{ contractCreateForm.nameError }}</p>
-          </div>
-        </div>
+							<p class="info-text" id="contract-name-constraint">{{ $t('form.nameConstraint') }}</p>
+							<p v-show="contractCreateForm.nameError" id="name-error" class="info-error">{{contractCreateForm.nameError}}</p>
+						</div>
+					</div>
 
-        <div class="form-column">
-          <div class="form-block">
-            <label class="label" for="dateEnd">{{ $t('entity.contract.dateEnd') }} *</label>
-            <input
+					<div class="form-column">
+						<div class="form-block">
+							<label class="label" for="dateEnd">{{$t('entity.contract.dateEnd')}} *</label>
+							<input
                 class="input"
                 v-bind:class="{'has-error': contractCreateForm.dateError}"
                 type="date"
@@ -34,24 +33,32 @@
                 :aria-describedby="contractCreateForm.dateError ? 'date-error' : ''"
                 v-model="contractCreateForm.dateEnd"
                 required>
-            <p v-if="contractCreateForm.dateError" id="date-error" class="info-error">
-              {{ contractCreateForm.dateError }}</p>
-          </div>
-        </div>
-      </div>
+							<p v-show="contractCreateForm.dateError" id="date-error" class="info-error">{{contractCreateForm.dateError}}</p>
+						</div>
+					</div>
+				</div>
 
-      <div class="form-block">
-        <label class="label" for="owner-select">{{ $t('entity.contract.owner') }} *</label>
-        <div class="select">
-          <select id="owner-select" v-bind:class="{'has-error': contractCreateForm.ownerError}"
-                  name="owner-select" v-model="contractCreateForm.ownerId" aria-describedby="owner-error"
-                  required>
-            <option :value="null" disabled>{{ $t('entity.contract.selectOwner') }}</option>
-            <option v-for="user of users" :key="user.id" :value="user.id">{{ user.username }}</option>
-          </select>
-        </div>
-        <p v-if="contractCreateForm.ownerError" id="owner-error" class="info-error">
-          {{ contractCreateForm.ownerError }}</p>
+        <div class="form-row">
+					<div class="form-column">
+              <div class="form-block">
+                  <label class="label" for="owner-select">{{$t('entity.contract.owner')}} *</label>
+                  <div class="select">
+                      <select id="owner-select" v-bind:class="{'has-error': contractCreateForm.ownerError}" name="owner-select" v-model="contractCreateForm.ownerId" aria-describedby="owner-error" required>
+                          <option value="" disabled>{{$t('entity.contract.selectOwner')}}</option>
+                          <option v-for="user of users" :key="user.id" :value="user.id">{{user.username}}</option>
+                      </select>
+                  </div>
+                  <p v-show="contractCreateForm.ownerError" id="owner-error" class="info-error">{{contractCreateForm.ownerError}}</p>
+              </div>
+          </div>
+          <div class="form-column">
+              <div class="form-block">
+                  <div class="checkbox-wrapper">
+                      <input type="checkbox" id="restrict-domain" v-bind:class="{'has-error': contractCreateForm.ownerError}" name="restrict-domain" v-model="contractCreateForm.restrictDomain" aria-describedby="restrict-error">
+                  </div>
+                  <label class="label" for="restric-domain">Restrict contract's projects to a specific domain</label>
+              </div>
+          </div>
       </div>
 
       <button class="btn btn--default" type="submit">{{ $t('action.create') }}</button>
@@ -75,6 +82,7 @@ export default {
         nameError: "",
         dateError: "",
         ownerError: "",
+        restrictDomain: false
       },
       successMsg: "",
     }
@@ -123,10 +131,13 @@ export default {
 
     createContract() {
       this.contractCreateForm.error = "";
+      this.contractCreateForm.nameError = "";
+      this.contractCreateForm.dateError = "";
+      this.contractCreateForm.ownerError = "";
       this.successMsg = "";
 
       let isFormValid = this.checkName()
-      isFormValid &= this.checkDateEnd()
+      isFormValid &= this.checkDateEnd();
       isFormValid &= this.checkOwner();
 
       if (isFormValid) {
@@ -134,6 +145,7 @@ export default {
             this.contractCreateForm.name,
             this.contractCreateForm.dateEnd,
             this.contractCreateForm.ownerId,
+            this.contractCreateForm.restrictDomain,
             (contract) => {
               this.successMsg = this.$i18n.t("form.contractCreation")
               this.$emit('createContract', contract)

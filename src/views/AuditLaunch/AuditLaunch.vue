@@ -42,6 +42,32 @@
         <form novalidate>
             <div class="wrapper">
                 <p class="info-form">{{ $t('form.help') }}</p>
+                <section class="layout" id="section-basic-auth">
+                    <p v-if="!launchCondition && hasTryToLaunch" role="alert" id="incomplete-form" class="info-error">
+                        <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
+                            <icon-alert/>
+                        </icon-base-decorative>
+                        <span>{{ $t('audit.form.error.formError') }}</span>
+                    </p>
+                    <audit-form-section-header
+                        title="user authentification"
+                        :number="0"/>
+
+                    <!-- Basic auth -->
+                    <basic-auth-username-form
+                        :has-been-sent="hasTryToLaunch"
+                        :is-valid="isUsernameValid"
+                        v-model="auditConfigurationForm.auth.username"/>
+
+                    <basic-auth-password-form
+                        :has-been-sent="hasTryToLaunch"
+                        :is-valid="isPasswordValid"
+                        v-model="auditConfigurationForm.auth.password"/>
+                </section>
+            </div>
+
+            <div class="wrapper">
+                <p class="info-form">{{ $t('form.help') }}</p>
                 <section class="layout" id="section-definition">
                     <p v-if="!launchCondition && hasTryToLaunch" role="alert" id="incomplete-form" class="info-error">
                         <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
@@ -283,12 +309,15 @@ import AuditSiteCrawlerExclusionRegexForm from "./form/AuditSiteExclusionRegexFo
 import AuditUploadForm from "./form/AuditUploadForm";
 import AuditScenarioForm from "./form/AuditScenarioForm";
 import AuditBreakpointsForm from "./form/AuditBreakpointsForm";
-import moment from 'moment';
-import UrlHelper from "../../helper/urlhelper"
-import BreakpointHelper from "../../helper/breakpointHelper"
 import AuditWaitTimeForm from "./form/AuditWaitTimeForm";
 import AuditEnableScreenshotForm from "./form/AuditEnableScreenshotForm";
 import AuditBrowserForm from "./form/AuditBrowserForm";
+import BasicAuthUsernameForm from "./form/BasicAuthUsernameForm";
+import BasicAuthPasswordForm from "./form/BasicAuthPasswordForm";
+import moment from 'moment';
+import UrlHelper from "../../helper/urlhelper"
+import BreakpointHelper from "../../helper/breakpointHelper"
+
 export default {
     name: 'auditLaunch',
     components: {
@@ -310,6 +339,8 @@ export default {
         AuditReferencesForm,
         AuditNameForm,
         AuditTypeForm,
+        BasicAuthUsernameForm,
+        BasicAuthPasswordForm,
         Breadcrumbs,
         BackToTop,
         IconBaseDecorative,
@@ -342,6 +373,12 @@ export default {
             references: [],
             seedMustBeInDomain: true,
             auditConfigurationForm: {
+
+                auth: {
+                    username: this.$store.state.auth.user.username,
+                    password: ''
+                }, 
+
                 common: {
                     name: '',
                     selectedReferences: [],
@@ -427,7 +464,7 @@ export default {
             (error) => {
                 console.error(error)
             }
-        )
+        );
     },
     methods: {
         showLaunchMsg() {
@@ -481,6 +518,14 @@ export default {
         },
     },
     computed: {
+        //Auth
+        isUsernameValid() {
+            return this.auditConfigurationForm.auth.username == this.$store.state.auth.user.username
+        },
+        isPasswordValid() {
+            return this.auditConfigurationForm.auth.password == this.$store.state.auth.user.password
+        },
+
          //Commons
         isAuditTypeValid() {
             return ['site', 'scenario', 'upload', 'page'].includes(this.auditConfigurationForm.common.type);

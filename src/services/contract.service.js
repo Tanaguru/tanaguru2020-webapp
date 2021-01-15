@@ -57,12 +57,13 @@ export default class ContractService extends Service{
           });
     }
 
-    create(name, dateEnd, ownerId, then, error){
+    create(name, dateEnd, ownerId, restrictDomain, then, error){
         const contract = {
             'auditLimit': 0,
             'dateEnd' : dateEnd,
             'name' : name,
-            'ownerId' : ownerId
+            'ownerId' : ownerId,
+            'restrictDomain' : restrictDomain
         };
 
         return this.axios({
