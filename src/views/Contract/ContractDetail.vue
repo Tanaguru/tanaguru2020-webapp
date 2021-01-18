@@ -241,19 +241,19 @@ export default {
         },
 
         deletingProjectCondition(){
-			return this.$store.state.auth.user.appRole.overrideProjectRole.authorities.some(authority => {
+			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
                 return authority.name === 'DELETE_PROJECT'
             }) ||
-            (this.currentContractUser && this.currentContractUser.projectRole.authorities.some(authority => {
+            (this.currentContractUser && this.currentContractUser.contractRole.authorities.some(authority => {
                 return authority.name === 'DELETE_PROJECT'
             }));
         },
 
         deletingUserCondition(){
-			return this.$store.state.auth.user.appRole.overrideProjectRole.authorities.some(authority => {
+			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
                 return authority.name === 'REMOVE_MEMBER'
             }) ||
-            (this.currentContractUser && this.currentContractUser.projectRole.authorities.some(authority => {
+            (this.currentContractUser && this.currentContractUser.contractRole.authorities.some(authority => {
                 return authority.name === 'REMOVE_MEMBER'
             }));
         },
