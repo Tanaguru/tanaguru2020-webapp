@@ -11,3 +11,4 @@
 
 ## 1.0.2
 - Add browser choice (Mozilla firefox, Google chrome)
+- Add a form field to find a css selector in a page (audit creation form)
