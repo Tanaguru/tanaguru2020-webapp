@@ -56,7 +56,7 @@
                   <div class="checkbox-wrapper">
                       <input type="checkbox" id="restrict-domain" v-bind:class="{'has-error': contractCreateForm.ownerError}" name="restrict-domain" v-model="contractCreateForm.restrictDomain" aria-describedby="restrict-error">
                   </div>
-                  <label class="label" for="restric-domain">Restrict contract's projects to a specific domain</label>
+                  <label class="label" for="restric-domain">{{ $t('entity.contract.restrictDomain') }}</label>
               </div>
           </div>
       </div>
@@ -151,7 +151,11 @@ export default {
               this.$emit('createContract', contract)
             },
             (err) => {
-              this.contractCreateForm.error = this.$i18n.t("form.genericError")
+              if(err.response.data.error == "CANNOT_CREATE_MULTIPLE_USER_CONTRACT"){
+                this.contractCreateForm.error = "This user has reached their contract limit"
+              } else {  
+                this.contractCreateForm.error = this.$i18n.t("form.genericError");
+              }
             }
         )
       }

@@ -72,7 +72,7 @@ export default class ContractService extends Service{
             data: contract
         })
         .then((resp) => {then(resp.data)})
-        .catch((err) => {error(err.error)});
+        .catch((err) => {error(err)});
     }
 
     modifyById(id, name, dateEnd, ownerId, then, error ){

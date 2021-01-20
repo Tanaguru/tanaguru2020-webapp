@@ -30,7 +30,11 @@
 				<p>{{ liveMsg }} {{$t('user.results')}}</p>
 			</div>
 
-			<user-table :users="filteredUsers" @deleteUser="deleteUser"></user-table>
+			<user-table 
+				:users="filteredUsers" 
+				@delete-user="deleteUser"
+			>
+			</user-table>
 		</section>
 
         <BackToTop />

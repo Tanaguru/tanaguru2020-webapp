@@ -98,14 +98,16 @@ export default {
 
 		deleteContract(contract) {
 			const index = this.contracts.indexOf(contract);
-			this.contractService.delete(
-				contract.id,
-				() => {
-					this.contracts.splice(index, 1)
+            if(index > -1){
+				this.contractService.delete(
+					contract.id,
+					() => {
+						this.contracts.splice(index, 1)
 
-				},
-				(error) => console.error(error)
-			)
+					},
+					(error) => console.error(error)
+				)
+			}
 		},
 		fireAriaLive() {
 			clearTimeout(this.timer)

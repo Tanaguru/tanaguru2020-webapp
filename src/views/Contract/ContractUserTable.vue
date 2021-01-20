@@ -103,7 +103,7 @@ export default {
 				}
 			})
 			.then(() => {
-				this.$emit('remove-user', contractUser)
+				this.$emit('delete-user', contractUser)
 				this.$modal.close()
 			})
 			.catch(() => {

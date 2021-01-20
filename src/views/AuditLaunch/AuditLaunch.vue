@@ -42,32 +42,6 @@
         <form novalidate>
             <div class="wrapper">
                 <p class="info-form">{{ $t('form.help') }}</p>
-                <section class="layout" id="section-basic-auth">
-                    <p v-if="!launchCondition && hasTryToLaunch" role="alert" id="incomplete-form" class="info-error">
-                        <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
-                            <icon-alert/>
-                        </icon-base-decorative>
-                        <span>{{ $t('audit.form.error.formError') }}</span>
-                    </p>
-                    <audit-form-section-header
-                        title="user authentification"
-                        :number="0"/>
-
-                    <!-- Basic auth -->
-                    <basic-auth-username-form
-                        :has-been-sent="hasTryToLaunch"
-                        :is-valid="isUsernameValid"
-                        v-model="auditConfigurationForm.auth.username"/>
-
-                    <basic-auth-password-form
-                        :has-been-sent="hasTryToLaunch"
-                        :is-valid="isPasswordValid"
-                        v-model="auditConfigurationForm.auth.password"/>
-                </section>
-            </div>
-
-            <div class="wrapper">
-                <p class="info-form">{{ $t('form.help') }}</p>
                 <section class="layout" id="section-definition">
                     <p v-if="!launchCondition && hasTryToLaunch" role="alert" id="incomplete-form" class="info-error">
                         <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
@@ -253,6 +227,32 @@
                 </section>
             </div>
 
+            <hr role="presentation" class="separator separator--main" v-if="isAuditTypeValid"/>
+
+            <div class="wrapper" v-if="isAuditTypeValid">
+                <section class="layout" id="section-browser">
+                    <audit-form-section-header
+                        :title="$t('audit.basicAuth.basicAuth')"
+                        :number="7"/>
+
+                        <!-- Basic auth -->
+                        <basic-auth-login-form
+                            :has-been-sent="hasTryToLaunch"
+                            :is-valid="isLoginValid"
+                            v-model="auditConfigurationForm.common.login"/>
+
+                        <basic-auth-password-form
+                            :has-been-sent="hasTryToLaunch"
+                            :is-valid="isPasswordValid"
+                            v-model="auditConfigurationForm.common.password"/>
+
+                        <basic-auth-url-form
+                            :has-been-sent="hasTryToLaunch"
+                            :is-valid="isUrlValid"
+                            v-model="auditConfigurationForm.common.url"/>
+                </section>
+            </div>
+
             <div class="wrapper" v-if="isAuditTypeValid">
                 <button class="btn btn--default-inverse btn--icon" type="button" @click="startAudit"
                         @focus="showLaunchMsg" @blur="hideLaunchMsg">
@@ -312,8 +312,9 @@ import AuditBreakpointsForm from "./form/AuditBreakpointsForm";
 import AuditWaitTimeForm from "./form/AuditWaitTimeForm";
 import AuditEnableScreenshotForm from "./form/AuditEnableScreenshotForm";
 import AuditBrowserForm from "./form/AuditBrowserForm";
-import BasicAuthUsernameForm from "./form/BasicAuthUsernameForm";
+import BasicAuthLoginForm from "./form/BasicAuthLoginForm";
 import BasicAuthPasswordForm from "./form/BasicAuthPasswordForm";
+import BasicAuthUrlForm from "./form/BasicAuthUrlForm";
 import moment from 'moment';
 import UrlHelper from "../../helper/urlhelper"
 import BreakpointHelper from "../../helper/breakpointHelper"
@@ -339,8 +340,9 @@ export default {
         AuditReferencesForm,
         AuditNameForm,
         AuditTypeForm,
-        BasicAuthUsernameForm,
+        BasicAuthLoginForm,
         BasicAuthPasswordForm,
+        BasicAuthUrlForm,
         Breadcrumbs,
         BackToTop,
         IconBaseDecorative,
@@ -374,11 +376,6 @@ export default {
             seedMustBeInDomain: true,
             auditConfigurationForm: {
 
-                auth: {
-                    username: this.$store.state.auth.user.username,
-                    password: ''
-                }, 
-
                 common: {
                     name: '',
                     selectedReferences: [],
@@ -387,7 +384,10 @@ export default {
                     breakpoints: [1920],
                     type: "page",
                     enableScreenshot: false,
-                    browser: 'chrome'
+                    browser: 'chrome',
+                    login: '',
+                    password: '',
+                    url: ''
                 },
                 site: {
                     seeds: [],
@@ -519,11 +519,27 @@ export default {
     },
     computed: {
         //Auth
-        isUsernameValid() {
-            return this.auditConfigurationForm.auth.username == this.$store.state.auth.user.username
+        isLoginValid() {
+            return !this.auditConfigurationForm.common.login.length || this.auditConfigurationForm.common.login.length > 3
         },
         isPasswordValid() {
-            return this.auditConfigurationForm.auth.password == this.$store.state.auth.user.password
+            return !this.auditConfigurationForm.common.password || this.auditConfigurationForm.common.password.length > 5
+        },
+        isUrlValid() {
+            if(this.auditConfigurationForm.common.url) {
+                if(this.project.domain) {
+                    return this.auditConfigurationForm.common.url.includes(this.project.domain) && !this.auditConfigurationForm.page.urls.includes(this.auditConfigurationForm.common.url)
+                } else {
+                    try {
+                        let parsedUrl = new URL(auditConfigurationForm.common.url);
+                    } catch (_) {
+                        return;
+                    }
+                }
+            } else {
+                return !this.auditConfigurationForm.common.url
+            }
+            
         },
 
          //Commons
@@ -561,7 +577,6 @@ export default {
 
         //Sites
         isSiteSeedsValid() {
-
             return this.auditConfigurationForm.site.seeds.every(seed => seed.includes(this.project.domain))
         },
         isCrawlerMaxDepthValid() {

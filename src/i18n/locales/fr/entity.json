@@ -36,7 +36,8 @@
 		"dateEnd": "Date de fin",
 		"dateStart": "Date de début",
 		"owner": "Propriétaire",
-		"selectOwner": "Sélectionner le propriétaire du contrat"
+		"selectOwner": "Sélectionner le propriétaire du contrat",
+		"restrictDomain": "Restreindre les projets du contrat à un domaine spécifique"
 	},
 	"project": {
 		"name": "Nom",

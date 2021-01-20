@@ -9,34 +9,34 @@
 			</tr>
 			</thead>
 			<tbody>
-			<tr v-for="contract of contracts" :key="contract.id">
-				<th scope="row">{{ contract.name }}</th>
-				<td>{{ $moment(contract.dateEnd).format('LL') }}</td>
-				<td class="td-actions">
-					<ul class="actions-list">
-						<li class="actions-list__item">
-							<router-link class="link link-independent link-independent--icon"
-										 :to="'/contracts/' + contract.id">
-								<icon-base-decorative>
-									<icon-arrow-blue/>
-								</icon-base-decorative>
-								<span>{{ $t('action.show') }}</span>
-							</router-link>
-						</li>
-						<li class="actions-list__item">
-							<button
-								class="btn btn--icon btn--nude btn-delete"
-								v-if="$store.state.auth.authorities['DELETE_CONTRACT']"
-								@click="deleteContract(contract)">
-								<icon-base-decorative>
-									<icon-delete/>
-								</icon-base-decorative>
-								<span>{{ $t('action.delete') }}</span>
-							</button>
-						</li>
-					</ul>
-				</td>
-			</tr>
+				<tr v-for="contract of contracts" :key="contract.id">
+					<th scope="row">{{ contract.name }}</th>
+					<td>{{ $moment(contract.dateEnd).format('LL') }}</td>
+					<td class="td-actions">
+						<ul class="actions-list">
+							<li class="actions-list__item">
+								<router-link class="link link-independent link-independent--icon"
+											:to="'/contracts/' + contract.id">
+									<icon-base-decorative>
+										<icon-arrow-blue/>
+									</icon-base-decorative>
+									<span>{{ $t('action.show') }}</span>
+								</router-link>
+							</li>
+							<li class="actions-list__item">
+								<button
+									class="btn btn--icon btn--nude btn-delete"
+									v-if="$store.state.auth.authorities['DELETE_CONTRACT']"
+									@click="deleteContract(contract)">
+									<icon-base-decorative>
+										<icon-delete/>
+									</icon-base-decorative>
+									<span>{{ $t('action.delete') }}</span>
+								</button>
+							</li>
+						</ul>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 
@@ -76,14 +76,13 @@ export default {
 					}
 				})
 				.then(() => {
-					this.$emit('deleteContract', contract)
-				})
-				.catch(() => {
-
-				})
-				.finally(() => {
+					this.$emit('delete-contract', contract)
 					this.$modal.close()
 				})
+				.catch(() => {
+					this.$modal.close()
+				})
+				.finally(() => {})
 		},
 	}
 }

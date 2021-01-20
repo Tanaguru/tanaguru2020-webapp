@@ -115,26 +115,11 @@
 						</div>
 					</div>
 
-                    <div class="form-column" v-if="!contract.restrictDomain">
-						<div class="form-block">
-							<label class="label" for="restrictProject">Restrict project to a defined domain</label>
-							<input
-                                class="input"
-                                type="checkbox"
-                                name="restrictProject"
-                                id="restrictProject"
-                                v-model="projectCreateForm.restrictProject"
-                            >
-						</div>
-					</div>
-                </div>
-
-				<div class="form-row">
-					<div class="form-column">
+                    <div class="form-column">
 						<div class="form-block">
 							<label class="label" for="domain">
                                 {{$t('entity.project.domain')}} 
-                                <span v-if="contract.restrictDomain || projectCreateForm.restrictProject"> *</span>
+                                <span v-if="contract.restrictDomain"> *</span>
                             </label>
 							<input
                                 class="input"
@@ -144,13 +129,13 @@
                                 :placeholder="$t('entity.project.domain')"
                                 :aria-describedBy="domainDescribedBy"
                                 v-model="projectCreateForm.domain"
-                                required
+                                :required="contract.restrictDomain"
                             >
 							<p class="info-text" id="domain-constraint">(example : http://www.website.com/)</p>
 							<p class="info-error" id="domain-error">{{projectCreateForm.domainError}}</p>
 						</div>
 					</div>
-				</div>
+                </div>
 
                 <button class="btn btn--default" type="submit">{{$t('action.create')}}</button>
                 <p v-if="projectCreateForm.error" class="info-error">{{projectCreateForm.error}}</p>
@@ -224,7 +209,6 @@ export default {
                 domainError: "",
                 error: "",
                 nameError: "",
-                restrictProject: false
             },
             promoteSuccessMsg: ""
         }
@@ -324,7 +308,7 @@ export default {
 				this.projectCreateForm.nameError = this.$i18n.t("form.emptyInput");
 				return;
 			}
-            if(this.projectCreateForm.restrictProject || this.contract.restrictDomain ) {
+            if(this.contract.restrictDomain ) {
                 try {
                     let parsedUrl = new URL(this.projectCreateForm.domain);
                 } catch (_) {
@@ -336,7 +320,6 @@ export default {
 				this.projectCreateForm.name,
 				this.projectCreateForm.domain,
                 this.contract.id,
-                this.projectCreateForm.restrictProject,
 				(project) => {
 					this.projects.push(project)
 					this.projectCreateForm.successMsg = this.$i18n.t('form.projectCreation')

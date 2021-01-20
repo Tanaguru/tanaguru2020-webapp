@@ -1,32 +1,32 @@
 <template>
     <div class="layout-content">
+        
         <input-validation-display
             class="layout-content__aside"
             :value="isValid"/>
 
         <div class="layout-content__main">
             <div class="input-name form-block">
-                <label class="label" for="username">Username *
+                <label class="label" for="login">{{ $t('audit.basicAuth.password') }}
                     <span v-if="isValid"
-                          class="screen-reader-text">{{ $t('audit.form.help.checked') }}</span>
+                        class="screen-reader-text">{{ $t('audit.form.help.checked') }}</span>
                     <span v-else class="screen-reader-text">{{ $t('audit.form.help.empty') }}</span>
                 </label>
-                <input class="input" :class="[{'has-error':usernameError && !isValid}]"
-                       type="text"
-                       name="username"
-                       id="username"
-                       v-model="username"
-                       @input="onUsernameInput"
-                       @focus="hideError"
-                       @blur="showError"
-                       required
-                       :aria-describedby="usernameError ? 'info-error' : ''"/>
+                <input class="input" :class="[{'has-error':loginError && !isValid}]"
+                    type="text"
+                    name="login"
+                    id="login"
+                    v-model="login"
+                    @input="onLoginInput"
+                    @focus="hideError"
+                    @blur="showError"
+                    :aria-describedby="loginError ? 'info-error' : ''"/>
 
-                <p v-if="!isValid && usernameError" role="alert" class="info-error" id="username-error">
+                <p v-if="!isValid && loginError" role="alert" class="info-error" id="login-error">
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-alert/>
                     </icon-base-decorative>
-                    <span>Your username is incorrect.</span>
+                    <span>{{ $t('audit.basicAuth.loginError') }}</span>
                 </p>
             </div>
         </div>
@@ -38,7 +38,7 @@ import IconBaseDecorative from '../../../components/icons/IconBaseDecorative';
 import IconAlert from '../../../components/icons/IconAlert';
 import InputValidationDisplay from "../InputValidationDisplay";
 export default {
-    name: 'BasicAuthUsernameForm',
+    name: 'BasicAuthLoginForm',
     components: {
         InputValidationDisplay,
         IconBaseDecorative,
@@ -47,21 +47,21 @@ export default {
     props: ['value', 'isValid'],
     data() {
         return {
-            username: this.value,
+            login: this.value,
             hasInput: false,
-            usernameError: false,
+            loginError: false,
         }
     },
     methods:{
-        onUsernameInput(){
+        onLoginInput(){
             this.hasInput = true;
-            this.$emit('input', this.username);
+            this.$emit('input', this.login);
         },
         showError() {
-            this.usernameError = true
+            this.loginError = true
         },
         hideError() {
-            this.usernameError = false
+            this.loginError = false
         }
     },
     
