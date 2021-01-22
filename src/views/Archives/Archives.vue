@@ -108,6 +108,7 @@ export default {
             ],
             audits: [],
             types: ['PAGE', 'SITE', 'SCENARIO', 'UPLOAD'],
+            deleteAuditError: ""
         }
     },
     metaInfo() {
@@ -144,7 +145,15 @@ export default {
                     () => {
                         this.audits.splice(index, 1)
                     },
-                    (error) => console.error(error)
+                    (error) => {
+                        if(err.response.data.error == "AUDIT_NOT_FOUND"){
+                            this.deleteAuditError = this.$i18n.t("form.errorMsg.audit.notFound")
+                        } else if(err.response.status == "403"){
+                            this.deleteAuditError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+                        } else {  
+                            this.deleteAuditError = this.$i18n.t("form.errorMsg.genericError");
+                        }
+                    }
                 )
             }
         },

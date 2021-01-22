@@ -47,10 +47,12 @@
 		},
 		"contract": {
 			"notFound": "This contract does not exist.",
-			"projectLimit": "This contract has reached its maximum number of projects allowed."
+			"projectLimit": "This contract has reached its maximum number of projects allowed.",
+			"expired": "The contract is passed its validity date"
 		},
 		"project": {
-			"notFound": "This project does not exist."
+			"notFound": "This project does not exist.",
+			"invalidDomain": "The domain is not a valid one"
 		},
 		"others": {
 			"nameError": "The name should be less than 50 characters long.",

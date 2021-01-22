@@ -338,15 +338,17 @@ export default {
 					this.projectCreateForm.successMsg = this.$i18n.t('form.successMsg.projectCreation')
 				},
 				(error) => {
-                    if(err.response.data.error == "CONTRACT_NOT_FOUND"){
+                    if(error.response.data.error == "CONTRACT_NOT_FOUND"){
     					this.projectCreateForm.error = this.$i18n.t('form.errorMsg.contract.notFound')
-                    } else if (err.response.data.error == "PROJECT_LIMIT_FOR_CONTRACT"){
+                    } else if (error.response.data.error == "PROJECT_LIMIT_FOR_CONTRACT"){
                         this.projectCreateForm.error = this.$i18n.t('form.errorMsg.contract.projectLimit')
-                    } else if (err.response.status == "403") {
+                    } else if (error.response.data.error == "INVALID_DOMAIN"){
+                        this.projectCreateForm.error = this.$i18n.t('form.errorMsg.project.invalidDomain')
+                    } else if (error.response.status == "403") {
     					this.projectCreateForm.error = this.$i18n.t('form.errorMsg.user.permissionDenied')
                     } else {
     					this.projectCreateForm.error = this.$i18n.t('form.errorMsg.genericError')
-                    } 
+                    }
 				}
 			);
 			this.projectCreateForm.error = "";

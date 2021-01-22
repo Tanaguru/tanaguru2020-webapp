@@ -18,7 +18,7 @@ export default class ProjectService extends Service{
             data: project
         })
         .then((project) => {then(project.data)})
-        .catch((err) => {error(err)});
+        .catch(err => {error(err)});
     }
 
     findByContractId(id, then, error){

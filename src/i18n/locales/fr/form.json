@@ -44,11 +44,13 @@
 			"existingEmail": "Cette adresse e-mail est déjà enregistrée."
 		},
 		"contract": {
-			"notFound": "Ce contrat n'existe pas."
+			"notFound": "Ce contrat n'existe pas.",
+			"projectLimit": "Ce contrat a atteint la limite du nombre de projets autorisées.",
+			"expired": "La date de validité du contrat a expiré"
 		},
 		"project": {
 			"notFound": "Ce projet n'existe pas.",
-			"projectLimit": "Ce contrat a atteint la limite du nombre de projets autorisées."
+			"invalidDomain": "Le domaine n'est pas valide."
 		},
 		"others": {
 			"nameError": "Le nom doit être inférieur à 50 caractères.",

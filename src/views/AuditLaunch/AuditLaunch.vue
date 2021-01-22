@@ -512,7 +512,19 @@ export default {
                 parameters,
                 (audit) => this.$router.push('/audits/' + audit.id),
                 (error) => {
-                    this.auditConfigurationForm.error = error;
+                    if(error.response.data.error == "PROJECT_NOT_FOUND"){
+    					this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.project.notFound')
+                    } else if (error.response.data.error == "CONTRACT_DATE_PASSED"){
+                        this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.contract.expired')
+                    } else if (error.response.data.error == "NO_MAIN_REFERENCE"){
+                        this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.project.noMainReference')
+                    } else if (error.response.data.error == "NO_USABLE_REFERENCE"){
+                        this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.project.noUsableReference')
+                    } else if (error.response.status == "403") {
+    					this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.user.permissionDenied')
+                    } else {
+    					this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.genericError')
+                    }
                 }
             )
         },
