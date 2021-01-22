@@ -12,8 +12,8 @@
                          class="custom-fieldset">
                         <p class="custom-fieldset__legend" :id="`breakpoint-${i}`">
                             {{$t('audit.resolution.default')}}
-                            <span v-if="!breakpoint" class="screen-reader-text">{{$t('audit.form.help.checked')}}</span>
-                            <span v-else class="screen-reader-text">{{$t('audit.form.help.empty')}}</span>
+                            <span v-if="!breakpoint" class="screen-reader-text">{{$t('audit.form.indications.help.checked')}}</span>
+                            <span v-else class="screen-reader-text">{{$t('audit.form.indications.help.empty')}}</span>
                         </p>
 
                         <div class="custom-fieldset__content">
@@ -37,7 +37,7 @@
 								<icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
 									<icon-alert/>
 								</icon-base-decorative>
-								<span>{{ $t('form.emptyInput') }}</span>
+								<span>{{ $t('form.errorMsg.emptyInput') }}</span>
 							</p>
 							<p v-else-if="!isBreakPointValid(breakpoint)" role="alert" class="info-error" :id='`valid-error-${i}`'>
 								<icon-base-decorative width="16" height="16" viewBox="0 0 16 16">

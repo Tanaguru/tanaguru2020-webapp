@@ -8,8 +8,8 @@
             <div class="input-name form-block">
                 <label class="label" for="url">URL 
                     <span v-if="isValid"
-                          class="screen-reader-text">{{ $t('audit.form.help.checked') }}</span>
-                    <span v-else class="screen-reader-text">{{ $t('audit.form.help.empty') }}</span>
+                          class="screen-reader-text">{{ $t('audit.form.indications.help.checked') }}</span>
+                    <span v-else class="screen-reader-text">{{ $t('audit.form.indications.help.empty') }}</span>
                 </label>
                 <input class="input" :class="[{'has-error':urlError && !isValid}]"
                        type="text"

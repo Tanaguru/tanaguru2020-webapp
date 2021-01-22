@@ -46,7 +46,7 @@
                         <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                             <icon-alert/>
                         </icon-base-decorative>
-                        <span>{{ $t('form.emptyInput') }}</span>
+                        <span>{{ $t('form.errorMsg.emptyInput') }}</span>
                     </p>
                     <p v-if="showErrorMsgs && inputPlainText && !validUrlsInFreeForm" role="alert" class="info-error" id='invalid-freeform-urls-error'>
                         <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
@@ -91,7 +91,7 @@
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-alert/>
                             </icon-base-decorative>
-                            <span>{{ $t('form.emptyInput') }}</span>
+                            <span>{{ $t('form.errorMsg.emptyInput') }}</span>
                         </p>
                         <p v-if="showItemError.includes(i) && url && !checkValidUrl(url, projectDomain, isSeedMustBeInDomain)" role="alert" class="info-error" :id='`valid-url-error-${i}`'>
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">

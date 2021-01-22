@@ -20,19 +20,19 @@
                                 <icon-launch/>
                             </icon-base-decorative>
                             <span>{{ $t('action.auditStart') }}</span>
-                            <span v-if="!launchCondition" class="screen-reader-text">{{ $t('form.missingFields') }}</span>
+                            <span v-if="!launchCondition" class="screen-reader-text">{{ $t('form.errorMsg.missingFields') }}</span>
                         </button>
                         <p class="launch-info" v-if="launchCondition && launchMsg">
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-valid/>
                             </icon-base-decorative>
-                            <span>{{ $t('audit.form.help.ready') }}</span>
+                            <span>{{ $t('audit.form.indications.help.ready') }}</span>
                         </p>
                         <p v-else-if="launchMsg" class="info-error">
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-alert/>
                             </icon-base-decorative>
-                            <span>{{ $t('form.missingFields') }}</span>
+                            <span>{{ $t('form.errorMsg.missingFields') }}</span>
                         </p>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
 
         <form novalidate>
             <div class="wrapper">
-                <p class="info-form">{{ $t('form.help') }}</p>
+                <p class="info-form">{{ $t('form.indications.help') }}</p>
                 <section class="layout" id="section-definition">
                     <p v-if="!launchCondition && hasTryToLaunch" role="alert" id="incomplete-form" class="info-error">
                         <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
@@ -216,7 +216,7 @@
             <div class="wrapper" v-if="isAuditTypeValid">
                 <section class="layout" id="section-browser">
                     <audit-form-section-header
-                        :title="$t('audit.definition.browser.title')"
+                        :title="$t('audit.definition.browsers.title')"
                         :number="6"/>
 
                     <audit-browser-form
@@ -265,13 +265,13 @@
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-valid/>
                     </icon-base-decorative>
-                    <span>{{$t('audit.form.help.ready')}}</span>
+                    <span>{{$t('audit.form.indications.help.ready')}}</span>
                 </p>
                 <p v-else-if="launchMsg" v-show="hasTryToLaunch" class="info-error">
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-alert/>
                     </icon-base-decorative>
-                    <span>{{$t('form.missingFields')}}</span>
+                    <span>{{$t('form.errorMsg.missingFields')}}</span>
                 </p>
             </div>
         </form>

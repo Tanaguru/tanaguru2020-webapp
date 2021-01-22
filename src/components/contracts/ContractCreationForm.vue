@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>{{ $t('form.help') }}</p>
+    <p>{{ $t('form.indications.help') }}</p>
     <form @submit.prevent="createContract" novalidate >
 				<div class="form-row">
 					<div class="form-column">
@@ -16,7 +16,7 @@
                 :placeholder="$t('entity.contract.name')"
                 v-model="contractCreateForm.name"
                 required>
-							<p class="info-text" id="contract-name-constraint">{{ $t('form.nameConstraint') }}</p>
+							<p class="info-text" id="contract-name-constraint">{{ $t('form.indications.nameConstraint') }}</p>
 							<p v-show="contractCreateForm.nameError" id="name-error" class="info-error">{{contractCreateForm.nameError}}</p>
 						</div>
 					</div>
@@ -100,12 +100,12 @@ export default {
     checkName() {
       this.contractCreateForm.nameError = "";
       if (!this.contractCreateForm.name) {
-        this.contractCreateForm.nameError = this.$i18n.t("form.emptyInput");
+        this.contractCreateForm.nameError = this.$i18n.t("form.errorMsg.emptyInput");
         return false;
       }
 
       if (this.contractCreateForm.name.length > 50) {
-        this.contractCreateForm.nameError = this.$i18n.t("form.nameError");
+        this.contractCreateForm.nameError = this.$i18n.t("form.errorMsg.others.nameError");
         return false;
       }
       return true;
@@ -114,7 +114,7 @@ export default {
     checkOwner() {
       this.contractCreateForm.ownerError = "";
       if (this.contractCreateForm.ownerId == null) {
-        this.contractCreateForm.ownerError = this.$i18n.t("form.emptyInput");
+        this.contractCreateForm.ownerError = this.$i18n.t("form.errorMsg.emptyInput");
         return false;
       }
       return true;
@@ -123,7 +123,7 @@ export default {
     checkDateEnd() {
       this.contractCreateForm.dateEndError = "";
       if (!this.contractCreateForm.dateEnd) {
-        this.contractCreateForm.dateError = this.$i18n.t("form.emptyInput");
+        this.contractCreateForm.dateError = this.$i18n.t("form.errorMsg.emptyInput");
         return false;
       }
       return true;
@@ -142,21 +142,25 @@ export default {
 
       if (isFormValid) {
         this.contractService.create(
-            this.contractCreateForm.name,
-            this.contractCreateForm.dateEnd,
-            this.contractCreateForm.ownerId,
-            this.contractCreateForm.restrictDomain,
-            (contract) => {
-              this.successMsg = this.$i18n.t("form.contractCreation")
-              this.$emit('createContract', contract)
-            },
-            (err) => {
-              if(err.response.data.error == "CANNOT_CREATE_MULTIPLE_USER_CONTRACT"){
-                this.contractCreateForm.error = "This user has reached their contract limit"
-              } else {  
-                this.contractCreateForm.error = this.$i18n.t("form.genericError");
-              }
+          this.contractCreateForm.name,
+          this.contractCreateForm.dateEnd,
+          this.contractCreateForm.ownerId,
+          this.contractCreateForm.restrictDomain,
+          (contract) => {
+            this.successMsg = this.$i18n.t("form.successMsg.contractCreation")
+            this.$emit('createContract', contract)
+          },
+          (err) => {
+            if(err.response.data.error == "CANNOT_CREATE_MULTIPLE_USER_CONTRACT"){
+              this.contractCreateForm.error = this.$i18n.t("form.errorMsg.user.limitReached")
+            } else if(err.response.data.error == "USER_NOT_FOUND"){
+              this.contractCreateForm.error = this.$i18n.t("form.errorMsg.user.notFound")
+            } else if(err.response.status == "403"){
+              this.contractCreateForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
+            } else {  
+              this.contractCreateForm.error = this.$i18n.t("form.errorMsg.genericError");
             }
+          }
         )
       }
     }

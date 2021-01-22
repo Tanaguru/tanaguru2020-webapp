@@ -103,9 +103,16 @@ export default {
 					contract.id,
 					() => {
 						this.contracts.splice(index, 1)
-
 					},
-					(error) => console.error(error)
+					(error) => {
+						if(err.response.data.error == "CONTRACT_NOT_FOUND"){
+							this.deleteContractError = this.$i18n.t("form.errorMsg.contract.notFound")
+						} else if(err.response.status == "403"){
+							this.deleteContractError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+						} else {  
+							this.deleteContractError = this.$i18n.t("form.errorMsg.genericError");
+						}
+					}
 				)
 			}
 		},

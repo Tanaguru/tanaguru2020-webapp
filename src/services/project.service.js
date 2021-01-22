@@ -5,12 +5,11 @@ export default class ProjectService extends Service{
         super('projects', axios)
     }
 
-    create(name, domain, contractId, restrictDomain, then, error){
+    create(name, domain, contractId, then, error){
         const project = {
             'name' : name,
             'domain' : domain,
             'contractId' : contractId,
-            'restrictDomain' : restrictDomain
         };
   
           return this.axios({

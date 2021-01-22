@@ -3,7 +3,7 @@
         <h2 class="user__title-2">{{$t('action.changePassword')}}</h2>
 
         <div>
-            <p>{{$t('form.help')}}</p>
+            <p>{{$t('form.indications.help')}}</p>
             <form @submit.prevent="modifyPassword" novalidate>
                 <div class="form-block">
                     <label class="label" for="password2">{{$t('entity.user.newPassword')}} *</label>
@@ -74,12 +74,12 @@
                             this.token,
                             (user) => {
                                 this.modifyPasswordForm.active = false;
-                                this.modifyPasswordForm.successMsg = this.$i18n.t("form.savedChange")
+                                this.modifyPasswordForm.successMsg = this.$i18n.t("form.successMsg.savedChangesChange")
                             },
-                            (error) => this.modifyPasswordForm.error = this.$i18n.t("form.genericError")
+                            (error) => this.modifyPasswordForm.error = this.$i18n.t("form.errorMsg.genericError")
                         )
                     } else {
-                        this.modifyPasswordForm.error = this.$i18n.t("form.incorrectConfirmation")
+                        this.modifyPasswordForm.error = this.$i18n.t("form.errorMsg.password.incorrectConfirmation")
                     }
 
                     this.modifyPasswordForm.password = "";

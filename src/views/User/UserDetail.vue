@@ -10,13 +10,13 @@
             <h2 class="user__title-2">{{ $t('user.profile') }}</h2>
 
             <div v-if="modifyUserForm.active">
-                <p>{{ $t('form.help') }}</p>
+                <p>{{ $t('form.indications.help') }}</p>
                 <form @submit.prevent="modifyUser" novalidate>
                     <div class="form-row">
                         <div class="form-column">
                             <div class="form-block">
                                 <label class="label" for="username">{{ $t('entity.user.username') }} *</label>
-                                <p class="info-text">{{ $t('form.invalidUsername') }}</p>
+                                <p class="info-text">{{ $t('form.errorMsg.username.invalidUsername') }}</p>
                                 <input
                                     class="input"
                                     v-bind:class="{ 'has-error': modifyUserForm.usernameError }"
@@ -111,7 +111,7 @@
             <h2 class="user__title-2">{{ $t('action.changePassword') }}</h2>
 
             <div v-if="modifyPasswordForm.active">
-                <p>{{ $t('form.help') }}</p>
+                <p>{{ $t('form.indications.help') }}</p>
                 <form @submit.prevent="modifyPassword" novalidate>
                     <div class="form-block">
                         <label class="label" for="password2">{{ $t('entity.user.newPassword') }} *</label>
@@ -240,7 +240,7 @@ export default {
 
             if (this.isCurrentUser) {
                 if (this.modifyUserForm.username === '' || this.modifyUserForm.username.length < 4) {
-                    this.modifyUserForm.usernameError = this.$i18n.t("form.invalidUsername")
+                    this.modifyUserForm.usernameError = this.$i18n.t("form.errorMsg.username.invalidUsername")
                 }
                 if (this.modifyUserForm.email === '') {
                     this.modifyUserForm.emailError = this.$i18n.t("entity.user.emailError")
@@ -258,15 +258,15 @@ export default {
                             this.$store.state.auth.user = user;
                             this.user = user;
                             this.modifyUserForm.active = false;
-                            this.modifyUserForm.successMsg = this.$i18n.t("form.savedChange")
+                            this.modifyUserForm.successMsg = this.$i18n.t("form.successMsg.savedChangesChange")
                         },
-                        (error) => this.modifyUserForm.error = this.$i18n.t("form.genericError")
+                        (error) => this.modifyUserForm.error = this.$i18n.t("form.errorMsg.genericError")
                     )
                 }
 
             } else {
                 if (this.modifyUserForm.username === '' || this.modifyUserForm.username.length < 4) {
-                    this.modifyUserForm.usernameError = this.$i18n.t("form.invalidUsername")
+                    this.modifyUserForm.usernameError = this.$i18n.t("form.errorMsg.username.invalidUsername")
                 }
                 if (this.modifyUserForm.email === '') {
                     this.modifyUserForm.emailError = this.$i18n.t("entity.user.emailError")
@@ -282,9 +282,9 @@ export default {
                         (user) => {
                             this.user = user;
                             this.modifyUserForm.active = false;
-                            this.modifyUserForm.successMsg = this.$i18n.t("form.savedChange")
+                            this.modifyUserForm.successMsg = this.$i18n.t("form.successMsg.savedChangesChange")
                         },
-                        (error) => this.modifyUserForm.error = this.$i18n.t("form.genericError")
+                        (error) => this.modifyUserForm.error = this.$i18n.t("form.errorMsg.genericError")
                     )
                 }
             }
@@ -298,17 +298,17 @@ export default {
         modifyPassword() {
             if(this.modifyPasswordForm.password.length == 0 || this.modifyPasswordForm.passwordConfirm.length == 0){
                 if(this.modifyPasswordForm.password.length == 0){
-                    this.modifyPasswordForm.passwordError = this.$i18n.t("form.emptyInput")
+                    this.modifyPasswordForm.passwordError = this.$i18n.t("form.errorMsg.emptyInput")
                 }
                 if (this.modifyPasswordForm.passwordConfirm.length == 0){
-                    this.modifyPasswordForm.confirmationError = this.$i18n.t("form.emptyInput")
+                    this.modifyPasswordForm.confirmationError = this.$i18n.t("form.errorMsg.emptyInput")
                 }
             }
             else if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-,;:_]).{8,}$/.test(this.modifyPasswordForm.password) == false) {
                 this.modifyPasswordForm.confirmationError = "Your password should be at least 8 characters long and contain at least 1 upper case, 1 lower case, 1 number and 1 special character."
             }
             else if (this.modifyPasswordForm.password != this.modifyPasswordForm.passwordConfirm) {
-                this.modifyPasswordForm.error = this.$i18n.t("form.incorrectConfirmation")
+                this.modifyPasswordForm.error = this.$i18n.t("form.errorMsg.password.incorrectConfirmation")
             }
             else {
                 this.modifyPasswordForm.error = "";
@@ -318,9 +318,9 @@ export default {
                     null,
                     (user) => {
                         this.modifyPasswordForm.active = false;
-                        this.modifyPasswordForm.successMsg = this.$i18n.t("form.savedChange")
+                        this.modifyPasswordForm.successMsg = this.$i18n.t("form.successMsg.savedChangesChange")
                     },
-                    (error) => this.modifyPasswordForm.error = this.$i18n.t("form.genericError")
+                    (error) => this.modifyPasswordForm.error = this.$i18n.t("form.errorMsg.genericError")
                 )
             }
         }

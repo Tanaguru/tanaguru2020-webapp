@@ -8,9 +8,9 @@
             <div class="form-block">
                 <fieldset class="checkbox-wrapper checkbox-guidelines">
 					<legend class="checkbox-wrapper__legend">{{ $t('audit.guidelines.reference.title') }} *
-						<span v-if="isValid" class="screen-reader-text">{{ $t('audit.form.help.checked') }}</span>
+						<span v-if="isValid" class="screen-reader-text">{{ $t('audit.form.indications.help.checked') }}</span>
 
-						<span v-else class="screen-reader-text">{{ $t('audit.form.help.empty') }}</span>
+						<span v-else class="screen-reader-text">{{ $t('audit.form.indications.help.empty') }}</span>
 					</legend>
 
 					<p class="info-text">{{ $t('audit.guidelines.reference.explanation') }}</p>

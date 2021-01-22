@@ -9,8 +9,8 @@
             <div class="input-name form-block">
                 <label class="label" for="login">{{ $t('audit.basicAuth.password') }}
                     <span v-if="isValid"
-                        class="screen-reader-text">{{ $t('audit.form.help.checked') }}</span>
-                    <span v-else class="screen-reader-text">{{ $t('audit.form.help.empty') }}</span>
+                        class="screen-reader-text">{{ $t('audit.form.indications.help.checked') }}</span>
+                    <span v-else class="screen-reader-text">{{ $t('audit.form.indications.help.empty') }}</span>
                 </label>
                 <input class="input" :class="[{'has-error':loginError && !isValid}]"
                     type="text"

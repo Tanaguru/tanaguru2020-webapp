@@ -155,7 +155,13 @@ export default {
                 () => {
                 },
                 (error) => {
-                    console.error(error)
+                    if(err.response.data.error == "AUDIT_NOT_FOUND"){
+                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.audit.notFound")
+                    } else if(err.response.status == "403"){
+                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+                    } else {  
+                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.genericError");
+                    }
                 }
             );
         }
