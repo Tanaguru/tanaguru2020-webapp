@@ -82,13 +82,13 @@
             </form>
 
 			<ContractUserTable
-					:contract-users="contractUsers"
-					@remove-user="removeUser"
-					@promote-user="promoteUser"
-					:deletingCondition="deletingUserCondition"
-					:addingCondition="addingCondition"
-					:promoteCondition="promoteCondition"
-					:promoteSuccessMsg="promoteSuccessMsg" />
+                :contract-users="contractUsers"
+                @remove-user="removeUser"
+                @promote-user="promoteUser"
+                :deletingCondition="deletingUserCondition"
+                :addingCondition="addingCondition"
+                :promoteCondition="promoteCondition"
+                :promoteSuccessMsg="promoteSuccessMsg" />
         </article>
 
         <!-- PROJECTS BY CONTRACT -->
@@ -146,7 +146,8 @@
 		<article v-show="projects.length > 0">
 			<h2 class="contract__title-2" id="table-projects">{{$t('contract.projectsList')}}</h2>
 
-			<ContractProjectTable :projects="projects" :deletingCondition="deletingProjectCondition" @delete-project="deleteProject" :userRemoveError="userRemoveError" />
+			<ContractProjectTable 
+                :projects="projects" :deletingCondition="deletingProjectCondition" @delete-project="deleteProject" :userRemoveError="userRemoveError" />
 		</article>
 
         <BackToTop />

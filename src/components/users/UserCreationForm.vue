@@ -17,7 +17,7 @@
 							:placeholder="$t('entity.user.username')"
 							v-model="userCreateForm.username"
 							required>
-						<p class="info-text" id="username-constraint">{{ $t('straint') }}</p>
+						<p class="info-text" id="username-constraint">{{ $t('form.indications.usernameConstraint') }}</p>
 						<p v-if="userCreateForm.usernameError" id="username-error" class="info-error">
 							{{ userCreateForm.usernameError }}</p>
 					</div>
