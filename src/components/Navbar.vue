@@ -68,9 +68,6 @@ export default {
 
 			})
 		}
-	},
-	created(){
-		console.log(this.NAVBAR_LINKS)
 	}
 }
 </script>
