@@ -76,7 +76,7 @@ export default {
 					}
 				})
 				.then(() => {
-					this.$emit('deleteContract', contract)
+					this.$emit('delete-contract', contract)
 				})
 				.catch(() => {
 
