@@ -20,7 +20,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="audit of audits" :key="audit.id" v-if="audit.type == type && totalPagesByAudit[audit.id]">
+            <tr v-for="audit of audits" :key="audit.id" v-if="audit.type === type && totalPagesByAudit[audit.id] !== undefined">
                 <th scope="row">{{ audit.name }}</th>
                 <td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
                 <td>{{ totalPagesByAudit[audit.id] }}</td>
@@ -35,7 +35,8 @@
 								<span>{{ $t('action.show') }}</span>
 							</router-link>
 						</li>
-						<li class="actions-list__item">
+						<li class="actions-list__item"
+							v-if="audit.status === 'DONE' || audit.status === 'ERROR'">
 							<button
 								class="btn btn--icon btn--nude"
 								@click="confirmAuditDeletion(audit)">
@@ -45,7 +46,8 @@
 								<span>{{ $t('action.delete') }}</span>
 							</button>
 						</li>
-						<li class="actions-list__item">
+						<li class="actions-list__item"
+							v-if="audit.status === 'DONE' || audit.status === 'ERROR'">
 							<button
 								class="btn btn--icon btn--nude"
 								@click="confirmAuditScreenshotDeletion(audit)">
@@ -108,7 +110,7 @@ export default {
 			})
 			.finally(() => {})
         },
-        
+
         confirmAuditScreenshotDeletion(audit) {
             this.$modal
 			.confirm(DeletionModal, this.$t('deletionModal.delete') + "all screenshots from" + audit.name.toUpperCase(), {
