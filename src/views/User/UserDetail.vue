@@ -335,18 +335,10 @@ export default {
                     this.$route.params.id,
                     (user) => {
                         this.user = user
-
-                        if (this.$store.state.auth.user.appRole.name === 'USER') {
-                            this.breadcrumbProps.push({
-                                name: 'Configuration',
-                                path: '/configuration'
-                            })
-                        } else {
-                            this.breadcrumbProps.push({
-                                name: 'Administration',
-                                path: '/administration'
-                            })
-                        }
+                        this.breadcrumbProps.push({
+                            name: 'Administration',
+                            path: '/administration'
+                        })
                         this.breadcrumbProps.push({
                             name: 'Profil de ' + this.user.username,
                             path: '/users/' + this.user.id

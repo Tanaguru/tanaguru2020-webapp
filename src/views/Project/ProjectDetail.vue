@@ -124,18 +124,10 @@
 				this.$route.params.id,
 				(project) => {
 					this.project = project
-
-					if(this.$store.state.auth.user.appRole.name == 'USER'){
-						this.breadcrumbProps.push({
-							name : 'Configuration',
-							path : '/configuration'
-						})
-					} else {
-						this.breadcrumbProps.push({
-							name : 'Administration',
-							path : '/administration'
-						})
-					}
+					this.breadcrumbProps.push({
+						name : 'Administration',
+						path : '/administration'
+					})
                     this.breadcrumbProps.push({
                         name : this.project.contract.name,
                         path : '/contracts/' + this.project.contract.id

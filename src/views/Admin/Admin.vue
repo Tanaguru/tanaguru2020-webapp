@@ -5,15 +5,17 @@
 				<adminContractList :users="users" />
 			</Tab>
 
-			<Tab :name="$t('entity.user.users')" class="tabs-wrapper">
-				<adminUserList :users="users"  @create-user="createUser" />
-			</Tab>
+			<div v-if="this.$store.state.auth.user.appRole.name !== 'USER'">
+				<Tab :name="$t('entity.user.users')" class="tabs-wrapper">
+					<adminUserList :users="users"  @create-user="createUser" />
+				</Tab>
 
 
-			<Tab v-if="showReferenceTab"
-				 :name="$t('entity.reference.references')" class="tabs-wrapper">
-				<reference-tab />
-			</Tab>
+				<Tab v-if="showReferenceTab"
+					:name="$t('entity.reference.references')" class="tabs-wrapper">
+					<reference-tab />
+				</Tab>
+			</div>
 		</Tabs>
     </main>
 </template>
@@ -56,10 +58,6 @@ export default {
 		}
 	},
 	created(){
-		if(this.$store.state.auth.user.appRole.name == 'USER'){
-			this.$router.replace('/configuration')
-		}
-
 		this.userService.findAll(
 			users => {
 				this.users = users
