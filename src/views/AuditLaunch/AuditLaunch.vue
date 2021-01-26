@@ -421,7 +421,7 @@ export default {
             (activeBrowsers) => {
                 this.activeBrowsers = activeBrowsers
                 if(this.activeBrowsers.length > 0){
-                    this.auditConfigurationForm.common.browser = activeBrowsers.contains('firefox') ?
+                    this.auditConfigurationForm.common.browser = activeBrowsers.includes('firefox') ?
 						'firefox' :
 						this.activeBrowsers[0];
                 }
@@ -513,6 +513,8 @@ export default {
         //Pages
         checkValidUrl: UrlHelper.checkValidUrl,
         isPageUrlsValid() {
+        	console.log(this.project.domain);
+        	console.log(this.auditConfigurationForm.page.urls)
             return this.auditConfigurationForm.page.urls.every(url => url.includes(this.project.domain))
         },
 
