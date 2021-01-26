@@ -421,7 +421,9 @@ export default {
             (activeBrowsers) => {
                 this.activeBrowsers = activeBrowsers
                 if(this.activeBrowsers.length > 0){
-                    this.auditConfigurationForm.common.browser = this.activeBrowsers[0];
+                    this.auditConfigurationForm.common.browser = activeBrowsers.contains('firefox') ?
+						'firefox' :
+						this.activeBrowsers[0];
                 }
             },
             (error) => {
