@@ -23,7 +23,7 @@ export default class ProjectService extends Service{
 
     findByContractId(id, then, error){
         return this.axios({
-            url: this.controllerName + '/by-contract/' + id, 
+            url: this.controllerName + '/by-contract/' + id,
             method: 'get',
           })
           .then(resp => {
@@ -47,9 +47,22 @@ export default class ProjectService extends Service{
         })
     }
 
+    findByAuthorityByProjectId(id, then, error){
+        return this.axios({
+            url: this.controllerName + '/' + id + '/authorities',
+            method: 'get',
+        })
+            .then(resp => {
+                then(resp.data)
+            })
+            .catch(err => {
+                error(err)
+            })
+    }
+
     findMemberOfByContractId(id, then, error){
         return this.axios({
-            url: this.controllerName + '/member-of/by-contract/' + id, 
+            url: this.controllerName + '/member-of/by-contract/' + id,
             method: 'get',
           })
           .then(resp => {
@@ -102,4 +115,6 @@ export default class ProjectService extends Service{
         .then((user) => {then(user.data)})
         .catch((err) => {error(err)});
     }
+
+
 }

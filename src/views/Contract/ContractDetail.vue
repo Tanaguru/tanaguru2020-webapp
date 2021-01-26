@@ -147,7 +147,10 @@
 			<h2 class="contract__title-2" id="table-projects">{{$t('contract.projectsList')}}</h2>
 
 			<ContractProjectTable 
-                :projects="projects" :deletingCondition="deletingProjectCondition" @delete-project="deleteProject" :userRemoveError="userRemoveError" />
+                :projects="projects" 
+                :deletingCondition="deletingProjectCondition" 
+                @delete-project="deleteProject" 
+                :userRemoveError="userRemoveError" />
 		</article>
 
         <BackToTop />
@@ -188,6 +191,7 @@ export default {
             users: [],
             contractUsers: [],
 			contractOwner: null,
+			authorityByProjectId: {},
             modifyContractForm: {
                 active: false,
                 name: "",
@@ -241,14 +245,6 @@ export default {
 			}) ||
             (this.currentContractUser && this.currentContractUser.contractRole.authorities.some(authority => {
                 return authority.name === 'CREATE_PROJECT'
-            }));
-        },
-        deletingProjectCondition(){
-			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
-                return authority.name === 'DELETE_PROJECT'
-            }) ||
-            (this.currentContractUser && this.currentContractUser.contractRole.authorities.some(authority => {
-                return authority.name === 'DELETE_PROJECT'
             }));
         },
         deletingUserCondition(){
@@ -326,7 +322,10 @@ export default {
                 try {
                     let parsedUrl = new URL(this.projectCreateForm.domain);
                 } catch (_) {
-                    this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError");
+                    if(this.projectCreateForm.domain.length === 0 ) {
+                        this.projectCreateForm.domainError = this.$i18n.t("form.emptyInput");
+                    } else {
+                        this.projectCreateForm.domainError = this.$i18n.t("form.urlError");
                     return;
                 }
             }
@@ -357,6 +356,7 @@ export default {
 			this.projectCreateForm.domainError = "";
 			this.projectCreateForm.name = "";
 			this.projectCreateForm.domain = "";
+        }
         },
         deleteProject(project){
             const index = this.projects.indexOf(project);
@@ -501,7 +501,21 @@ export default {
         );
         this.projectService.findByContractId(
             this.$route.params.id,
-            (projects) => {this.projects = projects},
+            (projects) => {
+            	this.projects = projects
+				for(let project of projects){
+					this.projectService.findByAuthorityByProjectId(
+						project.id,
+						(authorities) => {
+							this.$set(this.authorityByProjectId, project.id, authorities);
+						},
+						(error) => {
+							console.error("Unable to get authorities for project ", project.id);
+						}
+					)
+
+				}
+			},
             (error) => {console.error(error)}
         );
     },
