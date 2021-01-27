@@ -9,7 +9,8 @@
 			<h2 class="admin-contracts__title-2">{{ $t('contracts.createContract') }}</h2>
 			<contract-creation-form
 				:users="users"
-				@createContract="onCreateContract">
+				@createContract="onCreateContract"
+				:selected="selected">
 			</contract-creation-form>
 		</section>
 
@@ -61,7 +62,7 @@ export default {
 		ContractCreationForm,
 		BackToTop
 	},
-	props: ['users'],
+	props: ['users', 'selected' ],
 	data() {
 		return {
 			contracts: [],
@@ -77,6 +78,14 @@ export default {
 			},
 			err => console.error(err)
 		);
+	},
+	watch: {
+    	selected: function(newVal, oldVal) {  
+			if(newVal == 0) {
+				this.searchContract = ""
+				this.liveMsg = ""
+			} 
+		}
 	},
 	computed: {
 		newContractCondition() {

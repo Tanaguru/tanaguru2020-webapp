@@ -57,7 +57,12 @@
             </form>
 		</article>
 
-        <ProjectUserTable :users="projectUsers" @remove-user="removeUser" @promote-user="promoteUser" :managerCondition="managerCondition" :promoteSuccessMsg="promoteSuccessMsg" />
+        <ProjectUserTable 
+			:users="projectUsers" 
+			@remove-user="removeUser" 
+			@promote-user="promoteUser" 
+			:managerCondition="managerCondition" 
+			:promoteSuccessMsg="promoteSuccessMsg" />
 
 	    <BackToTop />
 
@@ -279,6 +284,7 @@
 						}
 					)
 				}
+				this.userAdditionForm.id = null;
 			},
 		}
 	}

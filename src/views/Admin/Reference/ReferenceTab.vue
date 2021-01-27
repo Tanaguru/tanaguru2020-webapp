@@ -59,6 +59,7 @@ export default {
 			references: []
 		}
 	},
+	props: [ 'selected'],
 	created() {
 		this.testHierarchyService.findAllReferences(
 			(references) => {
@@ -85,7 +86,6 @@ export default {
 			)
 		}
 	},
-
 	computed: {
 		notDeletedReferences() {
 			return this.references.filter(reference => {

@@ -58,7 +58,7 @@ export default {
 		IconDelete,
 		DeletionModal
 	},
-    props: [ 'projects', 'deletingCondition', 'removeUserError', 'authorityByProjectId' ],
+    props: [ 'projects', 'authorityByProjectId' ],
     methods: {
         confirm(project) {
 			this.$modal

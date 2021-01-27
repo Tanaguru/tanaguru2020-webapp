@@ -1,11 +1,11 @@
 <template>
     <div>
 		<ul class="tabs">
-			<li v-for="(tab, index) in tabs" :key="index" class="tabs__item">
+			<li v-for="(tab, i) in tabs" :key="i" class="tabs__item">
 				<button
 					class="btn tabs__btn"
 					:class="{ 'is-active': tab.isActive }"
-					@click="selectTab(tab)"
+					@click="selectTab(i)"
 				>
 				{{ tab.name }}
 				</button>
@@ -19,18 +19,24 @@
     export default {
         data: () => {
             return {
+                selectedIndex: 0,
                 tabs: []
             }
         },
         methods: {
-            selectTab(selectedTab) {
-                this.tabs.forEach(tab => {
-                    tab.isActive = tab.name === selectedTab.name;
+            selectTab(i) {
+                this.selectedIndex = i
+                this.tabs.forEach((tab, index) => {
+                    tab.isActive = (index === i)
                 });
+                this.$emit('activeTab', this.selectedIndex)
             }
         },
         created() {
-			this.tabs = this.$children;
+            this.tabs = this.$children;
+        },
+        mounted(){
+            this.selectTab(0)
         }
     }
 </script>

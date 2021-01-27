@@ -384,7 +384,7 @@ export default {
                     breakpoints: [1920],
                     type: "page",
                     enableScreenshot: false,
-                    browser: 'chrome',
+                    browser: 'firefox',
                     login: '',
                     password: '',
                     url: ''

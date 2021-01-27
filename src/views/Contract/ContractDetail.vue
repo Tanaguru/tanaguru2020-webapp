@@ -80,7 +80,7 @@
                 <button class="btn btn--default btn-add" type="submit">{{$t('action.addUser')}}</button>
                 <p v-if="userAdditionForm.successMsg" class="info-success" aria-live="polite">{{ userAdditionForm.successMsg }}</p>
             </form>
-
+            
 			<ContractUserTable
                 :contract-users="contractUsers"
                 @remove-user="removeUser"
@@ -148,9 +148,8 @@
 
 			<ContractProjectTable 
                 :projects="projects" 
-                :deletingCondition="deletingProjectCondition" 
-                @delete-project="deleteProject" 
-                :userRemoveError="userRemoveError" />
+                :authorityByProjectId="authorityByProjectId" 
+                @delete-project="deleteProject"/>
 		</article>
 
         <BackToTop />
@@ -167,7 +166,6 @@ import IconArrowBlue from '../../components//icons/IconArrowBlue'
 import IconDelete from '../../components//icons/IconDelete'
 import Breadcrumbs from '../../components/Breadcrumbs';
 import moment from 'moment'
-
 export default {
     name: 'contractDetail',
     components: {
@@ -190,8 +188,8 @@ export default {
             contract: null,
             users: [],
             contractUsers: [],
-			contractOwner: null,
-			authorityByProjectId: {},
+            contractOwner: null,
+            authorityByProjectId: {},
             modifyContractForm: {
                 active: false,
                 name: "",
@@ -248,10 +246,10 @@ export default {
             }));
         },
         deletingUserCondition(){
-			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
+			return this.$store.state.auth.user.appRole.overrideProjectRole.authorities.some(authority => {
                 return authority.name === 'REMOVE_MEMBER'
             }) ||
-            (this.currentContractUser && this.currentContractUser.contractRole.authorities.some(authority => {
+            (this.currentContractUser && this.currentContractUser.projectRole.authorities.some(authority => {
                 return authority.name === 'REMOVE_MEMBER'
             }));
         },
@@ -322,10 +320,7 @@ export default {
                 try {
                     let parsedUrl = new URL(this.projectCreateForm.domain);
                 } catch (_) {
-                    if(this.projectCreateForm.domain.length === 0 ) {
-                        this.projectCreateForm.domainError = this.$i18n.t("form.emptyInput");
-                    } else {
-                        this.projectCreateForm.domainError = this.$i18n.t("form.urlError");
+                    this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError");
                     return;
                 }
             }
@@ -334,7 +329,7 @@ export default {
 				this.projectCreateForm.domain,
                 this.contract.id,
 				(project) => {
-					this.projects.push(project)
+                    this.projects.push(project)
 					this.projectCreateForm.successMsg = this.$i18n.t('form.successMsg.projectCreation')
 				},
 				(error) => {
@@ -356,7 +351,6 @@ export default {
 			this.projectCreateForm.domainError = "";
 			this.projectCreateForm.name = "";
 			this.projectCreateForm.domain = "";
-        }
         },
         deleteProject(project){
             const index = this.projects.indexOf(project);
@@ -411,6 +405,7 @@ export default {
                     this.userAdditionForm.error = this.$i18n.t('form.errorMsg.user.inexistantUser')
                 }
             }
+            this.userAdditionForm.username = "";
         },
         promoteUser(contractUser){
 			this.contractService.promoteMember(
@@ -472,11 +467,17 @@ export default {
             this.$route.params.id,
             (contract) => {
                 this.contract = contract
-                
-                this.breadcrumbProps.push({
-                    name : 'Administration',
-                    path : '/administration'
-                })
+                if(this.$store.state.auth.user.appRole.name == 'USER'){
+                    this.breadcrumbProps.push({
+                        name : 'Configuration',
+                        path : '/configuration'
+                    })
+                } else {
+                    this.breadcrumbProps.push({
+                        name : 'Administration',
+                        path : '/administration'
+                    })
+                }
                 this.breadcrumbProps.push({
                     name : this.contract.name,
                     path : '/contracts/'+ this.contract.id
@@ -513,7 +514,6 @@ export default {
 							console.error("Unable to get authorities for project ", project.id);
 						}
 					)
-
 				}
 			},
             (error) => {console.error(error)}

@@ -130,6 +130,24 @@ export default {
 
 		}
 	},
+	props: [ 'selected' ],
+	watch: {
+    	selected: function(newVal, oldVal) {  
+			if(newVal == 1) {
+			this.userCreateForm.username = ""
+			this.userCreateForm.password = ""
+			this.userCreateForm.email = ""
+			this.userCreateForm.appRole = ""
+			this.userCreateForm.enabled = ""
+			this.userCreateForm.usernameError = ""
+			this.userCreateForm.passwordError = ""
+			this.userCreateForm.emailError = ""
+			this.userCreateForm.roleError = ""
+			this.userCreateForm.error = ""
+			this.userCreateForm.successMsg = ""
+			} 
+		}
+	},
 	computed: {
 		emailDescribedBy() {
 			let description = 'email-constraint';

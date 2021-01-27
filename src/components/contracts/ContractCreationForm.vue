@@ -71,7 +71,7 @@
 <script>
 export default {
   name: 'contractCreationForm',
-  props: ['users'],
+  props: ['users', 'selected'],
   data() {
     return {
       contractCreateForm: {
@@ -86,6 +86,20 @@ export default {
       },
       successMsg: "",
     }
+  },
+  watch: {
+    	selected: function(newVal, oldVal) {  
+        if(newVal == 0) {
+          this.contractCreateForm.name = ""
+          this.contractCreateForm.ownerId = ""
+          this.contractCreateForm.dateEnd = ""
+          this.contractCreateForm.nameError = ""
+          this.contractCreateForm.dateError = ""
+          this.contractCreateForm.ownerError = ""
+          this.contractCreateForm.error = ""
+          this.contractCreateForm.successMsg = ""
+        } 
+    	}
   },
   computed: {
     nameDescribedBy() {

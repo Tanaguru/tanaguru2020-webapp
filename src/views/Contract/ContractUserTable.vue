@@ -124,7 +124,7 @@ export default {
 	},
 	computed: {
 		sortedContractUsers(){
-    		return this.contractUsers.reverse();
+			return this.contractUsers.reverse();
 		}
 	}
 }
