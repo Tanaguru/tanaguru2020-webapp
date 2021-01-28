@@ -200,16 +200,7 @@
 			},
 
 			createProjectCondition(){
-				let condition = false;
-				if(this.currentContractId){
-					if(this.$store.state.auth.user.appRole.overrideContractRole.name == 'CONTRACT_OWNER' || this.$store.state.auth.user.appRole.overrideContractRole.name == 'CONTRACT_MANAGER'){
-						condition = true
-					}
-					else if(this.currentUserRole == 'CONTRACT_OWNER' || this.currentUserRole == 'CONTRACT_MANAGER'){
-						condition = true
-					}
-				}
-				return condition
+				return this.currentContractId;
 			}
 		},
 		methods: {
