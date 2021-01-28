@@ -97,7 +97,7 @@ export default {
           this.contractCreateForm.dateError = ""
           this.contractCreateForm.ownerError = ""
           this.contractCreateForm.error = ""
-          this.contractCreateForm.successMsg = ""
+          this.successMsg = ""
         } 
     	}
   },
@@ -176,6 +176,10 @@ export default {
             }
           }
         )
+
+        this.contractCreateForm.name = ""
+        this.contractCreateForm.ownerId = ""
+        this.contractCreateForm.dateEnd = ""
       }
     }
   }

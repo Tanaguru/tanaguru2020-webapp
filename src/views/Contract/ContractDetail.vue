@@ -83,7 +83,7 @@
 
 			<ContractUserTable
                 :contract-users="contractUsers"
-                @remove-user="removeUser"
+                @delete-user="deleteUser"
                 @promote-user="promoteUser"
                 :deletingCondition="deletingUserCondition"
                 :addingCondition="addingCondition"
@@ -436,7 +436,7 @@ export default {
                     }
 			)
         },
-        removeUser(contractUser){
+        deleteUser(contractUser){
 			this.contractService.removeMember(
 				contractUser.user.id,
 				this.contract.id,
