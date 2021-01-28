@@ -176,8 +176,7 @@
 				(contracts) => {
 					this.sharedContracts = contracts
 					for (let i = 0; i < this.sharedContracts.length; i++){
-						this.projectService.findMemberOfByContractId(
-							this.sharedContracts[i].id,
+						this.projectService.findMemberOf(
 							(projects) => {
 								this.sharedProjects = projects
 							},

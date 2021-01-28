@@ -73,6 +73,19 @@ export default class ProjectService extends Service{
           });
     }
 
+    findMemberOf(then, error){
+        return this.axios({
+            url: this.controllerName + '/member-of',
+            method: 'get',
+        })
+            .then(resp => {
+                then(resp.data)
+            })
+            .catch(err => {
+                error(err);
+            });
+    }
+
     removeMember(id, projectId, then, error){
         const user = {
             'id' : id,
