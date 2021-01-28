@@ -80,7 +80,7 @@
                 <button class="btn btn--default btn-add" type="submit">{{$t('action.addUser')}}</button>
                 <p v-if="userAdditionForm.successMsg" class="info-success" aria-live="polite">{{ userAdditionForm.successMsg }}</p>
             </form>
-            
+
 			<ContractUserTable
                 :contract-users="contractUsers"
                 @remove-user="removeUser"
@@ -118,7 +118,7 @@
                     <div class="form-column">
 						<div class="form-block">
 							<label class="label" for="domain">
-                                {{$t('entity.project.domain')}} 
+                                {{$t('entity.project.domain')}}
                                 <span v-if="contract.restrictDomain"> *</span>
                             </label>
 							<input
@@ -146,9 +146,9 @@
 		<article v-show="projects.length > 0">
 			<h2 class="contract__title-2" id="table-projects">{{$t('contract.projectsList')}}</h2>
 
-			<ContractProjectTable 
-                :projects="projects" 
-                :authorityByProjectId="authorityByProjectId" 
+			<ContractProjectTable
+                :projects="projects"
+                :authorityByProjectId="authorityByProjectId"
                 @delete-project="deleteProject"/>
 		</article>
 
@@ -249,7 +249,7 @@ export default {
 			return this.$store.state.auth.user.appRole.overrideProjectRole.authorities.some(authority => {
                 return authority.name === 'REMOVE_MEMBER'
             }) ||
-            (this.currentContractUser && this.currentContractUser.projectRole.authorities.some(authority => {
+            (this.currentContractUser && this.currentContractUser.contractRole.authorities.some(authority => {
                 return authority.name === 'REMOVE_MEMBER'
             }));
         },
@@ -294,13 +294,13 @@ export default {
                         this.modifyContractForm.active = false;
                     },
                     (error) => {
-                        if(err.response.data.error == "USER_NOT_FOUND") {  
+                        if(err.response.data.error == "USER_NOT_FOUND") {
                             this.modifyContractForm.error = this.$i18n.t("form.errorMsg.user.notFound");
-                        } else if(err.response.data.error == "CONTRACT_NOT_FOUND") {  
+                        } else if(err.response.data.error == "CONTRACT_NOT_FOUND") {
                             this.modifyContractForm.error = this.$i18n.t("form.errorMsg.contract.notFound");
                         } else if(err.response.status == "403"){
                             this.modifyContractForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
-                        } else {  
+                        } else {
                             this.modifyContractForm.error = this.$i18n.t("form.errorMsg.genericError");
                         }
                     }
@@ -365,7 +365,7 @@ export default {
 							this.deleteProjectError = this.$i18n.t("form.errorMsg.project.notFound")
 						} else if(err.response.status == "403"){
 							this.deleteProjectError = this.$i18n.t("form.errorMsg.user.permissionDenied")
-						} else {  
+						} else {
 							this.deleteProjectError = this.$i18n.t("form.errorMsg.genericError");
 						}
                     }
@@ -396,7 +396,7 @@ export default {
                                 this.userAdditionForm.error = this.$i18n.t("form.errorMsg.contract.notFound")
                             } else if(err.response.status == "403"){
                                 this.userAdditionForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
-                            } else {  
+                            } else {
                                 this.userAdditionForm.error = this.$i18n.t("form.errorMsg.genericError");
                             }
                         }
@@ -430,7 +430,7 @@ export default {
                             this.contractCreateForm.error = this.$i18n.t("form.errorMsg.contract.notFound")
                         } else if(err.response.status == "403"){
                             this.contractCreateForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
-                        } else {  
+                        } else {
                             this.contractCreateForm.error = this.$i18n.t("form.errorMsg.genericError");
                         }
                     }
@@ -450,7 +450,7 @@ export default {
                         this.userRemoveError = this.$i18n.t("form.errorMsg.user.notFound")
                     } else if(err.response.status == "403"){
                         this.userRemoveError = this.$i18n.t("form.errorMsg.user.permissionDenied")
-                    } else {  
+                    } else {
                         this.userRemoveError = this.$i18n.t("form.errorMsg.genericError");
                     }
                 },
@@ -490,7 +490,8 @@ export default {
                             if(contractUser.contractRole.name === 'CONTRACT_OWNER'){
                             	this.contractOwner = contractUser;
 							}
-                            if(contractUser.user.id === this.$store.state.user.id){
+
+                            if(contractUser.user.id === this.$store.state.auth.user.id){
                                 this.currentContractUser = contractUser;
                             }
                         });
