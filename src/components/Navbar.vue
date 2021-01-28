@@ -84,7 +84,7 @@ export default {
 		font-size: $small-font-size;
 	}
 
-	&__item {
+	&__item { 
 		&:not(:last-child) {
 			padding-right: .6rem;
 

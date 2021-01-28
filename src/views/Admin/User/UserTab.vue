@@ -6,7 +6,7 @@
 
 		<section v-if="this.$store.state.auth.authorities && $store.state.auth.authorities['CREATE_USER']">
 			<h2 class="admin-users__title-2">{{$t('users.createUser')}}</h2>
-			<user-creation-form id="contract-user-form" @createUser="onCreateUser"></user-creation-form>
+			<user-creation-form id="contract-user-form" @createUser="onCreateUser" :selected="selected"></user-creation-form>
 		</section>
 
 		<section>
@@ -30,7 +30,11 @@
 				<p>{{ liveMsg }} {{$t('user.results')}}</p>
 			</div>
 
-			<user-table :users="filteredUsers" @deleteUser="deleteUser"></user-table>
+			<user-table 
+				:users="filteredUsers" 
+				@delete-user="deleteUser"
+			>
+			</user-table>
 		</section>
 
         <BackToTop />
@@ -63,7 +67,15 @@
 
             }
         },
-        props: [ 'users' ],
+		props: [ 'users', 'selected' ],
+		watch: {
+			selected: function(newVal, oldVal) {  
+				if(newVal == 1) {
+					this.search = ""
+					this.liveMsg = ""
+				} 
+			}
+		},
         computed:{
 			filteredUsers(){
 				let users = this.search ?

@@ -34,7 +34,7 @@
 
         <article v-show="managerCondition">
             <h2 class="project__title-2">{{$t('project.users')}}</h2>
-			<p>{{$t('form.help')}}</p>
+			<p>{{$t('form.indications.help')}}</p>
             <form @submit.prevent="addUser" class="form-users" novalidate>
                 <div class="form-block">
                     <label class="label" for="user-select">{{$t('entity.user.username')}} *</label>
@@ -57,7 +57,12 @@
             </form>
 		</article>
 
-        <ProjectUserTable :users="projectUsers" @remove-user="removeUser" @promote-user="promoteUser" :managerCondition="managerCondition" :promoteSuccessMsg="promoteSuccessMsg" />
+        <ProjectUserTable 
+			:users="projectUsers" 
+			@remove-user="removeUser" 
+			@promote-user="promoteUser" 
+			:managerCondition="managerCondition" 
+			:promoteSuccessMsg="promoteSuccessMsg" />
 
 	    <BackToTop />
 
@@ -124,18 +129,10 @@
 				this.$route.params.id,
 				(project) => {
 					this.project = project
-
-					if(this.$store.state.auth.user.appRole.name == 'USER'){
-						this.breadcrumbProps.push({
-							name : 'Configuration',
-							path : '/configuration'
-						})
-					} else {
-						this.breadcrumbProps.push({
-							name : 'Administration',
-							path : '/administration'
-						})
-					}
+					this.breadcrumbProps.push({
+						name : 'Administration',
+						path : '/administration'
+					})
                     this.breadcrumbProps.push({
                         name : this.project.contract.name,
                         path : '/contracts/' + this.project.contract.id
@@ -214,7 +211,17 @@
 						(project) => {
 							this.projectUsers.splice(index, 1)
 						},
-						(error) => console.error(error),
+						(error) => {
+							if(err.response.data.error == "PROJECT_NOT_FOUND"){
+								this.userRemoveError = this.$i18n.t("form.errorMsg.project.notFound")
+							} else if(err.response.data.error == "USER_NOT_FOUND"){
+								this.userRemoveError = this.$i18n.t("form.errorMsg.user.notFound")
+							} else if(err.response.status == "403"){
+								this.userRemoveError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+							} else {  
+								this.userRemoveError = this.$i18n.t("form.errorMsg.genericError");
+							}
+						}
 					)
 				}
 			},
@@ -229,7 +236,25 @@
 						(project) => {
 							user.projectRole.name = user.projectRole.name
 						},
-						(error) => console.error(error)
+						(error) => {
+							if(err.response.data.error == "CANNOT_PROMOTE_YOURSELF"){
+								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.user.promoteSelf")
+							} else if (err.response.data.error == "PROJECT_CANNOT_PROMOTE_USER"){
+								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.user.notAllowed")
+							} else if (err.response.data.error == "CANNOT_PROMOTE_CONTRACT_OWNER"){
+								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.user.promoteOwner")
+							} else if (err.response.data.error == "USER_NOT_FOUND_FOR_PROJECT"){
+								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.user.userDoesntBelong")
+							} else if(err.response.data.error == "USER_NOT_FOUND"){
+								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.user.notFound")
+							} else if(err.response.data.error == "PROJECT_NOT_FOUND"){
+								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.project.notFound")
+							} else if(err.response.status == "403"){
+								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
+							} else {  
+								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.genericError");
+							}
+						}
 
 					)
 				}
@@ -237,20 +262,29 @@
 
 			addUser(user){
 				if(!this.userAdditionForm.id){
-					this.userAdditionForm.error = this.$i18n.t('form.emptyInput')
+					this.userAdditionForm.error = this.$i18n.t('form.errorMsg.emptyInput')
 				} else {
 					this.projectService.addMember(
 						this.userAdditionForm.id,
 						this.project.id,
 						(user) => {
 							this.projectUsers.push(user)
-							this.userAdditionForm.successMsg = this.$i18n.t("form.userProjectAddition")
+							this.userAdditionForm.successMsg = this.$i18n.t("form.successMsg.userProjectAddition")
 						},
 						(error) => {
-							this.userAdditionForm.error = this.$i18n.t("form.genericError")
+							if(err.response.data.error == "PROJECT_NOT_FOUND"){
+								this.userAdditionForm.error = this.$i18n.t("form.errorMsg.project.notFound")
+							} else if(err.response.data.error == "USER_NOT_FOUND"){
+								this.userAdditionForm.error = this.$i18n.t("form.errorMsg.user.notFound")
+							} else if(err.response.status == "403"){
+								this.userAdditionForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
+							} else {  
+								this.userAdditionForm.error = this.$i18n.t("form.errorMsg.genericError");
+							}
 						}
 					)
 				}
+				this.userAdditionForm.id = null;
 			},
 		}
 	}

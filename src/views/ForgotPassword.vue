@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <p>{{$t('form.help')}}</p>
+        <p>{{$t('form.indications.help')}}</p>
         <form @submit.prevent="sendResetPassword" novalidate>
             <div class="form-block">
                 <label class="label" for="email">{{$t('entity.user.email')}} *</label>
@@ -39,7 +39,7 @@
         methods:{
             sendResetPassword(){
                 if(this.emailInput.length == 0){
-                    this.emailError = this.$i18n.t('form.emptyInput')
+                    this.emailError = this.$i18n.t('form.errorMsg.emptyInput')
                 } else if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.emailInput) == false){
                     this.emailError = "This should be an e-mail adress."
                 }
@@ -48,11 +48,11 @@
                 this.userService.forgotPassword(
                     this.emailInput,
                     () => {
-                        this.validationSuccess = this.$t('form.resetPasswordMailSuccess');
+                        this.validationSuccess = this.$t('form.successMsg.resetPasswordMailSuccess');
                     },
                     (error)=>{
                         console.error(error);
-                        this.validationError = this.$t('form.resetPasswordMailError');
+                        this.validationError = this.$t('form.password.resetPasswordMailError');
                     }
                 )
             }

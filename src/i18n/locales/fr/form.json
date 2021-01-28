@@ -1,29 +1,60 @@
 {
-	"help": "Les champs obligatoires sont signalés par le symbole *.",
-	"savedChange": "Modification(s) enregistrée(s).",
-	"genericError": "Une erreur est survenue.",
-	"projectCreation": "Le project a été créé.",
-	"contractCreation": "Le contrat a été créé.",
-	"userCreation": "L'utilisateur a été créé.",
-	"userContractAddition": "L'utilisateur a été ajouté au contrat.",
-	"userProjectAddition": "L'utilisateur a été ajouté au projet.",
-	"inexistantUser": "Cet utilisateur n'existe pas.",
-	"notAMember": "Cet utilisateur ne peut être ajouté au projet",
-	"incorrectConfirmation": "Le mot de passe et sa confirmation ne correspondent pas.",
-	"missingFields": "Merci de bien vouloir corriger les champs vides ou les saisies incorrectes.",
-	"existingEmail": "Cette adresse e-mail est déjà enregistrée.",
-	"existingUsername": "Ce nom d'utilisateur n'est pas disponible",
-	"invalidUsername": "Le nom d'utilisateur doit contenir plus de 4 charactères et moins de 30.",
-	"invalidPassword": "Le mot de passe ne rempli pas les critères indiqués.",
-	"nameError": "Le nom doit être inférieur à 50 caractères.",
-	"nameConstraint": "50 caractères maximum",
-	"usernameError": "Le nom d'utilisateur doit contenir moins de 30 caractères.",
-	"usernameConstraint": "30 caractères maximum",
-	"passwordConstraint": "Doit contenir au minimum 8 caractères dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial.",
-	"passwordError": "Votre mot de passe doit contenir au minimum 8 caractères dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial.",
-	"emailConstraint": "La saisie doit être au format e-mail.",
-	"emptyInput": "Veuillez remplir ce champ.",
-	"resetPasswordMailSuccess": "Un email contenant les instructions pour réinitialiser votre mot de pas a été envoyé.",
-	"resetPasswordMailError": "Une erreur est survenue lors de l'envoie de l'email, veuillez rééssayer plus tard.",
-	"urlError": "Veuillez saisie une URL valide (exemple : http://www.tanaguru.com)"
+	"indications" : {
+		"help": "Les champs obligatoires sont signalés par le symbole *.",
+		"nameConstraint": "50 caractères maximum",
+		"usernameConstraint": "30 caractères maximum",
+		"passwordConstraint": "Doit contenir au minimum 8 caractères dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial.",
+		"emailConstraint": "La saisie doit être au format e-mail."
+	},
+	"successMsg": {
+		"savedChange": "Modification(s) enregistrée(s).",
+		"projectCreation": "Le project a été créé.",
+		"contractCreation": "Le contrat a été créé.",
+		"userCreation": "L'utilisateur a été créé.",
+		"userContractAddition": "L'utilisateur a été ajouté au contrat.",
+		"userProjectAddition": "L'utilisateur a été ajouté au projet.",
+		"resetPasswordMailSuccess": "Un email contenant les instructions pour réinitialiser votre mot de pas a été envoyé."
+	},
+	"errorMsg": {
+		"genericError": "Une erreur est survenue.",
+		"missingFields": "Merci de bien vouloir corriger les champs vides ou les saisies incorrectes.",
+		"emptyInput": "Veuillez remplir ce champ.",
+		"user": {
+			"notAMember": "Cet utilisateur ne peut être ajouté au projet",
+			"limitReached": "Cet utilisateur a attein sa limite de contrats",
+			"notFound": "Cet utilisateur n'existe pas",
+			"permissionDenied": "Vous n'avez pas les authorisations requises",
+			"promoteSelf": "Vous ne pouvez vous promouvoir vous-même",
+			"notAllowed": "Votre rôle dans ce projet ne vous autorise pas à promouvoir un utilisateur",
+			"promoteOwner": "Vous ne pouvez promouvoir le propriétaire du contrat",
+			"userDoesntBelong": "Cet utilisateur ne fait pas partie du contrat"
+		},
+		"password": {
+			"passwordError": "Votre mot de passe doit contenir au minimum 8 caractères dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial.",
+			"incorrectConfirmation": "Le mot de passe et sa confirmation ne correspondent pas.",
+			"invalidPassword": "Le mot de passe ne rempli pas les critères indiqués.",
+			"resetPasswordMailError": "Une erreur est survenue lors de l'envoie de l'email, veuillez rééssayer plus tard."
+		},
+		"username": {
+			"existingUsername": "Ce nom d'utilisateur n'est pas disponible",
+			"invalidUsername": "Le nom d'utilisateur doit contenir plus de 4 charactères et moins de 30.",
+			"usernameError": "Le nom d'utilisateur doit contenir moins de 30 caractères."
+		},
+		"email": {
+			"existingEmail": "Cette adresse e-mail est déjà enregistrée."
+		},
+		"contract": {
+			"notFound": "Ce contrat n'existe pas.",
+			"projectLimit": "Ce contrat a atteint la limite du nombre de projets autorisées.",
+			"expired": "La date de validité du contrat a expiré"
+		},
+		"project": {
+			"notFound": "Ce projet n'existe pas.",
+			"invalidDomain": "Le domaine n'est pas valide."
+		},
+		"others": {
+			"nameError": "Le nom doit être inférieur à 50 caractères.",
+			"urlError": "Veuillez saisie une URL valide (exemple : http://www.tanaguru.com)"
+		}	
+	}
 }

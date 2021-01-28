@@ -6,27 +6,26 @@
 
         <div class="layout-content__main">
             <div class="input-name form-block">
-                <label class="label" for="name">{{ $t('audit.definition.labelName') }} *
+                <label class="label" for="password">{{ $t('audit.basicAuth.password') }}
                     <span v-if="isValid"
                           class="screen-reader-text">{{ $t('audit.form.indications.help.checked') }}</span>
                     <span v-else class="screen-reader-text">{{ $t('audit.form.indications.help.empty') }}</span>
                 </label>
-                <input class="input" :class="[{'has-error':nameError && !isValid}]"
+                <input class="input" :class="[{'has-error':passwordError && !isValid}]"
                        type="text"
-                       name="name"
-                       id="name"
-                       v-model="name"
-                       @input="onNameInput"
+                       name="password"
+                       id="password"
+                       v-model="password"
+                       @input="onPasswordInput"
                        @focus="hideError"
                        @blur="showError"
-                       required
-                       :aria-describedby="nameError ? 'info-error' : ''"/>
+                       :aria-describedby="passwordError ? 'info-error' : ''"/>
 
-                <p v-if="!isValid && nameError" role="alert" class="info-error" id="name-error">
+                <p v-if="!isValid && passwordError" role="alert" class="info-error" id="password-error">
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-alert/>
                     </icon-base-decorative>
-                    <span>{{ $t("audit.form.error.auditName") }}</span>
+                    <span>{{ $t('audit.basicAuth.passwordError') }}</span>
                 </p>
             </div>
         </div>
@@ -38,7 +37,7 @@ import IconBaseDecorative from '../../../components/icons/IconBaseDecorative';
 import IconAlert from '../../../components/icons/IconAlert';
 import InputValidationDisplay from "../InputValidationDisplay";
 export default {
-    name: 'auditNameForm',
+    name: 'BasicAuthPasswordForm',
     components: {
         InputValidationDisplay,
         IconBaseDecorative,
@@ -47,21 +46,21 @@ export default {
     props: ['value', 'isValid'],
     data() {
         return {
-            name: this.value,
+            password: "",
             hasInput: false,
-            nameError: false
+            passwordError: false,
         }
     },
     methods:{
-        onNameInput(){
+        onPasswordInput(){
             this.hasInput = true;
-            this.$emit('input', this.name);
+            this.$emit('input', this.password);
         },
         showError() {
-            this.nameError = true
+            this.passwordError = true
         },
         hideError() {
-            this.nameError = false
+            this.passwordError = false
         }
     },
     

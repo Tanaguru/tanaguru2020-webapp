@@ -7,8 +7,8 @@
         <div class="layout-content__main">
             <div class="input-waittime">
                 <label class="label" for="waitTime">{{$t('audit.waitTime.label')}} *
-                    <span v-if="isValid " class="screen-reader-text">{{$t('audit.form.help.checked')}}</span>
-                    <span v-else class="screen-reader-text">{{$t('audit.form.help.empty')}}</span>
+                    <span v-if="isValid " class="screen-reader-text">{{$t('audit.form.indications.help.checked')}}</span>
+                    <span v-else class="screen-reader-text">{{$t('audit.form.indications.help.empty')}}</span>
                 </label>
                 <input class="input" v-bind:class="{'has-error':wtError && !isValid}" type="number"
                        name="waitTime"

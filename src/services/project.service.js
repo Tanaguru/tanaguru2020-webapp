@@ -6,20 +6,20 @@ export default class ProjectService extends Service{
     }
 
     create(name, domain, contractId, then, error){
-      const project = {
-          'name' : name,
-          'domain' : domain,
-          'contractId' : contractId
-      };
-
-        return this.axios({
-          url: this.controllerName + "/",
-          method: 'post',
-          data: project
-      })
-      .then((project) => {then(project.data)})
-      .catch((err) => {error(err)});
-  }
+        const project = {
+            'name' : name,
+            'domain' : domain,
+            'contractId' : contractId,
+        };
+  
+          return this.axios({
+            url: this.controllerName + "/", 
+            method: 'post',
+            data: project
+        })
+        .then((project) => {then(project.data)})
+        .catch(err => {error(err)});
+    }
 
     findByContractId(id, then, error){
         return this.axios({

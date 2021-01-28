@@ -119,6 +119,15 @@
 		"selectScenario": "Select a scenario",
 		"noScenario": "No scenario found"
 	},
+	"basicAuth": {
+		"basicAuth": "Secured access",
+		"login": "Login",
+		"password": "Password",
+		"explanation": "Please provide basic authentification informations to allow quick and easy protected access to the audit's pages. If login page is included in the 'Pages to test' section (#2), leave 'URL' field empty.",
+		"urlError": "URL should belong to specified domain and should not be listed in the pages to test.",
+		"loginError": "Login should be longer than 3 characters",
+		"passwordError": "Password should be longer than 5 characters"
+	},
 	"form": {
 		"help": {
 			"checked": "Filled",
@@ -147,7 +156,9 @@
 			"auditReferences": "Please choose at least one guidelines.",
 			"crawlerDuration": "Please enter a numeric value between 0.1 et 86400 for the crawler max duration in seconds.",
 			"crawlerDepth": "Please enter an integer between 1 and 10 for the crawler max depth in pages.",
-			"crawlerDocument": "Please enter an integer between 1 and 1000 for the crawler max pages."
+			"crawlerDocument": "Please enter an integer between 1 and 1000 for the crawler max pages.",
+			"noMainReference": "No guidelines have been given to conduct this audit",
+			"noUsableReference": "No valid guidelines have been given to conduct this audit"
 		}
 	}
 }

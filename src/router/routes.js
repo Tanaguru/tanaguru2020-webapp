@@ -9,7 +9,6 @@ import AuditDetail from "@/views/AuditDetail/AuditDetail";
 import AuditHistory from "@/views/AuditHistory";
 import PageDetail from "@/views/PageDetail/PageDetail";
 import Admin from "@/views/Admin/Admin";
-import Config from "@/views/Configuration";
 import Archives from "@/views/Archives/Archives";
 import ResetPassword from "@/views/ResetPassword";
 import ForgotPassword from "@/views/ForgotPassword";
@@ -80,13 +79,6 @@ export default [
         component: Admin,
         meta :{
             requireAuthentication : true
-        }
-    },{
-        path: '/configuration',
-        name: 'Config',
-        component: Config,
-        meta :{
-            requireAuthentication : true,
         }
     },{
         path: '/projects/:id/archives',

@@ -36,7 +36,8 @@
 		"dateEnd": "End date",
 		"dateStart": "Start date",
 		"owner": "Owner",
-		"selectOwner": "Select the contract's owner"
+		"selectOwner": "Select the contract's owner",
+		"restrictDomain": "Restrict contract's projects to a specific domain"
 	},
 	"project": {
 		"name": "Name",

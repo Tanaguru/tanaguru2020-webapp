@@ -20,19 +20,19 @@
                                 <icon-launch/>
                             </icon-base-decorative>
                             <span>{{ $t('action.auditStart') }}</span>
-                            <span v-if="!launchCondition" class="screen-reader-text">{{ $t('form.missingFields') }}</span>
+                            <span v-if="!launchCondition" class="screen-reader-text">{{ $t('form.errorMsg.missingFields') }}</span>
                         </button>
                         <p class="launch-info" v-if="launchCondition && launchMsg">
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-valid/>
                             </icon-base-decorative>
-                            <span>{{ $t('audit.form.help.ready') }}</span>
+                            <span>{{ $t('audit.form.indications.help.ready') }}</span>
                         </p>
                         <p v-else-if="launchMsg" class="info-error">
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-alert/>
                             </icon-base-decorative>
-                            <span>{{ $t('form.missingFields') }}</span>
+                            <span>{{ $t('form.errorMsg.missingFields') }}</span>
                         </p>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
 
         <form novalidate>
             <div class="wrapper">
-                <p class="info-form">{{ $t('form.help') }}</p>
+                <p class="info-form">{{ $t('form.indications.help') }}</p>
                 <section class="layout" id="section-definition">
                     <p v-if="!launchCondition && hasTryToLaunch" role="alert" id="incomplete-form" class="info-error">
                         <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
@@ -216,7 +216,7 @@
             <div class="wrapper" v-if="isAuditTypeValid">
                 <section class="layout" id="section-browser">
                     <audit-form-section-header
-                        :title="$t('audit.definition.browser.title')"
+                        :title="$t('audit.definition.browsers.title')"
                         :number="6"/>
 
                     <audit-browser-form
@@ -224,6 +224,32 @@
 						:browsers="activeBrowsers"
                         v-model="auditConfigurationForm.common.browser"
                         :has-been-sent="hasTryToLaunch"/>
+                </section>
+            </div>
+
+            <hr role="presentation" class="separator separator--main" v-if="isAuditTypeValid"/>
+
+            <div class="wrapper" v-if="isAuditTypeValid">
+                <section class="layout" id="section-browser">
+                    <audit-form-section-header
+                        :title="$t('audit.basicAuth.basicAuth')"
+                        :number="7"/>
+
+                        <!-- Basic auth -->
+                        <basic-auth-login-form
+                            :has-been-sent="hasTryToLaunch"
+                            :is-valid="isLoginValid"
+                            v-model="auditConfigurationForm.common.login"/>
+
+                        <basic-auth-password-form
+                            :has-been-sent="hasTryToLaunch"
+                            :is-valid="isPasswordValid"
+                            v-model="auditConfigurationForm.common.password"/>
+
+                        <basic-auth-url-form
+                            :has-been-sent="hasTryToLaunch"
+                            :is-valid="isUrlValid"
+                            v-model="auditConfigurationForm.common.url"/>
                 </section>
             </div>
 
@@ -239,13 +265,13 @@
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-valid/>
                     </icon-base-decorative>
-                    <span>{{$t('audit.form.help.ready')}}</span>
+                    <span>{{$t('audit.form.indications.help.ready')}}</span>
                 </p>
                 <p v-else-if="launchMsg" v-show="hasTryToLaunch" class="info-error">
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-alert/>
                     </icon-base-decorative>
-                    <span>{{$t('form.missingFields')}}</span>
+                    <span>{{$t('form.errorMsg.missingFields')}}</span>
                 </p>
             </div>
         </form>
@@ -283,12 +309,16 @@ import AuditSiteCrawlerExclusionRegexForm from "./form/AuditSiteExclusionRegexFo
 import AuditUploadForm from "./form/AuditUploadForm";
 import AuditScenarioForm from "./form/AuditScenarioForm";
 import AuditBreakpointsForm from "./form/AuditBreakpointsForm";
-import moment from 'moment';
-import UrlHelper from "../../helper/urlhelper"
-import BreakpointHelper from "../../helper/breakpointHelper"
 import AuditWaitTimeForm from "./form/AuditWaitTimeForm";
 import AuditEnableScreenshotForm from "./form/AuditEnableScreenshotForm";
 import AuditBrowserForm from "./form/AuditBrowserForm";
+import BasicAuthLoginForm from "./form/BasicAuthLoginForm";
+import BasicAuthPasswordForm from "./form/BasicAuthPasswordForm";
+import BasicAuthUrlForm from "./form/BasicAuthUrlForm";
+import moment from 'moment';
+import UrlHelper from "../../helper/urlhelper"
+import BreakpointHelper from "../../helper/breakpointHelper"
+
 export default {
     name: 'auditLaunch',
     components: {
@@ -310,6 +340,9 @@ export default {
         AuditReferencesForm,
         AuditNameForm,
         AuditTypeForm,
+        BasicAuthLoginForm,
+        BasicAuthPasswordForm,
+        BasicAuthUrlForm,
         Breadcrumbs,
         BackToTop,
         IconBaseDecorative,
@@ -342,6 +375,7 @@ export default {
             references: [],
             seedMustBeInDomain: true,
             auditConfigurationForm: {
+
                 common: {
                     name: '',
                     selectedReferences: [],
@@ -350,7 +384,10 @@ export default {
                     breakpoints: [1920],
                     type: "page",
                     enableScreenshot: false,
-                    browser: 'firefox'
+                    browser: 'firefox',
+                    login: '',
+                    password: '',
+                    url: ''
                 },
                 site: {
                     seeds: [],
@@ -429,7 +466,7 @@ export default {
             (error) => {
                 console.error(error)
             }
-        )
+        );
     },
     methods: {
         showLaunchMsg() {
@@ -477,12 +514,48 @@ export default {
                 parameters,
                 (audit) => this.$router.push('/audits/' + audit.id),
                 (error) => {
-                    this.auditConfigurationForm.error = error;
+                    if(error.response.data.error == "PROJECT_NOT_FOUND"){
+    					this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.project.notFound')
+                    } else if (error.response.data.error == "CONTRACT_DATE_PASSED"){
+                        this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.contract.expired')
+                    } else if (error.response.data.error == "NO_MAIN_REFERENCE"){
+                        this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.project.noMainReference')
+                    } else if (error.response.data.error == "NO_USABLE_REFERENCE"){
+                        this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.project.noUsableReference')
+                    } else if (error.response.status == "403") {
+    					this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.user.permissionDenied')
+                    } else {
+    					this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.genericError')
+                    }
                 }
             )
         },
     },
     computed: {
+        //Auth
+        isLoginValid() {
+            return !this.auditConfigurationForm.common.login.length || this.auditConfigurationForm.common.login.length > 3
+        },
+        isPasswordValid() {
+            return !this.auditConfigurationForm.common.password || this.auditConfigurationForm.common.password.length > 5
+        },
+        isUrlValid() {
+            if(this.auditConfigurationForm.common.url) {
+                if(this.project.domain) {
+                    return this.auditConfigurationForm.common.url.includes(this.project.domain) && !this.auditConfigurationForm.page.urls.includes(this.auditConfigurationForm.common.url)
+                } else {
+                    try {
+                        let parsedUrl = new URL(auditConfigurationForm.common.url);
+                    } catch (_) {
+                        return;
+                    }
+                }
+            } else {
+                return !this.auditConfigurationForm.common.url
+            }
+            
+        },
+
          //Commons
         isAuditTypeValid() {
             return ['site', 'scenario', 'upload', 'page'].includes(this.auditConfigurationForm.common.type);
@@ -520,7 +593,6 @@ export default {
 
         //Sites
         isSiteSeedsValid() {
-
             return this.auditConfigurationForm.site.seeds.every(seed => seed.includes(this.project.domain))
         },
         isCrawlerMaxDepthValid() {

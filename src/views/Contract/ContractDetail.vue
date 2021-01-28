@@ -38,7 +38,7 @@
                                     v-model="modifyContractForm.name"
                                     :aria-describedby="nameDescribedBy"
                                     required>
-							    <p class="info-text" id="name-constraint">{{ $t('form.nameConstraint') }}</p>
+							    <p class="info-text" id="name-constraint">{{ $t('form.indications.nameConstraint') }}</p>
                                 <p v-if="modifyContractForm.nameError" class="info-error" id="name-error">{{modifyContractForm.nameError}}</p>
 							</div>
 						</div>
@@ -61,7 +61,7 @@
 
         <article v-show="addingCondition">
             <h2 class="contract__title-2">{{$t('contract.users')}}</h2>
-			<p>{{$t('form.help')}}</p>
+			<p>{{$t('form.indications.help')}}</p>
             <form @submit.prevent="addUser" class="form-users" novalidate>
                 <div class="form-block form-block--half">
                     <label class="label" for="username">{{$t('entity.user.username')}} *</label>
@@ -80,22 +80,22 @@
                 <button class="btn btn--default btn-add" type="submit">{{$t('action.addUser')}}</button>
                 <p v-if="userAdditionForm.successMsg" class="info-success" aria-live="polite">{{ userAdditionForm.successMsg }}</p>
             </form>
-
+            
 			<ContractUserTable
-					:contract-users="contractUsers"
-					@remove-user="removeUser"
-					@promote-user="promoteUser"
-					:deletingCondition="deletingUserCondition"
-					:addingCondition="addingCondition"
-					:promoteCondition="promoteCondition"
-					:promoteSuccessMsg="promoteSuccessMsg" />
+                :contract-users="contractUsers"
+                @remove-user="removeUser"
+                @promote-user="promoteUser"
+                :deletingCondition="deletingUserCondition"
+                :addingCondition="addingCondition"
+                :promoteCondition="promoteCondition"
+                :promoteSuccessMsg="promoteSuccessMsg" />
         </article>
 
         <!-- PROJECTS BY CONTRACT -->
 
         <article v-show="addingCondition">
             <h2 class="contract__title-2">{{$t('contract.createProject')}}</h2>
-			<p>{{$t('form.help')}}</p>
+			<p>{{$t('form.indications.help')}}</p>
             <form @submit.prevent="createProject" novalidate>
 				<div class="form-row">
 					<div class="form-column">
@@ -115,9 +115,12 @@
 						</div>
 					</div>
 
-					<div class="form-column">
+                    <div class="form-column">
 						<div class="form-block">
-							<label class="label" for="domain">{{$t('entity.project.domain')}} *</label>
+							<label class="label" for="domain">
+                                {{$t('entity.project.domain')}} 
+                                <span v-if="contract.restrictDomain"> *</span>
+                            </label>
 							<input
                                 class="input"
                                 type="url"
@@ -126,13 +129,13 @@
                                 :placeholder="$t('entity.project.domain')"
                                 :aria-describedBy="domainDescribedBy"
                                 v-model="projectCreateForm.domain"
-                                required
+                                :required="contract.restrictDomain"
                             >
 							<p class="info-text" id="domain-constraint">(example : http://www.website.com/)</p>
-							<p v-show="projectCreateForm.domainError" class="info-error" id="domain-error">{{projectCreateForm.domainError}}</p>
+							<p class="info-error" id="domain-error">{{projectCreateForm.domainError}}</p>
 						</div>
 					</div>
-				</div>
+                </div>
 
                 <button class="btn btn--default" type="submit">{{$t('action.create')}}</button>
                 <p v-if="projectCreateForm.error" class="info-error">{{projectCreateForm.error}}</p>
@@ -143,10 +146,10 @@
 		<article v-show="projects.length > 0">
 			<h2 class="contract__title-2" id="table-projects">{{$t('contract.projectsList')}}</h2>
 
-			<ContractProjectTable
-				:projects="projects"
-				:authorityByProjectId="authorityByProjectId"
-				@delete-project="deleteProject" />
+			<ContractProjectTable 
+                :projects="projects" 
+                :authorityByProjectId="authorityByProjectId" 
+                @delete-project="deleteProject"/>
 		</article>
 
         <BackToTop />
@@ -163,7 +166,6 @@ import IconArrowBlue from '../../components//icons/IconArrowBlue'
 import IconDelete from '../../components//icons/IconDelete'
 import Breadcrumbs from '../../components/Breadcrumbs';
 import moment from 'moment'
-
 export default {
     name: 'contractDetail',
     components: {
@@ -186,8 +188,8 @@ export default {
             contract: null,
             users: [],
             contractUsers: [],
-			contractOwner: null,
-			authorityByProjectId: {},
+            contractOwner: null,
+            authorityByProjectId: {},
             modifyContractForm: {
                 active: false,
                 name: "",
@@ -209,9 +211,10 @@ export default {
                 successMsg: "",
                 domainError: "",
                 error: "",
-                nameError: ""
+                nameError: "",
             },
-            promoteSuccessMsg: ""
+            promoteSuccessMsg: "",
+            userRemoveError: "",
         }
     },
     metaInfo() {
@@ -234,7 +237,6 @@ export default {
                 return authority.name === 'PROMOTE_MEMBER'
             }));
         },
-
         addingCondition(){
 			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
 				return authority.name === 'CREATE_PROJECT'
@@ -243,16 +245,14 @@ export default {
                 return authority.name === 'CREATE_PROJECT'
             }));
         },
-
         deletingUserCondition(){
-			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
+			return this.$store.state.auth.user.appRole.overrideProjectRole.authorities.some(authority => {
                 return authority.name === 'REMOVE_MEMBER'
             }) ||
-            (this.currentContractUser && this.currentContractUser.contractRole.authorities.some(authority => {
+            (this.currentContractUser && this.currentContractUser.projectRole.authorities.some(authority => {
                 return authority.name === 'REMOVE_MEMBER'
             }));
         },
-
         nameDescribedBy(){
             let description = 'name-constraint';
             if(this.modifyContractForm.nameError){
@@ -260,7 +260,6 @@ export default {
             }
             return description;
         },
-
         domainDescribedBy(){
             let description = 'domain-constraint';
             if(this.projectCreateForm.domainError){
@@ -274,20 +273,17 @@ export default {
             this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
         },
-
         showModifyContractForm(){
             this.modifyContractForm.name = this.contract.name;
             this.modifyContractForm.dateEnd = this.contract.dateEnd;
             this.modifyContractForm.active = true;
         },
-
         modifyContract(){
             if(this.modifyContractForm.name == '' || this.modifyContractForm.name.length > 50){
-                this.modifyContractForm.nameError = this.$i18n.t('form.invalidUsername')
+                this.modifyContractForm.nameError = this.$i18n.t('form.errorMsg.username.invalidUsername')
             }
             else {
                 this.modifyContractForm.error = ""
-
                 this.contractService.modifyById(
                     this.contract.id,
                     this.modifyContractForm.name,
@@ -297,58 +293,65 @@ export default {
                         this.contract = contract;
                         this.modifyContractForm.active = false;
                     },
-                    (error) => this.modifyContractForm.error = this.$i18n.t('form.genericError')
+                    (error) => {
+                        if(err.response.data.error == "USER_NOT_FOUND") {  
+                            this.modifyContractForm.error = this.$i18n.t("form.errorMsg.user.notFound");
+                        } else if(err.response.data.error == "CONTRACT_NOT_FOUND") {  
+                            this.modifyContractForm.error = this.$i18n.t("form.errorMsg.contract.notFound");
+                        } else if(err.response.status == "403"){
+                            this.modifyContractForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
+                        } else {  
+                            this.modifyContractForm.error = this.$i18n.t("form.errorMsg.genericError");
+                        }
+                    }
                 );
-                this.modifyContractForm.successMsg = this.$i18n.t('form.savedChanges')
+                this.modifyContractForm.successMsg = this.$i18n.t('form.successMsg.savedChangesChanges')
             }
         },
-
         createProject: function(){
 			this.projectCreateForm.successMsg = '';
-
 			if(this.projectCreateForm.name.length === 0){
-				this.projectCreateForm.nameError = this.$i18n.t("form.emptyInput");
-            }
-
-
-			try {
-                let parsedUrl = new URL(this.projectCreateForm.domain);
-			} catch (_) {
-                if(this.projectCreateForm.domain.length === 0 ) {
-                    this.projectCreateForm.domainError = this.$i18n.t("form.emptyInput");
-                } else {
-                    this.projectCreateForm.domainError = this.$i18n.t("form.urlError");
-                }
+				this.projectCreateForm.nameError = this.$i18n.t("form.errorMsg.emptyInput");
 				return;
-			}
-
+			} else if(this.projectCreateForm.name.length > 50){
+                this.projectCreateForm.nameError = this.$i18n.t("form.errorMsg.others.nameError")
+            }
+            if(this.contract.restrictDomain ) {
+                try {
+                    let parsedUrl = new URL(this.projectCreateForm.domain);
+                } catch (_) {
+                    this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError");
+                    return;
+                }
+            }
 			this.projectService.create(
 				this.projectCreateForm.name,
 				this.projectCreateForm.domain,
-				this.contract.id,
+                this.contract.id,
 				(project) => {
-					this.projects.push(project)
-                    this.projectCreateForm.successMsg = this.$i18n.t('form.projectCreation')
-                    this.projectCreateForm.error = "";
-                    this.projectCreateForm.name = "";
-                    this.projectCreateForm.domain = "";
-                    this.projectCreateForm.nameError = "";
-			        this.projectCreateForm.domainError = ""
-
+                    this.projects.push(project)
+					this.projectCreateForm.successMsg = this.$i18n.t('form.successMsg.projectCreation')
 				},
 				(error) => {
-					this.projectCreateForm.error = this.$i18n.t('form.genericError')
-					if(this.projectCreateForm.name.length > 50){
-						this.projectCreateForm.nameError = this.$i18n.t("form.nameError")
-					}
+                    if(error.response.data.error == "CONTRACT_NOT_FOUND"){
+    					this.projectCreateForm.error = this.$i18n.t('form.errorMsg.contract.notFound')
+                    } else if (error.response.data.error == "PROJECT_LIMIT_FOR_CONTRACT"){
+                        this.projectCreateForm.error = this.$i18n.t('form.errorMsg.contract.projectLimit')
+                    } else if (error.response.data.error == "INVALID_DOMAIN"){
+                        this.projectCreateForm.error = this.$i18n.t('form.errorMsg.project.invalidDomain')
+                    } else if (error.response.status == "403") {
+    					this.projectCreateForm.error = this.$i18n.t('form.errorMsg.user.permissionDenied')
+                    } else {
+    					this.projectCreateForm.error = this.$i18n.t('form.errorMsg.genericError')
+                    }
 				}
 			);
-
 			this.projectCreateForm.error = "";
-			this.projectCreateForm.name = ""
-			this.projectCreateForm.domain = ""
+			this.projectCreateForm.nameError = "";
+			this.projectCreateForm.domainError = "";
+			this.projectCreateForm.name = "";
+			this.projectCreateForm.domain = "";
         },
-
         deleteProject(project){
             const index = this.projects.indexOf(project);
             if(index > -1){
@@ -357,19 +360,25 @@ export default {
                     () => {
                         this.projects.splice(index, 1)
                     },
-                    (error) => console.error(error)
+                    (error) => {
+                        if(err.response.data.error == "PROJECT_NOT_FOUND"){
+							this.deleteProjectError = this.$i18n.t("form.errorMsg.project.notFound")
+						} else if(err.response.status == "403"){
+							this.deleteProjectError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+						} else {  
+							this.deleteProjectError = this.$i18n.t("form.errorMsg.genericError");
+						}
+                    }
                 )
             }
         },
-
         addUser(){
             if(this.userAdditionForm.username.length == 0){
-                this.userAdditionForm.error = this.$i18n.t('form.emptyInput')
+                this.userAdditionForm.error = this.$i18n.t('form.errorMsg.emptyInput')
             } else {
                 let existantUser = this.users.find(user =>
                 user.username === this.userAdditionForm.username
                 )
-
                 if(existantUser){
                     let newUser = existantUser.id
                     this.contractService.addMember(
@@ -378,16 +387,26 @@ export default {
                         (contractUser) => {
                             this.contractUsers.push(contractUser);
                             this.userAdditionForm.error = "";
-                            this.userAdditionForm.successMsg = this.$i18n.t('form.userContractAddition');
+                            this.userAdditionForm.successMsg = this.$i18n.t('form.successMsg.userContractAddition');
                         },
-                        (error) => this.userAdditionForm.error = this.$i18n.t('form.inexistantUser')
+                        (error) => {
+                            if(err.response.data.error == "USER_NOT_FOUND"){
+                                this.userAdditionForm.error = this.$i18n.t("form.errorMsg.user.notFound")
+                            } else if(err.response.data.error == "CONTRACT_NOT_FOUND"){
+                                this.userAdditionForm.error = this.$i18n.t("form.errorMsg.contract.notFound")
+                            } else if(err.response.status == "403"){
+                                this.userAdditionForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
+                            } else {  
+                                this.userAdditionForm.error = this.$i18n.t("form.errorMsg.genericError");
+                            }
+                        }
                     )
                 } else {
-                    this.userAdditionForm.error = this.$i18n.t('form.inexistantUser')
+                    this.userAdditionForm.error = this.$i18n.t('form.errorMsg.user.inexistantUser')
                 }
             }
+            this.userAdditionForm.username = "";
         },
-
         promoteUser(contractUser){
 			this.contractService.promoteMember(
 					contractUser.user.id,
@@ -396,10 +415,27 @@ export default {
 					(modifiedContractUser) => {
 						contractUser.contractRole.name = modifiedContractUser.contractRole.name
 					},
-					(error) => console.error(error)
+					(error) => {
+                        if(err.response.data.error == "CANNOT_PROMOTE_YOURSELF"){
+                            this.contractCreateForm.error = this.$i18n.t("form.errorMsg.user.promoteSelf")
+                        } else if (err.response.data.error == "PROJECT_CANNOT_PROMOTE_USER"){
+                            this.contractCreateForm.error = this.$i18n.t("form.errorMsg.user.notAllowed")
+                        } else if (err.response.data.error == "CANNOT_PROMOTE_CONTRACT_OWNER"){
+                            this.contractCreateForm.error = this.$i18n.t("form.errorMsg.user.promoteOwner")
+                        } else if (err.response.data.error == "USER_NOT_FOUND_FOR_PROJECT"){
+                            this.contractCreateForm.error = this.$i18n.t("form.errorMsg.user.userDoesntBelong")
+                        } else if(err.response.data.error == "USER_NOT_FOUND"){
+                            this.contractCreateForm.error = this.$i18n.t("form.errorMsg.user.notFound")
+                        } else if(err.response.data.error == "CONTRACT_NOT_FOUND"){
+                            this.contractCreateForm.error = this.$i18n.t("form.errorMsg.contract.notFound")
+                        } else if(err.response.status == "403"){
+                            this.contractCreateForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
+                        } else {  
+                            this.contractCreateForm.error = this.$i18n.t("form.errorMsg.genericError");
+                        }
+                    }
 			)
         },
-
         removeUser(contractUser){
 			this.contractService.removeMember(
 				contractUser.user.id,
@@ -407,7 +443,17 @@ export default {
 				() => {
 					this.contractUsers.splice(this.contractUsers.indexOf(contractUser), 1);
 				},
-				(error) => console.error(error),
+				(error) => {
+                    if(err.response.data.error == "CONTRACT_NOT_FOUND"){
+                        this.userRemoveError = this.$i18n.t("form.errorMsg.contract.notFound")
+                    } else if(err.response.data.error == "USER_NOT_FOUND"){
+                        this.userRemoveError = this.$i18n.t("form.errorMsg.user.notFound")
+                    } else if(err.response.status == "403"){
+                        this.userRemoveError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+                    } else {  
+                        this.userRemoveError = this.$i18n.t("form.errorMsg.genericError");
+                    }
+                },
 			)
         }
     },
@@ -417,7 +463,6 @@ export default {
                 this.users = users
             }
         )
-
         this.contractService.findById(
             this.$route.params.id,
             (contract) => {
@@ -437,7 +482,6 @@ export default {
                     name : this.contract.name,
                     path : '/contracts/'+ this.contract.id
                 });
-
                 this.userService.findAllByContract(
                     this.contract.id,
                     (contractUsers) => {
@@ -446,8 +490,7 @@ export default {
                             if(contractUser.contractRole.name === 'CONTRACT_OWNER'){
                             	this.contractOwner = contractUser;
 							}
-
-                            if(contractUser.user.id === this.$store.state.auth.user.id){
+                            if(contractUser.user.id === this.$store.state.user.id){
                                 this.currentContractUser = contractUser;
                             }
                         });
@@ -457,7 +500,6 @@ export default {
             },
             (error) => { this.$router.replace('/404') }
         );
-
         this.projectService.findByContractId(
             this.$route.params.id,
             (projects) => {
@@ -472,7 +514,6 @@ export default {
 							console.error("Unable to get authorities for project ", project.id);
 						}
 					)
-
 				}
 			},
             (error) => {console.error(error)}
@@ -487,15 +528,12 @@ export default {
 		margin-top: 6.2rem;
 		margin-bottom: 3.1rem;
 	}
-
 	.form-users {
 		margin-bottom: 4.6rem;
 	}
-
 	.infos-list {
 		margin-bottom: 2.4rem;
 	}
-
 	.select {
 		max-width: 35rem;
 	}

@@ -103,7 +103,7 @@ export default {
 				}
 			})
 			.then(() => {
-				this.$emit('remove-user', contractUser)
+				this.$emit('delete-user', contractUser)
 				this.$modal.close()
 			})
 			.catch(() => {
@@ -124,7 +124,7 @@ export default {
 	},
 	computed: {
 		sortedContractUsers(){
-    		return this.contractUsers.reverse();
+			return this.contractUsers.reverse();
 		}
 	}
 }
