@@ -63,7 +63,7 @@
 					</div>
 				</div>
 
-				<div class="form-column">
+				<div class="form-column" v-show="this.$store.state.auth.authorities['PROMOTE_USER']">
 					<div class="form-block">
 						<label class="label" for="role-select">{{ $t('entity.user.status') }} *</label>
 						<div class="select">
@@ -170,6 +170,13 @@ export default {
 			}
 			return description;
 		},
+	},
+	created(){
+		if(this.$store.state.auth.authorities['CREATE_CONTRACT']){
+			this.userCreateForm.appRole = null;
+		} else {
+			this.userCreateForm.appRole = 'User'
+		}
 	},
 	methods: {
 		checkUsername(){

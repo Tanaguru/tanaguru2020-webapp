@@ -108,7 +108,7 @@ export default {
 			.catch(() => {
                 this.$modal.close()
 			})
-			.finally(() => {})
+			.finally(() => {this.$modal.close})
         },
 
         confirmAuditScreenshotDeletion(audit) {
@@ -129,7 +129,7 @@ export default {
 			.catch(() => {
                 this.$modal.close()
 			})
-			.finally(() => {})
+			.finally(() => {this.$modal.close})
         },
 
         moment: function (date) {

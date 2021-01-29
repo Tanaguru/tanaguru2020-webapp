@@ -82,7 +82,7 @@ export default {
 				.catch(() => {
 					this.$modal.close()
 				})
-				.finally(() => {})
+				.finally(() => {this.$modal.close()})
 		},
 	}
 }

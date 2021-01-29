@@ -6,11 +6,11 @@
 				<span>{{$t('action.close')}}</span>
 			</button>
 		</header>
-		<!-- first screen -->
+
 		<section v-if="unconfirmed" class="modal-body" id="modalDescription">
             <p>{{ message }}</p>
 			<div id="buttons">
-				<button type="button" class="btn btn--default btn--icon" @click="confirmDeletion">
+				<button type="button" class="btn btn--default btn--icon" @click="resolveHandler">
 					<icon-base-decorative width="18" height="18"><icon-checked /></icon-base-decorative>
 					<span>{{$t('action.confirm')}}</span>
 				</button>
@@ -19,18 +19,8 @@
 					<span>{{$t('action.cancel')}}</span>
 				</button>
 			</div>
-		</section>
 
-		<!-- After confirm screen -->
-		<section v-else class="modal-body" id="modalEndMessage">
-            <p>{{$t('deletionModal.done')}}</p>
-			<p>{{$t('deletionModal.actionConfirmed')}}</p>
-			<div id="buttons">
-				<button type="button" class="btn btn--default btn--icon" @click="resolveHandler" :aria-label="$t('action.closeModal')">
-					<icon-base-decorative width="18" height="18"><icon-close /></icon-base-decorative>
-					<span>Close</span>
-				</button>
-			</div>
+			<p>PSA : Sometimes deleting from our database takes some time, please be patient if the deleted element doesn't instantly disappear from the table.</p>
 		</section>
 	</div>
 </template>
@@ -75,16 +65,8 @@ import IconChecked from './icons/IconChecked'
 			// this value will be passed to `catch`
 			this.reject()
 		},
-		confirmDeletion() {
-			this.unconfirmed = false
-		},
 		closeModal() {
-			if(this.unconfirmed === true){
-				this.$modal.close()
-			}
-			else {
-				this.resolveHandler()
-			}
+			this.$modal.close()
 		}
     },
   };

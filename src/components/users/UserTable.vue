@@ -77,9 +77,10 @@
 					})
 					.then(() => {
 						this.$emit('delete-user', user)
+						this.$modal.close()
 					})
 					.catch(() => {
-
+						this.$modal.close()
 					})
 					.finally(() => {
 						this.$modal.close()

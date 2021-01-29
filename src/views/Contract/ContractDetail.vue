@@ -288,17 +288,17 @@ export default {
                     this.contract.id,
                     this.modifyContractForm.name,
                     this.modifyContractForm.dateEnd,
-                    this.contractOwner.id,
+                    this.contractOwner.user.id,
                     (contract) => {
                         this.contract = contract;
                         this.modifyContractForm.active = false;
                     },
                     (error) => {
-                        if(err.response.data.error == "USER_NOT_FOUND") {
+                        if(error.response.data.error == "USER_NOT_FOUND") {
                             this.modifyContractForm.error = this.$i18n.t("form.errorMsg.user.notFound");
-                        } else if(err.response.data.error == "CONTRACT_NOT_FOUND") {
+                        } else if(error.response.data.error == "CONTRACT_NOT_FOUND") {
                             this.modifyContractForm.error = this.$i18n.t("form.errorMsg.contract.notFound");
-                        } else if(err.response.status == "403"){
+                        } else if(error.response.status == "403"){
                             this.modifyContractForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
                         } else {
                             this.modifyContractForm.error = this.$i18n.t("form.errorMsg.genericError");

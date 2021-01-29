@@ -93,7 +93,8 @@ export default {
     methods: {
         confirm(contractUser) {
 			this.$modal
-			.confirm(DeletionModal, this.$t('deletionModal.remove') + contractUser.user.username + this.$t('deletionModal.contrat'), {
+			.confirm(DeletionModal, this.$t('deletionModal.remove') + contractUser.user.username + this.$t('deletionModal.contract'), 
+			{
 				label: "deletion-modal",
 				classes: "modal",
 				attributes: {
@@ -109,7 +110,7 @@ export default {
 			.catch(() => {
 				this.$modal.close()
 			})
-			.finally(() => {})
+			.finally(() => {this.$modal.close})
 		},
 
         promoteUser(user) {

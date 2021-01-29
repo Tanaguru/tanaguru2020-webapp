@@ -7,14 +7,27 @@
                 <div class="tabs-wrapper">
                     <header>
                         <h1 class="title-logs">
-                            <span class="title-logs__type" v-if="audit.type === 'SITE'">{{ $t('entity.audit.site') }}</span>
-                            <span class="title-logs__type" v-else-if="audit.type === 'PAGE'">{{ $t('entity.audit.page') }}</span>
-                            <span class="title-logs__type" v-else-if="audit.type === 'SCENARIO'">{{ $t('entity.audit.scenario') }}</span>
-                            <span class="title-logs__type" v-else>{{ $t('entity.audit.upload') }}</span>
 							{{ audit.name }}
-							<span aria-live="polite" :class="'title-logs__status title-logs__status--' + audit.status.toLowerCase()" v-if="audit">{{ $t('auditDetail.status.' +  audit.status.toLowerCase()) }}</span>
                         </h1>
                     </header>
+
+					<section class="main-info title-logs">		
+						<h2>Information</h2>	
+						<p>
+							{{ $t('auditDetail.information.status') }}
+							<span aria-live="polite" :class="'title-logs__status title-logs__status--' + audit.status.toLowerCase()" v-if="audit">{{ $t('auditDetail.status.' +  audit.status.toLowerCase()) }}</span>
+						</p>
+						<p>
+							{{ $t('auditDetail.information.type') }} 
+							<span v-if="audit.type === 'SITE'">{{ $t('entity.audit.site') }}</span>
+                            <span v-else-if="audit.type === 'PAGE'">{{ $t('entity.audit.page') }}</span>
+                            <span v-else-if="audit.type === 'SCENARIO'">{{ $t('entity.audit.scenario') }}</span>
+                            <span v-else>{{ $t('entity.audit.upload') }}</span>
+						</p>
+						<p v-if="browser == 'firefox'" >{{ $t('auditDetail.information.browser') }}Mozilla Firefox</p>
+						<p v-else-if="browser == 'chrome'" >{{ $t('auditDetail.information.browser') }}Google Chrome</p>
+						<p>{{ $t('auditDetail.information.reference') }}{{ mainReference }}</p>
+					</section>
 
 					<section class="section-logs">
 						<page-list
@@ -99,10 +112,12 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 				timer: null,
 				audit: null,
 				sharecode: null,
-          project:null,
+          		project: null,
 				parameters: [],
 				pages: [],
-                auditLogs: [],
+				auditLogs: [],
+				mainReference: null,
+				browser: null,
 
                 auditLogPageSize: 10,
                 auditLogTotalPage : 0,
@@ -122,7 +137,7 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 			this.timer = setInterval(this.refreshPages, 3000);
 
             this.loadPages(this.pageCurrentPage, this.auditPagePageSize);
-            this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize);
+			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize);	
 		},
 		beforeDestroy () {
 			clearInterval(this.timer)
@@ -147,6 +162,24 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 						this.sharecode,
 						(audit) => {
 							this.audit = audit;
+
+							this.auditParametersService.findByAuditId(
+								audit.id,
+								this.sharecode,
+								(parameters) => {
+									let browser = null;
+									parameters.forEach(parameter => {
+										if(parameter.auditParameter.code == "WEBDRIVER_BROWSER") {
+											browser = parameter.value
+										}
+									});
+									this.browser = browser
+									this.mainReference = 'to do'
+								},
+								(error) => {
+									console.log(error)
+								}
+							)
 						},
 						(error) => {
 							console.error(error);
