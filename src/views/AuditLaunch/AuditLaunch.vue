@@ -26,7 +26,7 @@
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-valid/>
                             </icon-base-decorative>
-                            <span>{{ $t('audit.form.indications.help.ready') }}</span>
+                            <span>{{ $t('audit.form.help.ready') }}</span>
                         </p>
                         <p v-else-if="launchMsg" class="info-error">
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
@@ -265,7 +265,7 @@
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-valid/>
                     </icon-base-decorative>
-                    <span>{{$t('audit.form.indications.help.ready')}}</span>
+                    <span>{{$t('audit.form.help.ready')}}</span>
                 </p>
                 <p v-else-if="launchMsg" v-show="hasTryToLaunch" class="info-error">
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">

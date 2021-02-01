@@ -14,7 +14,7 @@
 			</ul>
 
 			<ul class="project-actions-list">
-				<li class="project-actions-list__item">
+				<li class="project-actions-list__item" v-if="!validContract">
 					<router-link class="btn btn--default btn--icon" :to="'/projects/' + project.id + '/audit'">
 						<icon-base-decorative width="16" height="16" viewBox="0 0 20 20"><icon-launch /></icon-base-decorative>
 						<span>{{$t('action.auditNewStart')}}</span>
@@ -96,6 +96,7 @@
 				project: [],
 				projectUsers: [],
 				contract: [],
+				validContract: false,
 				contractUsers: [],
 				audits: [],
 				currentUserRole: null,
@@ -124,7 +125,7 @@
 				]
 			}
 		},
-		created(){
+		created(){			
 			this.projectService.findById(
 				this.$route.params.id,
 				(project) => {
@@ -155,6 +156,7 @@
 					)
 
 					this.contract = this.project.contract
+					this.validContract = this.$moment(this.contract.dateEnd).isBefore(new Date())
 
 					this.userService.findAllByContract(
 						this.contract.id,

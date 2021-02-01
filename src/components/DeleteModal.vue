@@ -19,8 +19,6 @@
 					<span>{{$t('action.cancel')}}</span>
 				</button>
 			</div>
-
-			<p>PSA : Sometimes deleting from our database takes some time, please be patient if the deleted element doesn't instantly disappear from the table.</p>
 		</section>
 	</div>
 </template>
