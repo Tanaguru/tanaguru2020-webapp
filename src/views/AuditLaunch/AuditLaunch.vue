@@ -15,20 +15,20 @@
                     </div>
 
                     <div class="launch-header__cta">
-                        <button class="btn btn--default-inverse btn--icon" type="button" @click="startAudit" @focus="showLaunchMsg" @blur="hideLaunchMsg">
+                        <button class="btn btn--default-inverse btn--icon" type="button" @click="startAudit">
                             <icon-base-decorative>
                                 <icon-launch/>
                             </icon-base-decorative>
                             <span>{{ $t('action.auditStart') }}</span>
                             <span v-if="!launchCondition" class="screen-reader-text">{{ $t('form.errorMsg.missingFields') }}</span>
                         </button>
-                        <p class="launch-info" v-if="launchCondition && launchMsg">
+                        <p class="launch-info" v-if="launchCondition">
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-valid/>
                             </icon-base-decorative>
                             <span>{{ $t('audit.form.help.ready') }}</span>
                         </p>
-                        <p v-else-if="launchMsg" class="info-error">
+                        <p v-else-if="!launchCondition" class="info-error">
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-alert/>
                             </icon-base-decorative>
@@ -43,7 +43,7 @@
             <div class="wrapper">
                 <p class="info-form">{{ $t('form.indications.help') }}</p>
                 <section class="layout" id="section-definition">
-                    <p v-if="!launchCondition && hasTryToLaunch" role="alert" id="incomplete-form" class="info-error">
+                    <p v-if="!launchCondition" role="alert" id="incomplete-form" class="info-error">
                         <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                             <icon-alert/>
                         </icon-base-decorative>
@@ -83,7 +83,7 @@
                     <audit-page-urls-form
                         :is-valid="isPageUrlsValid"
                         v-model="auditConfigurationForm.page.urls"
-                        :project-domain="project.domain"/>
+                        :project-domain="project.domain.trim()"/>
                 </section>
             </div>
 
@@ -95,7 +95,7 @@
                         :number="2"/>
 
                     <audit-site-seeds-form
-                        v-if="project.domain"
+                        v-if="project.domain.trim()"
                         :is-valid="isSiteSeedsValid"
                         v-model="auditConfigurationForm.site.seeds"
                         :has-been-sent="hasTryToLaunch"/>
@@ -255,19 +255,19 @@
 
             <div class="wrapper" v-if="isAuditTypeValid">
                 <button class="btn btn--default-inverse btn--icon" type="button" @click="startAudit"
-                        @focus="showLaunchMsg" @blur="hideLaunchMsg">
+                        >
                     <icon-base-decorative>
                         <icon-launch/>
                     </icon-base-decorative>
                     <span>{{$t('action.auditStart')}}</span>
                 </button>
-                <p class="launch-info" v-if="launchCondition && launchMsg">
+                <p class="launch-info" v-if="launchCondition">
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-valid/>
                     </icon-base-decorative>
                     <span>{{$t('audit.form.help.ready')}}</span>
                 </p>
-                <p v-else-if="launchMsg" v-show="hasTryToLaunch" class="info-error">
+                <p v-else-if="launchMsg" class="info-error">
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-alert/>
                     </icon-base-decorative>
@@ -437,8 +437,8 @@ export default {
             (project) => {
                 let currentDate = new Date();
                 this.auditConfigurationForm.common.name = project.name + ' ' + this.$moment().format("DD-MM-YYYY HH:mm");
-                this.auditConfigurationForm.page.urls.push(project.domain);
-                this.auditConfigurationForm.site.seeds.push(project.domain);
+                this.auditConfigurationForm.page.urls.push(project.domain.trim());
+                this.auditConfigurationForm.site.seeds.push(project.domain.trim());
                 this.project = project;
 
                 this.breadcrumbProps.push({
@@ -469,12 +469,13 @@ export default {
         );
     },
     methods: {
-        showLaunchMsg() {
+        /*showLaunchMsg() {
             this.launchMsg = true;
         },
         hideLaunchMsg() {
             this.launchMsg = false;
-        },
+        },*/
+
         startAudit: function () {
             this.hasTryToLaunch = true;
             if (!this.launchCondition) {
@@ -541,14 +542,12 @@ export default {
         },
         isUrlValid() {
             if(this.auditConfigurationForm.common.url) {
-                if(this.project.domain) {
-                    return this.auditConfigurationForm.common.url.includes(this.project.domain) && !this.auditConfigurationForm.page.urls.includes(this.auditConfigurationForm.common.url)
+                if(this.project.domain.trim()) {
+                    return this.auditConfigurationForm.common.url.includes(this.project.domain.trim()) && !this.auditConfigurationForm.page.urls.includes(this.auditConfigurationForm.common.url)
                 } else {
-                    try {
-                        let parsedUrl = new URL(auditConfigurationForm.common.url);
-                    } catch (_) {
-                        return;
-                    }
+                    let urlRegex = /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+
+                    return urlRegex.test(this.auditConfigurationForm.common.url)
                 }
             } else {
                 return !this.auditConfigurationForm.common.url
@@ -586,14 +585,12 @@ export default {
         //Pages
         checkValidUrl: UrlHelper.checkValidUrl,
         isPageUrlsValid() {
-        	console.log(this.project.domain);
-        	console.log(this.auditConfigurationForm.page.urls)
-            return this.auditConfigurationForm.page.urls.every(url => url.includes(this.project.domain))
+            return this.auditConfigurationForm.page.urls.every(url => url.includes(this.project.domain.trim()))
         },
 
         //Sites
         isSiteSeedsValid() {
-            return this.auditConfigurationForm.site.seeds.every(seed => seed.includes(this.project.domain))
+            return this.auditConfigurationForm.site.seeds.every(seed => seed.includes(this.project.domain.trim()))
         },
         isCrawlerMaxDepthValid() {
             return Number.isInteger(this.auditConfigurationForm.site.crawlerMaxDepth) &&
@@ -618,6 +615,8 @@ export default {
         isSelectedUploadResourceValid() {
             return this.auditConfigurationForm.resource.id != null
         },
+
+        //Launch condition
         launchCondition() {
             let result =
                 this.isAuditTypeValid &&
