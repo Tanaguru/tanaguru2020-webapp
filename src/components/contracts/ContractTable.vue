@@ -66,7 +66,7 @@ export default {
 	methods: {
 		deleteContract(contract) {
 			this.$modal
-				.confirm(DeletionModal, this.$t('deletionModal.delete') + contract.name + ' ?', {
+				.confirm(DeletionModal, this.$t('deletionModal.delete') + contract.name + this.$t('deletionModal.andProjects'), {
 					label: "deletion-modal",
 					classes: "modal",
 					attributes: {

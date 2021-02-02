@@ -9,6 +9,7 @@
 
 		<section v-if="unconfirmed" class="modal-body" id="modalDescription">
             <p>{{ message }}</p>
+			<p v-show="warning">{{ warning }}</p>
 			<div id="buttons">
 				<button type="button" class="btn btn--default btn--icon" @click="resolveHandler">
 					<icon-base-decorative width="18" height="18"><icon-checked /></icon-base-decorative>
@@ -44,6 +45,10 @@ import IconChecked from './icons/IconChecked'
         message: {
 			type: String,
             required: true
+		},
+		warning: {
+			type: String,
+			required: false
 		},
 		resolve: {
 			type: Function,
