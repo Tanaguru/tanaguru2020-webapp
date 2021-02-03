@@ -34,6 +34,7 @@
 		"contract": "Contract",
 		"name": "Name",
 		"dateEnd": "End date",
+		"formDateEnd": "End date (format mm/dd/yyyy)",
 		"dateStart": "Start date",
 		"owner": "Owner",
 		"selectOwner": "Select the contract's owner",

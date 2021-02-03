@@ -23,11 +23,27 @@
 
 					<div class="form-column">
 						<div class="form-block">
-							<label class="label" for="dateEnd">{{$t('entity.contract.dateEnd')}} *</label>
+							<label class="label" for="dateEnd">{{$t('entity.contract.formDateEnd')}} *</label>
 							<input
+                v-if="$i18n.locale = 'EN'"
+                pattern="^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$"
+                placeholder="MM/DD/YYYY"
                 class="input"
                 v-bind:class="{'has-error': contractCreateForm.dateError}"
-                type="date"
+                type="text"
+                name="dateEnd"
+                id="dateEnd"
+                :aria-describedby="contractCreateForm.dateError ? 'date-error' : ''"
+                v-model="contractCreateForm.dateEnd"
+                required>
+
+              <input
+                v-else
+                pattern="^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$"
+                placeholder="DD/MM/YYYY"
+                class="input"
+                v-bind:class="{'has-error': contractCreateForm.dateError}"
+                type="text"
                 name="dateEnd"
                 id="dateEnd"
                 :aria-describedby="contractCreateForm.dateError ? 'date-error' : ''"
@@ -155,9 +171,17 @@ export default {
       isFormValid &= this.checkOwner();
 
       if (isFormValid) {
+
+        let dateEnd = this.modifyContractForm.dateEnd;
+        if(this.$i18n.locale == 'en'){ 
+          dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'MM-DD-YYYY').format("YYYY-MM-DD")
+        } else {
+          dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'DD-MM-YYYY').format("YYYY-MM-DD")
+        }
+
         this.contractService.create(
           this.contractCreateForm.name,
-          this.contractCreateForm.dateEnd,
+          dateEnd,
           this.contractCreateForm.ownerId,
           this.contractCreateForm.restrictDomain,
           (contract) => {

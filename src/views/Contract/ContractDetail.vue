@@ -45,8 +45,11 @@
 
 						<div class="form-column">
 							<div class="form-block">
-								<label class="label" for="dateEnd">{{$t('entity.contract.dateEnd')}} * :</label>
-								<input class="input" type="date" name="dateEnd" id="dateEnd" v-model="modifyContractForm.dateEnd" >
+								<label class="label" for="dateEnd">{{$t('entity.contract.formDateEnd')}} * :</label>
+
+								<input v-if="$i18n.locale == 'EN'" class="input" type="text" pattern="^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$" name="dateEnd" id="dateEnd" v-model="modifyContractForm.dateEnd" >
+
+                                <input v-else class="input" type="text" pattern="^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$" name="dateEnd" id="dateEnd" v-model="modifyContractForm.dateEnd" >
 							</div>
 						</div>
 					</div>
@@ -275,19 +278,28 @@ export default {
         },
         showModifyContractForm(){
             this.modifyContractForm.name = this.contract.name;
-            this.modifyContractForm.dateEnd = this.contract.dateEnd;
+            this.modifyContractForm.dateEnd = this.$moment(this.contract.dateEnd).format('L');
             this.modifyContractForm.active = true;
         },
         modifyContract(){
             if(this.modifyContractForm.name == '' || this.modifyContractForm.name.length > 50){
                 this.modifyContractForm.nameError = this.$i18n.t('form.errorMsg.username.invalidUsername')
             }
+
             else {
+
+                let dateEnd = this.modifyContractForm.dateEnd;
+                if(this.$i18n.locale == 'en'){ 
+                    dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'MM-DD-YYYY').format("YYYY-MM-DD")
+                } else {
+                    dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'DD-MM-YYYY').format("YYYY-MM-DD")
+                }
+                
                 this.modifyContractForm.error = ""
                 this.contractService.modifyById(
                     this.contract.id,
                     this.modifyContractForm.name,
-                    this.modifyContractForm.dateEnd,
+                    dateEnd,
                     this.contractOwner.user.id,
                     (contract) => {
                         this.contract = contract;
