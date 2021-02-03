@@ -27,7 +27,6 @@
 							<input
                 v-if="$i18n.locale = 'EN'"
                 pattern="^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$"
-                placeholder="MM/DD/YYYY"
                 class="input"
                 v-bind:class="{'has-error': contractCreateForm.dateError}"
                 type="text"
@@ -40,7 +39,6 @@
               <input
                 v-else
                 pattern="^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$"
-                placeholder="DD/MM/YYYY"
                 class="input"
                 v-bind:class="{'has-error': contractCreateForm.dateError}"
                 type="text"
@@ -172,11 +170,11 @@ export default {
 
       if (isFormValid) {
 
-        let dateEnd = this.modifyContractForm.dateEnd;
-        if(this.$i18n.locale == 'en'){ 
-          dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'MM-DD-YYYY').format("YYYY-MM-DD")
+        let dateEnd = this.contractCreateForm.dateEnd;
+        if(this.$i18n.locale == 'EN'){ 
+          dateEnd = this.$moment(this.contractCreateForm.dateEnd, 'MM-DD-YYYY').format("YYYY-MM-DD")
         } else {
-          dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'DD-MM-YYYY').format("YYYY-MM-DD")
+          dateEnd = this.$moment(this.contractCreateForm.dateEnd, 'DD-MM-YYYY').format("YYYY-MM-DD")
         }
 
         this.contractService.create(

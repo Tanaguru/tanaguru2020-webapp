@@ -47,7 +47,14 @@
 							<div class="form-block">
 								<label class="label" for="dateEnd">{{$t('entity.contract.formDateEnd')}} * :</label>
 
-								<input v-if="$i18n.locale == 'EN'" class="input" type="text" pattern="^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$" name="dateEnd" id="dateEnd" v-model="modifyContractForm.dateEnd" >
+								<input 
+                                    v-if="$i18n.locale == 'EN'"
+                                    class="input" 
+                                    type="text" 
+                                    pattern="^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$" 
+                                    name="dateEnd" 
+                                    id="dateEnd" 
+                                    v-model="modifyContractForm.dateEnd" >
 
                                 <input v-else class="input" type="text" pattern="^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$" name="dateEnd" id="dateEnd" v-model="modifyContractForm.dateEnd" >
 							</div>
@@ -289,7 +296,7 @@ export default {
             else {
 
                 let dateEnd = this.modifyContractForm.dateEnd;
-                if(this.$i18n.locale == 'en'){ 
+                if(this.$i18n.locale == 'EN'){ 
                     dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'MM-DD-YYYY').format("YYYY-MM-DD")
                 } else {
                     dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'DD-MM-YYYY').format("YYYY-MM-DD")
