@@ -48,15 +48,20 @@
 								<label class="label" for="dateEnd">{{$t('entity.contract.formDateEnd')}} * :</label>
 
 								<input 
-                                    v-if="$i18n.locale == 'EN'"
+                                    v-if="$i18n.locale.toLowerCase() == 'en'"
                                     class="input" 
                                     type="text" 
-                                    pattern="^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$" 
                                     name="dateEnd" 
                                     id="dateEnd" 
                                     v-model="modifyContractForm.dateEnd" >
 
-                                <input v-else class="input" type="text" pattern="^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$" name="dateEnd" id="dateEnd" v-model="modifyContractForm.dateEnd" >
+                                <input 
+                                    v-else 
+                                    class="input" 
+                                    type="text" 
+                                    name="dateEnd" 
+                                    id="dateEnd" 
+                                    v-model="modifyContractForm.dateEnd" >
 							</div>
 						</div>
 					</div>
@@ -289,19 +294,29 @@ export default {
             this.modifyContractForm.active = true;
         },
         modifyContract(){
+            
             if(this.modifyContractForm.name == '' || this.modifyContractForm.name.length > 50){
                 this.modifyContractForm.nameError = this.$i18n.t('form.errorMsg.username.invalidUsername')
+            }
+
+            let dateEndRegex = null;
+            if(this.$i18n.locale.toLowerCase() == 'en'){
+                dateEndRegex = "/^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$/"
+            } else { dateEndRegex = "/^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$/" }
+
+            if(!dateEndRegex.test(this.modifyContractForm.dateEnd)){
+                this.modifyContractForm.dateEndError = this.$i18n.t('form.errorMsg.others.invalidDateEnd')
             }
 
             else {
 
                 let dateEnd = this.modifyContractForm.dateEnd;
-                if(this.$i18n.locale == 'EN'){ 
+                if(this.$i18n.locale.toLowerCase() == 'en'){ 
                     dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'MM-DD-YYYY').format("YYYY-MM-DD")
                 } else {
                     dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'DD-MM-YYYY').format("YYYY-MM-DD")
                 }
-                
+
                 this.modifyContractForm.error = ""
                 this.contractService.modifyById(
                     this.contract.id,

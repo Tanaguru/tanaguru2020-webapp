@@ -25,8 +25,7 @@
 						<div class="form-block">
 							<label class="label" for="dateEnd">{{$t('entity.contract.formDateEnd')}} *</label>
 							<input
-                v-if="$i18n.locale = 'EN'"
-                pattern="^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$"
+                v-if="$i18n.locale.toLowerCase() == 'en'"
                 class="input"
                 v-bind:class="{'has-error': contractCreateForm.dateError}"
                 type="text"
@@ -38,7 +37,6 @@
 
               <input
                 v-else
-                pattern="^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$"
                 class="input"
                 v-bind:class="{'has-error': contractCreateForm.dateError}"
                 type="text"
@@ -149,12 +147,17 @@ export default {
     },
 
     checkDateEnd() {
-      this.contractCreateForm.dateEndError = "";
-      if (!this.contractCreateForm.dateEnd) {
-        this.contractCreateForm.dateError = this.$i18n.t("form.errorMsg.emptyInput");
+      let dateEndRegex = null;
+      if(this.$i18n.locale.toLowerCase() == 'en'){
+        dateEndRegex = /^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$/
+      } else { dateEndRegex = /^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$/ }
+
+      if(dateEndRegex.test(this.contractCreateForm.dateEnd)){
+        return true;
+      } else {
+        this.contractCreateForm.dateError = this.$i18n.t('form.errorMsg.others.invalidDateEnd')
         return false;
       }
-      return true;
     },
 
     createContract() {
@@ -171,7 +174,7 @@ export default {
       if (isFormValid) {
 
         let dateEnd = this.contractCreateForm.dateEnd;
-        if(this.$i18n.locale == 'EN'){ 
+        if(this.$i18n.locale.toLowerCase() == 'en'){ 
           dateEnd = this.$moment(this.contractCreateForm.dateEnd, 'MM-DD-YYYY').format("YYYY-MM-DD")
         } else {
           dateEnd = this.$moment(this.contractCreateForm.dateEnd, 'DD-MM-YYYY').format("YYYY-MM-DD")

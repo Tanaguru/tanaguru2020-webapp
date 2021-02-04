@@ -48,7 +48,8 @@
 		"contract": {
 			"notFound": "This contract does not exist.",
 			"projectLimit": "This contract has reached its maximum number of projects allowed.",
-			"expired": "The contract is passed its validity date"
+			"expired": "The contract is passed its validity date",
+			"invalidDateEnd": "This isn't the expected date format."
 		},
 		"project": {
 			"notFound": "This project does not exist.",
