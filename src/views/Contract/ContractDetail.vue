@@ -301,8 +301,8 @@ export default {
 
             let dateEndRegex = null;
             if(this.$i18n.locale.toLowerCase() == 'en'){
-                dateEndRegex = "/^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$/"
-            } else { dateEndRegex = "/^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$/" }
+                dateEndRegex = /^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$/
+            } else { dateEndRegex = /^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$/ }
 
             if(!dateEndRegex.test(this.modifyContractForm.dateEnd)){
                 this.modifyContractForm.dateEndError = this.$i18n.t('form.errorMsg.others.invalidDateEnd')
