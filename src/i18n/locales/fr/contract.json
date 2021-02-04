@@ -1,6 +1,7 @@
 {
 	"infos": "Détails du contrat",
 	"users": "Utilisateurs du contrat",
+	"projects": "Projet(s) du contrat",
 	"createProject": "Créer un nouveau projet associé",
 	"projectsList": "Liste des projets associés",
 	"legendUsers": "Tableau des utilisateurs du contrat",

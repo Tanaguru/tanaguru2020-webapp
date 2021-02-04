@@ -7,7 +7,7 @@
 				</h3>
 				<ul class="actions-list desktop-flex-element">
 					<li class="actions-list__item">
-						<router-link :to="'/contracts/' +project.contract.id" class="link-independent">{{$t('entity.contract.contract')}} {{ project.contract.name }}</router-link>
+						<router-link :to="'/contracts/' + project.contract.id" v-on:click.native="activeTab()" class="link-independent">{{$t('entity.contract.contract')}} {{ project.contract.name }}</router-link>
 					</li>
 					<li class="actions-list__item">
 						<router-link :to="'/projects/' + project.id + '/archives'" class="link-independent link-independent--icon" :aria-label="project.name+ ': ' +$t('action.archives')">
@@ -484,6 +484,10 @@ export default {
 						},
 				);
 			}
+		},
+
+		activeTab(){
+			this.$store.state.activeTab.name = 'information'
 		}
 	},
 	created(){

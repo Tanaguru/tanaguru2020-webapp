@@ -36,7 +36,7 @@
             this.tabs = this.$children;
         },
         mounted(){
-            this.selectTab(0)
+            this.$children[0].name == 'Contracts' ? 0 : (this.selectTab(this.$store.state.activeTab.name == 'information' ? 0 : 2))
         }
     }
 </script>

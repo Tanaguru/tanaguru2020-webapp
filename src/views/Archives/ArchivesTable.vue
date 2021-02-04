@@ -193,4 +193,7 @@ export default {
 
 <style scoped>
 
+button {
+    margin-bottom: 1rem;
+}
 </style>

@@ -155,7 +155,7 @@ export default {
       if(dateEndRegex.test(this.contractCreateForm.dateEnd)){
         return true;
       } else {
-        this.contractCreateForm.dateError = this.$i18n.t('form.errorMsg.others.invalidDateEnd')
+        this.contractCreateForm.dateError = this.$i18n.t('form.errorMsg.contract.invalidDateEnd')
         return false;
       }
     },
