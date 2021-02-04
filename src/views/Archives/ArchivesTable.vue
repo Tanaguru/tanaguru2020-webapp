@@ -6,7 +6,7 @@
             @click="reverseAuditOrder()" 
             aria-pressed="true"
         >
-            Sort by most recent
+            {{ $t('action.sortAudits') }}
             <icon-base-decorative v-if="firstToLast">
                 <icon-close/>
             </icon-base-decorative>

@@ -28,5 +28,6 @@
 	"loadMore": "Afficher plus",
 	"backToPageList": "Retour à la liste des pages",
 	"confirm": "Confirmer",
-	"cancel": "Annuler"
+	"cancel": "Annuler",
+	"sortAudits": "Plus récent au plus ancien"
 }
