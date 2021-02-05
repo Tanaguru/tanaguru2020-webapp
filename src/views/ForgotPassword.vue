@@ -52,7 +52,7 @@
                     },
                     (error)=>{
                         console.error(error);
-                        this.validationError = this.$t('form.password.resetPasswordMailError');
+                        this.validationError = this.$t('form.errorMsg.password.resetPasswordMailError');
                     }
                 )
             }

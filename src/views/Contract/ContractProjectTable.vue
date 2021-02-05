@@ -1,6 +1,6 @@
 <template>
 	<div class="table-container">
-		<table class="table table--default" v-show="projects.length > 0">
+		<table class="table table--default" v-show="projects">
 			<caption class="screen-reader-text">{{$t('contract.legendProjects')}}</caption>
 			<thead>
 				<tr>

@@ -7,7 +7,7 @@
 				</h3>
 				<ul class="actions-list desktop-flex-element">
 					<li class="actions-list__item">
-						<router-link :to="'/contracts/' +project.contract.id" class="link-independent">{{$t('entity.contract.contract')}} {{ project.contract.name }}</router-link>
+						<router-link :to="'/contracts/' + project.contract.id" v-on:click.native="activeTab()" class="link-independent">{{$t('entity.contract.contract')}} {{ project.contract.name }}</router-link>
 					</li>
 					<li class="actions-list__item">
 						<router-link :to="'/projects/' + project.id + '/archives'" class="link-independent link-independent--icon" :aria-label="project.name+ ': ' +$t('action.archives')">
@@ -37,7 +37,7 @@
 				</div>
 
 				<ul class="actions-list">
-					<li class="actions-list__item" v-show="auditLaunchCondition">
+					<li class="actions-list__item" v-show="auditLaunchCondition && validContract">
 						<router-link :to="'/projects/'+project.id+'/audit'" class='btn btn--icon btn--nude'>
 							<icon-base-decorative><icon-launch /></icon-base-decorative>
 							<span>{{$t('action.auditStart')}}</span>
@@ -111,7 +111,7 @@
 			</div>
 
 			<div class="project-item-content__audits">
-				<div class="no-audit" v-if="!lastAudit">
+				<div class="no-audit" v-if="!lastAudit && validContract">
 					<p>{{$t('dashboard.project.noAudit')}}</p>
 
 					<router-link :to="'/projects/'+project.id+'/audit'" class='btn btn--icon btn--default'>
@@ -298,7 +298,7 @@
 
 				<div class="audit-links mobile-element">
 					<ul class="actions-list">
-						<li class="actions-list__item">
+						<li class="actions-list__item" v-if="auditLaunchCondition && validContract">
 							<router-link :to="'/projects/'+project.id+'/audit'" class='link-independent link-independent--icon'>
 								<icon-base-decorative><icon-launch /></icon-base-decorative>
 								<span>{{$t('action.auditStart')}}</span>
@@ -382,19 +382,28 @@ export default {
 			users: [],
 			currentUserRole: null,
 			projectOpen: false,
-			repositories: []
+			repositories: [],
 		}
 	},
 	computed: {
 		auditLaunchCondition(){
 			let condition = false;
+			
 			if(this.$store.state.auth.user.appRole.overrideProjectRole.name === 'PROJECT_MANAGER' || this.$store.state.auth.user.appRole.overrideProjectRole.name === 'PROJECT_USER'){
 				condition = true
 			}
 			else if(this.currentUserRole === "PROJECT_MANAGER" || this.currentUserRole === "PROJECT_USER" ){
 				condition = true
-			}
+			}			
 			return condition
+		},
+
+		validContract(){
+			let condition = true
+			if(this.$moment(this.project.contract.dateEnd).isBefore(new Date())){
+				condition = false
+			} else { condition = true }
+			return condition;
 		},
 
 		repositoriesNames(){
@@ -475,10 +484,13 @@ export default {
 						},
 				);
 			}
+		},
+
+		activeTab(){
+			this.$store.state.activeTab.name = 'information'
 		}
 	},
 	created(){
-
 		this.auditService.findLastByProject(
 			this.project.id,
 			(audit) => {

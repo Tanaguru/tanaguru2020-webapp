@@ -8,7 +8,7 @@
 			<div class="dashboard-header__actions">
 				<ul class="actions-list">
 					<li class="actions-list__item" v-show="createProjectCondition">
-						<router-link :to="'/contracts/'+currentContractId" class='btn btn--icon btn--nude'>
+						<router-link :to="'/contracts/'+currentContractId" v-on:click.native="activeTab()" class='btn btn--icon btn--nude'>
 							<icon-base-decorative width="16" height="16"><icon-plus /></icon-base-decorative>
 							<span>{{$t('dashboard.actions.new')}}</span>
 						</router-link>
@@ -70,7 +70,6 @@
 	import IconCompliant from '../../components/icons/IconCompliant'
 	import IconIgnored from '../../components/icons/IconIgnored'
 	import IconImproper from '../../components/icons/IconImproper'
-	import IconInforound from '../../components/icons/IconInforound'
 	import IconNotApplicable from '../../components/icons/IconNotApplicable'
 	import IconQualify from '../../components/icons/IconQualify'
 	import IconUntested from '../../components/icons/IconUntested'
@@ -202,6 +201,10 @@
 				else {
 					this.projectsOrder = 'chronological'
 				}
+			},
+
+			activeTab(){
+				this.$store.state.activeTab.name = 'projects'
 			}
 		}
 	}

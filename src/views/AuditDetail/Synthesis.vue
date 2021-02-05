@@ -115,7 +115,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(criteriaResultByPage, criteriaCode, i) in currentSynthesis" :key="criteriaCode">
+                    <tr v-for="(criteriaResultByPage, criteriaCode) in currentSynthesis" :key="criteriaCode">
                       <th scope="row" class="row-header">Test {{ criteriaCode }}</th>
                       <td v-for="(criteriaResult, pageId, indexPage) in criteriaResultByPage" :key="pageId">
                         <button class="btn btn--nude" @click="openModal(audit, pageById[pageId], criteriaResult, indexPage)">

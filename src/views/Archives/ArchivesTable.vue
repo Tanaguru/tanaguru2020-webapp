@@ -1,5 +1,20 @@
 <template>
     <div>
+        <button 
+            type="button" 
+            :class="firstToLast ? 'btn btn--default-inverse btn--icon' : 'btn btn--default btn--icon'"
+            @click="reverseAuditOrder()" 
+            aria-pressed="true"
+        >
+            {{ $t('action.sortAudits') }}
+            <icon-base-decorative v-if="firstToLast">
+                <icon-close/>
+            </icon-base-decorative>
+
+            <icon-base-decorative v-else>
+                <icon-checked/>
+            </icon-base-decorative>
+        </button>
         <table class="table table--default">
             <caption class="screen-reader-text">{{ $t('archives.legendUpload') }}</caption>
             <thead>
@@ -20,7 +35,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="audit of audits" :key="audit.id" v-if="audit.type === type && totalPagesByAudit[audit.id] !== undefined">
+            <tr v-for="audit of auditOrder" :key="audit.id" v-if="audit.type === type && totalPagesByAudit[audit.id] !== undefined">
                 <th scope="row">{{ audit.name }}</th>
                 <td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
                 <td>{{ totalPagesByAudit[audit.id] }}</td>
@@ -69,10 +84,11 @@
 </template>
 
 <script>
-import moment from 'moment';
 import IconBaseDecorative from '../../components/icons/IconBaseDecorative'
 import IconArrowBlue from '../../components/icons/IconArrowBlue'
 import IconDelete from '../../components/icons/IconDelete'
+import IconChecked from '../../components/icons/IconChecked'
+import IconClose from '../../components/icons/IconClose'
 import DeletionModal from '../../components/DeleteModal'
 
 export default {
@@ -81,11 +97,14 @@ export default {
         IconBaseDecorative,
         IconArrowBlue,
         IconDelete,
+        IconChecked,
+        IconClose,
         DeletionModal
     },
     data() {
         return {
-            totalPagesByAudit: {}
+            totalPagesByAudit: {},
+            firstToLast: false
         }
     },
     props: ['audits', 'type', 'deleteCondition'],
@@ -108,7 +127,7 @@ export default {
 			.catch(() => {
                 this.$modal.close()
 			})
-			.finally(() => {})
+			.finally(() => {this.$modal.close})
         },
 
         confirmAuditScreenshotDeletion(audit) {
@@ -129,7 +148,13 @@ export default {
 			.catch(() => {
                 this.$modal.close()
 			})
-			.finally(() => {})
+			.finally(() => {this.$modal.close})
+        },
+
+        reverseAuditOrder(){
+            if(this.firstToLast == true) {
+                this.firstToLast = false
+            } else { this.firstToLast = true }
         },
 
         moment: function (date) {
@@ -152,10 +177,23 @@ export default {
                 }
             )
         }
+    },
+    computed: {
+        auditOrder() {
+            let auditOrder = this.audits;
+            if(this.firstToLast == true){
+                auditOrder = this.audits
+            } else { auditOrder = this.audits.slice().reverse()}
+            
+            return auditOrder;
+        }
     }
 }
 </script>
 
 <style scoped>
 
+button {
+    margin-bottom: 1rem;
+}
 </style>

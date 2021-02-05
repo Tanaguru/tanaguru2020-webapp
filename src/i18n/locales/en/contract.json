@@ -1,6 +1,7 @@
 {
 	"infos": "Contract details",
 	"users": "Contract users",
+	"projects": "Contract projects",
 	"createProject": "Create a new project associated with the contract",
 	"projectsList": "Projects associated with the contract",
 	"legendUsers": "Contract's users table",

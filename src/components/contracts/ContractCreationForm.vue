@@ -23,11 +23,23 @@
 
 					<div class="form-column">
 						<div class="form-block">
-							<label class="label" for="dateEnd">{{$t('entity.contract.dateEnd')}} *</label>
+							<label class="label" for="dateEnd">{{$t('entity.contract.formDateEnd')}} *</label>
 							<input
+                v-if="$i18n.locale.toLowerCase() == 'en'"
                 class="input"
                 v-bind:class="{'has-error': contractCreateForm.dateError}"
-                type="date"
+                type="text"
+                name="dateEnd"
+                id="dateEnd"
+                :aria-describedby="contractCreateForm.dateError ? 'date-error' : ''"
+                v-model="contractCreateForm.dateEnd"
+                required>
+
+              <input
+                v-else
+                class="input"
+                v-bind:class="{'has-error': contractCreateForm.dateError}"
+                type="text"
                 name="dateEnd"
                 id="dateEnd"
                 :aria-describedby="contractCreateForm.dateError ? 'date-error' : ''"
@@ -97,7 +109,7 @@ export default {
           this.contractCreateForm.dateError = ""
           this.contractCreateForm.ownerError = ""
           this.contractCreateForm.error = ""
-          this.contractCreateForm.successMsg = ""
+          this.successMsg = ""
         } 
     	}
   },
@@ -135,12 +147,17 @@ export default {
     },
 
     checkDateEnd() {
-      this.contractCreateForm.dateEndError = "";
-      if (!this.contractCreateForm.dateEnd) {
-        this.contractCreateForm.dateError = this.$i18n.t("form.errorMsg.emptyInput");
+      let dateEndRegex = null;
+      if(this.$i18n.locale.toLowerCase() == 'en'){
+        dateEndRegex = /^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$/
+      } else { dateEndRegex = /^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$/ }
+
+      if(dateEndRegex.test(this.contractCreateForm.dateEnd)){
+        return true;
+      } else {
+        this.contractCreateForm.dateError = this.$i18n.t('form.errorMsg.contract.invalidDateEnd')
         return false;
       }
-      return true;
     },
 
     createContract() {
@@ -155,9 +172,17 @@ export default {
       isFormValid &= this.checkOwner();
 
       if (isFormValid) {
+
+        let dateEnd = this.contractCreateForm.dateEnd;
+        if(this.$i18n.locale.toLowerCase() == 'en'){ 
+          dateEnd = this.$moment(this.contractCreateForm.dateEnd, 'MM-DD-YYYY').format("YYYY-MM-DD")
+        } else {
+          dateEnd = this.$moment(this.contractCreateForm.dateEnd, 'DD-MM-YYYY').format("YYYY-MM-DD")
+        }
+
         this.contractService.create(
           this.contractCreateForm.name,
-          this.contractCreateForm.dateEnd,
+          dateEnd,
           this.contractCreateForm.ownerId,
           this.contractCreateForm.restrictDomain,
           (contract) => {
@@ -176,6 +201,10 @@ export default {
             }
           }
         )
+
+        this.contractCreateForm.name = ""
+        this.contractCreateForm.ownerId = ""
+        this.contractCreateForm.dateEnd = ""
       }
     }
   }

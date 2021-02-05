@@ -16,7 +16,8 @@
 						<ul class="actions-list">
 							<li class="actions-list__item">
 								<router-link class="link link-independent link-independent--icon"
-											:to="'/contracts/' + contract.id">
+											:to="'/contracts/' + contract.id"
+											v-on:click.native="activeTab()">
 									<icon-base-decorative>
 										<icon-arrow-blue/>
 									</icon-base-decorative>
@@ -66,7 +67,7 @@ export default {
 	methods: {
 		deleteContract(contract) {
 			this.$modal
-				.confirm(DeletionModal, this.$t('deletionModal.delete') + contract.name + ' ?', {
+				.confirm(DeletionModal, this.$t('deletionModal.delete') + contract.name + this.$t('deletionModal.andProjects'), {
 					label: "deletion-modal",
 					classes: "modal",
 					attributes: {
@@ -82,8 +83,12 @@ export default {
 				.catch(() => {
 					this.$modal.close()
 				})
-				.finally(() => {})
+				.finally(() => {this.$modal.close()})
 		},
+
+		activeTab(){
+			this.$store.state.activeTab.name = 'information'
+		}
 	}
 }
 

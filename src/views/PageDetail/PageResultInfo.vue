@@ -51,10 +51,11 @@
 		</div>
 
 		<div class="audit-infos">
-			<div class="audit-infos__stats">
+			<div class="audit-infos__stats" v-show="displayMode != 'anomaly'">
 				<div class="audit-stats">
 					<div class="audit-stats__chart">
 						<CircularProgressChart
+                            v-show="displayMode != 'anomaly'"
 							:percentage="percentage"
 							:shadowOne="'chart-shadow1-' + audit.id"
 							:shadowTwo="'chart-shadow2-' + audit.id"
@@ -144,7 +145,6 @@
     import IconPrint from "../../components/icons/IconPrint";
     import IconLaunch from "../../components/icons/IconLaunch";
     import CircularProgressChart from "../../components/charts/CircularProgressChart";
-	import moment from 'moment';
 	import backgroundImg from '../../../public/assets/images/logo-desktop.svg';
     export default {
         name: 'PageResultInfo',
@@ -168,7 +168,7 @@
 				defaultImg: { backgroundImage: `url(${require('../../../public/assets/images/logo-desktop.svg')})` }
             }
         },
-        props: ['audit', 'page', 'pages', 'auditParameters', 'percentage', 'nbAnomaly', 'nbElementTested', 'pageContent', 'reference' ],
+        props: ['audit', 'displayMode', 'page', 'pages', 'auditParameters', 'percentage', 'nbAnomaly', 'nbElementTested', 'pageContent', 'reference' ],
         computed: {
             shareCodeUrl(){
                 return location.origin + '/#/audits/' + this.audit.id + '/pages/' + this.page.id + '/' + this.audit.shareCode
@@ -182,42 +182,41 @@
 			}*/
         },
 
-    methods: {
-        moment: function (date) {
-            this.$moment.locale(this.$i18n.locale)
-            return this.$moment(date);
+        methods: {
+            moment: function (date) {
+                this.$moment.locale(this.$i18n.locale)
+                return this.$moment(date);
+            },
+
+            triggerPrint() {
+                bus.$emit("allShown", true);
+                setTimeout(() => (
+                    window.print()
+                ), 50)
+            },
+
+            copyShareCode() {
+                let shareCodeUrl = document.querySelector('#shareCodeUrl')
+                shareCodeUrl.setAttribute('type', 'text')
+                shareCodeUrl.select()
+                try {
+                    var successful = document.execCommand('copy');
+                    var msg = successful ? 'successful' : 'unsuccessful';
+                    this.copyButtonText = this.$i18n.t("resultAudit.copyLink.success")
+                    this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.sucessHelp")
+                    setTimeout(() => (
+                        this.showSharecodeTooltip = false
+                    ), 400)
+                } catch (err) {
+                    this.copyButtonText = this.$i18n.t("resultAudit.copyLink.fail")
+                    this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.failHelp")
+                }
+                /* unselect the range */
+                shareCodeUrl.setAttribute('type', 'hidden')
+                window.getSelection().removeAllRanges()
+            },
         },
-
-        triggerPrint() {
-            bus.$emit("allShown", true);
-            setTimeout(() => (
-                window.print()
-            ), 50)
-        },
-
-		copyShareCode() {
-			let shareCodeUrl = document.querySelector('#shareCodeUrl')
-			shareCodeUrl.setAttribute('type', 'text')
-			shareCodeUrl.select()
-			try {
-				var successful = document.execCommand('copy');
-				var msg = successful ? 'successful' : 'unsuccessful';
-				this.copyButtonText = this.$i18n.t("resultAudit.copyLink.success")
-				this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.sucessHelp")
-				setTimeout(() => (
-					this.showSharecodeTooltip = false
-				), 400)
-			} catch (err) {
-				this.copyButtonText = this.$i18n.t("resultAudit.copyLink.fail")
-				this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.failHelp")
-			}
-			/* unselect the range */
-			shareCodeUrl.setAttribute('type', 'hidden')
-			window.getSelection().removeAllRanges()
-		},
-    },
-
-}
+    }
 
 </script>
 

@@ -1,188 +1,172 @@
 <template>
-    <main v-if="contract" id="page" class="wrapper contract" role="main">
-		<Breadcrumbs :breadcrumbsItems='breadcrumbProps' ></Breadcrumbs>
+    
+        <article>
+            <h2 class="contract__title-2">{{$t('contract.infos')}}</h2>
+			<div v-if="!modifyContractForm.active">
+				<ul class="infos-list">
+					<li><span class="infos-list__exergue">{{$t('entity.contract.name')}}</span> : {{contract.name}}</li>
+					<li><span class="infos-list__exergue">{{$t('entity.contract.dateStart')}}</span> : {{  moment(contract.dateStart).format('LL') }}</li>
+					<li><span class="infos-list__exergue">{{$t('entity.contract.dateEnd')}}</span> : {{  moment(contract.dateEnd).format('LL') }}</li>
+				</ul>
 
-		<header class="headline headline--top">
-			<h1>{{contract.name}}</h1>
-		</header>
+				<button
+					class="btn btn--default"
+					v-if="$store.state.auth.user.appRole.name == 'SUPER_ADMIN'"
+					@click="showModifyContractForm()">
+					{{$t('action.modify')}}
+				</button>
+				<p v-if="modifyContractForm.error" class="info-error">{{modifyContractForm.error}}</p>
+			</div>
 
-        <div class="wrapper" id="page" role="main">
-            <Tabs @activeTab='activeTab'>
-                <Tab :name="$t('contract.infos')" class="tabs-wrapper">
-                    <article>
-                        <h2 class="contract__title-2">{{$t('contract.infos')}}</h2>
-                        <div v-if="!modifyContractForm.active">
-                            <ul class="infos-list">
-                                <li><span class="infos-list__exergue">{{$t('entity.contract.name')}}</span> : {{contract.name}}</li>
-                                <li><span class="infos-list__exergue">{{$t('entity.contract.dateStart')}}</span> : {{  moment(contract.dateStart).format('LL') }}</li>
-                                <li><span class="infos-list__exergue">{{$t('entity.contract.dateEnd')}}</span> : {{  moment(contract.dateEnd).format('LL') }}</li>
-                            </ul>
-
-                            <button
-                                class="btn btn--default"
-                                v-if="$store.state.auth.user.appRole.name == 'SUPER_ADMIN'"
-                                @click="showModifyContractForm()">
-                                {{$t('action.modify')}}
-                            </button>
-                            <p v-if="modifyContractForm.error" class="info-error">{{modifyContractForm.error}}</p>
-                        </div>
-
-                        <div v-else>
-                            <form @submit.prevent="modifyContract">
-                                <div class="form-row">
-                                    <div class="form-column">
-                                        <div class="form-block">
-                                            <label class="label" for="name1">{{$t('entity.contract.name')}} * :</label>
-                                            <input
-                                                class="input"
-                                                type="text"
-                                                name="name"
-                                                id="name1"
-                                                v-model="modifyContractForm.name"
-                                                :aria-describedby="nameDescribedBy"
-                                                required>
-                                            <p class="info-text" id="name-constraint">{{ $t('form.indications.nameConstraint') }}</p>
-                                            <p v-if="modifyContractForm.nameError" class="info-error" id="name-error">{{modifyContractForm.nameError}}</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-column">
-                                        <div class="form-block">
-                                            <label class="label" for="dateEnd">{{$t('entity.contract.formDateEnd')}} * :</label>
-
-                                            <input 
-                                                v-if="$i18n.locale.toLowerCase() == 'en'"
-                                                class="input" 
-                                                type="text" 
-                                                name="dateEnd" 
-                                                id="dateEnd" 
-                                                v-model="modifyContractForm.dateEnd" >
-
-                                            <input 
-                                                v-else 
-                                                class="input" 
-                                                type="text" 
-                                                name="dateEnd" 
-                                                id="dateEnd" 
-                                                v-model="modifyContractForm.dateEnd" >
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button class="btn btn--default" type="submit">{{$t('action.modify')}}</button>
-                                <p v-if="modifyContractForm.error" class="info-error">{{modifyContractForm.error}}</p>
-                            </form>
-                        </div>
-                    </article>
-                </Tab>
-
-                <!-- USERS BY CONTRACT -->
-                <div v-if="this.$store.state.auth.user.appRole.name !== 'USER'">
-                    <Tab :name="$t('contract.users')" class="tabs-wrapper">
-                        <article v-show="addingCondition">
-                        <h2 class="contract__title-2">{{$t('contract.users')}}</h2>
-                        <p>{{$t('form.indications.help')}}</p>
-                        <form @submit.prevent="addUser" class="form-users" novalidate>
-                            <div class="form-block form-block--half">
-                                <label class="label" for="username">{{$t('entity.user.username')}} *</label>
-                                <input
+			<div v-else>
+				<form @submit.prevent="modifyContract">
+					<div class="form-row">
+						<div class="form-column">
+							<div class="form-block">
+								<label class="label" for="name1">{{$t('entity.contract.name')}} * :</label>
+								<input
                                     class="input"
                                     type="text"
-                                    name="username"
-                                    id="username"
-                                    :placeholder="$t('entity.user.username')"
-                                    v-model="userAdditionForm.username"
-                                    required
-                                    :aria-describedby="userAdditionForm.error ? 'user-addition-error' : ''">
-                                <p v-if="userAdditionForm.error" class="info-error" id="user-addition-error">{{ userAdditionForm.error }}</p>
-                            </div>
+                                    name="name"
+                                    id="name1"
+                                    v-model="modifyContractForm.name"
+                                    :aria-describedby="nameDescribedBy"
+                                    required>
+							    <p class="info-text" id="name-constraint">{{ $t('form.indications.nameConstraint') }}</p>
+                                <p v-if="modifyContractForm.nameError" class="info-error" id="name-error">{{modifyContractForm.nameError}}</p>
+							</div>
+						</div>
 
-                            <button class="btn btn--default btn-add" type="submit">{{$t('action.addUser')}}</button>
-                            <p v-if="userAdditionForm.successMsg" class="info-success" aria-live="polite">{{ userAdditionForm.successMsg }}</p>
-                        </form>
+						<div class="form-column">
+							<div class="form-block">
+								<label class="label" for="dateEnd">{{$t('entity.contract.formDateEnd')}} * :</label>
 
-                        <ContractUserTable
-                            :contract-users="contractUsers"
-                            @delete-user="deleteUser"
-                            @promote-user="promoteUser"
-                            :deletingCondition="deletingUserCondition"
-                            :addingCondition="addingCondition"
-                            :promoteCondition="promoteCondition"
-                            :promoteSuccessMsg="promoteSuccessMsg" />
-                    </article>
-                    </Tab>
+								<input 
+                                    v-if="$i18n.locale.toLowerCase() == 'en'"
+                                    class="input" 
+                                    type="text" 
+                                    name="dateEnd" 
+                                    id="dateEnd" 
+                                    v-model="modifyContractForm.dateEnd" >
 
-                    <!-- PROJECTS BY CONTRACT -->
-                    <Tab :name="$t('contract.projects')" class="tabs-wrapper">
-                        <article v-show="addingCondition">
-                            <h2 class="contract__title-2">{{$t('contract.createProject')}}</h2>
-                            <p>{{$t('form.indications.help')}}</p>
-                            <form @submit.prevent="createProject" novalidate>
-                                <div class="form-row">
-                                    <div class="form-column">
-                                        <div class="form-block">
-                                            <label class="label" for="name2">{{$t('entity.project.name')}} *</label>
-                                            <input
-                                                class="input"
-                                                type="text"
-                                                name="name"
-                                                id="name2"
-                                                :placeholder="$t('entity.project.name')"
-                                                :aria-describedBy="projectCreateForm.nameError ? 'name-error' : ''"
-                                                v-model="projectCreateForm.name"
-                                                required
-                                            >
-                                            <p v-show="projectCreateForm.nameError" id="name-error" class="info-error">{{projectCreateForm.nameError}}</p>
-                                        </div>
-                                    </div>
+                                <input 
+                                    v-else 
+                                    class="input" 
+                                    type="text" 
+                                    name="dateEnd" 
+                                    id="dateEnd" 
+                                    v-model="modifyContractForm.dateEnd" >
+							</div>
+						</div>
+					</div>
 
-                                    <div class="form-column">
-                                        <div class="form-block">
-                                            <label class="label" for="domain">
-                                                {{$t('entity.project.domain')}}
-                                                <span v-if="contract.restrictDomain"> *</span>
-                                            </label>
-                                            <input
-                                                class="input"
-                                                type="url"
-                                                name="domain"
-                                                id="domain"
-                                                :placeholder="$t('entity.project.domain')"
-                                                :aria-describedBy="domainDescribedBy"
-                                                v-model="projectCreateForm.domain"
-                                                :required="contract.restrictDomain"
-                                            >
-                                            <p class="info-text" id="domain-constraint">(example : http://www.website.com/)</p>
-                                            <p class="info-error" id="domain-error">{{projectCreateForm.domainError}}</p>
-                                        </div>
-                                    </div>
-                                </div>
+					<button class="btn btn--default" type="submit">{{$t('action.modify')}}</button>
+					<p v-if="modifyContractForm.error" class="info-error">{{modifyContractForm.error}}</p>
+				</form>
+			</div>
+        </article>
 
-                                <button class="btn btn--default" type="submit">{{$t('action.create')}}</button>
-                                <p v-if="projectCreateForm.error" class="info-error">{{projectCreateForm.error}}</p>
-                                <p class="info-success" v-show="projectCreateForm.successMsg">{{ projectCreateForm.successMsg }}</p>
-                            </form>
-                        </article>
+        <!-- USERS BY CONTRACT -->
 
-                        <article v-show="projects.length > 0">
-                            <h2 class="contract__title-2" id="table-projects">{{$t('contract.projectsList')}}</h2>
-
-                            <ContractProjectTable
-                                :projects="projects"
-                                :authorityByProjectId="authorityByProjectId"
-                                @delete-project="deleteProject"/>
-                        </article>
-                    </Tab>
+        <article v-show="addingCondition">
+            <h2 class="contract__title-2">{{$t('contract.users')}}</h2>
+			<p>{{$t('form.indications.help')}}</p>
+            <form @submit.prevent="addUser" class="form-users" novalidate>
+                <div class="form-block form-block--half">
+                    <label class="label" for="username">{{$t('entity.user.username')}} *</label>
+                    <input
+                        class="input"
+                        type="text"
+                        name="username"
+                        id="username"
+                        :placeholder="$t('entity.user.username')"
+                        v-model="userAdditionForm.username"
+                        required
+                        :aria-describedby="userAdditionForm.error ? 'user-addition-error' : ''">
+                    <p v-if="userAdditionForm.error" class="info-error" id="user-addition-error">{{ userAdditionForm.error }}</p>
                 </div>
-            </Tabs>
-        </div>
+
+                <button class="btn btn--default btn-add" type="submit">{{$t('action.addUser')}}</button>
+                <p v-if="userAdditionForm.successMsg" class="info-success" aria-live="polite">{{ userAdditionForm.successMsg }}</p>
+            </form>
+
+			<ContractUserTable
+                :contract-users="contractUsers"
+                @delete-user="deleteUser"
+                @promote-user="promoteUser"
+                :deletingCondition="deletingUserCondition"
+                :addingCondition="addingCondition"
+                :promoteCondition="promoteCondition"
+                :promoteSuccessMsg="promoteSuccessMsg" />
+        </article>
+
+        <!-- PROJECTS BY CONTRACT -->
+
+        <article v-show="addingCondition">
+            <h2 class="contract__title-2">{{$t('contract.createProject')}}</h2>
+			<p>{{$t('form.indications.help')}}</p>
+            <form @submit.prevent="createProject" novalidate>
+				<div class="form-row">
+					<div class="form-column">
+						<div class="form-block">
+							<label class="label" for="name2">{{$t('entity.project.name')}} *</label>
+							<input
+                                class="input"
+                                type="text"
+                                name="name"
+                                id="name2"
+                                :placeholder="$t('entity.project.name')"
+                                :aria-describedBy="projectCreateForm.nameError ? 'name-error' : ''"
+                                v-model="projectCreateForm.name"
+                                required
+                            >
+							<p v-show="projectCreateForm.nameError" id="name-error" class="info-error">{{projectCreateForm.nameError}}</p>
+						</div>
+					</div>
+
+                    <div class="form-column">
+						<div class="form-block">
+							<label class="label" for="domain">
+                                {{$t('entity.project.domain')}}
+                                <span v-if="contract.restrictDomain"> *</span>
+                            </label>
+							<input
+                                class="input"
+                                type="url"
+                                name="domain"
+                                id="domain"
+                                :placeholder="$t('entity.project.domain')"
+                                :aria-describedBy="domainDescribedBy"
+                                v-model="projectCreateForm.domain"
+                                :required="contract.restrictDomain"
+                            >
+							<p class="info-text" id="domain-constraint">(example : http://www.website.com/)</p>
+							<p class="info-error" id="domain-error">{{projectCreateForm.domainError}}</p>
+						</div>
+					</div>
+                </div>
+
+                <button class="btn btn--default" type="submit">{{$t('action.create')}}</button>
+                <p v-if="projectCreateForm.error" class="info-error">{{projectCreateForm.error}}</p>
+                <p class="info-success" v-show="projectCreateForm.successMsg">{{ projectCreateForm.successMsg }}</p>
+            </form>
+        </article>
+
+		<article v-show="projects.length > 0">
+			<h2 class="contract__title-2" id="table-projects">{{$t('contract.projectsList')}}</h2>
+
+			<ContractProjectTable
+                :projects="projects"
+                :authorityByProjectId="authorityByProjectId"
+                @delete-project="deleteProject"/>
+		</article>
+
         <BackToTop />
+
     </main>
 </template>
 
 <script>
-import Tabs from './../../components/Tabs'
-import Tab from './../../components/Tab'
 import ContractUserTable from './ContractUserTable'
 import ContractProjectTable from './ContractProjectTable'
 import BackToTop from '../../components/BackToTop'
@@ -198,8 +182,6 @@ export default {
 		IconArrowBlue,
         IconDelete,
         Breadcrumbs,
-        Tabs,
-        Tab,
         BackToTop,
         ContractUserTable,
         ContractProjectTable
@@ -212,7 +194,6 @@ export default {
                     path: '/'
                 }
             ],
-			selectedTab: null,
             contract: null,
             users: [],
             contractUsers: [],
@@ -257,9 +238,6 @@ export default {
         }
     },
     computed: {
-        showReferenceTab(){
-    		return REFERENCE_PANEL
-		},
         promoteCondition(){
 			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
                 return authority.name === 'PROMOTE_MEMBER'
@@ -304,9 +282,6 @@ export default {
             this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
         },
-        activeTab(value){
-			this.selectedTab = value
-		},
         showModifyContractForm(){
             this.modifyContractForm.name = this.contract.name;
             this.modifyContractForm.dateEnd = this.$moment(this.contract.dateEnd).format('L');
@@ -512,8 +487,6 @@ export default {
         }
     },
     created() {
-        console.log(this.$store.state.activeTab)
-
         this.userService.findAll(
             (users) => {
                 this.users = users
