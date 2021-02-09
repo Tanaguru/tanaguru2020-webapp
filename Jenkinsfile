@@ -60,7 +60,7 @@ pipeline {
             steps {
 				script{
 					unstash 'version'
-					def devDockerEnv = createDockerEnvFileContent('812179c5-a3f7-4664-aa64-72e047016d28');
+					def devDockerEnv = createDockerEnvFileContent('62d1f7d7-fe7c-43da-a752-14fe989555bb');
                     writeFile file: "./.env", text: devDockerEnv
 					sh '''
 						WEBAPP_VERSION=$(cat version.txt)
