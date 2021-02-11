@@ -21,25 +21,27 @@
 
 							<input
                                 class="input"
-                                v-bind:class="{'has-error': !isBreakPointValid(breakpoint)}"
+                                v-bind:class="{'has-error': showItemError.includes(i) && !isBreakPointValid(breakpoint)}"
                                 type="number"
                                 name="breakpoint-length"
                                 :id="`breakpoint-length-${i}`"
                                 :required="i === 0"
                                 :value="breakpoint"
                                 @input="onChangeBreakpoint(i, $event.target.value)"
+                                @focus="hideItemListError(i)"
+                                @blur="showItemListError(i)"
                                 :aria-describedby="describedBy(breakpoint, i)"
 							/>
 
 							<p class="info-text" :id='`precision-length-${i}`'>{{$t('audit.resolution.labelHelp')}}</p>
 
-                             <p v-if="!breakpoint" role="alert" class="info-error" :id='`empty-error-${i}`'>
+                             <p v-if="showItemError.includes(i) && !breakpoint" role="alert" class="info-error" :id='`empty-error-${i}`'>
 								<icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
 									<icon-alert/>
 								</icon-base-decorative>
 								<span>{{ $t('form.errorMsg.emptyInput') }}</span>
 							</p>
-							<p v-else-if="!isBreakPointValid(breakpoint)" role="alert" class="info-error" :id='`valid-error-${i}`'>
+							<p v-else-if="showItemError.includes(i) && !isBreakPointValid(breakpoint)" role="alert" class="info-error" :id='`valid-error-${i}`'>
 								<icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
 									<icon-alert/>
 								</icon-base-decorative>
@@ -93,6 +95,7 @@
         data() {
             return {
                 breakpoints: this.value,
+                showItemError: []
             }
         },
         methods: {
@@ -118,6 +121,17 @@
 							'' :
 							'valid-error-' + i
             },
+            showItemListError(i) {
+                this.showItemError.push(i)
+            },
+            hideItemListError(i) {
+                if(!this.isBreakPointValid) {
+                    let j = this.showItemError.indexOf(i);
+                    if(j >= 0) {
+                        this.showItemError.splice(i,1);
+                    }
+                }
+            }
         }
     }
 </script>

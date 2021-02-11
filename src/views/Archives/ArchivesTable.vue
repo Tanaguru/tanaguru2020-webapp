@@ -64,6 +64,7 @@
 						<li class="actions-list__item"
 							v-if="audit.status === 'DONE' || audit.status === 'ERROR'">
 							<button
+                                v-show="hasScreenShot[audit.id] == 'true'"
 								class="btn btn--icon btn--nude"
 								@click="confirmAuditScreenshotDeletion(audit)">
 								<icon-base-decorative>
@@ -104,6 +105,7 @@ export default {
     data() {
         return {
             totalPagesByAudit: {},
+            hasScreenShot: {},
             firstToLast: false
         }
     },
@@ -174,6 +176,31 @@ export default {
                 },
                 (error) => {
                     console.error(error)
+                }
+            )
+
+            this.auditParametersService.findByAuditId(
+                this.audits[i].id,
+                this.audits[i].sharecode,
+                (parameters) => {
+            
+                    let screenshotParam = null;
+                    parameters.forEach(parameter => {
+                        if(parameter.auditParameter.code == "ENABLE_SCREENSHOT") {
+                            screenshotParam = parameter.value
+                        }
+                    });
+
+                    this.$set(
+                        this.hasScreenShot, 
+                        this.audits[i].id, 
+                        screenshotParam
+                    )
+
+                    console.log(this.hasScreenShot)
+                },
+                (error) => {
+                    console.log(error)
                 }
             )
         }

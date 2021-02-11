@@ -109,6 +109,7 @@ export default {
 
 	.router-link-active {
 		color: $link-hover;
+		font-weight: bolder;
 
 		svg {
 			.stroke-color {

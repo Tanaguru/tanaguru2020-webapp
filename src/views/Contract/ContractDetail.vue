@@ -10,7 +10,10 @@
             <Tabs @activeTab='activeTab'>
                 <Tab :name="$t('contract.infos')" class="tabs-wrapper">
                     <article>
-                        <h2 class="contract__title-2">{{$t('contract.infos')}}</h2>
+                        <h2 class="contract__title-2">
+                            {{$t('contract.infos')}}
+							<span aria-live="polite" class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">Expired</span>
+                        </h2>
                         <div v-if="!modifyContractForm.active">
                             <ul class="infos-list">
                                 <li><span class="infos-list__exergue">{{$t('entity.contract.name')}}</span> : {{contract.name}}</li>
@@ -585,6 +588,14 @@ export default {
 		margin-top: 6.2rem;
 		margin-bottom: 3.1rem;
 	}
+    .title-logs__status--error {
+        padding: .5rem .8rem;
+		border-radius: .2rem;
+		color: $color-white;
+		font-size: $medium-font-size;
+		vertical-align: middle;
+        background-color: $color-alert;
+    }
 	.form-users {
 		margin-bottom: 4.6rem;
 	}

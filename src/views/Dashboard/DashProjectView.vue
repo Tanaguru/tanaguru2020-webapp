@@ -568,7 +568,7 @@ export default {
 		);
 
 		this.userService.findAllByProject(
-			this.$props.project.id,
+			this.project.id,
 			(users) => {
 				this.users = users
 				let currentUser = this.users.filter(user =>

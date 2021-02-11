@@ -172,7 +172,7 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 								audit.id,
 								this.sharecode,
 								(parameters) => {
-									this.parameters = parameters.filter(parameter => parameter.value && parameter.auditParameter.code != "SITE_SEEDS" && parameter.auditParameter.code != "PAGE_URLS" && parameter.auditParameter.code != "SCENARIO_ID" && parameter.auditParameter.code != "DOM_ID")
+									this.parameters = parameters.filter(parameter => parameter.value && parameter.auditParameter.code != "SITE_SEEDS" && parameter.auditParameter.code != "PAGE_URLS" && parameter.auditParameter.code != "SCENARIO_ID" && parameter.auditParameter.code != "DOM_ID" && parameter.auditParameter.code != "WEBDRIVER_BROWSER")
 									let browser = null;
 							
 									parameters.forEach(parameter => {
