@@ -9,7 +9,12 @@
 		<article>
             <h2 class="project__title-2">{{$t('project.infos')}}</h2>
 			<ul class="infos-list">
-				<li><span class="infos-list__exergue">{{$t('entity.project.contract')}}</span> : {{ contract.name }}</li>
+				<li>
+					<span class="infos-list__exergue">{{$t('entity.project.contract')}}</span> 
+					: 
+					{{ contract.name }}
+					<span class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">Expired</span>    
+				</li>
 				<li><span class="infos-list__exergue">{{$t('entity.project.domain')}}</span> : <a :href="project.domain"> {{ project.domain }} </a></li>
 			</ul>
 
@@ -298,6 +303,13 @@
 		margin-top: 6.2rem;
 		margin-bottom: 3.1rem;
 	}
+}
+
+.title-logs__status--error {
+	padding: .2rem .3rem;
+	border-radius: .2rem;
+	color: $color-white;
+	background-color: $color-alert;
 }
 
 .project-actions-list {

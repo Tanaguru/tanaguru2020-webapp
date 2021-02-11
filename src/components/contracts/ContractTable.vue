@@ -11,7 +11,10 @@
 			<tbody>
 				<tr v-for="contract of contracts" :key="contract.id">
 					<th scope="row">{{ contract.name }}</th>
-					<td>{{ $moment(contract.dateEnd).format('LL') }}</td>
+					<td>
+						{{ $moment(contract.dateEnd).format('LL') }}
+						<span class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">Expired</span> 
+					</td>
 					<td class="td-actions">
 						<ul class="actions-list">
 							<li class="actions-list__item">
@@ -94,3 +97,13 @@ export default {
 
 </script>
 
+<style lang="scss" scoped>
+
+.title-logs__status--error {
+	margin: 1rem;
+	padding: .2rem .3rem;
+	border-radius: .2rem;
+	color: $color-white;
+	background-color: $color-alert;
+}
+</style>

@@ -3,7 +3,10 @@
 		<Breadcrumbs :breadcrumbsItems='breadcrumbProps' ></Breadcrumbs>
 
 		<header class="headline headline--top">
-			<h1>{{contract.name}}</h1>
+			<h1>
+                {{contract.name}}
+                <span aria-live="polite" class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">Expired</span>    
+            </h1>
 		</header>
 
         <div class="wrapper" id="page" role="main">
@@ -12,7 +15,6 @@
                     <article>
                         <h2 class="contract__title-2">
                             {{$t('contract.infos')}}
-							<span aria-live="polite" class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">Expired</span>
                         </h2>
                         <div v-if="!modifyContractForm.active">
                             <ul class="infos-list">
@@ -83,36 +85,38 @@
                 <div v-if="this.$store.state.auth.user.appRole.name !== 'USER'">
                     <Tab :name="$t('contract.users')" class="tabs-wrapper">
                         <article v-show="addingCondition">
-                        <h2 class="contract__title-2">{{$t('contract.users')}}</h2>
-                        <p>{{$t('form.indications.help')}}</p>
-                        <form @submit.prevent="addUser" class="form-users" novalidate>
-                            <div class="form-block form-block--half">
-                                <label class="label" for="username">{{$t('entity.user.username')}} *</label>
-                                <input
-                                    class="input"
-                                    type="text"
-                                    name="username"
-                                    id="username"
-                                    :placeholder="$t('entity.user.username')"
-                                    v-model="userAdditionForm.username"
-                                    required
-                                    :aria-describedby="userAdditionForm.error ? 'user-addition-error' : ''">
-                                <p v-if="userAdditionForm.error" class="info-error" id="user-addition-error">{{ userAdditionForm.error }}</p>
-                            </div>
+                            <h2 class="contract__title-2">{{$t('contract.users')}}</h2>
+                            <p>{{$t('form.indications.help')}}</p>
+                            <form @submit.prevent="addUser" class="form-users" novalidate>
+                                <div class="form-block form-block--half">
+                                    <label class="label" for="username">{{$t('entity.user.username')}} *</label>
+                                    <input
+                                        class="input"
+                                        type="text"
+                                        name="username"
+                                        id="username"
+                                        :placeholder="$t('entity.user.username')"
+                                        v-model="userAdditionForm.username"
+                                        required
+                                        :aria-describedby="userAdditionForm.error ? 'user-addition-error' : ''">
+                                    <p v-if="userAdditionForm.error" class="info-error" id="user-addition-error">{{ userAdditionForm.error }}</p>
+                                </div>
 
-                            <button class="btn btn--default btn-add" type="submit">{{$t('action.addUser')}}</button>
-                            <p v-if="userAdditionForm.successMsg" class="info-success" aria-live="polite">{{ userAdditionForm.successMsg }}</p>
-                        </form>
+                                <button class="btn btn--default btn-add" type="submit">{{$t('action.addUser')}}</button>
+                                <p v-if="userAdditionForm.successMsg" class="info-success" aria-live="polite">{{ userAdditionForm.successMsg }}</p>
+                            </form>
+                        </article>
 
-                        <ContractUserTable
-                            :contract-users="contractUsers"
-                            @delete-user="deleteUser"
-                            @promote-user="promoteUser"
-                            :deletingCondition="deletingUserCondition"
-                            :addingCondition="addingCondition"
-                            :promoteCondition="promoteCondition"
-                            :promoteSuccessMsg="promoteSuccessMsg" />
-                    </article>
+                        <article>
+                            <ContractUserTable
+                                :contract-users="contractUsers"
+                                @delete-user="deleteUser"
+                                @promote-user="promoteUser"
+                                :deletingCondition="deletingUserCondition"
+                                :addingCondition="addingCondition"
+                                :promoteCondition="promoteCondition"
+                                :promoteSuccessMsg="promoteSuccessMsg" />
+                        </article>
                     </Tab>
 
                     <!-- PROJECTS BY CONTRACT -->
@@ -167,13 +171,17 @@
                             </form>
                         </article>
 
-                        <article v-show="projects.length > 0">
+                        <article v-if="projects.length > 0">
                             <h2 class="contract__title-2" id="table-projects">{{$t('contract.projectsList')}}</h2>
 
                             <ContractProjectTable
                                 :projects="projects"
                                 :authorityByProjectId="authorityByProjectId"
                                 @delete-project="deleteProject"/>
+                        </article>
+                        <article v-else>
+                            <p v-if=" $moment(contract.dateEnd).isAfter(new Date())">No project have been created in this contract yet.</p>
+                            <p v-else>This contract had no project.</p>
                         </article>
                     </Tab>
                 </div>
@@ -264,18 +272,18 @@ export default {
     		return REFERENCE_PANEL
 		},
         promoteCondition(){
-			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
+			return (this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
                 return authority.name === 'PROMOTE_MEMBER'
-            }) ||
-            (this.currentContractUser &&  this.currentContractUser.contractRole.authorities.some(authority => {
+            }) && this.$moment(this.contract.dateEnd).isAfter(new Date())) ||
+            (this.currentContractUser && this.$moment(this.contract.dateEnd).isAfter(new Date()) && this.currentContractUser.contractRole.authorities.some(authority => {
                 return authority.name === 'PROMOTE_MEMBER'
             }));
         },
         addingCondition(){
-			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
+			return (this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
 				return authority.name === 'CREATE_PROJECT'
-			}) ||
-            (this.currentContractUser && this.currentContractUser.contractRole.authorities.some(authority => {
+			}) && this.$moment(this.contract.dateEnd).isAfter(new Date()))||
+            (this.currentContractUser && this.$moment(this.contract.dateEnd).isAfter(new Date()) && this.currentContractUser.contractRole.authorities.some(authority => {
                 return authority.name === 'CREATE_PROJECT'
             }));
         },
@@ -515,8 +523,6 @@ export default {
         }
     },
     created() {
-        console.log(this.$store.state.activeTab)
-
         this.userService.findAll(
             (users) => {
                 this.users = users
