@@ -29,7 +29,6 @@
                                 @click="showModifyContractForm()">
                                 {{$t('action.modify')}}
                             </button>
-                            <p v-if="modifyContractForm.error" class="info-error">{{modifyContractForm.error}}</p>
                         </div>
 
                         <div v-else>
