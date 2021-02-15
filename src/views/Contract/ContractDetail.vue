@@ -29,7 +29,6 @@
                                 @click="showModifyContractForm()">
                                 {{$t('action.modify')}}
                             </button>
-                            <p v-if="modifyContractForm.error" class="info-error">{{modifyContractForm.error}}</p>
                         </div>
 
                         <div v-else>
@@ -159,7 +158,7 @@
                                                 v-model="projectCreateForm.domain"
                                                 :required="contract.restrictDomain"
                                             >
-                                            <p class="info-text" id="domain-constraint">(example : http://www.website.com/)</p>
+                                            <p class="info-text" id="domain-constraint">{{$t('form.indications.urlConstraint')}}</p>
                                             <p class="info-error" id="domain-error">{{projectCreateForm.domainError}}</p>
                                         </div>
                                     </div>

@@ -8,7 +8,7 @@
 
 		<Tabs @activeTab='activeTab'>
             <Tab :name="$t('project.infos')" class="tabs-wrapper">
-				<article>
+				<article v-if="!modifyProjectForm.active">
 					<h2 class="project__title-2">{{$t('project.infos')}}</h2>
 					<ul class="infos-list">
 						<li>
@@ -21,6 +21,14 @@
 					</ul>
 
 					<ul class="project-actions-list">
+						<li class="project-actions-list__item">
+							<button
+								v-if="$store.state.auth.authorities['MODIFY_PROJECT']"
+								class="btn btn--default"
+								@click="showModifyProjectForm()">
+								{{$t('action.modify')}}
+							</button>
+						</li>
 						<li class="project-actions-list__item" v-if="!validContract">
 							<router-link class="btn btn--default btn--icon" :to="'/projects/' + project.id + '/audit'">
 								<icon-base-decorative width="16" height="16" viewBox="0 0 20 20"><icon-launch /></icon-base-decorative>
@@ -35,6 +43,46 @@
 							</router-link>
 						</li>
 					</ul>
+				</article>
+				<article v-else>
+					<form @submit.prevent="modifyProject">
+						<div class="form-row">
+							<div class="form-column">
+								<div class="form-block">
+									<label class="label" for="name1">{{$t('entity.project.name')}} * :</label>
+									<input
+										class="input"
+										type="text"
+										name="name"
+										id="name1"
+										v-model="modifyProjectForm.name"
+										:aria-describedby="nameDescribedBy"
+										required>
+									<p class="info-text" id="name-constraint">{{ $t('form.indications.nameConstraint') }}</p>
+									<p v-if="modifyProjectForm.nameError" class="info-error" id="name-error">{{modifyProjectForm.nameError}}</p>
+								</div>
+							</div>
+
+							<div class="form-column">
+								<div class="form-block">
+									<label class="label" for="domain">{{$t('entity.project.domain')}} * :</label>
+									<input
+										class="input"
+										type="text"
+										name="domain"
+										id="domain"
+										v-model="modifyProjectForm.domain"
+										:aria-describedby="domainDescribedBy"
+										required>
+									<p class="info-text" id="domain-constraint">{{ $t('form.indications.urlConstraint') }}</p>
+									<p v-if="modifyProjectForm.domainError" class="info-error" id="domain-error">{{modifyProjectForm.domainError}}</p>
+								</div>
+							</div>
+						</div>
+
+						<button class="btn btn--default" type="submit">{{$t('action.modify')}}</button>
+						<p v-if="modifyProjectForm.error" class="info-error">{{modifyProjectForm.error}}</p>
+					</form>
 				</article>
 			</Tab>
 
@@ -126,6 +174,14 @@
 						path: '/'
 					},
 				],
+				selectedTab: null,
+				modifyProjectForm: {
+					active: false,
+					name: "",
+					domain: "",
+					nameError: "",
+					domainError: ""
+				}
 			}
 		},
 		metaInfo(){
@@ -215,9 +271,69 @@
 					description = "user-error"
 				}
 				return description;
-			}
+			},
+
+			nameDescribedBy(){
+				let description = 'name-constraint';
+				if(this.modifyProjectForm.nameError){
+					description = 'name-error name-constraint'
+				}
+				return description;
+			},
+
+			domainDescribedBy(){
+				let description = 'domain-constraint';
+				if(this.modifyProjectForm.domainError){
+					description = 'domain-error domain-constraint'
+				}
+				return description;
+			},
 		},
 		methods: {
+			activeTab(value){
+				this.selectedTab = value
+			},
+
+			showModifyProjectForm(){
+				this.modifyProjectForm.name = this.project.name;
+				this.modifyProjectForm.domain = this.project.domain;
+            	this.modifyProjectForm.active = true;
+			},
+			modifyProject(){
+				if(this.modifyProjectForm.name.length === 0){
+					this.modifyProjectForm.nameError = this.$i18n.t("form.errorMsg.emptyInput");
+				} else if(this.modifyProjectForm.name.length > 50){
+					this.modifyProjectForm.nameError = this.$i18n.t("form.errorMsg.others.nameError")
+				}
+
+				if(this.contract.restrictDomain) {
+					let urlRegex = /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+
+					if(!urlRegex.test(this.auditConfigurationForm.common.url)){
+						this.modifyProjectForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
+					}
+				}
+
+				this.projectService.modifyById(
+					this.project.id,
+					this.modifyProjectForm.name,
+					this.modifyProjectForm.domain,
+					(project) => {
+						this.project = project;
+                        this.modifyProjectForm.active = false;
+                    },
+                    (error) => {
+						console.log(error)
+					}
+				)
+
+				this.modifyProjectForm.error = "";
+				this.modifyProjectForm.nameError = "";
+				this.modifyProjectForm.domainError = "";
+				this.modifyProjectForm.name = "";
+				this.modifyProjectForm.domain = "";
+			},
+
 			removeUser(user){
 				var index = this.projectUsers.indexOf(user);
 				if(index > -1){
@@ -254,21 +370,21 @@
 						},
 						(error) => {
 							if(err.response.data.error == "CANNOT_PROMOTE_YOURSELF"){
-								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.user.promoteSelf")
+								this.modifyProjectForm.error = this.$i18n.t("form.errorMsg.user.promoteSelf")
 							} else if (err.response.data.error == "PROJECT_CANNOT_PROMOTE_USER"){
-								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.user.notAllowed")
+								this.modifyProjectForm.error = this.$i18n.t("form.errorMsg.user.notAllowed")
 							} else if (err.response.data.error == "CANNOT_PROMOTE_CONTRACT_OWNER"){
-								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.user.promoteOwner")
+								this.modifyProjectForm.error = this.$i18n.t("form.errorMsg.user.promoteOwner")
 							} else if (err.response.data.error == "USER_NOT_FOUND_FOR_PROJECT"){
-								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.user.userDoesntBelong")
+								this.modifyProjectForm.error = this.$i18n.t("form.errorMsg.user.userDoesntBelong")
 							} else if(err.response.data.error == "USER_NOT_FOUND"){
-								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.user.notFound")
+								this.modifyProjectForm.error = this.$i18n.t("form.errorMsg.user.notFound")
 							} else if(err.response.data.error == "PROJECT_NOT_FOUND"){
-								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.project.notFound")
+								this.modifyProjectForm.error = this.$i18n.t("form.errorMsg.project.notFound")
 							} else if(err.response.status == "403"){
-								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
+								this.modifyProjectForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
 							} else {  
-								this.projectCreateForm.error = this.$i18n.t("form.errorMsg.genericError");
+								this.modifyProjectForm.error = this.$i18n.t("form.errorMsg.genericError");
 							}
 						}
 

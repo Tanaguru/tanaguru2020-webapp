@@ -35,7 +35,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="audit of auditOrder" :key="audit.id" v-if="audit.type === type && totalPagesByAudit[audit.id] !== undefined">
+            <tr v-for="audit of auditOrder" :key="audit.id" v-if="audit.type === type && totalPagesByAudit[audit.id] > 0">
                 <th scope="row">{{ audit.name }}</th>
                 <td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
                 <td>{{ totalPagesByAudit[audit.id] }}</td>
@@ -104,7 +104,7 @@ export default {
     },
     data() {
         return {
-            totalPagesByAudit: {},
+            totalPagesByAudit: [],
             hasScreenShot: {},
             firstToLast: false
         }
@@ -213,7 +213,7 @@ export default {
             } else { auditOrder = this.audits.slice().reverse()}
             
             return auditOrder;
-        }
+        },
     }
 }
 </script>
