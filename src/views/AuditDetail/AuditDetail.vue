@@ -172,25 +172,22 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 								audit.id,
 								this.sharecode,
 								(parameters) => {
-
-									console.log(parameters)
-
-									this.parameters = parameters.map(parameter => {
-										return parameter.value 
-										&& parameter.auditParameter.code != "SITE_SEEDS" 
-										&& parameter.auditParameter.code != "PAGE_URLS" 
-										&& parameter.auditParameter.code != "SCENARIO_ID" 
-										&& parameter.auditParameter.code != "DOM_ID" 
-										&& parameter.auditParameter.code != "WEBDRIVER_BROWSER"
-									})
-									console.log(this.parameters)
-
 									parameters.forEach(parameter => {
 										if(parameter.auditParameter.code == "WEBDRIVER_BROWSER") {
 											this.browser = parameter.value
 										}
+										else if(parameter.auditParameter.code == "MAIN_REFERENCE") {
+											this.mainReference = parameter.value
+										}
+										else if(parameter.value
+										&& parameter.auditParameter.code != "SITE_SEEDS" 
+										&& parameter.auditParameter.code != "PAGE_URLS" 
+										&& parameter.auditParameter.code != "SCENARIO_ID" 
+										&& parameter.auditParameter.code != "DOM_ID" 
+										&& parameter.auditParameter.code != "WEBDRIVER_BROWSER"){
+											this.parameters.push(parameter)
+										}
 									});
-									//this.mainReference = 'to do'
 								},
 								(error) => {
 									console.log(error)

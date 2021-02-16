@@ -174,6 +174,7 @@ import Breadcrumbs from '../../components/Breadcrumbs';
 import ProfileContractTable from './ProfileContractTable';
 import BackToTop from '../../components/BackToTop';
 import EmailHelper from '../../helper/emailHelper'
+import PasswordHelper from '../../helper/PasswordHelper'
 
 export default {
     name: 'userDetail',
@@ -184,6 +185,7 @@ export default {
         Breadcrumbs,
         BackToTop,
         EmailHelper,
+        PasswordHelper
     },
     data() {
         return {
@@ -240,19 +242,18 @@ export default {
         modifyUser() {
             this.modifyUserForm.error = ""
 
-            if (this.isCurrentUser) {
+            if (this.modifyUserForm.username === '' || this.modifyUserForm.username.length < 4) {
+                this.modifyUserForm.usernameError = this.$i18n.t("form.errorMsg.username.invalidUsername")
+            }
 
-                if (this.modifyUserForm.username === '' || this.modifyUserForm.username.length < 4) {
-                    this.modifyUserForm.usernameError = this.$i18n.t("form.errorMsg.username.invalidUsername")
-                }
+            if (!this.modifyUserForm.email) {
+                this.modifyUserForm.emailError = this.$i18n.t("entity.user.emailError")
+            } else if (!this.checkValidEmail(this.modifyUserForm.email)) {
+                this.modifyUserForm.emailError = this.$i18n.t("form.errorMsg.email.notEmail")
+            }
 
-                if (!this.modifyUserForm.email) {
-                    this.modifyUserForm.emailError = this.$i18n.t("entity.user.emailError")
-                } else if (!this.checkValidEmail(this.modifyUserForm.email)) {
-                    this.modifyUserForm.emailError = this.$i18n.t("form.errorMsg.email.notEmail")
-                }
-
-                if (this.modifyUserForm.email && this.modifyUserForm.username && this.checkValidEmail(this.modifyUserForm.email)) {
+            if (this.modifyUserForm.email && this.modifyUserForm.username && this.checkValidEmail(this.modifyUserForm.email)) {
+                if (this.isCurrentUser) {
                     this.userService.modifyMe(
                         this.modifyUserForm.username,
                         this.modifyUserForm.email,
@@ -266,17 +267,7 @@ export default {
                         },
                         (error) => this.modifyUserForm.error = this.$i18n.t("form.errorMsg.genericError")
                     )
-                }
-
-            } else {
-                if (this.modifyUserForm.username === '' || this.modifyUserForm.username.length < 4) {
-                    this.modifyUserForm.usernameError = this.$i18n.t("form.errorMsg.username.invalidUsername")
-                }
-                if (this.modifyUserForm.email === '') {
-                    this.modifyUserForm.emailError = this.$i18n.t("entity.user.emailError")
-                }
-
-                if (this.modifyUserForm.email !== '' && this.modifyUserForm.username !== '') {
+                } else {
                     this.userService.modifyUser(
                         this.user.id,
                         this.modifyUserForm.username,
@@ -299,6 +290,7 @@ export default {
             this.modifyPasswordForm.passwordConfirm = "";
             this.modifyPasswordForm.active = true;
         },
+		checkValidPassword: PasswordHelper.checkValidPassword,
         modifyPassword() {
             if(this.modifyPasswordForm.password.length == 0 || this.modifyPasswordForm.passwordConfirm.length == 0){
                 if(this.modifyPasswordForm.password.length == 0){
@@ -308,8 +300,8 @@ export default {
                     this.modifyPasswordForm.confirmationError = this.$i18n.t("form.errorMsg.emptyInput")
                 }
             }
-            else if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-,;:_]).{8,}$/.test(this.modifyPasswordForm.password) == false) {
-                this.modifyPasswordForm.confirmationError = "Your password should be at least 8 characters long and contain at least 1 upper case, 1 lower case, 1 number and 1 special character."
+            else if (!this.checkValidPassword(this.modifyPasswordForm.password) == false) {
+                this.modifyPasswordForm.confirmationError = this.$i18n.t("form.errorMsg.password.passwordError")
             }
             else if (this.modifyPasswordForm.password != this.modifyPasswordForm.passwordConfirm) {
                 this.modifyPasswordForm.error = this.$i18n.t("form.errorMsg.password.incorrectConfirmation")

@@ -172,19 +172,17 @@ export default {
                 1,
                 (pagePage) => {
                     this.$set(this.totalPagesByAudit, this.audits[i].id, pagePage.totalPages)
-
-                    pagePage.content.forEach(page => {
-                        this.pageContentService.findByPageId(
-                            page.id,
-                            this.audits[i].shareCode,
-                            (content) => {
-                                this.$set(this.hasScreenShotByAudit, this.audits[i].id, content.screenshot)
-                            }
-                        )
-                    });
                 },
                 (error) => {
                     console.error(error)
+                }
+            )
+
+            this.auditService.hasScreenshotsById(
+                this.audits[i].id,
+                this.audits[i].shareCode,
+                (hasScreenshot) => {
+                    this.$set(this.hasScreenShotByAudit, this.audits[i].id, hasScreenshot)
                 }
             )
 
@@ -192,12 +190,19 @@ export default {
                 this.audits[i].id,
                 this.audits[i].sharecode,
                 (parameters) => {
-            
-                    this.$set(
-                        this.hasScreenShotByAudit, 
-                        this.audits[i].id, 
-                        parameters
-                    )
+                    if(parameters[5].value == "true"){
+                        this.$set(      
+                            this.hasScreenShotByAudit, 
+                            this.audits[i].id, 
+                            true
+                        )
+                    } else {
+                        this.$set(      
+                            this.hasScreenShotByAudit, 
+                            this.audits[i].id, 
+                            false
+                        )
+                    }
                 },
                 (error) => {
                     console.log(error)

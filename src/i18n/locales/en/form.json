@@ -43,7 +43,7 @@
 		},
 		"email": {
 			"existingEmail": "This e-mail adress has already been registered.",
-			"NotEmail": "This should be an e-mail adress."
+			"notEmail": "This should be an e-mail adress."
 
 		},
 		"contract": {

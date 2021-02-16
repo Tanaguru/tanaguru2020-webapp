@@ -108,8 +108,15 @@
 </template>
 
 <script>
+import EmailHelper from '../../helper/emailHelper';
+import PasswordHelper from '../../helper/PasswordHelper';
+
 export default {
 	name: 'userCreationForm',
+	components: {
+		EmailHelper,
+		PasswordHelper
+	},
 	data() {
 		return {
 			userCreateForm: {
@@ -124,10 +131,7 @@ export default {
 				passwordError: "",
 				usernameError: "",
 				roleError: ""
-			},
-			passwordRegex: /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-.,;:_]).{8,}$/,
-			emailRegex: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-
+			}
 		}
 	},
 	props: [ 'selected' ],
@@ -179,6 +183,8 @@ export default {
 		}
 	},
 	methods: {
+        checkValidEmail: EmailHelper.checkValidEmail,
+		checkValidPassword: PasswordHelper.checkValidPassword,
 		checkUsername(){
 			this.userCreateForm.usernameError = "";
 			if (!this.userCreateForm.username) {
@@ -199,7 +205,7 @@ export default {
 				return false;
 			}
 
-			if (!this.emailRegex.test(this.userCreateForm.email)) {
+			if (!this.checkValidEmail(this.userCreateForm.email)) {
 				this.userCreateForm.emailError = this.$i18n.t("form.indications.emailConstraint");
 				return false;
 			}
@@ -212,7 +218,7 @@ export default {
 				return false;
 			}
 
-			if (!this.passwordRegex.test(this.userCreateForm.password)) {
+			if (!this.checkValidPassword(this.userCreateForm.password)) {
 				this.userCreateForm.passwordError = this.$i18n.t("form.indications.passwordConstraint")
 				return false;
 			}

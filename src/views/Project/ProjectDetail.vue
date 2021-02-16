@@ -20,13 +20,7 @@
 						<li><span class="infos-list__exergue">{{$t('entity.project.domain')}}</span> : <a :href="project.domain"> {{ project.domain }} </a></li>
 					</ul>
 
-					<ul class="project-actions-list">
-						<button
-							class="btn btn--default"
-							v-if="$store.state.auth.user.appRole.name == 'SUPER_ADMIN'"
-							@click="showModifyContractForm()">
-							{{$t('action.modify')}}
-						</button>
+					<ul class="project-actions-list">						
 						<li class="project-actions-list__item" v-if="!validContract">
 							<router-link class="btn btn--default btn--icon" :to="'/projects/' + project.id + '/audit'">
 								<icon-base-decorative width="16" height="16" viewBox="0 0 20 20"><icon-launch /></icon-base-decorative>
