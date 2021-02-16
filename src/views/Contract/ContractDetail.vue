@@ -387,39 +387,46 @@ export default {
             }
 
             if(this.contract.restrictDomain) {
-
-                if(!this.checkValidDomain(this.auditConfigurationForm.common.url)){
+                if(!this.checkValidDomain(this.projectCreateForm.domain)){
                     this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
-                }
+                } else { this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError") }
+            } else {
+                if(this.projectCreateForm.domain){
+                    if(!this.checkValidDomain(this.projectCreateForm.domain)){
+                        this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
+                    }
+                } 
             }
 
-			this.projectService.create(
-				this.projectCreateForm.name,
-				this.projectCreateForm.domain.trim(),
-                this.contract.id,
-				(project) => {
-                    this.projects.push(project)
-					this.projectCreateForm.successMsg = this.$i18n.t('form.successMsg.projectCreation')
-				},
-				(error) => {
-                    if(error.response.data.error == "CONTRACT_NOT_FOUND"){
-    					this.projectCreateForm.error = this.$i18n.t('form.errorMsg.contract.notFound')
-                    } else if (error.response.data.error == "PROJECT_LIMIT_FOR_CONTRACT"){
-                        this.projectCreateForm.error = this.$i18n.t('form.errorMsg.contract.projectLimit')
-                    } else if (error.response.data.error == "INVALID_DOMAIN"){
-                        this.projectCreateForm.error = this.$i18n.t('form.errorMsg.project.invalidDomain')
-                    } else if (error.response.status == "403") {
-    					this.projectCreateForm.error = this.$i18n.t('form.errorMsg.user.permissionDenied')
-                    } else {
-    					this.projectCreateForm.error = this.$i18n.t('form.errorMsg.genericError')
+            if(this.checkValidDomain(this.projectCreateForm.domain) && this.projectCreateForm.name && this.projectCreateForm.name.length < 51) {
+                this.projectService.create(
+                    this.projectCreateForm.name,
+                    this.projectCreateForm.domain.trim(),
+                    this.contract.id,
+                    (project) => {
+                        this.projects.push(project)
+                        this.projectCreateForm.successMsg = this.$i18n.t('form.successMsg.projectCreation')
+                    },
+                    (error) => {
+                        if(error.response.data.error == "CONTRACT_NOT_FOUND"){
+                            this.projectCreateForm.error = this.$i18n.t('form.errorMsg.contract.notFound')
+                        } else if (error.response.data.error == "PROJECT_LIMIT_FOR_CONTRACT"){
+                            this.projectCreateForm.error = this.$i18n.t('form.errorMsg.contract.projectLimit')
+                        } else if (error.response.data.error == "INVALID_DOMAIN"){
+                            this.projectCreateForm.error = this.$i18n.t('form.errorMsg.project.invalidDomain')
+                        } else if (error.response.status == "403") {
+                            this.projectCreateForm.error = this.$i18n.t('form.errorMsg.user.permissionDenied')
+                        } else {
+                            this.projectCreateForm.error = this.$i18n.t('form.errorMsg.genericError')
+                        }
                     }
-				}
-			);
-			this.projectCreateForm.error = "";
-			this.projectCreateForm.nameError = "";
-			this.projectCreateForm.domainError = "";
-			this.projectCreateForm.name = "";
-			this.projectCreateForm.domain = "";
+                );
+                this.projectCreateForm.error = "";
+                this.projectCreateForm.nameError = "";
+                this.projectCreateForm.domainError = "";
+                this.projectCreateForm.name = "";
+                this.projectCreateForm.domain = "";
+            }
         },
         deleteProject(project){
             const index = this.projects.indexOf(project);
@@ -440,6 +447,7 @@ export default {
                     }
                 )
             }
+
         },
         addUser(){
             if(this.userAdditionForm.username.length == 0){
