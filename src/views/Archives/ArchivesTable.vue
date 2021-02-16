@@ -183,31 +183,11 @@ export default {
                 this.audits[i].shareCode,
                 (hasScreenshot) => {
                     this.$set(this.hasScreenShotByAudit, this.audits[i].id, hasScreenshot)
-                }
-            )
-
-            /*this.auditParametersService.findByAuditId(
-                this.audits[i].id,
-                this.audits[i].sharecode,
-                (parameters) => {
-                    if(parameters[5].value == "true"){
-                        this.$set(      
-                            this.hasScreenShotByAudit, 
-                            this.audits[i].id, 
-                            true
-                        )
-                    } else {
-                        this.$set(      
-                            this.hasScreenShotByAudit, 
-                            this.audits[i].id, 
-                            false
-                        )
-                    }
                 },
                 (error) => {
-                    console.log(error)
-                },
-            )*/
+                    console.error(error)
+                }
+            )
         }
     },
     computed: {
