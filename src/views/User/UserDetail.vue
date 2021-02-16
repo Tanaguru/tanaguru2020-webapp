@@ -173,6 +173,7 @@ import IconArrowBlue from '../../components//icons/IconArrowBlue'
 import Breadcrumbs from '../../components/Breadcrumbs';
 import ProfileContractTable from './ProfileContractTable';
 import BackToTop from '../../components/BackToTop';
+import EmailHelper from '../../helper/emailHelper'
 
 export default {
     name: 'userDetail',
@@ -181,7 +182,8 @@ export default {
         IconArrowBlue,
         ProfileContractTable,
         Breadcrumbs,
-        BackToTop
+        BackToTop,
+        EmailHelper,
     },
     data() {
         return {
@@ -234,23 +236,23 @@ export default {
             this.modifyUserForm.enabled = this.user.enabled;
             this.modifyUserForm.active = true;
         },
+        checkValidEmail: EmailHelper.checkValidEmail,
         modifyUser() {
             this.modifyUserForm.error = ""
 
             if (this.isCurrentUser) {
 
-                let emailRegex = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/
-
                 if (this.modifyUserForm.username === '' || this.modifyUserForm.username.length < 4) {
                     this.modifyUserForm.usernameError = this.$i18n.t("form.errorMsg.username.invalidUsername")
                 }
+
                 if (!this.modifyUserForm.email) {
                     this.modifyUserForm.emailError = this.$i18n.t("entity.user.emailError")
-                } else if (!emailRegex.test(this.modifyUserForm.email)) {
-                    this.modifyUserForm.emailError = "This should be an e-mail adress."
+                } else if (!this.checkValidEmail) {
+                    this.modifyUserForm.emailError = this.$i18n.t("form.errorMsg.email.notEmail")
                 } 
 
-                if (this.modifyUserForm.email !== '' && this.modifyUserForm.username !== '' && emailRegex.test(this.modifyUserForm.email)) {
+                if (this.modifyUserForm.email !== '' && this.modifyUserForm.username !== '' && this.checkValidEmail) {
                     this.userService.modifyMe(
                         this.modifyUserForm.username,
                         this.modifyUserForm.email,

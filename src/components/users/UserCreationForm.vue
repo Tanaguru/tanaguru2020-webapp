@@ -265,6 +265,10 @@ export default {
 					}
 				)
 			}
+			this.userCreateForm.username = "";
+			this.userCreateForm.email = "";
+			this.userCreateForm.appRole = "";
+			this.userCreateForm.enable = "";
 		},
 	}
 }

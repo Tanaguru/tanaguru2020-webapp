@@ -35,7 +35,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="audit of auditOrder" :key="audit.id" v-if="audit.type === type && totalPagesByAudit[audit.id] !== undefined">
+            <tr v-for="audit of auditOrder" :key="audit.id" v-if="audit.type === type && totalPagesByAudit[audit.id] > 0">
                 <th scope="row">{{ audit.name }}</th>
                 <td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
                 <td>{{ totalPagesByAudit[audit.id] }}</td>
@@ -62,9 +62,8 @@
 							</button>
 						</li>
 						<li class="actions-list__item"
-							v-if="audit.status === 'DONE' || audit.status === 'ERROR'">
+							v-if="(hasScreenShotByAudit[audit.id] && audit.status === 'DONE') || (hasScreenShotByAudit[audit.id] && audit.status === 'ERROR')">
 							<button
-                                v-show="hasScreenShot[audit.id] == 'true'"
 								class="btn btn--icon btn--nude"
 								@click="confirmAuditScreenshotDeletion(audit)">
 								<icon-base-decorative>
@@ -105,7 +104,7 @@ export default {
     data() {
         return {
             totalPagesByAudit: {},
-            hasScreenShot: {},
+            hasScreenShotByAudit: [],
             firstToLast: false
         }
     },
@@ -173,36 +172,37 @@ export default {
                 1,
                 (pagePage) => {
                     this.$set(this.totalPagesByAudit, this.audits[i].id, pagePage.totalPages)
+
+                    pagePage.content.forEach(page => {
+                        this.pageContentService.findByPageId(
+                            page.id,
+                            this.audits[i].shareCode,
+                            (content) => {
+                                this.$set(this.hasScreenShotByAudit, this.audits[i].id, content.screenshot)
+                            }
+                        )
+                    });
                 },
                 (error) => {
                     console.error(error)
                 }
             )
 
-            this.auditParametersService.findByAuditId(
+            /*this.auditParametersService.findByAuditId(
                 this.audits[i].id,
                 this.audits[i].sharecode,
                 (parameters) => {
             
-                    let screenshotParam = null;
-                    parameters.forEach(parameter => {
-                        if(parameter.auditParameter.code == "ENABLE_SCREENSHOT") {
-                            screenshotParam = parameter.value
-                        }
-                    });
-
                     this.$set(
-                        this.hasScreenShot, 
+                        this.hasScreenShotByAudit, 
                         this.audits[i].id, 
-                        screenshotParam
+                        parameters
                     )
-
-                    console.log(this.hasScreenShot)
                 },
                 (error) => {
                     console.log(error)
-                }
-            )
+                },
+            )*/
         }
     },
     computed: {

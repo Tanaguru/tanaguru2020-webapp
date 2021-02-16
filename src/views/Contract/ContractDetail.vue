@@ -5,7 +5,7 @@
 		<header class="headline headline--top">
 			<h1>
                 {{contract.name}}
-                <span aria-live="polite" class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">Expired</span>    
+                <span aria-live="polite" class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">{{$t('contract.expired')}}</span>    
             </h1>
 		</header>
 
@@ -83,7 +83,7 @@
                 <!-- USERS BY CONTRACT -->
                 <div v-if="this.$store.state.auth.user.appRole.name !== 'USER'">
                     <Tab :name="$t('contract.users')" class="tabs-wrapper">
-                        <article v-show="addingCondition">
+                        <article v-show="addingCondition && isStillValid">
                             <h2 class="contract__title-2">{{$t('contract.users')}}</h2>
                             <p>{{$t('form.indications.help')}}</p>
                             <form @submit.prevent="addUser" class="form-users" novalidate>
@@ -112,15 +112,15 @@
                                 @delete-user="deleteUser"
                                 @promote-user="promoteUser"
                                 :deletingCondition="deletingUserCondition"
-                                :addingCondition="addingCondition"
                                 :promoteCondition="promoteCondition"
+                                :isStillValid="isStillValid"
                                 :promoteSuccessMsg="promoteSuccessMsg" />
                         </article>
                     </Tab>
 
                     <!-- PROJECTS BY CONTRACT -->
                     <Tab :name="$t('contract.projects')" class="tabs-wrapper">
-                        <article v-show="addingCondition">
+                        <article v-show="addingCondition && isStillValid">
                             <h2 class="contract__title-2">{{$t('contract.createProject')}}</h2>
                             <p>{{$t('form.indications.help')}}</p>
                             <form @submit.prevent="createProject" novalidate>
@@ -179,8 +179,8 @@
                                 @delete-project="deleteProject"/>
                         </article>
                         <article v-else>
-                            <p v-if=" $moment(contract.dateEnd).isAfter(new Date())">No project have been created in this contract yet.</p>
-                            <p v-else>This contract had no project.</p>
+                            <p v-if=" $moment(contract.dateEnd).isAfter(new Date())">{{$t('contract.noProjectYet')}}</p>
+                            <p v-else>{{$t('contract.hadNoProject')}}</p>
                         </article>
                     </Tab>
                 </div>
@@ -271,20 +271,23 @@ export default {
     		return REFERENCE_PANEL
 		},
         promoteCondition(){
-			return (this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
+			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
                 return authority.name === 'PROMOTE_MEMBER'
-            }) && this.$moment(this.contract.dateEnd).isAfter(new Date())) ||
-            (this.currentContractUser && this.$moment(this.contract.dateEnd).isAfter(new Date()) && this.currentContractUser.contractRole.authorities.some(authority => {
+            }) ||
+            (this.currentContractUser &&  this.currentContractUser.contractRole.authorities.some(authority => {
                 return authority.name === 'PROMOTE_MEMBER'
             }));
         },
         addingCondition(){
-			return (this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
+			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
 				return authority.name === 'CREATE_PROJECT'
-			}) && this.$moment(this.contract.dateEnd).isAfter(new Date()))||
-            (this.currentContractUser && this.$moment(this.contract.dateEnd).isAfter(new Date()) && this.currentContractUser.contractRole.authorities.some(authority => {
+			}) ||
+            (this.currentContractUser && this.currentContractUser.contractRole.authorities.some(authority => {
                 return authority.name === 'CREATE_PROJECT'
             }));
+        },
+        isStillValid(){
+            return this.$moment(this.contract.dateEnd).isAfter(new Date())
         },
         deletingUserCondition(){
 			return this.$store.state.auth.user.appRole.overrideProjectRole.authorities.some(authority => {

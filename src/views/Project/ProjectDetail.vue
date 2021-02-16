@@ -15,7 +15,7 @@
 							<span class="infos-list__exergue">{{$t('entity.project.contract')}}</span> 
 							: 
 							{{ contract.name }}
-							<span class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">Expired</span>    
+							<span class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">{{$t('contract.expired')}}</span>    
 						</li>
 						<li><span class="infos-list__exergue">{{$t('entity.project.domain')}}</span> : <a :href="project.domain"> {{ project.domain }} </a></li>
 					</ul>
