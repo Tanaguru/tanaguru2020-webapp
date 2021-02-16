@@ -248,11 +248,11 @@ export default {
 
                 if (!this.modifyUserForm.email) {
                     this.modifyUserForm.emailError = this.$i18n.t("entity.user.emailError")
-                } else if (!this.checkValidEmail) {
+                } else if (!this.checkValidEmail(this.modifyUserForm.email)) {
                     this.modifyUserForm.emailError = this.$i18n.t("form.errorMsg.email.notEmail")
-                } 
+                }
 
-                if (this.modifyUserForm.email !== '' && this.modifyUserForm.username !== '' && this.checkValidEmail) {
+                if (this.modifyUserForm.email && this.modifyUserForm.username && this.checkValidEmail(this.modifyUserForm.email)) {
                     this.userService.modifyMe(
                         this.modifyUserForm.username,
                         this.modifyUserForm.email,
