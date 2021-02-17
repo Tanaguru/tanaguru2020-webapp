@@ -389,7 +389,9 @@ export default {
             if(this.contract.restrictDomain) {
                 if(!this.checkValidDomain(this.projectCreateForm.domain)){
                     this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
-                } else { this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError") }
+                } else if(!this.projectCreateForm.domain) { 
+                    this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError") 
+                }
             } else {
                 if(this.projectCreateForm.domain){
                     if(!this.checkValidDomain(this.projectCreateForm.domain)){
