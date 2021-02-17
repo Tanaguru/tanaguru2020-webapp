@@ -212,7 +212,7 @@ export default {
                 auditOrder = this.auditsByType
             } else { auditOrder = this.auditsByType.slice().reverse()}
             return auditOrder;
-        }
+        },
     }
 }
 </script>

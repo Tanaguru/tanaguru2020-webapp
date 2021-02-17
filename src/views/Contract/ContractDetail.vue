@@ -158,7 +158,7 @@
                                                 v-model="projectCreateForm.domain"
                                                 :required="contract.restrictDomain"
                                             >
-                                            <p class="info-text" id="domain-constraint">(example : http://www.website.com/)</p>
+                                            <p class="info-text" id="domain-constraint">{{$t('form.indications.urlConstraint')}}</p>
                                             <p class="info-error" id="domain-error">{{projectCreateForm.domainError}}</p>
                                         </div>
                                     </div>
@@ -389,7 +389,9 @@ export default {
             if(this.contract.restrictDomain) {
                 if(!this.checkValidDomain(this.projectCreateForm.domain)){
                     this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
-                } else { this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError") }
+                } else if(!this.projectCreateForm.domain) { 
+                    this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError") 
+                }
             } else {
                 if(this.projectCreateForm.domain){
                     if(!this.checkValidDomain(this.projectCreateForm.domain)){
