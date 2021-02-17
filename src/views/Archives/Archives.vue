@@ -59,11 +59,10 @@
                 <span v-else-if="type == 'UPLOAD'">{{ $t('entity.audit.upload') }}</span>
                 <span v-else>{{ $t('entity.audit.scenario') }}</span>
             </h2>
-            <div class="table-container" v-if="audits.length > 0">
+            <div class="table-container">
                 <ArchivesTable :audits="audits" :type="type" :deleteCondition="deleteCondition" @delete-audit="deleteAudit"
                                @delete-screenshot="deleteScreenshot"/>
             </div>
-            <p v-else>{{ $t('archives.noAudit') }}</p>
         </article>
     </main>
 </template>
