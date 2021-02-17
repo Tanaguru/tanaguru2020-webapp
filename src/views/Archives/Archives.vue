@@ -49,7 +49,7 @@
             </ul>
         </header>
 
-        <article class="article-archives" id="page-audit" v-for="type of types" :key="type">
+        <article v-if="audits.length > 0" class="article-archives" id="page-audit" v-for="type of types" :key="type">
             <h2 class="article-archives__title">
                 <icon-base-decorative width="40" height="40" viewBox="0 0 72 72">
                     <icon-audit-page/>
@@ -149,7 +149,7 @@ export default {
                             this.deleteAuditError = this.$i18n.t("form.errorMsg.audit.notFound")
                         } else if(err.response.status == "403"){
                             this.deleteAuditError = this.$i18n.t("form.errorMsg.user.permissionDenied")
-                        } else {  
+                        } else {
                             this.deleteAuditError = this.$i18n.t("form.errorMsg.genericError");
                         }
                     }
@@ -167,7 +167,7 @@ export default {
                         this.deleteScreenshotError = this.$i18n.t("form.errorMsg.audit.notFound")
                     } else if(err.response.status == "403"){
                         this.deleteScreenshotError = this.$i18n.t("form.errorMsg.user.permissionDenied")
-                    } else {  
+                    } else {
                         this.deleteScreenshotError = this.$i18n.t("form.errorMsg.genericError");
                     }
                 }

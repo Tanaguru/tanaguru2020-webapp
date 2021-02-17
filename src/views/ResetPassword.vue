@@ -43,8 +43,13 @@
 </template>
 
 <script>
+    import PasswordHelper from '../helper/PasswordHelper';
+
     export default {
         name: 'resetPassword',
+        components: {
+            PasswordHelper
+        },
         data() {
             return {
                 userId: null,
@@ -62,9 +67,10 @@
             this.token = this.$route.params.token;
         },
         methods:{
+		    checkValidPassword: PasswordHelper.checkValidPassword,
             modifyPassword() {
-                if(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-,;:_]).{8,}$/.test(this.modifyPasswordForm.password) == false){
-                    this.modifyPasswordForm.error = "Your password should have at least 8 characters including 1 upper case character, 1 lower case character, 1 number and 1 symbol"
+                if(!this.checkValidPassword(this.modifyPasswordForm.password)){
+                    this.modifyPasswordForm.error = this.$i18n.t("form.errorMsg.password.passwordError")
                 } else {
                     this.modifyPasswordForm.error = "";
                     if (this.modifyPasswordForm.password === this.modifyPasswordForm.passwordConfirm) {

@@ -1,83 +1,87 @@
 <template>
     <div>
-        <button 
-            type="button" 
-            :class="firstToLast ? 'btn btn--default-inverse btn--icon' : 'btn btn--default btn--icon'"
-            @click="reverseAuditOrder()" 
-            aria-pressed="true"
-        >
-            {{ $t('action.sortAudits') }}
-            <icon-base-decorative v-if="firstToLast">
-                <icon-close/>
-            </icon-base-decorative>
+        <div v-if="auditsByType.length > 0">
+            <button
+                type="button"
+                :class="firstToLast ? 'btn btn--default-inverse btn--icon' : 'btn btn--default btn--icon'"
+                @click="reverseAuditOrder()"
+                aria-pressed="true"
+            >
+                {{ $t('action.sortAudits') }}
+                <icon-base-decorative v-if="firstToLast">
+                    <icon-close/>
+                </icon-base-decorative>
 
-            <icon-base-decorative v-else>
-                <icon-checked/>
-            </icon-base-decorative>
-        </button>
-        <table class="table table--default">
-            <caption class="screen-reader-text">{{ $t('archives.legendUpload') }}</caption>
-            <thead>
-            <tr>
-                <th scope="col">
-                    {{ $t('entity.audit.name') }}
-                </th>
-                <th scope="col">
-                    {{ $t('entity.audit.status') }}
-                </th>
-                <th scope="col">
-                    {{ $t('entity.audit.nbPage') }}
-                </th>
-                <th scope="col">
-                    {{ $t('entity.audit.dateEnd') }}
-                </th>
-                <th scope="col">{{ $t('entity.generic.actions') }}</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="audit of auditOrder" :key="audit.id" v-if="audit.type === type && totalPagesByAudit[audit.id] > 0">
-                <th scope="row">{{ audit.name }}</th>
-                <td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
-                <td>{{ totalPagesByAudit[audit.id] }}</td>
-                <td>{{ audit.dateEnd ? moment(audit.dateEnd).format('LL') : '' }}</td>
-                <td class="td-actions">
-					<ul class="actions-list">
-						<li class="actions-list__item">
-							<router-link class="link link-independent link-independent--icon" :to="'/audits/' + audit.id">
-								<icon-base-decorative>
-									<icon-arrow-blue/>
-								</icon-base-decorative>
-								<span>{{ $t('action.show') }}</span>
-							</router-link>
-						</li>
-						<li class="actions-list__item"
-							v-if="audit.status === 'DONE' || audit.status === 'ERROR'">
-							<button
-								class="btn btn--icon btn--nude"
-								@click="confirmAuditDeletion(audit)">
-								<icon-base-decorative>
-									<icon-delete/>
-								</icon-base-decorative>
-								<span>{{ $t('action.delete') }}</span>
-							</button>
-						</li>
-						<li class="actions-list__item"
-							v-if="audit.status === 'DONE' || audit.status === 'ERROR'">
-							<button
-                                v-show="hasScreenShot[audit.id] == 'true'"
-								class="btn btn--icon btn--nude"
-								@click="confirmAuditScreenshotDeletion(audit)">
-								<icon-base-decorative>
-									<icon-delete/>
-								</icon-base-decorative>
-								<span>{{ $t('action.deleteScreenshot') }}</span>
-							</button>
-						</li>
-					</ul>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                <icon-base-decorative v-else>
+                    <icon-checked/>
+                </icon-base-decorative>
+            </button>
+            <table class="table table--default">
+                <caption class="screen-reader-text">{{ $t('archives.legendUpload') }}</caption>
+                <thead>
+                <tr>
+                    <th scope="col">
+                        {{ $t('entity.audit.name') }}
+                    </th>
+                    <th scope="col">
+                        {{ $t('entity.audit.status') }}
+                    </th>
+                    <th scope="col">
+                        {{ $t('entity.audit.nbPage') }}
+                    </th>
+                    <th scope="col">
+                        {{ $t('entity.audit.dateEnd') }}
+                    </th>
+                    <th scope="col">{{ $t('entity.generic.actions') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="audit of auditOrder" :key="audit.id" v-if="audit.type === type && totalPagesByAudit[audit.id] && totalPagesByAudit[audit.id] > 0">
+                    <th scope="row">{{ audit.name }}</th>
+                    <td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
+                    <td>{{ totalPagesByAudit[audit.id] }}</td>
+                    <td>{{ audit.dateEnd ? moment(audit.dateEnd).format('LL') : '' }}</td>
+                    <td class="td-actions">
+                        <ul class="actions-list">
+                            <li class="actions-list__item">
+                                <router-link class="link link-independent link-independent--icon" :to="'/audits/' + audit.id">
+                                    <icon-base-decorative>
+                                        <icon-arrow-blue/>
+                                    </icon-base-decorative>
+                                    <span>{{ $t('action.show') }}</span>
+                                </router-link>
+                            </li>
+                            <li class="actions-list__item"
+                                v-if="audit.status === 'DONE' || audit.status === 'ERROR'">
+                                <button
+                                    class="btn btn--icon btn--nude"
+                                    @click="confirmAuditDeletion(audit)">
+                                    <icon-base-decorative>
+                                        <icon-delete/>
+                                    </icon-base-decorative>
+                                    <span>{{ $t('action.delete') }}</span>
+                                </button>
+                            </li>
+                            <li class="actions-list__item"
+                                v-if="(hasScreenShotByAudit[audit.id] && audit.status === 'DONE') || (hasScreenShotByAudit[audit.id] && audit.status === 'ERROR')">
+                                <button
+                                    class="btn btn--icon btn--nude"
+                                    @click="confirmAuditScreenshotDeletion(audit)">
+                                    <icon-base-decorative>
+                                        <icon-delete/>
+                                    </icon-base-decorative>
+                                    <span>{{ $t('action.deleteScreenshot') }}</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div v-else>
+            <p>{{ $t('archives.noAudit') }}</p>
+        </div>
         <vue-accessible-modal>
             <template v-slot:backdrop></template>
         </vue-accessible-modal>
@@ -104,8 +108,8 @@ export default {
     },
     data() {
         return {
-            totalPagesByAudit: [],
-            hasScreenShot: {},
+            totalPagesByAudit: {},
+            hasScreenShotByAudit: [],
             firstToLast: false
         }
     },
@@ -179,39 +183,34 @@ export default {
                 }
             )
 
-            this.auditParametersService.findByAuditId(
+            this.auditService.hasScreenshotsById(
                 this.audits[i].id,
-                this.audits[i].sharecode,
-                (parameters) => {
-            
-                    let screenshotParam = null;
-                    parameters.forEach(parameter => {
-                        if(parameter.auditParameter.code == "ENABLE_SCREENSHOT") {
-                            screenshotParam = parameter.value
-                        }
-                    });
-
-                    this.$set(
-                        this.hasScreenShot, 
-                        this.audits[i].id, 
-                        screenshotParam
-                    )
-
-                    console.log(this.hasScreenShot)
+                this.audits[i].shareCode,
+                (hasScreenshot) => {
+                    this.$set(this.hasScreenShotByAudit, this.audits[i].id, hasScreenshot)
                 },
                 (error) => {
-                    console.log(error)
+                    console.error(error)
                 }
             )
         }
     },
     computed: {
+        auditsByType() {
+            let auditsOfType = [];
+            this.audits.forEach(audit => {
+                if(audit.type === this.type){
+                    auditsOfType.push(audit)
+                }
+            });
+
+            return auditsOfType;
+        },
         auditOrder() {
-            let auditOrder = this.audits;
+            let auditOrder = this.auditsByType;
             if(this.firstToLast == true){
-                auditOrder = this.audits
-            } else { auditOrder = this.audits.slice().reverse()}
-            
+                auditOrder = this.auditsByType
+            } else { auditOrder = this.auditsByType.slice().reverse()}
             return auditOrder;
         },
     }

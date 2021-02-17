@@ -429,7 +429,7 @@ export default {
                 }
             },
             (error) => {
-                console.log(error);
+                console.error(error);
             }
         );
         this.projectService.findById(
@@ -552,7 +552,7 @@ export default {
             } else {
                 return !this.auditConfigurationForm.common.url
             }
-            
+
         },
 
          //Commons

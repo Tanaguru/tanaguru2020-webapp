@@ -43,7 +43,8 @@
 			"usernameError": "The username should be shorter than 30 characters."
 		},
 		"email": {
-			"existingEmail": "This e-mail adress has already been registered."
+			"existingEmail": "This e-mail adress has already been registered.",
+			"notEmail": "This should be an e-mail adress."
 
 		},
 		"contract": {

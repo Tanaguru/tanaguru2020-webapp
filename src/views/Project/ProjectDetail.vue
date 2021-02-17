@@ -15,7 +15,7 @@
 							<span class="infos-list__exergue">{{$t('entity.project.contract')}}</span> 
 							: 
 							{{ contract.name }}
-							<span class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">Expired</span>    
+							<span class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">{{$t('contract.expired')}}</span>    
 						</li>
 						<li><span class="infos-list__exergue">{{$t('entity.project.domain')}}</span> : <a :href="project.domain"> {{ project.domain }} </a></li>
 					</ul>
@@ -175,6 +175,7 @@
 					},
 				],
 				selectedTab: null,
+<<<<<<< HEAD
 				modifyProjectForm: {
 					active: false,
 					name: "",
@@ -182,6 +183,8 @@
 					nameError: "",
 					domainError: ""
 				}
+=======
+>>>>>>> develop
 			}
 		},
 		metaInfo(){
@@ -293,6 +296,7 @@
 			activeTab(value){
 				this.selectedTab = value
 			},
+<<<<<<< HEAD
 
 			showModifyProjectForm(){
 				this.modifyProjectForm.name = this.project.name;
@@ -334,6 +338,8 @@
 				this.modifyProjectForm.domain = "";
 			},
 
+=======
+>>>>>>> develop
 			removeUser(user){
 				var index = this.projectUsers.indexOf(user);
 				if(index > -1){

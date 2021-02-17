@@ -217,20 +217,11 @@
 				(error) => { 'error' }
 			)
 
-			this.contractService.findMemberOf(
-				(contracts) => {
-					this.sharedContracts = contracts
-					for (let i = 0; i < this.sharedContracts.length; i++){
-						this.projectService.findMemberOfByContractId(
-							this.sharedContracts[i].id,
-							(projects) => {
-								this.sharedProjects = projects
-							},
-							(error) => { 'error' }
-						)
-					}
+			this.projectService.findMemberOfNotOwner(
+				(projects) => {
+					this.sharedProjects = projects
 				},
-				(error) => { 'error' }
+				(error) => { console.error(error) }
 			)
 		},
 		computed: {

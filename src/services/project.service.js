@@ -11,9 +11,9 @@ export default class ProjectService extends Service{
             'domain' : domain,
             'contractId' : contractId,
         };
-  
+
           return this.axios({
-            url: this.controllerName + "/", 
+            url: this.controllerName + "/",
             method: 'post',
             data: project
         })
@@ -71,6 +71,19 @@ export default class ProjectService extends Service{
           .catch(err => {
               error(err);
           });
+    }
+
+    findMemberOfNotOwner(then, error){
+        return this.axios({
+            url: this.controllerName + '/member-of',
+            method: 'get',
+        })
+            .then(resp => {
+                then(resp.data)
+            })
+            .catch(err => {
+                error(err);
+            });
     }
 
     removeMember(id, projectId, then, error){

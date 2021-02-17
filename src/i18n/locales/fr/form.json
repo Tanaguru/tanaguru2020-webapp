@@ -42,7 +42,8 @@
 			"usernameError": "Le nom d'utilisateur doit contenir moins de 30 caractères."
 		},
 		"email": {
-			"existingEmail": "Cette adresse e-mail est déjà enregistrée."
+			"existingEmail": "Cette adresse e-mail est déjà enregistrée.",
+			"notEmail": "Veuillez saisir une adress e-mail."
 		},
 		"contract": {
 			"notFound": "Ce contrat n'existe pas.",

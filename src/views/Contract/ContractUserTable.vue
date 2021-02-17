@@ -36,7 +36,7 @@
 						<button
 							class="btn btn--clipboard"
 							@click="editUser(contractUser)"
-							v-if="contractUser.contractRole.name != 'CONTRACT_OWNER' && promoteCondition"
+							v-if="contractUser.contractRole.name != 'CONTRACT_OWNER' && promoteCondition && isStillValid"
 						>
 							{{$t('action.promote')}}
 						</button>
@@ -89,7 +89,7 @@ export default {
 			editedUser: null
 		}
 	},
-    props: [ 'contractUsers', 'deletingCondition', 'promoteCondition', 'addingCondition' ],
+    props: [ 'contractUsers', 'deletingCondition', 'promoteCondition', 'isStillValid' ],
     methods: {
         confirm(contractUser) {
 			this.$modal

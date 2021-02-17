@@ -92,10 +92,10 @@
         },
         props: [ 'selected' ],
         watch: {
-            selected: function(newVal, oldVal) {  
+            selected: function(newVal, oldVal) {
                 if(newVal == 2) {
                     this.testInputError = ""
-                } 
+                }
             }
         },
         methods : {
@@ -282,7 +282,6 @@
 			isLabelUsed(label){
 				return this.existingReferences.some(
 					(existingLabel)=>{
-						console.log(existingLabel.code + ' ' + label)
 						return existingLabel.code === label
 					}
 				)
