@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div v-if="auditsByType.length > 0"> 
-            <button 
-                type="button" 
+        <div v-if="auditsByType.length > 0">
+            <button
+                type="button"
                 :class="firstToLast ? 'btn btn--default-inverse btn--icon' : 'btn btn--default btn--icon'"
-                @click="reverseAuditOrder()" 
+                @click="reverseAuditOrder()"
                 aria-pressed="true"
             >
                 {{ $t('action.sortAudits') }}
@@ -36,7 +36,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="audit of auditOrder" :key="audit.id" v-if="audit.type === type && totalPagesByAudit[audit.id] > 0">
+                <tr v-for="audit of auditOrder" :key="audit.id" v-if="audit.type === type && totalPagesByAudit[audit.id] && totalPagesByAudit[audit.id] > 0">
                     <th scope="row">{{ audit.name }}</th>
                     <td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
                     <td>{{ totalPagesByAudit[audit.id] }}</td>
@@ -205,13 +205,12 @@ export default {
             });
 
             return auditsOfType;
-        }, 
+        },
         auditOrder() {
             let auditOrder = this.auditsByType;
             if(this.firstToLast == true){
                 auditOrder = this.auditsByType
             } else { auditOrder = this.auditsByType.slice().reverse()}
-            
             return auditOrder;
         }
     }

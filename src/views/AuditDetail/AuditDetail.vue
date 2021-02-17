@@ -12,11 +12,11 @@
                         </h1>
                     </header>
 
-					<section class="main-info title-logs">		
-						<h2>Audit parameters</h2>	
+					<section class="main-info title-logs">
+						<h2>Audit parameters</h2>
 						<ul>
 							<li>
-								{{ $t('auditDetail.information.type') }} 
+								{{ $t('auditDetail.information.type') }}
 								<span v-if="audit.type === 'SITE'">{{ $t('entity.audit.site') }}</span>
 								<span v-else-if="audit.type === 'PAGE'">{{ $t('entity.audit.page') }}</span>
 								<span v-else-if="audit.type === 'SCENARIO'">{{ $t('entity.audit.scenario') }}</span>
@@ -27,8 +27,8 @@
 							<!--<li>{{ $t('auditDetail.information.reference') }}{{ mainReference }}</li>-->
 
 							<li v-for="parameter in parameters" :key="parameter.id">
-								{{ parameter.auditParameter.code.charAt(0).toUpperCase() + parameter.auditParameter.code.slice(1).toLowerCase().replaceAll('_', ' ') }} 
-								: 
+								{{ parameter.auditParameter.code.charAt(0).toUpperCase() + parameter.auditParameter.code.slice(1).toLowerCase().replaceAll('_', ' ') }}
+								:
 								{{ parameter.value }}
 							</li>
 						</ul>
@@ -142,7 +142,7 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 			this.timer = setInterval(this.refreshPages, 3000);
 
             this.loadPages(this.pageCurrentPage, this.auditPagePageSize);
-			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize);	
+			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize);
 		},
 		beforeDestroy () {
 			clearInterval(this.timer)
@@ -180,17 +180,17 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 											this.mainReference = parameter.value
 										}
 										else if(parameter.value
-										&& parameter.auditParameter.code != "SITE_SEEDS" 
-										&& parameter.auditParameter.code != "PAGE_URLS" 
-										&& parameter.auditParameter.code != "SCENARIO_ID" 
-										&& parameter.auditParameter.code != "DOM_ID" 
+										&& parameter.auditParameter.code != "SITE_SEEDS"
+										&& parameter.auditParameter.code != "PAGE_URLS"
+										&& parameter.auditParameter.code != "SCENARIO_ID"
+										&& parameter.auditParameter.code != "DOM_ID"
 										&& parameter.auditParameter.code != "WEBDRIVER_BROWSER"){
 											this.parameters.push(parameter)
 										}
 									});
 								},
 								(error) => {
-									console.log(error)
+									console.error(error)
 								}
 							)
 						},
