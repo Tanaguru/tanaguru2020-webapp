@@ -107,23 +107,17 @@
 						<!--<li>
 							<button class="btn btn--nude btn--icon">
 								<span>{{$t('entity.audit.parameters')}}</span>
-								<icon-base-decorative><icon-arrow-blue /></icon-base-decorative>
+								<icon-bas<pae-decorative><icon-arrow-blue /></icon-base-decorative>
 							</button>
 						</li>-->
 					</ul>
-					<!--<div class="form-block" v-if="otherPages.length > 1">
-						<label class="label" for="page-select">Voir la liste :</label>
-						<div class="select">
-							<select name="page-select" id="page-select" v-model="selectedPage">
-								<option value="">Sélectionner une page</option>
-								<option v-for="page in otherPages" :value="page.id" :key="page.id">{{page.rank}} - {{ page.name.split("_")[0] }}</option>
-							</select>
-						</div>
-						<router-link class="btn btn--nude btn--icon" v-if="selectedPage != page.id" :to="'/audits/' + audit.id + '/pages/' + selectedPage">
-							<icon-base-decorative><icon-arrow-blue /></icon-base-decorative>
-							<span>Afficher l'audit</span>
-						</router-link>
-					</div>-->
+					<div class="form-block">
+						<pagination
+							:current-page="page"
+							:total-pages="pageTotalPage"
+							@changePage="(page) => {loadPages(page, auditPagePageSize)}"
+						/>
+					</div>
                     <router-link class="btn btn--nude btn--icon" :to="'/audits/' + audit.id">
                         <icon-base-decorative>
                             <icon-arrow-blue/>
@@ -146,6 +140,8 @@
     import IconLaunch from "../../components/icons/IconLaunch";
     import CircularProgressChart from "../../components/charts/CircularProgressChart";
 	import backgroundImg from '../../../public/assets/images/logo-desktop.svg';
+    import Pagination from '../../components/Pagination';
+
     export default {
         name: 'PageResultInfo',
         components: {
@@ -156,7 +152,8 @@
             IconPrint,
             IconLaunch,
 			CircularProgressChart,
-			backgroundImg
+			backgroundImg,
+            Pagination
         },
         data(){
             return {
@@ -188,6 +185,22 @@
                 return this.$moment(date);
             },
 
+            loadPages(page, size){
+                this.pageService.findByAuditId(
+                    this.audit.id,
+                    this.audit.sharecode,
+                    page,
+                    size,
+                    (auditPagePage) =>{
+                        /*this.pages = auditPagePage.content;
+                        this.pageCurrentPage = page;
+                        this.pageTotalPage = auditPagePage.totalPages;
+                        this.pageTotal = auditPagePage.totalElements;*/
+                        console.log(auditPagePage)
+                    }
+                )
+            },
+
             triggerPrint() {
                 bus.$emit("allShown", true);
                 setTimeout(() => (
@@ -216,6 +229,9 @@
                 window.getSelection().removeAllRanges()
             },
         },
+        created() {
+            this.loadPages(this.page.id, )
+        }
     }
 
 </script>

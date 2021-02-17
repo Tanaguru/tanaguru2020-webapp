@@ -26,6 +26,7 @@
 		"running": "En cours"
 	},
 	"information": {
+		"parameters": "Paramètres de l'audit",
 		"status": "Status : ",
 		"browser": "Navigateur utilisé pour l'audit : ",
 		"reference": "Référentiel principal : ",
