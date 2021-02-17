@@ -6,5 +6,8 @@
 	"projectsList": "Projects associated with the contract",
 	"legendUsers": "Contract's users table",
 	"legendProjects": "Contract's projects table",
-	"contracts": "contract(s)"
+	"contracts": "contract(s)",
+	"expired": "Expired",
+	"noProjectYet": "This contract has no project yet.",
+	"hadNoProject": "No project had been created in this contract."
 }

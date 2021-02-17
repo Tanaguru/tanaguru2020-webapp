@@ -3,14 +3,19 @@
 		<Breadcrumbs :breadcrumbsItems='breadcrumbProps' ></Breadcrumbs>
 
 		<header class="headline headline--top">
-			<h1>{{contract.name}}</h1>
+			<h1>
+                {{contract.name}}
+                <span aria-live="polite" class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">{{$t('contract.expired')}}</span>    
+            </h1>
 		</header>
 
         <div class="wrapper" id="page" role="main">
             <Tabs @activeTab='activeTab'>
                 <Tab :name="$t('contract.infos')" class="tabs-wrapper">
                     <article>
-                        <h2 class="contract__title-2">{{$t('contract.infos')}}</h2>
+                        <h2 class="contract__title-2">
+                            {{$t('contract.infos')}}
+                        </h2>
                         <div v-if="!modifyContractForm.active">
                             <ul class="infos-list">
                                 <li><span class="infos-list__exergue">{{$t('entity.contract.name')}}</span> : {{contract.name}}</li>
@@ -24,7 +29,6 @@
                                 @click="showModifyContractForm()">
                                 {{$t('action.modify')}}
                             </button>
-                            <p v-if="modifyContractForm.error" class="info-error">{{modifyContractForm.error}}</p>
                         </div>
 
                         <div v-else>
@@ -79,42 +83,44 @@
                 <!-- USERS BY CONTRACT -->
                 <div v-if="this.$store.state.auth.user.appRole.name !== 'USER'">
                     <Tab :name="$t('contract.users')" class="tabs-wrapper">
-                        <article v-show="addingCondition">
-                        <h2 class="contract__title-2">{{$t('contract.users')}}</h2>
-                        <p>{{$t('form.indications.help')}}</p>
-                        <form @submit.prevent="addUser" class="form-users" novalidate>
-                            <div class="form-block form-block--half">
-                                <label class="label" for="username">{{$t('entity.user.username')}} *</label>
-                                <input
-                                    class="input"
-                                    type="text"
-                                    name="username"
-                                    id="username"
-                                    :placeholder="$t('entity.user.username')"
-                                    v-model="userAdditionForm.username"
-                                    required
-                                    :aria-describedby="userAdditionForm.error ? 'user-addition-error' : ''">
-                                <p v-if="userAdditionForm.error" class="info-error" id="user-addition-error">{{ userAdditionForm.error }}</p>
-                            </div>
+                        <article v-show="addingCondition && isStillValid">
+                            <h2 class="contract__title-2">{{$t('contract.users')}}</h2>
+                            <p>{{$t('form.indications.help')}}</p>
+                            <form @submit.prevent="addUser" class="form-users" novalidate>
+                                <div class="form-block form-block--half">
+                                    <label class="label" for="username">{{$t('entity.user.username')}} *</label>
+                                    <input
+                                        class="input"
+                                        type="text"
+                                        name="username"
+                                        id="username"
+                                        :placeholder="$t('entity.user.username')"
+                                        v-model="userAdditionForm.username"
+                                        required
+                                        :aria-describedby="userAdditionForm.error ? 'user-addition-error' : ''">
+                                    <p v-if="userAdditionForm.error" class="info-error" id="user-addition-error">{{ userAdditionForm.error }}</p>
+                                </div>
 
-                            <button class="btn btn--default btn-add" type="submit">{{$t('action.addUser')}}</button>
-                            <p v-if="userAdditionForm.successMsg" class="info-success" aria-live="polite">{{ userAdditionForm.successMsg }}</p>
-                        </form>
+                                <button class="btn btn--default btn-add" type="submit">{{$t('action.addUser')}}</button>
+                                <p v-if="userAdditionForm.successMsg" class="info-success" aria-live="polite">{{ userAdditionForm.successMsg }}</p>
+                            </form>
+                        </article>
 
-                        <ContractUserTable
-                            :contract-users="contractUsers"
-                            @delete-user="deleteUser"
-                            @promote-user="promoteUser"
-                            :deletingCondition="deletingUserCondition"
-                            :addingCondition="addingCondition"
-                            :promoteCondition="promoteCondition"
-                            :promoteSuccessMsg="promoteSuccessMsg" />
-                    </article>
+                        <article>
+                            <ContractUserTable
+                                :contract-users="contractUsers"
+                                @delete-user="deleteUser"
+                                @promote-user="promoteUser"
+                                :deletingCondition="deletingUserCondition"
+                                :promoteCondition="promoteCondition"
+                                :isStillValid="isStillValid"
+                                :promoteSuccessMsg="promoteSuccessMsg" />
+                        </article>
                     </Tab>
 
                     <!-- PROJECTS BY CONTRACT -->
                     <Tab :name="$t('contract.projects')" class="tabs-wrapper">
-                        <article v-show="addingCondition">
+                        <article v-show="addingCondition && isStillValid">
                             <h2 class="contract__title-2">{{$t('contract.createProject')}}</h2>
                             <p>{{$t('form.indications.help')}}</p>
                             <form @submit.prevent="createProject" novalidate>
@@ -164,13 +170,17 @@
                             </form>
                         </article>
 
-                        <article v-show="projects.length > 0">
+                        <article v-if="projects.length > 0">
                             <h2 class="contract__title-2" id="table-projects">{{$t('contract.projectsList')}}</h2>
 
                             <ContractProjectTable
                                 :projects="projects"
                                 :authorityByProjectId="authorityByProjectId"
                                 @delete-project="deleteProject"/>
+                        </article>
+                        <article v-else>
+                            <p v-if=" $moment(contract.dateEnd).isAfter(new Date())">{{$t('contract.noProjectYet')}}</p>
+                            <p v-else>{{$t('contract.hadNoProject')}}</p>
                         </article>
                     </Tab>
                 </div>
@@ -190,6 +200,7 @@ import IconBaseDecorative from '../../components//icons/IconBaseDecorative'
 import IconArrowBlue from '../../components//icons/IconArrowBlue'
 import IconDelete from '../../components//icons/IconDelete'
 import Breadcrumbs from '../../components/Breadcrumbs';
+import DomainHelper from '../../helper/DomainHelper'
 
 export default {
     name: 'contractDetail',
@@ -202,7 +213,8 @@ export default {
         Tab,
         BackToTop,
         ContractUserTable,
-        ContractProjectTable
+        ContractProjectTable,
+        DomainHelper
     },
     data() {
         return {
@@ -276,6 +288,9 @@ export default {
                 return authority.name === 'CREATE_PROJECT'
             }));
         },
+        isStillValid(){
+            return this.$moment(this.contract.dateEnd).isAfter(new Date())
+        },
         deletingUserCondition(){
 			return this.$store.state.auth.user.appRole.overrideProjectRole.authorities.some(authority => {
                 return authority.name === 'REMOVE_MEMBER'
@@ -304,6 +319,7 @@ export default {
             this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
         },
+        checkValidDomain: DomainHelper.checkValidDomain,
         activeTab(value){
 			this.selectedTab = value
 		},
@@ -371,40 +387,46 @@ export default {
             }
 
             if(this.contract.restrictDomain) {
-                let urlRegex = /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
-
-                if(!urlRegex.test(this.auditConfigurationForm.common.url)){
+                if(!this.checkValidDomain(this.projectCreateForm.domain)){
                     this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
-                }
+                } else { this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError") }
+            } else {
+                if(this.projectCreateForm.domain){
+                    if(!this.checkValidDomain(this.projectCreateForm.domain)){
+                        this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
+                    }
+                } 
             }
 
-			this.projectService.create(
-				this.projectCreateForm.name,
-				this.projectCreateForm.domain.trim(),
-                this.contract.id,
-				(project) => {
-                    this.projects.push(project)
-					this.projectCreateForm.successMsg = this.$i18n.t('form.successMsg.projectCreation')
-				},
-				(error) => {
-                    if(error.response.data.error == "CONTRACT_NOT_FOUND"){
-    					this.projectCreateForm.error = this.$i18n.t('form.errorMsg.contract.notFound')
-                    } else if (error.response.data.error == "PROJECT_LIMIT_FOR_CONTRACT"){
-                        this.projectCreateForm.error = this.$i18n.t('form.errorMsg.contract.projectLimit')
-                    } else if (error.response.data.error == "INVALID_DOMAIN"){
-                        this.projectCreateForm.error = this.$i18n.t('form.errorMsg.project.invalidDomain')
-                    } else if (error.response.status == "403") {
-    					this.projectCreateForm.error = this.$i18n.t('form.errorMsg.user.permissionDenied')
-                    } else {
-    					this.projectCreateForm.error = this.$i18n.t('form.errorMsg.genericError')
+            if(this.checkValidDomain(this.projectCreateForm.domain) && this.projectCreateForm.name && this.projectCreateForm.name.length < 51) {
+                this.projectService.create(
+                    this.projectCreateForm.name,
+                    this.projectCreateForm.domain.trim(),
+                    this.contract.id,
+                    (project) => {
+                        this.projects.push(project)
+                        this.projectCreateForm.successMsg = this.$i18n.t('form.successMsg.projectCreation')
+                    },
+                    (error) => {
+                        if(error.response.data.error == "CONTRACT_NOT_FOUND"){
+                            this.projectCreateForm.error = this.$i18n.t('form.errorMsg.contract.notFound')
+                        } else if (error.response.data.error == "PROJECT_LIMIT_FOR_CONTRACT"){
+                            this.projectCreateForm.error = this.$i18n.t('form.errorMsg.contract.projectLimit')
+                        } else if (error.response.data.error == "INVALID_DOMAIN"){
+                            this.projectCreateForm.error = this.$i18n.t('form.errorMsg.project.invalidDomain')
+                        } else if (error.response.status == "403") {
+                            this.projectCreateForm.error = this.$i18n.t('form.errorMsg.user.permissionDenied')
+                        } else {
+                            this.projectCreateForm.error = this.$i18n.t('form.errorMsg.genericError')
+                        }
                     }
-				}
-			);
-			this.projectCreateForm.error = "";
-			this.projectCreateForm.nameError = "";
-			this.projectCreateForm.domainError = "";
-			this.projectCreateForm.name = "";
-			this.projectCreateForm.domain = "";
+                );
+                this.projectCreateForm.error = "";
+                this.projectCreateForm.nameError = "";
+                this.projectCreateForm.domainError = "";
+                this.projectCreateForm.name = "";
+                this.projectCreateForm.domain = "";
+            }
         },
         deleteProject(project){
             const index = this.projects.indexOf(project);
@@ -425,6 +447,7 @@ export default {
                     }
                 )
             }
+
         },
         addUser(){
             if(this.userAdditionForm.username.length == 0){
@@ -512,8 +535,6 @@ export default {
         }
     },
     created() {
-        console.log(this.$store.state.activeTab)
-
         this.userService.findAll(
             (users) => {
                 this.users = users
@@ -585,6 +606,14 @@ export default {
 		margin-top: 6.2rem;
 		margin-bottom: 3.1rem;
 	}
+    .title-logs__status--error {
+        padding: .5rem .8rem;
+		border-radius: .2rem;
+		color: $color-white;
+		font-size: $medium-font-size;
+		vertical-align: middle;
+        background-color: $color-alert;
+    }
 	.form-users {
 		margin-bottom: 4.6rem;
 	}

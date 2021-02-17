@@ -4,6 +4,23 @@
 		<div class="dashboard-header__inner">
 			<div class="dashboard-header__title">
 				<h1>{{$t('page.dashboard')}}</h1>
+				<ul class="actions-list">
+                <li class="actions-list__item">
+                    <a class="link link-independent link-independent--icon" href="#my-projects">
+                        <span>{{$t('dashboard.title.myProjects')}}</span>
+                    </a>
+                </li>
+                <li class="actions-list__item">
+                    <a class="link link-independent link-independent--icon" href="#my-shared-projects">
+                        <span>{{$t('dashboard.title.mySharedProjects')}}</span>
+                    </a>
+                </li>
+                <li class="actions-list__item">
+                    <a class="link link-independent link-independent--icon" href="#shared-with-me">
+                        <span>{{$t('dashboard.title.sharedProjects')}}</span>
+                    </a>
+                </li>
+            </ul>
 			</div>
 			<div class="dashboard-header__actions">
 				<ul class="actions-list">
@@ -29,21 +46,37 @@
 		</div>
 	</header>
 
+	<!-- PRIVATE PROJECTS -->
 	<article class="dashboard-section">
-		<h2 class="dashboard-section__title">{{$t('dashboard.title.myProjects')}}</h2>
-		<div v-if="projectsOrder == 'alphabetical' && userProjects.length > 0">
-			<DashProjectView v-for="project in alphabeticalProjects" :project="project" :key="project.id" />
+		<h2 class="dashboard-section__title" id="my-projects">{{$t('dashboard.title.myProjects')}}</h2>
+		<div v-if="projectsOrder == 'alphabetical' && privateProjects.length > 0">
+			<DashProjectView v-for="project in alphabeticalPrivateProjects" :project="project" :key="project.id" />
 		</div>
-		<div v-else-if="projectsOrder== 'chronological' && userProjects.length > 0">
-			<DashProjectView v-for="project in chronologicalProjects" :project="project" :key="project.id" />
+		<div v-else-if="projectsOrder == 'chronological' && privateProjects.length > 0">
+			<DashProjectView v-for="project in chronologicalPrivateProjects" :project="project" :key="project.id" />
 		</div>
 		<div v-else>
 			<p>{{$t('dashboard.project.noProject')}}</p>
 		</div>
 	</article>
 
+	<!-- PROJECTS SHARED BY USER -->
 	<article class="dashboard-section">
-		<h2>{{$t('dashboard.title.sharedProjects')}}</h2>
+		<h2 class="dashboard-section__title" id="my-shared-projects">{{$t('dashboard.title.mySharedProjects')}}</h2>
+		<div v-if="projectsOrder == 'alphabetical' && sharedByCurrentUser.length > 0">
+			<DashProjectView v-for="project in alphabeticalSharedProjects" :project="project" :key="project.id" />
+		</div>
+		<div v-else-if="projectsOrder == 'chronological' && sharedByCurrentUser.length > 0">
+			<DashProjectView v-for="project in chronologicalSharedProjects" :project="project" :key="project.id" />
+		</div>
+		<div v-else>
+			<p>{{$t('dashboard.project.noProject')}}</p>
+		</div>
+	</article>
+
+	<!-- PROJECTS SHARED WITH USER -->
+	<article class="dashboard-section">
+		<h2 id="shared-with-me">{{$t('dashboard.title.sharedProjects')}}</h2>
 		<div v-if="sharedProjects.length > 0">
 			<DashProjectView v-for="project in sharedProjects" :project="project" :key="project.id" />
 		</div>
@@ -124,6 +157,8 @@
 				contractsOwned : [],
 				currentContractId : null,
 				sharedContracts : [],
+				privateProjects: [],
+				sharedByCurrentUser: [],
 				sharedProjects : [],
 				projects: {},
 				userProjects: [],
@@ -152,9 +187,20 @@
 					this.projectService.findMemberOfByContractId(
 						contracts[0].id,
 						(projects) => {
-							this.userProjects = projects
+							projects.forEach(project => {
+								this.userService.findAllByProject(
+									project.id,
+									(users) => {
+										if(users.length > 1){
+											this.sharedByCurrentUser.push(project)
+										} else {
+											this.privateProjects.push(project)
+										}
+									},
+									(error) => { 'error' }
+								)
+							});
 						},
-						(error) => { 'error' }
 					)
 
 					this.userService.findAllByContract(
@@ -179,15 +225,26 @@
 			)
 		},
 		computed: {
-			alphabeticalProjects(){
-				return this.userProjects.sort(function(a, b){
+			alphabeticalPrivateProjects(){
+				return this.privateProjects.sort(function(a, b){
                     return a.name.localeCompare(b.name)
 				})
 			},
 
-			chronologicalProjects(){
-				return this.userProjects.sort((a, b) => b.id - a.id);
+			chronologicalPrivateProjects(){
+				return this.privateProjects.sort((a, b) => b.id - a.id);
 			},
+
+			alphabeticalSharedProjects(){
+				return this.sharedByCurrentUser.sort(function(a, b){
+                    return a.name.localeCompare(b.name)
+				})
+			},
+
+			chronologicalSharedProjects(){
+				return this.sharedByCurrentUser.sort((a, b) => b.id - a.id);
+			},
+
 
 			createProjectCondition(){
 				return this.currentContractId;

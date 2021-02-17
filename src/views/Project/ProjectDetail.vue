@@ -6,63 +6,73 @@
 			<h1>{{project.name}}</h1>
 		</header>
 
-		<article>
-            <h2 class="project__title-2">{{$t('project.infos')}}</h2>
-			<ul class="infos-list">
-				<li><span class="infos-list__exergue">{{$t('entity.project.contract')}}</span> : {{ contract.name }}</li>
-				<li><span class="infos-list__exergue">{{$t('entity.project.domain')}}</span> : <a :href="project.domain"> {{ project.domain }} </a></li>
-			</ul>
+		<Tabs @activeTab='activeTab'>
+            <Tab :name="$t('project.infos')" class="tabs-wrapper">
+				<article>
+					<h2 class="project__title-2">{{$t('project.infos')}}</h2>
+					<ul class="infos-list">
+						<li>
+							<span class="infos-list__exergue">{{$t('entity.project.contract')}}</span> 
+							: 
+							{{ contract.name }}
+							<span class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">{{$t('contract.expired')}}</span>    
+						</li>
+						<li><span class="infos-list__exergue">{{$t('entity.project.domain')}}</span> : <a :href="project.domain"> {{ project.domain }} </a></li>
+					</ul>
 
-			<ul class="project-actions-list">
-				<li class="project-actions-list__item" v-if="!validContract">
-					<router-link class="btn btn--default btn--icon" :to="'/projects/' + project.id + '/audit'">
-						<icon-base-decorative width="16" height="16" viewBox="0 0 20 20"><icon-launch /></icon-base-decorative>
-						<span>{{$t('action.auditNewStart')}}</span>
-					</router-link>
-				</li>
+					<ul class="project-actions-list">						
+						<li class="project-actions-list__item" v-if="!validContract">
+							<router-link class="btn btn--default btn--icon" :to="'/projects/' + project.id + '/audit'">
+								<icon-base-decorative width="16" height="16" viewBox="0 0 20 20"><icon-launch /></icon-base-decorative>
+								<span>{{$t('action.auditNewStart')}}</span>
+							</router-link>
+						</li>
 
-				<li class="project-actions-list__item">
-					<router-link class="link-independent link-independent--icon" :to="'/projects/' + project.id + '/archives'" >
-						<icon-base-decorative width="16" height="16" viewBox="0 0 24 24"><icon-version /></icon-base-decorative>
-						<span>{{$t('action.archives')}}</span>
-					</router-link>
-				</li>
-			</ul>
-        </article>
+						<li class="project-actions-list__item">
+							<router-link class="link-independent link-independent--icon" :to="'/projects/' + project.id + '/archives'" >
+								<icon-base-decorative width="16" height="16" viewBox="0 0 24 24"><icon-version /></icon-base-decorative>
+								<span>{{$t('action.archives')}}</span>
+							</router-link>
+						</li>
+					</ul>
+				</article>
+			</Tab>
 
-        <!-- USERS BY Project -->
+			<!-- USERS BY Project -->
+			<Tab :name="$t('project.users')" class="tabs-wrapper">
+				<article v-show="managerCondition">
+					<h2 class="project__title-2">{{$t('project.users')}}</h2>
+					<p>{{$t('form.indications.help')}}</p>
+					<form @submit.prevent="addUser" class="form-users" novalidate>
+						<div class="form-block">
+							<label class="label" for="user-select">{{$t('entity.user.username')}} *</label>
+							<div class="select">
+								<select
+									id="user-select"
+									name="user-select"
+									v-model="userAdditionForm.id"
+									:aria-describedby="userAdditionDescribedby"
+									required>
+									<option value="" disabled>{{ $t('project.selectUser') }}</option>
+									<option v-for="user in contractUsers" :value="user.user.id" :key="user.user.username">{{ user.user.username }}</option>
+								</select>
+							</div>
+							<p v-if="userAdditionForm.error" class="info-error" id="user-error">{{ userAdditionForm.error }}</p>
+							<p v-if="userAdditionForm.successMsg" class="info-success" id="user-success">{{ userAdditionForm.successMsg }}</p>
+						</div>
 
-        <article v-show="managerCondition">
-            <h2 class="project__title-2">{{$t('project.users')}}</h2>
-			<p>{{$t('form.indications.help')}}</p>
-            <form @submit.prevent="addUser" class="form-users" novalidate>
-                <div class="form-block">
-                    <label class="label" for="user-select">{{$t('entity.user.username')}} *</label>
-                    <div class="select">
-						<select
-							id="user-select"
-							name="user-select"
-							v-model="userAdditionForm.id"
-							:aria-describedby="userAdditionDescribedby"
-							required>
-							<option value="" disabled>{{ $t('project.selectUser') }}</option>
-							<option v-for="user in contractUsers" :value="user.user.id" :key="user.user.username">{{ user.user.username }}</option>
-						</select>
-					</div>
-					<p v-if="userAdditionForm.error" class="info-error" id="user-error">{{ userAdditionForm.error }}</p>
-                	<p v-if="userAdditionForm.successMsg" class="info-success" id="user-success">{{ userAdditionForm.successMsg }}</p>
-                </div>
+						<button class="btn btn--default" type="submit">{{$t('action.addUser')}}</button>
+					</form>
+				</article>
 
-                <button class="btn btn--default" type="submit">{{$t('action.addUser')}}</button>
-            </form>
-		</article>
-
-        <ProjectUserTable 
-			:users="projectUsers" 
-			@remove-user="removeUser" 
-			@promote-user="promoteUser" 
-			:managerCondition="managerCondition" 
-			:promoteSuccessMsg="promoteSuccessMsg" />
+				<ProjectUserTable 
+					:users="projectUsers" 
+					@remove-user="removeUser" 
+					@promote-user="promoteUser" 
+					:managerCondition="managerCondition" 
+					:promoteSuccessMsg="promoteSuccessMsg" />
+			</Tab>
+		</Tabs>
 
 	    <BackToTop />
 
@@ -70,6 +80,8 @@
 </template>
 
 <script>
+	import Tabs from './../../components/Tabs'
+	import Tab from './../../components/Tab'
 	import Breadcrumbs from '../../components/Breadcrumbs';
 	import ProjectUserTable from './ProjectUserTable';
 	import BackToTop from '../../components/BackToTop';
@@ -82,6 +94,8 @@
 	export default {
 		name: 'projectDetail',
 		components: {
+			Tabs,
+			Tab,
 			Breadcrumbs,
 			BackToTop,
 			ProjectUserTable,
@@ -112,6 +126,7 @@
 						path: '/'
 					},
 				],
+				selectedTab: null,
 			}
 		},
 		metaInfo(){
@@ -204,6 +219,9 @@
 			}
 		},
 		methods: {
+			activeTab(value){
+				this.selectedTab = value
+			},
 			removeUser(user){
 				var index = this.projectUsers.indexOf(user);
 				if(index > -1){
@@ -298,6 +316,13 @@
 		margin-top: 6.2rem;
 		margin-bottom: 3.1rem;
 	}
+}
+
+.title-logs__status--error {
+	padding: .2rem .3rem;
+	border-radius: .2rem;
+	color: $color-white;
+	background-color: $color-alert;
 }
 
 .project-actions-list {

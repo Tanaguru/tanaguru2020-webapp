@@ -8,7 +8,8 @@
 	},
 	"title": {
 		"myProjects": "Mes projets",
-		"sharedProjects": "Projets partagés"
+		"sharedProjects": "Projets partagés avec moi",
+		"mySharedProjects": "Mes projets partagés"
 	},
 	"project": {
 		"contract": "Contrat :",

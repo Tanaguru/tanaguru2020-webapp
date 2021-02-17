@@ -268,7 +268,7 @@
     .audit-infos__stats {
         @media #{$media-lg-viewport} {
             position: absolute;
-            top: 0;
+            top: 15rem;
             right: 0;
             width: 28.8rem;
         }

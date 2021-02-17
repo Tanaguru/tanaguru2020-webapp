@@ -24,7 +24,7 @@
 							</li>
 							<li v-if="browser == 'firefox'" >{{ $t('auditDetail.information.browser') }}Mozilla Firefox</li>
 							<li v-else-if="browser == 'chrome'" >{{ $t('auditDetail.information.browser') }}Google Chrome</li>
-							<li>{{ $t('auditDetail.information.reference') }}{{ mainReference }}</li>
+							<!--<li>{{ $t('auditDetail.information.reference') }}{{ mainReference }}</li>-->
 
 							<li v-for="parameter in parameters" :key="parameter.id">
 								{{ parameter.auditParameter.code.charAt(0).toUpperCase() + parameter.auditParameter.code.slice(1).toLowerCase().replaceAll('_', ' ') }} 
@@ -172,16 +172,22 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 								audit.id,
 								this.sharecode,
 								(parameters) => {
-									this.parameters = parameters.filter(parameter => parameter.value && parameter.auditParameter.code != "SITE_SEEDS" && parameter.auditParameter.code != "PAGE_URLS" && parameter.auditParameter.code != "SCENARIO_ID" && parameter.auditParameter.code != "DOM_ID")
-									let browser = null;
-							
 									parameters.forEach(parameter => {
 										if(parameter.auditParameter.code == "WEBDRIVER_BROWSER") {
-											browser = parameter.value
+											this.browser = parameter.value
+										}
+										else if(parameter.auditParameter.code == "MAIN_REFERENCE") {
+											this.mainReference = parameter.value
+										}
+										else if(parameter.value
+										&& parameter.auditParameter.code != "SITE_SEEDS" 
+										&& parameter.auditParameter.code != "PAGE_URLS" 
+										&& parameter.auditParameter.code != "SCENARIO_ID" 
+										&& parameter.auditParameter.code != "DOM_ID" 
+										&& parameter.auditParameter.code != "WEBDRIVER_BROWSER"){
+											this.parameters.push(parameter)
 										}
 									});
-									this.browser = browser
-									this.mainReference = 'to do'
 								},
 								(error) => {
 									console.log(error)
