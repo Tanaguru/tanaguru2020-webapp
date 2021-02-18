@@ -143,11 +143,41 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 
             this.loadPages(this.pageCurrentPage, this.auditPagePageSize);
 			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize);
+
+			this.getParameters();
 		},
 		beforeDestroy () {
 			clearInterval(this.timer)
 		},
 		methods: {
+			getParameters(){
+				this.auditParametersService.findByAuditId(
+					this.$route.params.id,
+					this.sharecode,
+					(parameters) => {
+						parameters.forEach(parameter => {
+							if(parameter.auditParameter.code == "WEBDRIVER_BROWSER") {
+								this.browser = parameter.value
+							}
+							else if(parameter.auditParameter.code == "MAIN_REFERENCE") {
+								this.mainReference = parameter.value
+							}
+							else if(parameter.value
+							&& parameter.auditParameter.code != "SITE_SEEDS"
+							&& parameter.auditParameter.code != "PAGE_URLS"
+							&& parameter.auditParameter.code != "SCENARIO_ID"
+							&& parameter.auditParameter.code != "DOM_ID"
+							&& parameter.auditParameter.code != "WEBDRIVER_BROWSER"){
+								this.parameters.push(parameter)
+							}
+						});
+					},
+					(error) => {
+						console.error(error)
+					}
+				)
+			},
+			
 			getProject(){
 				this.projectService.findByAuditId(
 						this.$route.params.id,
@@ -163,40 +193,14 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 
 			getAudit(){
 				this.auditService.findById(
-						this.$route.params.id,
-						this.sharecode,
-						(audit) => {
-							this.audit = audit;
-
-							this.auditParametersService.findByAuditId(
-								audit.id,
-								this.sharecode,
-								(parameters) => {
-									parameters.forEach(parameter => {
-										if(parameter.auditParameter.code == "WEBDRIVER_BROWSER") {
-											this.browser = parameter.value
-										}
-										else if(parameter.auditParameter.code == "MAIN_REFERENCE") {
-											this.mainReference = parameter.value
-										}
-										else if(parameter.value
-										&& parameter.auditParameter.code != "SITE_SEEDS"
-										&& parameter.auditParameter.code != "PAGE_URLS"
-										&& parameter.auditParameter.code != "SCENARIO_ID"
-										&& parameter.auditParameter.code != "DOM_ID"
-										&& parameter.auditParameter.code != "WEBDRIVER_BROWSER"){
-											this.parameters.push(parameter)
-										}
-									});
-								},
-								(error) => {
-									console.error(error)
-								}
-							)
-						},
-						(error) => {
-							console.error(error);
-						}
+					this.$route.params.id,
+					this.sharecode,
+					(audit) => {
+						this.audit = audit;
+					},
+					(error) => {
+						console.error(error);
+					}
 				);
 
                 this.loadPages(this.pageCurrentPage, this.auditPagePageSize);
