@@ -81,7 +81,7 @@
                 </Tab>
 
                 <!-- USERS BY CONTRACT -->
-                <div v-if="this.$store.state.auth.user.appRole.name !== 'USER'">
+                <div v-show="currentContractUser || this.$store.state.auth.user.appRole.name !== 'USER'">
                     <Tab :name="$t('contract.users')" class="tabs-wrapper">
                         <article v-show="addingCondition && isStillValid">
                             <h2 class="contract__title-2">{{$t('contract.users')}}</h2>
@@ -269,9 +269,6 @@ export default {
         }
     },
     computed: {
-        showReferenceTab(){
-    		return REFERENCE_PANEL
-		},
         promoteCondition(){
 			return this.$store.state.auth.user.appRole.overrideContractRole.authorities.some(authority => {
                 return authority.name === 'PROMOTE_MEMBER'
