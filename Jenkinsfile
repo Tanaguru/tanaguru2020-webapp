@@ -1,8 +1,15 @@
 def COLOR_MAP = [
-    'SUCCESS': 'good', 
+    'SUCCESS': 'good',
     'FAILURE': 'danger',
     'UNSTABLE': 'warning',
 ]
+
+def createDockerEnvFileContent(String propertyFileName){
+    configFileProvider([configFile(fileId: propertyFileName, variable: 'configFile')]) {
+         def props = readProperties file: "$configFile"
+         return "API_BASE_URL=" + props['API_BASE_URL'] + "\n"
+    }
+}
 
 pipeline {
     agent any
@@ -51,28 +58,27 @@ pipeline {
                 branch 'develop'
             }
             steps {
-                unstash 'version'
-
-                sh '''
-					WEBAPP_VERSION=$(cat version.txt)
-
-					echo API_BASE_URL=https://devapi.tanaguru.com > .env
-
-					docker stop tanaguru2020-webapp-dev || true
-					docker image prune -f
-
-					docker run -d --rm \
-						--name tanaguru2020-webapp-dev \
-						--env-file ./.env \
-						--label "traefik.enable=true" \
-						--label "traefik.frontend.redirect.entryPoint=secure" \
-						--label "traefik.http.routers.tanaguru-webapp-dev.entrypoints=secure" \
-						--label "traefik.http.routers.tanaguru-webapp-dev.rule=Host(\\`dev.tanaguru.com\\`)" \
-						--label "traefik.http.routers.tanaguru-webapp-dev.tls=true" \
-						--label "traefik.port=80" \
-						--network=web \
-						tanaguru2020-webapp:${WEBAPP_VERSION}
-				'''
+				script{
+					unstash 'version'
+					def devDockerEnv = createDockerEnvFileContent('62d1f7d7-fe7c-43da-a752-14fe989555bb');
+                    writeFile file: "./.env", text: devDockerEnv
+					sh '''
+						WEBAPP_VERSION=$(cat version.txt)
+						docker stop tanaguru2020-webapp-dev || true
+						docker image prune -f
+						docker run -d --rm \
+							--name tanaguru2020-webapp-dev \
+							--env-file ./.env \
+							--label "traefik.enable=true" \
+							--label "traefik.frontend.redirect.entryPoint=secure" \
+							--label "traefik.http.routers.tanaguru-webapp-dev.entrypoints=secure" \
+							--label "traefik.http.routers.tanaguru-webapp-dev.rule=Host(\\`dev.tanaguru.com\\`)" \
+							--label "traefik.http.routers.tanaguru-webapp-dev.tls=true" \
+							--label "traefik.port=80" \
+							--network=web \
+							tanaguru2020-webapp:${WEBAPP_VERSION}
+					'''
+				}
             }
         }
 
@@ -81,29 +87,32 @@ pipeline {
                 branch 'master'
             }
             steps {
-                unstash 'version'
+				script{
+					unstash 'version'
+					def devDockerEnv = createDockerEnvFileContent('9389b3f2-3191-41af-82df-f08e2996df69');
+					writeFile file: "./.env", text: devDockerEnv
+					sh '''
+						WEBAPP_VERSION=$(cat version.txt)
 
-                sh '''
-					WEBAPP_VERSION=$(cat version.txt)
+						echo API_BASE_URL=https://prodapi.tanaguru.com > .env
 
-					echo API_BASE_URL=https://prodapi.tanaguru.com > .env
+						docker stop tanaguru2020-webapp-prod || true
+						docker image prune -f
 
-					docker stop tanaguru2020-webapp-prod || true
-					docker image prune -f
-
-					docker run -d --rm \
-						--name tanaguru2020-webapp-prod \
-						--env-file ./.env \
-						--label "traefik.enable=true" \
-						--label "traefik.frontend.redirect.entryPoint=secure" \
-						--label "traefik.http.routers.tanaguru-webapp-prod.entrypoints=secure" \
-						--label "traefik.http.routers.tanaguru-webapp-prod.rule=Host(\\`prod.tanaguru.com\\`)" \
-						--label "traefik.http.routers.tanaguru-webapp-prod.tls=true" \
-						--label "traefik.port=80" \
-						--network=web \
-						tanaguru2020-webapp:${WEBAPP_VERSION}
-				'''
-            }
+						docker run -d --rm \
+							--name tanaguru2020-webapp-prod \
+							--env-file ./.env \
+							--label "traefik.enable=true" \
+							--label "traefik.frontend.redirect.entryPoint=secure" \
+							--label "traefik.http.routers.tanaguru-webapp-prod.entrypoints=secure" \
+							--label "traefik.http.routers.tanaguru-webapp-prod.rule=Host(\\`prod.tanaguru.com\\`)" \
+							--label "traefik.http.routers.tanaguru-webapp-prod.tls=true" \
+							--label "traefik.port=80" \
+							--network=web \
+							tanaguru2020-webapp:${WEBAPP_VERSION}
+					'''
+				}
+			}
         }
 
         stage('Store packages') {
@@ -123,30 +132,51 @@ pipeline {
             }
         }
 
-        stage('Push image to registry') {
-        	environment {
-				REGISTRY_USER = "admin"
-				REGISTRY_PASS = "9x^VTugHEfQ1e7"
-				REGISTRY_HOST = "registry.tanaguru.com"
+        stage('Push beta image to registry') {
+			when {
+				branch 'beta'
 			}
+			steps {
+				unstash 'version'
+
+				script{
+					def TIMESTAMP =sh(
+						script: "date +%Y-%m-%d",
+						returnStdout: true
+					).trim()
+
+					def WEBAPP_VERSION = sh(
+						script: "cat version.txt",
+						returnStdout: true
+					).trim()
+
+					def image = docker.image("tanaguru2020-webapp:${WEBAPP_VERSION}")
+					docker.withRegistry('https://registry.tanaguru.com', 'registry') {
+						image.push('beta-${TIMESTAMP}')
+					}
+				}
+			}
+		}
+
+        stage('Push image to registry') {
 			when {
 				branch 'master'
 			}
 			steps {
 				unstash 'version'
 
-				sh '''
-				  WEBAPP_VERSION=$(cat version.txt)
+				script{
+					def WEBAPP_VERSION = sh(
+						script: "cat version.txt",
+						returnStdout: true
+					).trim()
 
-				  docker login \
-				  --username="$REGISTRY_USER" \
-				  --password="$REGISTRY_PASS" "$REGISTRY_HOST"
-				  docker tag tanaguru2020-webapp:${WEBAPP_VERSION} registry.tanaguru.com/tanaguru2020-webapp:${WEBAPP_VERSION}
-				  docker push registry.tanaguru.com/tanaguru2020-webapp:${WEBAPP_VERSION}
-
-				  docker tag tanaguru2020-webapp:${WEBAPP_VERSION} registry.tanaguru.com/tanaguru2020-webapp:latest
-				  docker push registry.tanaguru.com/tanaguru2020-webapp:latest
-				'''
+					def image = docker.image("tanaguru2020-webapp:${WEBAPP_VERSION}")
+					docker.withRegistry('https://registry.tanaguru.com', 'registry') {
+						image.push()
+						image.push('latest')
+					}
+				}
 			}
 		}
     }

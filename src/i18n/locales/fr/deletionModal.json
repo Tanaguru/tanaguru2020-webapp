@@ -1,0 +1,11 @@
+{
+	"delete": "Êtes-vous sûr(e) de vouloir supprimer définitivement ",
+	"remove": "Êtes-vous sûr(e) de vouloir supprimer ",
+	"project": " de ce projet ?",
+	"contract": " de ce contrat ?",
+	"andProjects": " et tout ses projets ?",
+	"ownerWarning": " ATTENTION ! Supprimer un utilisateur supprimera tous les contrats qu'il possède. Modifiez les propriétaires des contrats que vous souhaitez conserver.",
+	"deleteScreenshot": "Êtes-vous sûr(e) de vouloir supprimer définitivement les captures d'écran de cet audit ?",
+	"done": "C'est fait !",
+	"actionConfirmed": "Cela peut prendre quelques instant pour apparaître mais votre action a été prise en compte."
+}

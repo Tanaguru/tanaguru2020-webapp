@@ -6,24 +6,24 @@ export default class ProjectService extends Service{
     }
 
     create(name, domain, contractId, then, error){
-      const project = {
-          'name' : name,
-          'domain' : domain,
-          'contractId' : contractId
-      };
+        const project = {
+            'name' : name,
+            'domain' : domain,
+            'contractId' : contractId,
+        };
 
-        return this.axios({
-          url: this.controllerName + "/", 
-          method: 'post',
-          data: project
-      })
-      .then((project) => {then(project.data)})
-      .catch((err) => {error(err)});
-  }
+          return this.axios({
+            url: this.controllerName + "/",
+            method: 'post',
+            data: project
+        })
+        .then((project) => {then(project.data)})
+        .catch(err => {error(err)});
+    }
 
     findByContractId(id, then, error){
         return this.axios({
-            url: this.controllerName + '/by-contract/' + id, 
+            url: this.controllerName + '/by-contract/' + id,
             method: 'get',
           })
           .then(resp => {
@@ -47,9 +47,22 @@ export default class ProjectService extends Service{
         })
     }
 
+    findByAuthorityByProjectId(id, then, error){
+        return this.axios({
+            url: this.controllerName + '/' + id + '/authorities',
+            method: 'get',
+        })
+            .then(resp => {
+                then(resp.data)
+            })
+            .catch(err => {
+                error(err)
+            })
+    }
+
     findMemberOfByContractId(id, then, error){
         return this.axios({
-            url: this.controllerName + '/member-of/by-contract/' + id, 
+            url: this.controllerName + '/member-of/by-contract/' + id,
             method: 'get',
           })
           .then(resp => {
@@ -58,6 +71,19 @@ export default class ProjectService extends Service{
           .catch(err => {
               error(err);
           });
+    }
+
+    findMemberOfNotOwner(then, error){
+        return this.axios({
+            url: this.controllerName + '/member-of',
+            method: 'get',
+        })
+            .then(resp => {
+                then(resp.data)
+            })
+            .catch(err => {
+                error(err);
+            });
     }
 
     removeMember(id, projectId, then, error){
@@ -102,4 +128,6 @@ export default class ProjectService extends Service{
         .then((user) => {then(user.data)})
         .catch((err) => {error(err)});
     }
+
+
 }

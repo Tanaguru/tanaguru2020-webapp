@@ -1,0 +1,13 @@
+{
+	"infos": "Détails du contrat",
+	"users": "Utilisateurs du contrat",
+	"projects": "Projet(s) du contrat",
+	"createProject": "Créer un nouveau projet associé",
+	"projectsList": "Liste des projets associés",
+	"legendUsers": "Tableau des utilisateurs du contrat",
+	"legendProjects": "Tableau des projets associés au contrat",
+	"contracts": "contrat(s)",
+	"expired": "Terminé",
+	"noProjectYet": "Aucun projet n'a encore été créé dans ce contrat.",
+	"hadNoProject": "Aucun projet n'avait été créé dans ce contrat"
+}

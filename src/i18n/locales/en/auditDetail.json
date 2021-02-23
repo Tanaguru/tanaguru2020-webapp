@@ -1,0 +1,35 @@
+{
+	"tabs": {
+		"logs": "Logs",
+		"synthesis": "Synthesis"
+	},
+	"pages": "Audit pages",
+	"logs": "Audit logs",
+	"synthesis": {
+		"pages": "Number of pages to audit",
+		"guidelines": "guidelines",
+		"table": {
+			"title": "Summary of audited pages",
+			"title-info": "Click on the icons for more details on the test status.",
+			"btnShow": "Test {status} - Show detail"
+		},
+		"modal": {
+			"criteria": "Criteria",
+			"rule": "Go to relevant rule page",
+			"seeDetails": "See detailed results for this page"
+		}
+	},
+	"status": {
+		"done": "Done",
+		"error": "Error",
+		"pending": "Pending",
+		"running": "Running"
+	},
+	"information": {
+		"parameters": "Audit parameters",
+		"status": "Status : ",
+		"browser": "Browser used to perform the audit : ",
+		"reference": "Main guidelines : ",
+		"type": "Audit type : "
+	}
+}

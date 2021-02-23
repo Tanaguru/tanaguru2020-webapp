@@ -1,45 +1,45 @@
-export default class Service{
-    constructor(controllerName, axios){
+export default class Service {
+    constructor(controllerName, axios) {
         this.controllerName = controllerName;
         this.axios = axios;
     }
 
-    findById(id, then, error){
+    findById(id, then, error) {
         return this.axios({
-            url: this.controllerName + "/" + id, 
+            url: this.controllerName + "/" + id,
             method: 'get',
-          })
-          .then(resp => {
-            then(resp.data)
-          })
-          .catch(err => {
-              error(err);
-          });
+        })
+            .then(resp => {
+                then(resp.data)
+            })
+            .catch(err => {
+                error(err);
+            });
     }
 
-    findAll(then, error){
+    findAll(then, error) {
         return this.axios({
-            url: this.controllerName + '/', 
+            url: this.controllerName + '/',
             method: 'get',
-          })
-          .then(resp => {
-            then(resp.data)
-          })
-          .catch(err => {
-              error(err);
-          });
+        })
+            .then(resp => {
+                then(resp.data)
+            })
+            .catch(err => {
+                error(err);
+            });
     }
 
-    delete(id, then, error){
+    delete(id, then, error) {
         return this.axios({
-        url: this.controllerName + "/" + id, 
-        method: 'delete',
-      })
-      .then(resp => {
-        then()
-      })
-      .catch(err => {
-          error(err);
-      });
+            url: this.controllerName + "/" + id,
+            method: 'delete',
+        })
+        .then(resp => {
+            then()
+        })
+        .catch(err => {
+            error(err);
+        });
     }
 }

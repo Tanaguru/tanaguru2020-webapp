@@ -7,14 +7,32 @@
                 <div class="tabs-wrapper">
                     <header>
                         <h1 class="title-logs">
-                            <span class="title-logs__type" v-if="audit.type === 'SITE'">{{ $t('entity.audit.site') }}</span>
-                            <span class="title-logs__type" v-else-if="audit.type === 'PAGE'">{{ $t('entity.audit.page') }}</span>
-                            <span class="title-logs__type" v-else-if="audit.type === 'SCENARIO'">{{ $t('entity.audit.scenario') }}</span>
-                            <span class="title-logs__type" v-else>{{ $t('entity.audit.upload') }}</span>
 							{{ audit.name }}
 							<span aria-live="polite" :class="'title-logs__status title-logs__status--' + audit.status.toLowerCase()" v-if="audit">{{ $t('auditDetail.status.' +  audit.status.toLowerCase()) }}</span>
                         </h1>
                     </header>
+
+					<section class="main-info title-logs">
+						<h2>Audit parameters</h2>
+						<ul>
+							<li>
+								{{ $t('auditDetail.information.type') }}
+								<span v-if="audit.type === 'SITE'">{{ $t('entity.audit.site') }}</span>
+								<span v-else-if="audit.type === 'PAGE'">{{ $t('entity.audit.page') }}</span>
+								<span v-else-if="audit.type === 'SCENARIO'">{{ $t('entity.audit.scenario') }}</span>
+								<span v-else>{{ $t('entity.audit.upload') }}</span>
+							</li>
+							<li v-if="browser == 'firefox'" >{{ $t('auditDetail.information.browser') }}Mozilla Firefox</li>
+							<li v-else-if="browser == 'chrome'" >{{ $t('auditDetail.information.browser') }}Google Chrome</li>
+							<!--<li>{{ $t('auditDetail.information.reference') }}{{ mainReference }}</li>-->
+
+							<li v-for="parameter in parameters" :key="parameter.id">
+								{{ parameter.auditParameter.code.charAt(0).toUpperCase() + parameter.auditParameter.code.slice(1).toLowerCase().replaceAll('_', ' ') }}
+								:
+								{{ parameter.value }}
+							</li>
+						</ul>
+					</section>
 
 					<section class="section-logs">
 						<page-list
@@ -61,8 +79,8 @@
 
 <script>
 import Breadcrumbs from "../../components/Breadcrumbs";
-import Tab from '../../components/Admin/AdminTab';
-import Tabs from '../../components/Admin/AdminTabs';
+import Tab from '../../components/Tab';
+import Tabs from '../../components/Tabs';
 import Logs from './LogsList';
 import Synthesis from './Synthesis';
 import LogsList from "./LogsList";
@@ -99,10 +117,12 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 				timer: null,
 				audit: null,
 				sharecode: null,
-          project:null,
+          		project: null,
 				parameters: [],
 				pages: [],
-                auditLogs: [],
+				auditLogs: [],
+				mainReference: null,
+				browser: null,
 
                 auditLogPageSize: 10,
                 auditLogTotalPage : 0,
@@ -122,12 +142,42 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 			this.timer = setInterval(this.refreshPages, 3000);
 
             this.loadPages(this.pageCurrentPage, this.auditPagePageSize);
-            this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize);
+			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize);
+
+			this.getParameters();
 		},
 		beforeDestroy () {
 			clearInterval(this.timer)
 		},
 		methods: {
+			getParameters(){
+				this.auditParametersService.findByAuditId(
+					this.$route.params.id,
+					this.sharecode,
+					(parameters) => {
+						parameters.forEach(parameter => {
+							if(parameter.auditParameter.code == "WEBDRIVER_BROWSER") {
+								this.browser = parameter.value
+							}
+							else if(parameter.auditParameter.code == "MAIN_REFERENCE") {
+								this.mainReference = parameter.value
+							}
+							else if(parameter.value
+							&& parameter.auditParameter.code != "SITE_SEEDS"
+							&& parameter.auditParameter.code != "PAGE_URLS"
+							&& parameter.auditParameter.code != "SCENARIO_ID"
+							&& parameter.auditParameter.code != "DOM_ID"
+							&& parameter.auditParameter.code != "WEBDRIVER_BROWSER"){
+								this.parameters.push(parameter)
+							}
+						});
+					},
+					(error) => {
+						console.error(error)
+					}
+				)
+			},
+			
 			getProject(){
 				this.projectService.findByAuditId(
 						this.$route.params.id,
@@ -143,14 +193,14 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 
 			getAudit(){
 				this.auditService.findById(
-						this.$route.params.id,
-						this.sharecode,
-						(audit) => {
-							this.audit = audit;
-						},
-						(error) => {
-							console.error(error);
-						}
+					this.$route.params.id,
+					this.sharecode,
+					(audit) => {
+						this.audit = audit;
+					},
+					(error) => {
+						console.error(error);
+					}
 				);
 
                 this.loadPages(this.pageCurrentPage, this.auditPagePageSize);

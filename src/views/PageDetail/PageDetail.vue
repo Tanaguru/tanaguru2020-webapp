@@ -21,6 +21,7 @@
 			<page-result-info
                 v-if="audit && page && pageContent && reference"
                 :resultSectionOpen="resultSectionOpen"
+                :display-mode="displayMode"
                 :audit="audit"
                 :page="page"
                 :page-content="pageContent"
@@ -502,7 +503,7 @@
                 }
 
                 breadcrumb.push({
-                    name: this.page.name.split("_")[0],
+                    name: this.page.name,
                 });
                 return breadcrumb;
             }

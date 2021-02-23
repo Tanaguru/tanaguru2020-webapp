@@ -1,11 +1,11 @@
 <template>
-    <dashboard v-if="$store.state.user"/>
+    <dashboard v-if="$store.state.auth.user"/>
     <Login v-else/>
 </template>
 
 <script>
 
-import dashboard from './Dashboard';
+import dashboard from './Dashboard/Dashboard';
 import Login from "./Login";
 export default {
     name: 'home',

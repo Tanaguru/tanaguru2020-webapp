@@ -1,0 +1,69 @@
+{
+	"indications" : {
+		"help": "Mandatory fields are indicated by the symbol *.",
+		"nameConstraint": "50 characters maximum",
+		"usernameConstraint": "30 characters maximum",
+		"passwordConstraint": "Should contain a minimum of 8 characters including at least 1 uppercase character, 1 lowercase, 1 number and 1 symbol (#?!@$%^&*-.,;:_).",
+		"emailConstraint": "Input should be an e-mail adress.",
+		"urlConstraint": "(example : http://www.website.com/)"
+	},
+	"successMsg": {
+		"savedChanges": "Changes have been saved.",
+		"projectCreation": "Project has been created.",
+		"contractCreation": "Contract has been created.",
+		"userCreation": "User has been created.",
+		"userContractAddition": "User has been added to the contract.",
+		"userProjectAddition": "User has been added to the project.",
+		"resetPasswordMailSuccess": "An email with instructions for resetting your password has been sent."
+	},
+	"errorMsg": {
+		"genericError": "An error has occured.",
+		"emptyInput": "This field should not be empty.",
+		"missingFields": "Please correct empty fields or incorrect inputs.",
+		"user": {
+			"inexistantUser": "This user does not exist.",
+			"notAMember": "This user can't be added to this project.",
+			"limitReached": "This user has reached their contract limit",
+			"notFound": "This user does not exist",
+			"permissionDenied": "You are not allowed to do this",
+			"promoteSelf": "You cannot promote yourself",
+			"notAllowed": "Your role in this project does not allow you to promote other users",
+			"promoteOwner": "You cannot promote the contract's owner",
+			"userDoesntBelong": "This user does not belong to the contract"
+		},
+		"password": {
+			"incorrectConfirmation": "The password and its confirmation don't match.",
+			"invalidPassword": "The password doesn't match the required criteria.",
+			"passwordError": "Your password should contain a minimum of 8 characters including at least 1 uppercase character, 1 lowercase, 1 number and 1 symbol (#?!@$%^&*-.,;:_).",
+			"resetPasswordMailError": "An error occurred while server was sending the email, please retry later."
+		},
+		"username": {
+			"existingUsername": "This username already exists.",
+			"invalidUsername": "The username should be longer than 4 characters and shorter than 30.",
+			"usernameError": "The username should be shorter than 30 characters."
+		},
+		"email": {
+			"existingEmail": "This e-mail adress has already been registered.",
+			"notEmail": "This should be an e-mail adress."
+
+		},
+		"contract": {
+			"notFound": "This contract does not exist.",
+			"projectLimit": "This contract has reached its maximum number of projects allowed.",
+			"expired": "The contract is passed its validity date",
+			"invalidDateEnd": "This isn't the expected date format."
+		},
+		"project": {
+			"notFound": "This project does not exist.",
+			"invalidDomain": "The domain is not a valid one"
+		},
+		"others": {
+			"nameError": "The name should be less than 50 characters long.",
+			"urlError": "Please enter a valid URL (example : http://www.tanaguru.com)"
+		}
+	}
+	
+	
+	
+	
+}

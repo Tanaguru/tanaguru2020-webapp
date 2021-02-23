@@ -1,13 +1,16 @@
 import Service from "./service";
 
 export default class UserService extends Service{
+    EMAIL_ALREADY_EXISTS = 'EMAIL_ALREADY_EXISTS'
+    USERNAME_ALREADY_EXISTS = 'USERNAME_ALREADY_EXISTS'
+
     constructor(axios){
         super('users', axios)
     }
 
     me(then, error){
         return this.axios({
-            url: '/users/me', 
+            url: '/users/me',
             method: 'GET'
           })
           .then(user => {then(user.data)})
@@ -24,21 +27,21 @@ export default class UserService extends Service{
         };
 
         this.axios({
-            url: this.controllerName + "/", 
+            url: this.controllerName + "/",
             method: 'post',
             data: user
         })
         .then((user) => {then(user.data)})
         .catch((err) => {error(err)});
     }
-    
+
     promoteById(id, appRole, then, error){
         const user = {
             'appRole' : appRole
         };
 
         return this.axios({
-            url: this.controllerName + "/promote/" + id, 
+            url: this.controllerName + "/promote/" + id,
             method: 'put',
             data: user
         })
@@ -64,7 +67,7 @@ export default class UserService extends Service{
         };
 
         return this.axios({
-            url: this.controllerName + "/", 
+            url: this.controllerName + "/",
             method: 'put',
             data: user
         })
@@ -88,7 +91,7 @@ export default class UserService extends Service{
         };
 
         return this.axios({
-            url: this.controllerName + "/me", 
+            url: this.controllerName + "/me",
             method: 'put',
             data: user
         })
@@ -126,7 +129,7 @@ export default class UserService extends Service{
 
     findAllByProject(id, then, error){
         return this.axios({
-            url: this.controllerName + '/by-project/' + id, 
+            url: this.controllerName + '/by-project/' + id,
             method: 'get',
           })
           .then(resp => {
@@ -137,10 +140,10 @@ export default class UserService extends Service{
           });
     }
 
-    
+
     findAllByContract(id, then, error){
         this.axios({
-            url: this.controllerName + '/by-contract/' + id, 
+            url: this.controllerName + '/by-contract/' + id,
             method: 'get',
           })
           .then(resp => {

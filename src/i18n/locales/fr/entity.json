@@ -1,0 +1,80 @@
+{
+	"generic": {
+		"actions": "Actions",
+		"anomalies": "anomalies"
+	},
+	"user": {
+		"user": "Utilisateur",
+		"users": "Utilisateurs",
+		"role": {
+			"role": "Rôle",
+			"superAdmin": "Super Admin",
+			"admin": "Admin",
+			"user": "User",
+			"projectManager": "Project Manager",
+			"projectUser": "Project User",
+			"projectGuest": "Project Guest",
+			"contractManager": "Contract Manager",
+			"contractUser": "Contract User",
+			"contractGuest": "Contract Guest"
+		},
+		"dateCreation": "Date de creation",
+		"username": "Nom d'utilisateur",
+		"email": "Adresse mail",
+		"password": "Mot de passe",
+		"newPassword": "Nouveau mot de passe",
+		"passwordConfirm": "Confirmation du mot de passe",
+		"enabled": "Activé",
+		"status": "Statut",
+		"selectStatus": "Sélectionner le statut",
+		"emailError": "Le champ ne peut pas être vide."
+	},
+	"contract": {
+		"contracts": "Contrats",
+		"contract": "Contrat",
+		"name": "Nom",
+		"dateEnd": "Date de fin",
+		"formDateEnd": "Date de fin (format jj/mm/aaaa)",
+		"dateStart": "Date de début",
+		"owner": "Propriétaire",
+		"selectOwner": "Sélectionner le propriétaire du contrat",
+		"restrictDomain": "Restreindre les projets du contrat à un domaine spécifique"
+	},
+	"project": {
+		"name": "Nom",
+		"domain": "Nom de domaine",
+		"contract": "Nom du contrat"
+	},
+	"audit": {
+		"name": "Nom",
+		"type": "Type",
+		"nbPage": "Nombre de pages",
+		"status": "Statut",
+		"dateStart": "Date de début",
+		"dateEnd": "Date de fin",
+		"id": "Id n°",
+		"url": "Domaine",
+		"repository": "Référentiel",
+		"parameters": "Paramètres de l'audit",
+		"page": "Audit de page",
+		"site": "Audit de site",
+		"upload": "Audit de fichier",
+		"scenario": "Audit de scénario",
+		"assisted": "Audit assisté",
+		"result": {
+			"passed": "Conforme",
+			"inapplicable": "Non appliquable",
+			"ignored": "Anomalies ignorées",
+			"failed": "Non conforme",
+			"untested": "Non testé",
+			"cantTell": "À qualifier"
+		}
+	},
+	"reference": {
+		"references": "Référentiels",
+		"name": "Nom"
+	},
+	"test": {
+		"tests": "Tests"
+	}
+}

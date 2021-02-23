@@ -1,0 +1,17 @@
+{
+	"siteName": "Tanaguru Engine",
+	"skiplink": "Aller au contenu",
+	"help": "Aide",
+	"language": {
+		"label": "Choisissez votre langue",
+		"french": "Français",
+		"english": "English"
+	},
+	"session": {
+		"expiresSoon": "La session arrive bientôt à expiration, veuillez cliquer ci dessous pour la prolonger.",
+		"maintainButtonLabel": "Prolonger la durée de la session."
+	},
+	"logoAlt": "Tanaguru - Retour à l'accueil",
+	"footerContent": "©2009-{date} Tanaguru.com - Propulsé par Tanaguru - Tanaguru app v{appVersion} - Tanaguru engine v{serverVersion}",
+	"breadcrumbsHelp": "Vous êtes ici"
+}

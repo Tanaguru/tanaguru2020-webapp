@@ -1,10 +1,11 @@
 {
   "name": "tanaguru2020-webapp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build --mode production",
+    "test:unit": "vue-cli-service test:unit",
     "sass-lint-vue": "./node_modules/.bin/sass-lint-vue",
     "version": "echo $npm_package_version"
   },
@@ -27,8 +28,10 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.3.0",
     "@vue/cli-plugin-router": "~4.3.0",
+    "@vue/cli-plugin-unit-jest": "^4.5.9",
     "@vue/cli-plugin-vuex": "~4.3.0",
     "@vue/cli-service": "~4.3.0",
+    "@vue/test-utils": "^1.0.3",
     "chart.js": "^2.9.3",
     "node-sass": "^4.14.1",
     "postcss-loader": "^3.0.0",

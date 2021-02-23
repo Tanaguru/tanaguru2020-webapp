@@ -77,7 +77,7 @@
 </template>
 
 <script>
-    import SearchInput from "../../components/SearchInput";
+    import SearchInput from "./SearchInput";
     import IconBaseDecorative from "../../components/icons/IconBaseDecorative";
     import IconBaseInformative from "../../components/icons/IconBaseInformative";
     import IconArrowBlue from "../../components/icons/IconArrowBlue";

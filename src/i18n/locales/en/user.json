@@ -1,0 +1,8 @@
+{
+	"profile": "Profile",
+	"contracts": "Contracts associated with this profile",
+	"noContract": "You have not been added to any contract yet.",
+	"adminNoContract": "This user has not been added to any contract yet.",
+	"results": "results",
+	"password": "Change my password"
+}

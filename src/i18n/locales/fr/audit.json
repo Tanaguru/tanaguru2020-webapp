@@ -1,0 +1,164 @@
+{
+	"definition": {
+		"title": "Définition de l'audit",
+		"radioLegend": "Type d'audit",
+		"radioType": {
+			"newAuditSite": "Audit de site",
+			"newAuditPage": "Audit de page",
+			"newAuditUpload": "Audit de fichier",
+			"newAuditScenario": "Audit de scenario"
+		},
+		"labelName": "Nom de l'audit",
+		"screenshot": {
+			"title": "Captures d'écran",
+			"explanation": "Souhaitez-vous ajouter des captures d'écran à votre audit ?",
+			"radioLegend": "Option d'ajout de captures d'écran",
+			"radioYes": "Oui",
+			"radioNo": "Non"
+		},
+		"browsers": {
+			"title": "Navigateur",
+			"subtitle": "Choix du navigateur",
+			"explanation": "La navigateur à utiliser pour l'audit.",
+			"radioLegend": "Option de choix de navigateur",
+			"firefox": "Mozilla Firefox",
+			"chrome": "Google Chrome"
+		}
+	},
+	"guidelines": {
+		"title": "Référentiels",
+		"reference": {
+			"title": "Bases de référence",
+			"explanation": "Choisissez le ou les référentiels que vous souhaitez apliquer à votre audit."
+		},
+		"mainReference": {
+			"title": "Choix du référentiel principal",
+			"explanation": "Il s'agit du référentiel qui sera affiché dans le tableau de bord."
+		},
+		"level": {
+			"title": "Niveau de conformité",
+			"levelA": "A",
+			"levelAA": "AA",
+			"levelAAA": "AAA"
+		}
+	},
+	"tests": {
+		"title": "Liste des tests",
+		"explanation": "La configuration ci-dessous peut-être modifiée dans les paramètres du projet.",
+		"category1": {
+			"title": "Catégorie de tests 1",
+			"checkbox1": "",
+			"checkbox2": "",
+			"checkbox3": "",
+			"checkbox4": ""
+		}
+	},
+	"pages": {
+		"title": "Configuration de l'audit de pages",
+		"subtitle": "Pages à tester",
+		"explanation": "Saissisez au moins une adresse de page. Exemple de format attendu : 'https://www.tanaguru.com'",
+		"radioLegend": "Options d'ajout de pages",
+		"array": "Saisie page par page",
+		"plainText": "Saisie libre",
+		"byPage": {
+			"page": "Page",
+			"name": "Nom de la page",
+			"url": "URL",
+			"button": "Ajouter une page"
+		},
+		"byUrl": {
+			"label": "URLs",
+			"labelHelp": "Les URLs des pages à auditer doivent être séparés par un ';'"
+		}
+	},
+	"resolution": {
+		"title": "Résolution",
+		"explanation": "Résolution de la page et de ses points de rupture",
+		"option": "Laisser l'outil gérer la résolution",
+		"default": "Résolution de base",
+		"breakpoint": "Point de rupture",
+		"label": "Largeur de l'écran en pixels",
+		"labelHelp": "Valeur maximum: 2048 pixels",
+		"button": "Ajouter un point de rupture"
+	},
+	"waitTime": {
+		"title": "Temps d'attente <span class=\"small\">(pour les frameworks Angular JS, React...)</span>",
+		"label": "Temps d’attente avant le chargement du code HTML (en millisecondes)",
+		"formHelp": "La valeur doit être comprise entre 0 (non inclus) et 10 000 millisecondes (ms). Exemple: 2 secondes = 2000 ms. Valeur à saisir dans le champ : 2000"
+	},
+	"site": {
+		"title": "Configuration de l'audit de site",
+		"parameters": {
+			"labelSiteSeeds": "Racines du site",
+			"labelSiteSeedsHelp": "Racines du site séparées par un ';'",
+			"labelMaxDepth": "Profondeur maximum",
+			"labelMaxDepthHelp": "Pronfondeur maximum du crawler en pages (la valeur doit être un nombre entier compris entre 1 et 10).",
+			"labelMaxDuration": "Durée maximum",
+			"labelMaxDurationHelp": "Durée maximum du crawler en secondes (la valeur doit être un nombre compris entre 0.1 et 86400).",
+			"labelMaxDocument": "Pages maximum",
+			"labelMaxDocumentHelp": "Nombre maximum de page à auditer (la valeur doit être un nombre entier compris entre 1 et 1000).",
+			"labelInclusionRegex": "Inclusion des urls contenant",
+			"labelInclusionRegexHelp": "Plusieurs expressions peuvent être saisies, séparées par un ';'",
+			"labelExclusionRegex": "Exclusion des urls contenant",
+			"labelExclusionRegexHelp": "Plusieurs expressions peuvent être saisies, séparées par un ';'"
+		}
+	},
+	"resource": {
+		"title": "Configuration de l'audit de fichier",
+		"subtitle": "Fichier",
+		"name": "Nom",
+		"file": "Fichier",
+		"selectResource": "Sélectionner un fichier",
+		"noResource": "Aucune ressource trouvée"
+	},
+	"scenario": {
+		"title": "Configuration de l'audit de scenario",
+		"subtitle": "Scenario",
+		"name": "Nom",
+		"file": "Fichier",
+		"selectScenario": "Sélectionner un scénario",
+		"noScenario": "Aucun scenario trouvé"
+	},
+	"basicAuth": {
+		"basicAuth": "Accès sécurisé",
+		"login": "Identifiant",
+		"password": "Mot de passe",
+		"explanation": "Indiquez les informations de connexion sécurisée aux pages de l'audit. Si la page de connexion est inclue dans les pages à tester (renseignées en section 2), laisser le champ 'URL' vide.",
+		"urlError": "L'URL doit faire partie du domaine spécifié et ne pas être cité dans les pages à tester.",
+		"loginError": "L'identifiant doit contenir plus de 3 caractères.",
+		"passwordError": "Le mot de passe doit contenir plus de 5 caractères."
+	},
+	"form": {
+		"help": {
+			"checked": "Rempli",
+			"empty": "A remplir",
+			"ready": "Prêt au lancement"
+		},
+		"error": {
+			"formError": "Le formulaire n'a pas été rempli correctement, vérifiez vos réponses pour complétez ou corrigez les champs vides ou mal renseignés.",
+			"auditType": "Veuillez choisir un type d'audit.",
+			"auditName": "Veuillez donner un nom à votre audit.",
+			"typeError": "Veuillez choisir le type d’audit à lancer. ",
+			"waitTimeError": "Veuillez entrer un nombre compris entre 0 (non inclus) et 10 000. ",
+			"scenarioError": "Fichier de scenario invalide. ",
+			"scenarioNameError": "Veuillez donner un nom à votre scenario",
+			"uploadError": "Veuillez choisir un fichier. ",
+			"emptyResourceId": "Veuillez choisir une ressource.",
+			"invalidResourceError": "Le fichier choisi est invalide",
+			"emptyScenarioId": "Veuillez choisir un scenario.",
+			"fileNameError": "Veuillez donner un nom à votre fichier",
+			"seedsError": "Veuillez entrer une URL. Vous ne pouvez pas auditer un site différent de celui associé au projet. ",
+			"emptyUrlError": "Le premier emplacement doit être rempli. ",
+			"emptyUrlsError": "Vous devez ajouter au moins une URL. ",
+			"scenarioSuccess": "Le scénario a bien été ajouté. ",
+			"resourceSuccess": "Le fichier a été ajouté. ",
+			"bpError": "Point de rupture invalide, veuillez entrer un nombre compris entre 1 et 2048.",
+			"auditReferences": "Veuillez choisir au moins un référentiel.",
+			"crawlerDuration": "Veuillez entrer un nombre compris entre 0 (non inclus) et 86400, pour la durée en secondes du crawler.",
+			"crawlerDepth": "Veuillez entrer un nombre entier, compris entre 1 et 10 pages, pour la profondeur du crawler.",
+			"crawlerDocument": "Veuillez entrer un nombre entier compris entre 1 et 1000 pour le nombre de pages à auditer.",
+			"noMainReference": "Aucun référentiel n'a été donné pour cet audit",
+			"noUsableReference": "Aucun réfétentiel valide n'a été donné pour cet audit"
+		}
+	}
+}
