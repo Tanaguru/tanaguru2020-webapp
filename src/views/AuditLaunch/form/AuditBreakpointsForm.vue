@@ -10,49 +10,45 @@
                     <div role="group"
                          :aria-labelledby="`breakpoint-${i}`"
                          class="custom-fieldset">
-                        <p class="custom-fieldset__legend" :id="`breakpoint-${i}`" v-if='i === 0'>
+                        <p class="custom-fieldset__legend" :id="`breakpoint-${i}`">
                             {{$t('audit.resolution.default')}}
-                            <span v-if="i === 0 && breakpoint !== '' " class="screen-reader-text">{{$t('audit.form.help.checked')}}</span>
-                            <span v-else class="screen-reader-text">{{$t('audit.form.help.empty')}}</span>
+                            <span v-if="!breakpoint" class="screen-reader-text">{{$t('audit.form.indications.help.checked')}}</span>
+                            <span v-else class="screen-reader-text">{{$t('audit.form.indications.help.empty')}}</span>
                         </p>
 
-						<p class="custom-fieldset__legend" :id='`breakpoint-${i}`' v-else>
-                            {{$t('audit.resolution.breakpoint')}} {{i}}
-							<span v-if="breakpoint !== '' " class="screen-reader-text">{{$t('audit.form.help.checked')}}</span>
-                            <span v-else class="screen-reader-text">{{$t('audit.form.help.empty')}}</span>
-
-						</p>
                         <div class="custom-fieldset__content">
 							<label class="label" :for="`breakpoint-length-${i}`">{{$t('audit.resolution.label')}} *</label>
 
 							<input
                                 class="input"
-                                v-bind:class="{'has-error': hasEmptyErrorRule(breakpoint, i) || hasValidErrorRule(breakpoint) }"
+                                v-bind:class="{'has-error': showItemError.includes(i) && !isBreakPointValid(breakpoint)}"
                                 type="number"
                                 name="breakpoint-length"
                                 :id="`breakpoint-length-${i}`"
                                 :required="i === 0"
                                 :value="breakpoint"
                                 @input="onChangeBreakpoint(i, $event.target.value)"
+                                @focus="hideItemListError(i)"
+                                @blur="showItemListError(i)"
                                 :aria-describedby="describedBy(breakpoint, i)"
 							/>
 
 							<p class="info-text" :id='`precision-length-${i}`'>{{$t('audit.resolution.labelHelp')}}</p>
 
-                             <p v-if="hasBeenSent && !isBreakPointEmpty(breakpoint)" class="info-error" :id='`empty-error-${i}`'>
+                             <p v-if="showItemError.includes(i) && !breakpoint" role="alert" class="info-error" :id='`empty-error-${i}`'>
 								<icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
 									<icon-alert/>
 								</icon-base-decorative>
-								<span>{{ $t('form.emptyInput') }}</span>
+								<span>{{ $t('form.errorMsg.emptyInput') }}</span>
 							</p>
-							<p v-else-if="hasBeenSent && !isBreakPointValid(breakpoint)" class="info-error" :id='`valid-error-${i}`'>
+							<p v-else-if="showItemError.includes(i) && !isBreakPointValid(breakpoint)" role="alert" class="info-error" :id='`valid-error-${i}`'>
 								<icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
 									<icon-alert/>
 								</icon-base-decorative>
 								<span>{{ $t('audit.form.error.bpError') }}</span>
 							</p>
 
-							<button class="btn btn--icon btn--clipboard btn-delete" type="button" v-if="i != 0" @click="removeBreakpoint(i)">
+							<button class="btn btn--icon btn--clipboard btn-delete" type="button" v-if="i !== 0" @click="removeBreakpoint(i)">
 								<icon-base-decorative width="18" height="18">
 									<icon-delete />
 								</icon-base-decorative>
@@ -85,9 +81,7 @@
     import IconDelete from '../../../components/icons/IconDelete';
     import IconPlus from '../../../components/icons/IconPlus';
     import InputValidationDisplay from "../InputValidationDisplay";
-
     import BreakpointHelper from "../../../helper/breakpointHelper";
-
     export default {
         name: 'auditBreakpointsForm',
         components: {
@@ -100,53 +94,43 @@
         props: ['value', 'isValid', 'hasBeenSent'],
         data() {
             return {
-                breakpoints: this.value
+                breakpoints: this.value,
+                showItemError: []
             }
         },
         methods: {
             isBreakPointValid:BreakpointHelper.isBreakpointValid,
-            isBreakPointEmpty:BreakpointHelper.isBreakpointEmpty,
-
             addBreakpoint() {
                 this.breakpoints.push('');
                 this.$emit('input', this.breakpoints);
             },
-
             removeBreakpoint(index) {
                 this.breakpoints.splice(index, 1);
                 this.$emit('input', this.breakpoints);
             },
-
             onChangeBreakpoint(index, value){
                 this.$set(this.breakpoints, index, value);
                 this.$emit('input', this.breakpoints);
             },
-            fullName: function (user) {
-                return user.first_name + ' ' + user.last_name;
-            },
-            hasValidErrorRule(breakpoint){
-                let rule = false;
-                if(this.hasBeenSent && !this.isBreakPointValid(breakpoint)) {
-                    rule = true
-                }
-                return rule;
-            },
-            hasEmptyErrorRule(breakpoint, i){
-                let rule = false;
-                if(this.hasBeenSent && !this.isBreakPointEmpty(breakpoint)) {
-                    rule = true
-                }
-                return rule;
-            },
+
             describedBy(breakpoint, i){
-                let describedBy = 'precision-length-' + i
-                if(this.hasValidErrorRule){
-                    describedBy = "precision-length-" + i + " valid-error-" + i
+                return 'precision-length-' + i +
+					!breakpoint ?
+						"empty-error-" + i :
+						this.isBreakPointValid(breakpoint) ?
+							'' :
+							'valid-error-' + i
+            },
+            showItemListError(i) {
+                this.showItemError.push(i)
+            },
+            hideItemListError(i) {
+                if(!this.isBreakPointValid) {
+                    let j = this.showItemError.indexOf(i);
+                    if(j >= 0) {
+                        this.showItemError.splice(i,1);
+                    }
                 }
-                else if(this.hasEmptyErrorRule){
-                    describedBy = "precision-length-" + i + "empty-error-" + i
-                }
-                return describedBy
             }
         }
     }

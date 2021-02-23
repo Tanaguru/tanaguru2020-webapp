@@ -97,13 +97,12 @@ export default {
 			})
 			.then(() => {
 				this.$emit('remove-user', user)
-			})
-			.catch(() => {
-
-			})
-			.finally(() => {
 				this.$modal.close()
 			})
+			.catch(() => {
+				this.$modal.close()
+			})
+			.finally(() => {this.$modal.close})
 		},
 
         promoteUser(user) {

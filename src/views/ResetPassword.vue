@@ -3,7 +3,7 @@
         <h2 class="user__title-2">{{$t('action.changePassword')}}</h2>
 
         <div>
-            <p>{{$t('form.help')}}</p>
+            <p>{{$t('form.indications.help')}}</p>
             <form @submit.prevent="modifyPassword" novalidate>
                 <div class="form-block">
                     <label class="label" for="password2">{{$t('entity.user.newPassword')}} *</label>
@@ -43,8 +43,13 @@
 </template>
 
 <script>
+    import PasswordHelper from '../helper/PasswordHelper';
+
     export default {
         name: 'resetPassword',
+        components: {
+            PasswordHelper
+        },
         data() {
             return {
                 userId: null,
@@ -62,9 +67,10 @@
             this.token = this.$route.params.token;
         },
         methods:{
+		    checkValidPassword: PasswordHelper.checkValidPassword,
             modifyPassword() {
-                if(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-,;:_]).{8,}$/.test(this.modifyPasswordForm.password) == false){
-                    this.modifyPasswordForm.error = "Your password should have at least 8 characters including 1 upper case character, 1 lower case character, 1 number and 1 symbol"
+                if(!this.checkValidPassword(this.modifyPasswordForm.password)){
+                    this.modifyPasswordForm.error = this.$i18n.t("form.errorMsg.password.passwordError")
                 } else {
                     this.modifyPasswordForm.error = "";
                     if (this.modifyPasswordForm.password === this.modifyPasswordForm.passwordConfirm) {
@@ -74,12 +80,12 @@
                             this.token,
                             (user) => {
                                 this.modifyPasswordForm.active = false;
-                                this.modifyPasswordForm.successMsg = this.$i18n.t("form.savedChange")
+                                this.modifyPasswordForm.successMsg = this.$i18n.t("form.successMsg.savedChangesChange")
                             },
-                            (error) => this.modifyPasswordForm.error = this.$i18n.t("form.genericError")
+                            (error) => this.modifyPasswordForm.error = this.$i18n.t("form.errorMsg.genericError")
                         )
                     } else {
-                        this.modifyPasswordForm.error = this.$i18n.t("form.incorrectConfirmation")
+                        this.modifyPasswordForm.error = this.$i18n.t("form.errorMsg.password.incorrectConfirmation")
                     }
 
                     this.modifyPasswordForm.password = "";

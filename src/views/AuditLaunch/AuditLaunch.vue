@@ -20,6 +20,7 @@
                                 <icon-launch/>
                             </icon-base-decorative>
                             <span>{{ $t('action.auditStart') }}</span>
+                            <span v-if="!launchCondition" class="screen-reader-text">{{ $t('form.errorMsg.missingFields') }}</span>
                         </button>
                         <p class="launch-info" v-if="launchCondition">
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
@@ -27,11 +28,11 @@
                             </icon-base-decorative>
                             <span>{{ $t('audit.form.help.ready') }}</span>
                         </p>
-                        <p v-else v-show="hasTryToLaunch" class="info-error">
+                        <p v-else-if="!launchCondition" class="info-error">
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-alert/>
                             </icon-base-decorative>
-                            <span>{{ $t('form.missingFields') }}</span>
+                            <span>{{ $t('form.errorMsg.missingFields') }}</span>
                         </p>
                     </div>
                 </div>
@@ -40,8 +41,14 @@
 
         <form novalidate>
             <div class="wrapper">
-                <p class="info-form">{{ $t('form.help') }}</p>
-                <section class="layout">
+                <p class="info-form">{{ $t('form.indications.help') }}</p>
+                <section class="layout" id="section-definition">
+                    <p v-if="!launchCondition" role="alert" id="incomplete-form" class="info-error">
+                        <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
+                            <icon-alert/>
+                        </icon-base-decorative>
+                        <span>{{ $t('audit.form.error.formError') }}</span>
+                    </p>
                     <audit-form-section-header
                         :title="$t('audit.definition.title')"
                         :number="1"/>
@@ -67,7 +74,7 @@
 
             <div class="wrapper"
                 v-if="isAuditTypeValid && auditConfigurationForm.common.type === 'page'">
-                <section class="layout">
+                <section class="layout"  id="section-page">
                     <audit-form-section-header
                         :title="$t('audit.pages.title')"
                         :number="2"/>
@@ -76,20 +83,19 @@
                     <audit-page-urls-form
                         :is-valid="isPageUrlsValid"
                         v-model="auditConfigurationForm.page.urls"
-                        :project-domain="project.domain"
-                        :has-been-sent="hasTryToLaunch"/>
+                        :project-domain="project.domain.trim()"/>
                 </section>
             </div>
 
             <div class="wrapper"
                 v-if="isAuditTypeValid && auditConfigurationForm.common.type === 'site'">
-                <section class="layout">
+                <section class="layout"  id="section-site">
                     <audit-form-section-header
                         :title="$t('audit.site.title')"
                         :number="2"/>
 
                     <audit-site-seeds-form
-                        v-if="project.domain"
+                        v-if="project.domain.trim()"
                         :is-valid="isSiteSeedsValid"
                         v-model="auditConfigurationForm.site.seeds"
                         :has-been-sent="hasTryToLaunch"/>
@@ -123,22 +129,23 @@
 
             <div class="wrapper"
                 v-if="isAuditTypeValid && auditConfigurationForm.common.type === 'scenario'">
-                <section class="layout">
+                <section class="layout"  id="section-scenario">
                     <audit-form-section-header
                         :title="$t('audit.scenario.title')"
                         :number="2"/>
 
                     <audit-scenario-form
-                            :is-valid="isSelectedScenarioValid"
-                            v-model="auditConfigurationForm.scenario.id"
-                            :project-id="project.id"
-                            :has-been-sent="hasTryToLaunch"/>
+                        :is-valid="isSelectedScenarioValid"
+                        v-model="auditConfigurationForm.scenario.id"
+                        :project-id="project.id"
+                        :has-been-sent="hasTryToLaunch"
+                        />
                 </section>
             </div>
 
             <div class="wrapper"
                 v-if="isAuditTypeValid && auditConfigurationForm.common.type === 'upload'">
-                <section class="layout">
+                <section class="layout"  id="section-upload">
                     <audit-form-section-header
                         :title="$t('audit.resource.title')"
                         :number="2"/>
@@ -151,10 +158,10 @@
                 </section>
             </div>
 
-            <hr role="presentation" class="separator separator--main" v-if="auditConfigurationForm.common.type != null"/>
+            <hr role="presentation" class="separator separator--main" v-if="isAuditTypeValid"/>
 
-            <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
-                <section class="layout">
+            <div class="wrapper" v-if="isAuditTypeValid">
+                <section class="layout"  id="section-references">
                     <audit-form-section-header
                         :title="$t('audit.guidelines.title')"
                         :number="3"/>
@@ -175,10 +182,10 @@
                 </section>
             </div>
 
-            <hr role="presentation" class="separator separator--main" v-if="auditConfigurationForm.common.type != null"/>
+            <hr role="presentation" class="separator separator--main" v-if="isAuditTypeValid"/>
 
-            <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
-                <section class="layout">
+            <div class="wrapper" v-if="isAuditTypeValid" >
+                <section class="layout" id="section-resolution">
                     <audit-form-section-header
                         :title="$t('audit.resolution.title')"
                         :number="4"/>
@@ -189,10 +196,10 @@
                 </section>
             </div>
 
-            <hr role="presentation" class="separator separator--main" v-if="auditConfigurationForm.common.type != null"/>
+            <hr role="presentation" class="separator separator--main" v-if="isAuditTypeValid"/>
 
-            <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
-                <section class="layout">
+            <div class="wrapper" v-if="isAuditTypeValid">
+                <section class="layout" id="section-waitTime">
                     <audit-form-section-header
                         :title="$t('audit.waitTime.title')"
                         :number="5"/>
@@ -204,12 +211,12 @@
                 </section>
             </div>
 
-            <hr role="presentation" class="separator separator--main" v-if="auditConfigurationForm.common.type != null"/>
+            <hr role="presentation" class="separator separator--main" v-if="isAuditTypeValid"/>
 
-            <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
-                <section class="layout">
+            <div class="wrapper" v-if="isAuditTypeValid">
+                <section class="layout" id="section-browser">
                     <audit-form-section-header
-                        :title="$t('audit.definition.browser.title')"
+                        :title="$t('audit.definition.browsers.title')"
                         :number="6"/>
 
                     <audit-browser-form
@@ -220,9 +227,35 @@
                 </section>
             </div>
 
-            <div class="wrapper" v-if="auditConfigurationForm.common.type != null">
+            <hr role="presentation" class="separator separator--main" v-if="isAuditTypeValid"/>
+
+            <div class="wrapper" v-if="isAuditTypeValid">
+                <section class="layout" id="section-browser">
+                    <audit-form-section-header
+                        :title="$t('audit.basicAuth.basicAuth')"
+                        :number="7"/>
+
+                        <!-- Basic auth -->
+                        <basic-auth-login-form
+                            :has-been-sent="hasTryToLaunch"
+                            :is-valid="isLoginValid"
+                            v-model="auditConfigurationForm.common.login"/>
+
+                        <basic-auth-password-form
+                            :has-been-sent="hasTryToLaunch"
+                            :is-valid="isPasswordValid"
+                            v-model="auditConfigurationForm.common.password"/>
+
+                        <basic-auth-url-form
+                            :has-been-sent="hasTryToLaunch"
+                            :is-valid="isUrlValid"
+                            v-model="auditConfigurationForm.common.url"/>
+                </section>
+            </div>
+
+            <div class="wrapper" v-if="isAuditTypeValid">
                 <button class="btn btn--default-inverse btn--icon" type="button" @click="startAudit"
-                        :enabled="launchCondition">
+                        >
                     <icon-base-decorative>
                         <icon-launch/>
                     </icon-base-decorative>
@@ -234,11 +267,11 @@
                     </icon-base-decorative>
                     <span>{{$t('audit.form.help.ready')}}</span>
                 </p>
-                <p v-else v-show="hasTryToLaunch" class="info-error">
+                <p v-else-if="launchMsg" class="info-error">
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-alert/>
                     </icon-base-decorative>
-                    <span>{{$t('form.missingFields')}}</span>
+                    <span>{{$t('form.errorMsg.missingFields')}}</span>
                 </p>
             </div>
         </form>
@@ -264,7 +297,6 @@ import IconArrowBlue from '../../components/icons/IconArrowBlue';
 import AuditTypeForm from "./form/AuditTypeForm";
 import AuditNameForm from "./form/AuditNameForm";
 import AuditReferencesForm from "./form/AuditReferencesForm";
-import AuditBrowserForm from "./form/AuditBrowserForm";
 import AuditMainReferenceForm from "./form/AuditMainReferenceForm";
 import AuditFormSectionHeader from "./AuditFormSectionHeader";
 import AuditSiteSeedsForm from "./form/AuditSiteSeedsForm";
@@ -277,15 +309,20 @@ import AuditSiteCrawlerExclusionRegexForm from "./form/AuditSiteExclusionRegexFo
 import AuditUploadForm from "./form/AuditUploadForm";
 import AuditScenarioForm from "./form/AuditScenarioForm";
 import AuditBreakpointsForm from "./form/AuditBreakpointsForm";
-import UrlHelper from "../../helper/urlhelper"
-import BreakpointHelper from "../../helper/breakpointHelper"
 import AuditWaitTimeForm from "./form/AuditWaitTimeForm";
 import AuditEnableScreenshotForm from "./form/AuditEnableScreenshotForm";
+import AuditBrowserForm from "./form/AuditBrowserForm";
+import BasicAuthLoginForm from "./form/BasicAuthLoginForm";
+import BasicAuthPasswordForm from "./form/BasicAuthPasswordForm";
+import BasicAuthUrlForm from "./form/BasicAuthUrlForm";
+import moment from 'moment';
+import UrlHelper from "../../helper/urlhelper"
+import BreakpointHelper from "../../helper/breakpointHelper"
 
 export default {
     name: 'auditLaunch',
     components: {
-		AuditBrowserForm,
+        AuditBrowserForm,
         AuditEnableScreenshotForm,
         AuditWaitTimeForm,
         AuditBreakpointsForm,
@@ -303,6 +340,9 @@ export default {
         AuditReferencesForm,
         AuditNameForm,
         AuditTypeForm,
+        BasicAuthLoginForm,
+        BasicAuthPasswordForm,
+        BasicAuthUrlForm,
         Breadcrumbs,
         BackToTop,
         IconBaseDecorative,
@@ -328,21 +368,26 @@ export default {
             ],
 
             project: null,
-            references: [],
-            activeBrowsers: [],
-
-            seedMustBeInDomain: true,
+            launchMsg: false,
             hasTryToLaunch: false,
+
+            activeBrowsers: [],
+            references: [],
+            seedMustBeInDomain: true,
             auditConfigurationForm: {
+
                 common: {
                     name: '',
                     selectedReferences: [],
                     mainReference: null,
                     waitTime: 500,
                     breakpoints: [1920],
-                    type: null,
+                    type: "page",
                     enableScreenshot: false,
-                    browser: null
+                    browser: 'firefox',
+                    login: '',
+                    password: '',
+                    url: ''
                 },
                 site: {
                     seeds: [],
@@ -382,21 +427,20 @@ export default {
                 if(references.length > 0){
                     this.auditConfigurationForm.common.selectedReferences.push(references[0]);
                 }
-
             },
             (error) => {
                 console.error(error);
             }
         );
-
         this.projectService.findById(
             this.$route.params.id,
             (project) => {
-                this.auditConfigurationForm.common.name = project.name + ' ' + this.moment().format("DD-MM-YYYY HH:mm");
-                this.auditConfigurationForm.page.urls.push(project.domain);
-                this.auditConfigurationForm.site.seeds.push(project.domain);
-
+                let currentDate = new Date();
+                this.auditConfigurationForm.common.name = project.name + ' ' + this.$moment().format("DD-MM-YYYY HH:mm");
+                this.auditConfigurationForm.page.urls.push(project.domain.trim());
+                this.auditConfigurationForm.site.seeds.push(project.domain.trim());
                 this.project = project;
+
                 this.breadcrumbProps.push({
                     name: project.contract.name,
                     path: '/contracts/' + project.contract.id
@@ -414,27 +458,29 @@ export default {
             (activeBrowsers) => {
                 this.activeBrowsers = activeBrowsers
                 if(this.activeBrowsers.length > 0){
-                    this.auditConfigurationForm.common.browser = this.activeBrowsers[0];
+                    this.auditConfigurationForm.common.browser = activeBrowsers.includes('firefox') ?
+						'firefox' :
+						this.activeBrowsers[0];
                 }
             },
             (error) => {
                 console.error(error)
             }
-        )
+        );
     },
-
     methods: {
-        moment: function (date) {
-            this.$moment.locale(this.$i18n.locale)
-            return this.$moment(date);
+        /*showLaunchMsg() {
+            this.launchMsg = true;
         },
+        hideLaunchMsg() {
+            this.launchMsg = false;
+        },*/
 
         startAudit: function () {
             this.hasTryToLaunch = true;
             if (!this.launchCondition) {
                 return;
             }
-
             const parameters = {
                 'WAIT_TIME': this.auditConfigurationForm.common.waitTime,
                 'WEBDRIVER_RESOLUTIONS': this.auditConfigurationForm.common.breakpoints.join(';'),
@@ -450,20 +496,16 @@ export default {
                     parameters['CRAWLER_EXCLUSION_REGEX'] = this.auditConfigurationForm.site.exclusionRegex;
                     parameters['CRAWLER_INCLUSION_REGEX'] = this.auditConfigurationForm.site.inclusionRegex;
                     break;
-
                 case 'page':
                     parameters['PAGE_URLS'] = this.auditConfigurationForm.page.urls.join(';');
                     break;
-
                 case 'upload':
                     parameters['DOM_ID'] = this.auditConfigurationForm.resource.id;
                     break;
-
                 case 'scenario':
                     parameters['SCENARIO_ID'] = this.auditConfigurationForm.scenario.id;
                     break;
             }
-
             this.auditService.start(
                 this.auditConfigurationForm.common.name,
                 this.auditConfigurationForm.common.selectedReferences.map((reference) => reference.id),
@@ -473,84 +515,108 @@ export default {
                 parameters,
                 (audit) => this.$router.push('/audits/' + audit.id),
                 (error) => {
-                    this.auditConfigurationForm.error = error;
+                    if(error.response.data.error == "PROJECT_NOT_FOUND"){
+    					this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.project.notFound')
+                    } else if (error.response.data.error == "CONTRACT_DATE_PASSED"){
+                        this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.contract.expired')
+                    } else if (error.response.data.error == "NO_MAIN_REFERENCE"){
+                        this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.project.noMainReference')
+                    } else if (error.response.data.error == "NO_USABLE_REFERENCE"){
+                        this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.project.noUsableReference')
+                    } else if (error.response.status == "403") {
+    					this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.user.permissionDenied')
+                    } else {
+    					this.auditConfigurationForm.error = this.$i18n.t('form.errorMsg.genericError')
+                    }
                 }
             )
         },
     },
     computed: {
+        //Auth
+        isLoginValid() {
+            return !this.auditConfigurationForm.common.login.length || this.auditConfigurationForm.common.login.length > 3
+        },
+        isPasswordValid() {
+            return !this.auditConfigurationForm.common.password || this.auditConfigurationForm.common.password.length > 5
+        },
+        isUrlValid() {
+            if(this.auditConfigurationForm.common.url) {
+                if(this.project.domain.trim()) {
+                    return this.auditConfigurationForm.common.url.includes(this.project.domain.trim()) && !this.auditConfigurationForm.page.urls.includes(this.auditConfigurationForm.common.url)
+                } else {
+                    let urlRegex = /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+
+                    return urlRegex.test(this.auditConfigurationForm.common.url)
+                }
+            } else {
+                return !this.auditConfigurationForm.common.url
+            }
+
+        },
+
          //Commons
         isAuditTypeValid() {
             return ['site', 'scenario', 'upload', 'page'].includes(this.auditConfigurationForm.common.type);
         },
-
         isAuditNameValid() {
             return this.auditConfigurationForm.common.name !== '';
         },
-
         isSelectedReferencesValid() {
             return this.auditConfigurationForm.common.selectedReferences.length > 0;
         },
-
         isMainReferenceValid() {
             return !!this.auditConfigurationForm.common.mainReference;
         },
-
         isWaitTimeValid() {
-            return Number.isInteger(this.auditConfigurationForm.common.waitTime) && this.auditConfigurationForm.common.waitTime > 0  && this.auditConfigurationForm.common.waitTime <= 10000 ;
+            return Number.isInteger(this.auditConfigurationForm.common.waitTime) &&
+				this.auditConfigurationForm.common.waitTime > 0  &&
+				this.auditConfigurationForm.common.waitTime <= 10000 ;
         },
-
         isBrowserValid(){
             return this.activeBrowsers.includes(this.auditConfigurationForm.common.browser);
         },
-
         isBreakpointsValid() {
             return this.auditConfigurationForm.common.breakpoints.filter(breakpoint => {
-                return !BreakpointHelper.isBreakpointValid(breakpoint) || BreakpointHelper.isBreakpointEmpty(breakpoint);
+                return ! BreakpointHelper.isBreakpointValid(breakpoint);
+                return ! BreakpointHelper.isBreakpointEmpty(breakpoint);
             }).length === 0;
         },
-
         //Pages
+        checkValidUrl: UrlHelper.checkValidUrl,
         isPageUrlsValid() {
-            return this.auditConfigurationForm.page.urls.filter((url) => {
-                return ! UrlHelper.checkValidUrl(url, this.project.domain, true)
-            }).length === 0;
+            return this.auditConfigurationForm.page.urls.every(url => url.includes(this.project.domain.trim()))
         },
 
         //Sites
         isSiteSeedsValid() {
-            return this.auditConfigurationForm.site.seeds.filter(seed => {
-                return ! UrlHelper.checkValidUrl(seed, this.project.domain, true)
-            }).length === 0;
+            return this.auditConfigurationForm.site.seeds.every(seed => seed.includes(this.project.domain.trim()))
         },
         isCrawlerMaxDepthValid() {
             return Number.isInteger(this.auditConfigurationForm.site.crawlerMaxDepth) &&
                 this.auditConfigurationForm.site.crawlerMaxDepth > 0 &&
                 this.auditConfigurationForm.site.crawlerMaxDepth <= 10
         },
-
         isCrawlerMaxDocumentValid() {
             return Number.isInteger(this.auditConfigurationForm.site.crawlerMaxDocument) &&
                 this.auditConfigurationForm.site.crawlerMaxDocument > 0 &&
                 this.auditConfigurationForm.site.crawlerMaxDocument <= 1000
         },
-
         isCrawlerMaxDurationValid() {
             return Number.isInteger(this.auditConfigurationForm.site.crawlerMaxDuration) &&
                 this.auditConfigurationForm.site.crawlerMaxDuration > 0 &&
                 this.auditConfigurationForm.site.crawlerMaxDuration <= 86400
         },
-
         //Scenario
         isSelectedScenarioValid() {
             return this.auditConfigurationForm.scenario.id != null;
         },
-
         //Upload
         isSelectedUploadResourceValid() {
             return this.auditConfigurationForm.resource.id != null
         },
 
+        //Launch condition
         launchCondition() {
             let result =
                 this.isAuditTypeValid &&
@@ -560,27 +626,22 @@ export default {
                 this.isBreakpointsValid &&
                 this.isWaitTimeValid &&
                 this.isBrowserValid;
-
             switch (this.auditConfigurationForm.common.type) {
                 case 'scenario':
                     result &= this.isSelectedScenarioValid;
                     break;
-
                 case 'upload':
                     result &= this.isSelectedUploadResourceValid;
                     break;
-
                 case 'site':
                     result &= this.isSiteSeedsValid &&
                         this.isCrawlerMaxDepthValid &&
                         this.isCrawlerMaxDocumentValid &&
                         this.isCrawlerMaxDurationValid;
                     break;
-
                 case 'page':
                     result &= this.isPageUrlsValid;
                     break;
-
                 default:
                     result = false;
             }
@@ -591,5 +652,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/views/AuditLaunch/AuditLaunch.style";
+@import "src/views/AuditLaunch/AuditLaunch.style.scss";
 </style>

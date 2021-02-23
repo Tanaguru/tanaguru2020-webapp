@@ -24,5 +24,12 @@
 		"error": "Erreur",
 		"pending": "En attente",
 		"running": "En cours"
+	},
+	"information": {
+		"parameters": "Paramètres de l'audit",
+		"status": "Status : ",
+		"browser": "Navigateur utilisé pour l'audit : ",
+		"reference": "Référentiel principal : ",
+		"type": "Type d'audit : "
 	}
 }

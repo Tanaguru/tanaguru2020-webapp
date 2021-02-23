@@ -26,6 +26,7 @@ export default class TanaguruRouter extends VueRouter{
                 } else if (err.response.status === 403) {
                     this.push('/forbidden')
                 }
+                return Promise.reject(err)
             }
         );
     }

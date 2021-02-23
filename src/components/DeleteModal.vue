@@ -1,13 +1,15 @@
 <template>
 	<div class="modal-content">
 		<header class="modal-header" id="modalTitle">
-			<button type="button" class="btn btn--nude btn--icon" @click="rejectHandler" :aria-label="$t('action.closeModal')">
+			<button type="button" class="btn btn--nude btn--icon" @click="closeModal" :aria-label="$t('action.closeModal')">
 				<icon-base-decorative width="18" height="18"><icon-close /></icon-base-decorative>
 				<span>{{$t('action.close')}}</span>
 			</button>
 		</header>
-		<section class="modal-body" id="modalDescription">
+
+		<section v-if="unconfirmed" class="modal-body" id="modalDescription">
             <p>{{ message }}</p>
+			<p v-show="warning">{{ warning }}</p>
 			<div id="buttons">
 				<button type="button" class="btn btn--default btn--icon" @click="resolveHandler">
 					<icon-base-decorative width="18" height="18"><icon-checked /></icon-base-decorative>
@@ -34,10 +36,19 @@ import IconChecked from './icons/IconChecked'
 		IconClose,
 		IconChecked
 	},
+	data() {
+		return {
+			unconfirmed: true
+		}
+	},
     props: {
         message: {
 			type: String,
             required: true
+		},
+		warning: {
+			type: String,
+			required: false
 		},
 		resolve: {
 			type: Function,
@@ -57,6 +68,9 @@ import IconChecked from './icons/IconChecked'
 			// this value will be passed to `catch`
 			this.reject()
 		},
+		closeModal() {
+			this.$modal.close()
+		}
     },
   };
 </script>

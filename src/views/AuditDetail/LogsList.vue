@@ -12,7 +12,7 @@
 <script>
 export default {
 	name: "logsList",
-    props: ['audit', 'auditLogs', 'totalElements', 'totalPages', 'currentPage', 'elementByPage'],
+    props: ['audit', 'auditLogs', 'totalElements', 'currentPage', 'elementByPage'],
     computed: {
 	    minElementIndex(){
 	        return this.currentPage * this.elementByPage + 1;

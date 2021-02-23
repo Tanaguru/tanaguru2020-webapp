@@ -9,8 +9,8 @@
                 <h3 class="layout-content-heading__subtitle layout-subtitle">
                     {{$t('audit.resource.subtitle')}} (.html)
                     <span v-if="isValid"
-                          class="screen-reader-text">{{$t('audit.form.help.checked')}}</span>
-                    <span v-else class="screen-reader-text">{{$t('audit.form.help.empty')}}</span>
+                          class="screen-reader-text">{{$t('audit.form.indications.help.checked')}}</span>
+                    <span v-else class="screen-reader-text">{{$t('audit.form.indications.help.empty')}}</span>
                 </h3>
             </div>
 
@@ -20,19 +20,22 @@
                            for="resourceName">
                         {{$t('audit.resource.name')}} *
                     </label>
-                    <input class="input"
-                           type="text"
-                           name="resourceName"
-                           id="resourceName"
-                           v-model="createResourceForm.name"
-                           required/>
+                    <input 
+                        class="input"
+                        type="text"
+                        name="resourceName"
+                        id="resourceName"
+                        v-model="createResourceForm.name"
+                        required
+                        :aria-describedby="describedBy"/>
                 </div>
                 <div class="form-block">
                     <file-upload
-                             :label="$t('audit.resource.file') + ' :'"
-                             @load="onAddResource"
-                             :required="true"
-                             format=".html"/>
+                        :label="$t('audit.resource.file') + ' :'"
+                        @load="onAddResource"
+                        :required="true"
+                        format=".html"
+                        :aria-describedby="describedBy"/>
                 </div>
 
                 <button class="btn btn--default btn--icon"
@@ -43,13 +46,13 @@
                     </icon-base-decorative>
                     <span>{{$t('action.add')}}</span>
                 </button>
-                <p v-if="createResourceForm.errorMsg" class="info-error">
+                <p v-if="createResourceForm.errorMsg" role="alert" id="name-error" class="info-error">
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-alert/>
                     </icon-base-decorative>
                     {{createResourceForm.errorMsg}}
                 </p>
-                <p v-else-if="createResourceForm.successMsg" class="info-success">
+                <p v-else-if="createResourceForm.successMsg" role="alert" id="name-success" class="info-success">
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-valid/>
                     </icon-base-decorative>
@@ -97,7 +100,7 @@
                 </table>
             </div>
 
-            <p v-if="!isValid && hasBeenSent" class="info-error">
+            <p v-if="!isValid && hasBeenSent" id="upload-error" class="info-error">
                 <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                     <icon-alert/>
                 </icon-base-decorative>
@@ -203,12 +206,28 @@ export default {
         isContentValid(){
             return !!this.createResourceForm.content;
         },
+        describedBy(){
+            let value = null;
+            if(this.createResourceForm.successMsg) {
+                value = "name-success"
+            }
+            else if(this.createResourceForm.errorMsg) {
+                value = "name-error"
+            }
+            else if(!this.isValid && this.hasBeenSent) {
+                value = "upload-error"
+            }
+            else {
+                value = null
+            }
+            return value
+        }
     }
 }
 
 </script>
 
 <style lang="scss" scoped>
-@import "src/views/AuditLaunch/AuditLaunch.style";
+@import "../AuditLaunch.style";
 
 </style>

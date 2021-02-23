@@ -119,6 +119,15 @@
 		"selectScenario": "Sélectionner un scénario",
 		"noScenario": "Aucun scenario trouvé"
 	},
+	"basicAuth": {
+		"basicAuth": "Accès sécurisé",
+		"login": "Identifiant",
+		"password": "Mot de passe",
+		"explanation": "Indiquez les informations de connexion sécurisée aux pages de l'audit. Si la page de connexion est inclue dans les pages à tester (renseignées en section 2), laisser le champ 'URL' vide.",
+		"urlError": "L'URL doit faire partie du domaine spécifié et ne pas être cité dans les pages à tester.",
+		"loginError": "L'identifiant doit contenir plus de 3 caractères.",
+		"passwordError": "Le mot de passe doit contenir plus de 5 caractères."
+	},
 	"form": {
 		"help": {
 			"checked": "Rempli",
@@ -126,6 +135,7 @@
 			"ready": "Prêt au lancement"
 		},
 		"error": {
+			"formError": "Le formulaire n'a pas été rempli correctement, vérifiez vos réponses pour complétez ou corrigez les champs vides ou mal renseignés.",
 			"auditType": "Veuillez choisir un type d'audit.",
 			"auditName": "Veuillez donner un nom à votre audit.",
 			"typeError": "Veuillez choisir le type d’audit à lancer. ",
@@ -146,7 +156,9 @@
 			"auditReferences": "Veuillez choisir au moins un référentiel.",
 			"crawlerDuration": "Veuillez entrer un nombre compris entre 0 (non inclus) et 86400, pour la durée en secondes du crawler.",
 			"crawlerDepth": "Veuillez entrer un nombre entier, compris entre 1 et 10 pages, pour la profondeur du crawler.",
-			"crawlerDocument": "Veuillez entrer un nombre entier compris entre 1 et 1000 pour le nombre de pages à auditer."
+			"crawlerDocument": "Veuillez entrer un nombre entier compris entre 1 et 1000 pour le nombre de pages à auditer.",
+			"noMainReference": "Aucun référentiel n'a été donné pour cet audit",
+			"noUsableReference": "Aucun réfétentiel valide n'a été donné pour cet audit"
 		}
 	}
 }

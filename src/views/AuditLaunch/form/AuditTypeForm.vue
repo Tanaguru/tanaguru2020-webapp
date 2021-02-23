@@ -8,8 +8,8 @@
             <fieldset class="radio-custom" :aria-describedby="!isValid && hasBeenSent ? 'type-error' : ''">
                 <legend class="radio-custom__legend">{{ $t('audit.definition.radioLegend') }} *
                     <span v-if="type"
-                          class="screen-reader-text">{{ $t('audit.form.help.checked') }}</span>
-                    <span v-else class="screen-reader-text">{{ $t('audit.form.help.empty') }}</span>
+                          class="screen-reader-text">{{ $t('audit.form.indications.help.checked') }}</span>
+                    <span v-else class="screen-reader-text">{{ $t('audit.form.indications.help.empty') }}</span>
                 </legend>
 
                 <div class="radio-custom__wrapper">
@@ -119,7 +119,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/views/AuditLaunch/AuditLaunch.style";
+@import "../AuditLaunch.style";
 
 // Custom radio buttons
 .radio-custom {

@@ -94,4 +94,17 @@ export default class AuditService extends Service{
             error(err);
         });
     }
+
+    hasScreenshotsById(id, shareCode, then, error){
+        return this.axios({
+            url: this.controllerName + '/' + id+ '/has-screenshot/' + shareCode,
+            method: 'get',
+        })
+        .then(resp => {
+            then(resp.data);
+        })
+        .catch(err => {
+            error(err);
+        })
+    }
 }

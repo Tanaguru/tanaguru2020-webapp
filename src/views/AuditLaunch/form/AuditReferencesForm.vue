@@ -8,14 +8,14 @@
             <div class="form-block">
                 <fieldset class="checkbox-wrapper checkbox-guidelines">
 					<legend class="checkbox-wrapper__legend">{{ $t('audit.guidelines.reference.title') }} *
-						<span v-if="isValid" class="screen-reader-text">{{ $t('audit.form.help.checked') }}</span>
+						<span v-if="isValid" class="screen-reader-text">{{ $t('audit.form.indications.help.checked') }}</span>
 
-						<span v-else class="screen-reader-text">{{ $t('audit.form.help.empty') }}</span>
+						<span v-else class="screen-reader-text">{{ $t('audit.form.indications.help.empty') }}</span>
 					</legend>
 
 					<p class="info-text">{{ $t('audit.guidelines.reference.explanation') }}</p>
 
-				    <div v-for="reference of references" class="checkbox">
+				    <div v-for="reference of references" class="checkbox" :key="reference.id">
                         <input
                             :class="['checkbox__input', {'has-error':!isValid}]"
                             type="checkbox"
@@ -29,7 +29,7 @@
                     </div>
                 </fieldset>
 
-                <p v-if="!isValid" class="info-error">
+                <p v-if="!isValid" role="alert" class="info-error">
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-alert/>
                     </icon-base-decorative>
@@ -44,7 +44,6 @@
 import IconBaseDecorative from "../../../components/icons/IconBaseDecorative";
 import IconAlert from "../../../components/icons/IconAlert";
 import InputValidationDisplay from "../InputValidationDisplay";
-
 export default {
     name: 'AuditReferencesForm',
     components: {
@@ -59,9 +58,8 @@ export default {
         }
     },
 }
-
 </script>
 
 <style lang="scss" scoped>
-@import "src/views/AuditLaunch/AuditLaunch.style";
+@import "../AuditLaunch.style";
 </style>

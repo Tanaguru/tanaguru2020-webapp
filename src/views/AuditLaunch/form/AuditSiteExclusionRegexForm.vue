@@ -8,9 +8,10 @@
             <div class="form-block">
                 <label class="label" for="exclusionRegex">{{$t('audit.site.parameters.labelExclusionRegex')}}</label>
                 <input class="input" type="text" name="exclusionRegex" id="exclusionRegex"
-                       v-model="exclusionRegex"
-                        @input="$emit('input', exclusionRegex)"/>
-                <p class="info-text">{{$t('audit.site.parameters.labelExclusionRegexHelp')}}</p>
+                        v-model="exclusionRegex"
+                        @input="$emit('input', exclusionRegex)"
+                        aria-describedby="exclusion-regex-help"/>
+                <p id="exclusion-regex-help" class="info-text">{{$t('audit.site.parameters.labelExclusionRegexHelp')}}</p>
             </div>
         </div>
     </div>
@@ -40,6 +41,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/views/AuditLaunch/AuditLaunch.style";
+@import "../AuditLaunch.style";
 
 </style>

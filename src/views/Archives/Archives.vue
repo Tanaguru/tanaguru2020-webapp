@@ -49,83 +49,36 @@
             </ul>
         </header>
 
-        <article class="article-archives" id="page-audit">
+        <article v-if="audits.length > 0" class="article-archives" id="page-audit" v-for="type of types" :key="type">
             <h2 class="article-archives__title">
                 <icon-base-decorative width="40" height="40" viewBox="0 0 72 72">
                     <icon-audit-page/>
                 </icon-base-decorative>
-                <span>{{ $t('entity.audit.page') }}</span>
+                <span v-if="type == 'PAGE'">{{ $t('entity.audit.page') }}</span>
+                <span v-else-if="type == 'SITE'">{{ $t('entity.audit.site') }}</span>
+                <span v-else-if="type == 'UPLOAD'">{{ $t('entity.audit.upload') }}</span>
+                <span v-else>{{ $t('entity.audit.scenario') }}</span>
             </h2>
-            <div class="table-container" v-if="pageAudits.length > 0">
-                <ArchivesTable :audits="pageAudits" :deleteCondition="deleteCondition" @deleteAudit="deleteAudit"
-                               @deleteScreenshot="deleteScreenshot"/>
+            <div class="table-container">
+                <ArchivesTable :audits="audits" :type="type" :deleteCondition="deleteCondition" @delete-audit="deleteAudit"
+                               @delete-screenshot="deleteScreenshot"/>
             </div>
-            <p v-else>{{ $t('archives.noAudit') }}</p>
         </article>
-
-        <article class="article-archives" id="site-audit">
-            <h2 class="article-archives__title">
-                <icon-base-decorative width="40" height="40" viewBox="0 0 72 72">
-                    <icon-audit-site/>
-                </icon-base-decorative>
-                <span>{{ $t('entity.audit.site') }}</span>
-            </h2>
-
-            <div class="table-container" v-if="siteAudits.length > 0">
-                <ArchivesTable :audits="siteAudits" :deleteCondition="deleteCondition" @deleteAudit="deleteAudit"
-                               @deleteScreenshot="deleteScreenshot"/>
-            </div>
-
-            <p v-else>{{ $t('archives.noAudit') }}</p>
-        </article>
-
-        <article class="article-archives" id="file-audit">
-            <h2 class="article-archives__title">
-                <icon-base-decorative width="40" height="40" viewBox="0 0 72 72">
-                    <icon-audit-file/>
-                </icon-base-decorative>
-                <span>{{ $t('entity.audit.upload') }}</span>
-            </h2>
-
-            <div class="table-container" v-if="uploadAudits.length > 0">
-                <ArchivesTable :audits="uploadAudits" :deleteCondition="deleteCondition" @deleteAudit="deleteAudit"
-                               @deleteScreenshot="deleteScreenshot"/>
-            </div>
-
-            <p v-else>{{ $t('archives.noAudit') }}</p>
-        </article>
-
-        <article class="article-archives" id="scenario-audit">
-            <h2 class="article-archives__title">
-                <icon-base-decorative width="40" height="40" viewBox="0 0 72 72">
-                    <icon-audit-scenario/>
-                </icon-base-decorative>
-                <span>{{ $t('entity.audit.scenario') }}</span>
-            </h2>
-
-            <div class="table-container" v-if="scenarioAudits.length > 0">
-                <ArchivesTable :audits="scenarioAudits" :deleteCondition="deleteCondition" @deleteAudit="deleteAudit"
-                               @deleteScreenshot="deleteScreenshot"/>
-            </div>
-
-            <p v-else>{{ $t('archives.noAudit') }}</p>
-        </article>
-
     </main>
 </template>
 
 
 <script>
-import Breadcrumbs from '../components/Breadcrumbs';
-import ArchivesTable from '../components/ArchivesTable';
-import IconBaseDecorative from '../components/icons/IconBaseDecorative';
-import IconAuditAssisted from '../components/icons/IconAuditAssisted';
-import IconAuditSite from '../components/icons/IconAuditSite';
-import IconAuditPage from '../components/icons/IconAuditPage';
-import IconAuditScenario from '../components/icons/IconAuditScenario';
-import IconAuditFile from '../components/icons/IconAuditFile';
-import IconArrowBlue from '../components/icons/IconArrowBlue';
-import IconDelete from '../components/icons/IconDelete';
+import Breadcrumbs from '../../components/Breadcrumbs';
+import ArchivesTable from './ArchivesTable';
+import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
+import IconAuditAssisted from '../../components/icons/IconAuditAssisted';
+import IconAuditSite from '../../components/icons/IconAuditSite';
+import IconAuditPage from '../../components/icons/IconAuditPage';
+import IconAuditScenario from '../../components/icons/IconAuditScenario';
+import IconAuditFile from '../../components/icons/IconAuditFile';
+import IconArrowBlue from '../../components/icons/IconArrowBlue';
+import IconDelete from '../../components/icons/IconDelete';
 
 
 export default {
@@ -152,10 +105,9 @@ export default {
                     path: '/'
                 },
             ],
-            pageAudits: [],
-            siteAudits: [],
-            uploadAudits: [],
-            scenarioAudits: [],
+            audits: [],
+            types: ['PAGE', 'SITE', 'SCENARIO', 'UPLOAD'],
+            deleteAuditError: ""
         }
     },
     metaInfo() {
@@ -186,31 +138,38 @@ export default {
         deleteAudit(audit) {
             var index = this.audits.indexOf(audit);
 
-            this.auditService.delete(
-                audit.id,
-                () => {
-                    this.audits.splice(index, 1)
-                    if (audit.type == 'SITE') {
-                        this.siteAudits.splice(index, 1)
-                    } else if (audit.type == 'PAGE') {
-                        this.pageAudits.splice(index, 1)
-                    } else if (audit.type == 'UPLOAD') {
-                        this.uploadAudits.splice(index, 1)
+            if(index > -1){
+                this.auditService.delete(
+                    audit.id,
+                    () => {
+                        this.audits.splice(index, 1)
+                    },
+                    (error) => {
+                        if(err.response.data.error == "AUDIT_NOT_FOUND"){
+                            this.deleteAuditError = this.$i18n.t("form.errorMsg.audit.notFound")
+                        } else if(err.response.status == "403"){
+                            this.deleteAuditError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+                        } else {
+                            this.deleteAuditError = this.$i18n.t("form.errorMsg.genericError");
+                        }
                     }
-                    if (audit.type == 'SCENARIO') {
-                        this.scenarioAudits.splice(index, 1)
-                    }
-                },
-                (error) => console.error(error)
-            )
+                )
+            }
         },
 
         deleteScreenshot(audit){
             this.pageContentService.deleteScreenshotByAudit(
                 audit.id,
-                () => {},
+                () => {
+                },
                 (error) => {
-                    console.error(error)
+                    if(err.response.data.error == "AUDIT_NOT_FOUND"){
+                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.audit.notFound")
+                    } else if(err.response.status == "403"){
+                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+                    } else {
+                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.genericError");
+                    }
                 }
             );
         }
@@ -257,18 +216,6 @@ export default {
             this.$route.params.id,
             (audits) => {
                 this.audits = audits
-                this.pageAudits = audits.filter(audit =>
-                    audit.type == 'PAGE',
-                ),
-                    this.siteAudits = audits.filter(audit =>
-                        audit.type == 'SITE'
-                    ),
-                    this.uploadAudits = audits.filter(audit =>
-                        audit.type == 'UPLOAD'
-                    ),
-                    this.scenarioAudits = audits.filter(audit =>
-                        audit.type == 'SCENARIO'
-                    )
             },
             (error) => {
                 console.error(error)

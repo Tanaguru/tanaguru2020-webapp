@@ -51,10 +51,11 @@
 		</div>
 
 		<div class="audit-infos">
-			<div class="audit-infos__stats">
+			<div class="audit-infos__stats" v-show="displayMode != 'anomaly'">
 				<div class="audit-stats">
 					<div class="audit-stats__chart">
 						<CircularProgressChart
+                            v-show="displayMode != 'anomaly'"
 							:percentage="percentage"
 							:shadowOne="'chart-shadow1-' + audit.id"
 							:shadowTwo="'chart-shadow2-' + audit.id"
@@ -106,23 +107,17 @@
 						<!--<li>
 							<button class="btn btn--nude btn--icon">
 								<span>{{$t('entity.audit.parameters')}}</span>
-								<icon-base-decorative><icon-arrow-blue /></icon-base-decorative>
+								<icon-bas<pae-decorative><icon-arrow-blue /></icon-base-decorative>
 							</button>
 						</li>-->
 					</ul>
-					<!--<div class="form-block" v-if="otherPages.length > 1">
-						<label class="label" for="page-select">Voir la liste :</label>
-						<div class="select">
-							<select name="page-select" id="page-select" v-model="selectedPage">
-								<option value="">Sélectionner une page</option>
-								<option v-for="page in otherPages" :value="page.id" :key="page.id">{{page.rank}} - {{ page.name.split("_")[0] }}</option>
-							</select>
-						</div>
-						<router-link class="btn btn--nude btn--icon" v-if="selectedPage != page.id" :to="'/audits/' + audit.id + '/pages/' + selectedPage">
-							<icon-base-decorative><icon-arrow-blue /></icon-base-decorative>
-							<span>Afficher l'audit</span>
-						</router-link>
-					</div>-->
+					<div class="form-block">
+						<pagination
+							:current-page="page"
+							:total-pages="pageTotalPage"
+							@changePage="(page) => {loadPages(page, auditPagePageSize)}"
+						/>
+					</div>
                     <router-link class="btn btn--nude btn--icon" :to="'/audits/' + audit.id">
                         <icon-base-decorative>
                             <icon-arrow-blue/>
@@ -144,8 +139,9 @@
     import IconPrint from "../../components/icons/IconPrint";
     import IconLaunch from "../../components/icons/IconLaunch";
     import CircularProgressChart from "../../components/charts/CircularProgressChart";
-	import moment from 'moment';
 	import backgroundImg from '../../../public/assets/images/logo-desktop.svg';
+    import Pagination from '../../components/Pagination';
+
     export default {
         name: 'PageResultInfo',
         components: {
@@ -156,7 +152,8 @@
             IconPrint,
             IconLaunch,
 			CircularProgressChart,
-			backgroundImg
+			backgroundImg,
+            Pagination
         },
         data(){
             return {
@@ -168,7 +165,7 @@
 				defaultImg: { backgroundImage: `url(${require('../../../public/assets/images/logo-desktop.svg')})` }
             }
         },
-        props: ['audit', 'page', 'pages', 'auditParameters', 'percentage', 'nbAnomaly', 'nbElementTested', 'pageContent', 'reference' ],
+        props: ['audit', 'displayMode', 'page', 'pages', 'auditParameters', 'percentage', 'nbAnomaly', 'nbElementTested', 'pageContent', 'reference' ],
         computed: {
             shareCodeUrl(){
                 return location.origin + '/#/audits/' + this.audit.id + '/pages/' + this.page.id + '/' + this.audit.shareCode
@@ -182,42 +179,60 @@
 			}*/
         },
 
-    methods: {
-        moment: function (date) {
-            this.$moment.locale(this.$i18n.locale)
-            return this.$moment(date);
+        methods: {
+            moment: function (date) {
+                this.$moment.locale(this.$i18n.locale)
+                return this.$moment(date);
+            },
+
+            loadPages(page, size){
+                this.pageService.findByAuditId(
+                    this.audit.id,
+                    this.audit.sharecode,
+                    page,
+                    size,
+                    (auditPagePage) =>{
+                        /*this.pages = auditPagePage.content;
+                        this.pageCurrentPage = page;
+                        this.pageTotalPage = auditPagePage.totalPages;
+                        this.pageTotal = auditPagePage.totalElements;*/
+                        console.log(auditPagePage)
+                    }
+                )
+            },
+
+            triggerPrint() {
+                bus.$emit("allShown", true);
+                setTimeout(() => (
+                    window.print()
+                ), 50)
+            },
+
+            copyShareCode() {
+                let shareCodeUrl = document.querySelector('#shareCodeUrl')
+                shareCodeUrl.setAttribute('type', 'text')
+                shareCodeUrl.select()
+                try {
+                    var successful = document.execCommand('copy');
+                    var msg = successful ? 'successful' : 'unsuccessful';
+                    this.copyButtonText = this.$i18n.t("resultAudit.copyLink.success")
+                    this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.sucessHelp")
+                    setTimeout(() => (
+                        this.showSharecodeTooltip = false
+                    ), 400)
+                } catch (err) {
+                    this.copyButtonText = this.$i18n.t("resultAudit.copyLink.fail")
+                    this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.failHelp")
+                }
+                /* unselect the range */
+                shareCodeUrl.setAttribute('type', 'hidden')
+                window.getSelection().removeAllRanges()
+            },
         },
-
-        triggerPrint() {
-            bus.$emit("allShown", true);
-            setTimeout(() => (
-                window.print()
-            ), 50)
-        },
-
-		copyShareCode() {
-			let shareCodeUrl = document.querySelector('#shareCodeUrl')
-			shareCodeUrl.setAttribute('type', 'text')
-			shareCodeUrl.select()
-			try {
-				var successful = document.execCommand('copy');
-				var msg = successful ? 'successful' : 'unsuccessful';
-				this.copyButtonText = this.$i18n.t("resultAudit.copyLink.success")
-				this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.sucessHelp")
-				setTimeout(() => (
-					this.showSharecodeTooltip = false
-				), 400)
-			} catch (err) {
-				this.copyButtonText = this.$i18n.t("resultAudit.copyLink.fail")
-				this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.failHelp")
-			}
-			/* unselect the range */
-			shareCodeUrl.setAttribute('type', 'hidden')
-			window.getSelection().removeAllRanges()
-		},
-    },
-
-}
+        created() {
+            this.loadPages(this.page.id, )
+        }
+    }
 
 </script>
 
@@ -269,7 +284,7 @@
     .audit-infos__stats {
         @media #{$media-lg-viewport} {
             position: absolute;
-            top: 0;
+            top: 15rem;
             right: 0;
             width: 28.8rem;
         }
