@@ -46,7 +46,7 @@
                         <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                             <icon-alert/>
                         </icon-base-decorative>
-                        <span>{{ $t('form.emptyInput') }}</span>
+                        <span>{{ $t('form.errorMsg.emptyInput') }}</span>
                     </p>
                     <p v-if="showErrorMsgs && inputPlainText && !validUrlsInFreeForm" role="alert" class="info-error" id='invalid-freeform-urls-error'>
                         <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
@@ -59,7 +59,7 @@
                 <p class="form-help">{{ $t('audit.pages.byUrl.labelHelp') }}</p>
             </div>
 
-            <div class="page-by-page" v-else-if="selectedInputMode == 'array'">
+            <div class="page-by-page" id="array-input-block" v-else-if="selectedInputMode == 'array'">
                 <div
                     role="group"
                     :arialabelledby="`page-${i+1}`"
@@ -78,7 +78,7 @@
                         </label>
                         <input class="input"
                                 :class="{'has-error': describedBy(url, i)}"
-                                type='text' 
+                                type='text'
                                 :id='`page-url-${i}`'
                                 @input="onArrayChange(i, $event.target.value)"
                                 @focus="hideItemListError(i)"
@@ -91,7 +91,7 @@
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-alert/>
                             </icon-base-decorative>
-                            <span>{{ $t('form.emptyInput') }}</span>
+                            <span>{{ $t('form.errorMsg.emptyInput') }}</span>
                         </p>
                         <p v-if="showItemError.includes(i) && url && !checkValidUrl(url, projectDomain, isSeedMustBeInDomain)" role="alert" class="info-error" :id='`valid-url-error-${i}`'>
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
@@ -110,6 +110,7 @@
                 </div>
 
                 <button type="button"
+						id="add-field-button"
                         class="btn btn--default btn--icon"
                         @click="addField">
                     <icon-base-decorative>
@@ -145,13 +146,10 @@
                 inputPlainText: this.value.join(';'),
                 inputArray: this.value,
                 inputModes:['array', 'plainText'],
-                selectedInputMode: null,
+                selectedInputMode: 'array',
                 showErrorMsgs: false,
                 showItemError: []
             }
-        },
-        created() {
-          this.selectedInputMode =  this.inputModes[0];
         },
         methods: {
             onPlainTextChange(value) {
@@ -209,22 +207,17 @@
         },
         computed:{
             validUrlsInFreeForm() {
-                let allValid = true;
                 let projectDomain = this.projectDomain
-                let areUrlsValid = this.inputArray.every(function(url) {
+                return this.inputArray.every(function(url) {
                     return url.includes(projectDomain)
                 });
-                if(areUrlsValid) {
-                    allValid = true;
-                } else { allValid = false }
-                return allValid;
-            }, 
+            },
             showFreeformError(){
                 let error = false;
                 if(this.showErrorMsgs) {
                     if(!this.inputPlainText || !this.validUrlsInFreeForm) {
                         error = true;
-                    } 
+                    }
                 }
                 return error;
             }

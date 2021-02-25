@@ -4,11 +4,28 @@
 		<div class="dashboard-header__inner">
 			<div class="dashboard-header__title">
 				<h1>{{$t('page.dashboard')}}</h1>
+				<ul class="actions-list">
+                <li class="actions-list__item">
+                    <a class="link link-independent link-independent--icon" href="#my-projects">
+                        <span>{{$t('dashboard.title.myProjects')}}</span>
+                    </a>
+                </li>
+                <li class="actions-list__item">
+                    <a class="link link-independent link-independent--icon" href="#my-shared-projects">
+                        <span>{{$t('dashboard.title.mySharedProjects')}}</span>
+                    </a>
+                </li>
+                <li class="actions-list__item">
+                    <a class="link link-independent link-independent--icon" href="#shared-with-me">
+                        <span>{{$t('dashboard.title.sharedProjects')}}</span>
+                    </a>
+                </li>
+            </ul>
 			</div>
 			<div class="dashboard-header__actions">
 				<ul class="actions-list">
 					<li class="actions-list__item" v-show="createProjectCondition">
-						<router-link :to="'/contracts/'+currentContractId" class='btn btn--icon btn--nude'>
+						<router-link :to="'/contracts/'+currentContractId" v-on:click.native="activeTab()" class='btn btn--icon btn--nude'>
 							<icon-base-decorative width="16" height="16"><icon-plus /></icon-base-decorative>
 							<span>{{$t('dashboard.actions.new')}}</span>
 						</router-link>
@@ -29,21 +46,37 @@
 		</div>
 	</header>
 
+	<!-- PRIVATE PROJECTS -->
 	<article class="dashboard-section">
-		<h2 class="dashboard-section__title">{{$t('dashboard.title.myProjects')}}</h2>
-		<div v-if="projectsOrder == 'alphabetical' && userProjects.length > 0">
-			<DashProjectView v-for="project in alphabeticalProjects" :project="project" :key="project.id" />
+		<h2 class="dashboard-section__title" id="my-projects">{{$t('dashboard.title.myProjects')}}</h2>
+		<div v-if="projectsOrder == 'alphabetical' && privateProjects.length > 0">
+			<DashProjectView v-for="project in alphabeticalPrivateProjects" :project="project" :key="project.id" />
 		</div>
-		<div v-else-if="projectsOrder== 'chronological' && userProjects.length > 0">
-			<DashProjectView v-for="project in chronologicalProjects" :project="project" :key="project.id" />
+		<div v-else-if="projectsOrder == 'chronological' && privateProjects.length > 0">
+			<DashProjectView v-for="project in chronologicalPrivateProjects" :project="project" :key="project.id" />
 		</div>
 		<div v-else>
 			<p>{{$t('dashboard.project.noProject')}}</p>
 		</div>
 	</article>
 
+	<!-- PROJECTS SHARED BY USER -->
 	<article class="dashboard-section">
-		<h2>{{$t('dashboard.title.sharedProjects')}}</h2>
+		<h2 class="dashboard-section__title" id="my-shared-projects">{{$t('dashboard.title.mySharedProjects')}}</h2>
+		<div v-if="projectsOrder == 'alphabetical' && sharedByCurrentUser.length > 0">
+			<DashProjectView v-for="project in alphabeticalSharedProjects" :project="project" :key="project.id" />
+		</div>
+		<div v-else-if="projectsOrder == 'chronological' && sharedByCurrentUser.length > 0">
+			<DashProjectView v-for="project in chronologicalSharedProjects" :project="project" :key="project.id" />
+		</div>
+		<div v-else>
+			<p>{{$t('dashboard.project.noProject')}}</p>
+		</div>
+	</article>
+
+	<!-- PROJECTS SHARED WITH USER -->
+	<article class="dashboard-section">
+		<h2 id="shared-with-me">{{$t('dashboard.title.sharedProjects')}}</h2>
 		<div v-if="sharedProjects.length > 0">
 			<DashProjectView v-for="project in sharedProjects" :project="project" :key="project.id" />
 		</div>
@@ -70,7 +103,6 @@
 	import IconCompliant from '../../components/icons/IconCompliant'
 	import IconIgnored from '../../components/icons/IconIgnored'
 	import IconImproper from '../../components/icons/IconImproper'
-	import IconInforound from '../../components/icons/IconInforound'
 	import IconNotApplicable from '../../components/icons/IconNotApplicable'
 	import IconQualify from '../../components/icons/IconQualify'
 	import IconUntested from '../../components/icons/IconUntested'
@@ -125,6 +157,8 @@
 				contractsOwned : [],
 				currentContractId : null,
 				sharedContracts : [],
+				privateProjects: [],
+				sharedByCurrentUser: [],
 				sharedProjects : [],
 				projects: {},
 				userProjects: [],
@@ -153,9 +187,20 @@
 					this.projectService.findMemberOfByContractId(
 						contracts[0].id,
 						(projects) => {
-							this.userProjects = projects
+							projects.forEach(project => {
+								this.userService.findAllByProject(
+									project.id,
+									(users) => {
+										if(users.length > 1){
+											this.sharedByCurrentUser.push(project)
+										} else {
+											this.privateProjects.push(project)
+										}
+									},
+									(error) => { 'error' }
+								)
+							});
 						},
-						(error) => { 'error' }
 					)
 
 					this.userService.findAllByContract(
@@ -172,44 +217,37 @@
 				(error) => { 'error' }
 			)
 
-			this.contractService.findMemberOf(
-				(contracts) => {
-					this.sharedContracts = contracts
-					for (let i = 0; i < this.sharedContracts.length; i++){
-						this.projectService.findMemberOfByContractId(
-							this.sharedContracts[i].id,
-							(projects) => {
-								this.sharedProjects = projects
-							},
-							(error) => { 'error' }
-						)
-					}
+			this.projectService.findMemberOfNotOwner(
+				(projects) => {
+					this.sharedProjects = projects
 				},
-				(error) => { 'error' }
+				(error) => { console.error(error) }
 			)
 		},
 		computed: {
-			alphabeticalProjects(){
-				return this.userProjects.sort(function(a, b){
+			alphabeticalPrivateProjects(){
+				return this.privateProjects.sort(function(a, b){
                     return a.name.localeCompare(b.name)
 				})
 			},
 
-			chronologicalProjects(){
-				return this.userProjects.sort((a, b) => b.id - a.id);
+			chronologicalPrivateProjects(){
+				return this.privateProjects.sort((a, b) => b.id - a.id);
 			},
 
+			alphabeticalSharedProjects(){
+				return this.sharedByCurrentUser.sort(function(a, b){
+                    return a.name.localeCompare(b.name)
+				})
+			},
+
+			chronologicalSharedProjects(){
+				return this.sharedByCurrentUser.sort((a, b) => b.id - a.id);
+			},
+
+
 			createProjectCondition(){
-				let condition = false;
-				if(this.currentContractId){
-					if(this.$store.state.auth.user.appRole.overrideContractRole.name == 'CONTRACT_OWNER' || this.$store.state.auth.user.appRole.overrideContractRole.name == 'CONTRACT_MANAGER'){
-						condition = true
-					}
-					else if(this.currentUserRole == 'CONTRACT_OWNER' || this.currentUserRole == 'CONTRACT_MANAGER'){
-						condition = true
-					}
-				}
-				return condition
+				return this.currentContractId;
 			}
 		},
 		methods: {
@@ -220,6 +258,10 @@
 				else {
 					this.projectsOrder = 'chronological'
 				}
+			},
+
+			activeTab(){
+				this.$store.state.activeTab.name = 'projects'
 			}
 		}
 	}

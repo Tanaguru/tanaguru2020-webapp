@@ -10,13 +10,13 @@
             <h2 class="user__title-2">{{ $t('user.profile') }}</h2>
 
             <div v-if="modifyUserForm.active">
-                <p>{{ $t('form.help') }}</p>
+                <p>{{ $t('form.indications.help') }}</p>
                 <form @submit.prevent="modifyUser" novalidate>
                     <div class="form-row">
                         <div class="form-column">
                             <div class="form-block">
                                 <label class="label" for="username">{{ $t('entity.user.username') }} *</label>
-                                <p class="info-text">{{ $t('form.invalidUsername') }}</p>
+                                <p class="info-text">{{ $t('form.errorMsg.username.invalidUsername') }}</p>
                                 <input
                                     class="input"
                                     v-bind:class="{ 'has-error': modifyUserForm.usernameError }"
@@ -82,8 +82,6 @@
             </div>
 
             <div v-else>
-                <p class="info-success" v-if="modifyUserForm.successMsg">{{ modifyUserForm.successMsg }}</p>
-
                 <ul class="infos-list">
                     <li><span class="infos-list__exergue">{{ $t('entity.user.username') }}</span> : {{ user.username }}
                     </li>
@@ -102,6 +100,7 @@
                     {{ $t('action.modify') }}
                 </button>
                 <p v-if="modifyUserForm.error" class="info-error">{{ modifyUserForm.error }}</p>
+                <p class="info-success" v-if="modifyUserForm.successMsg">{{ modifyUserForm.successMsg }}</p>
             </div>
         </article>
 
@@ -111,7 +110,7 @@
             <h2 class="user__title-2">{{ $t('action.changePassword') }}</h2>
 
             <div v-if="modifyPasswordForm.active">
-                <p>{{ $t('form.help') }}</p>
+                <p>{{ $t('form.indications.help') }}</p>
                 <form @submit.prevent="modifyPassword" novalidate>
                     <div class="form-block">
                         <label class="label" for="password2">{{ $t('entity.user.newPassword') }} *</label>
@@ -174,6 +173,8 @@ import IconArrowBlue from '../../components//icons/IconArrowBlue'
 import Breadcrumbs from '../../components/Breadcrumbs';
 import ProfileContractTable from './ProfileContractTable';
 import BackToTop from '../../components/BackToTop';
+import EmailHelper from '../../helper/emailHelper'
+import PasswordHelper from '../../helper/PasswordHelper'
 
 export default {
     name: 'userDetail',
@@ -182,7 +183,9 @@ export default {
         IconArrowBlue,
         ProfileContractTable,
         Breadcrumbs,
-        BackToTop
+        BackToTop,
+        EmailHelper,
+        PasswordHelper
     },
     data() {
         return {
@@ -235,20 +238,22 @@ export default {
             this.modifyUserForm.enabled = this.user.enabled;
             this.modifyUserForm.active = true;
         },
+        checkValidEmail: EmailHelper.checkValidEmail,
         modifyUser() {
             this.modifyUserForm.error = ""
 
-            if (this.isCurrentUser) {
-                if (this.modifyUserForm.username === '' || this.modifyUserForm.username.length < 4) {
-                    this.modifyUserForm.usernameError = this.$i18n.t("form.invalidUsername")
-                }
-                if (this.modifyUserForm.email === '') {
-                    this.modifyUserForm.emailError = this.$i18n.t("entity.user.emailError")
-                } else if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email) == false) {
-                    this.modifyUserForm.emailError = "This should be an e-mail adress."
-                }
+            if (this.modifyUserForm.username === '' || this.modifyUserForm.username.length < 4) {
+                this.modifyUserForm.usernameError = this.$i18n.t("form.errorMsg.username.invalidUsername")
+            }
 
-                if (this.modifyUserForm.email !== '' && this.modifyUserForm.username !== '' && /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email) == true) {
+            if (!this.modifyUserForm.email) {
+                this.modifyUserForm.emailError = this.$i18n.t("entity.user.emailError")
+            } else if (!this.checkValidEmail(this.modifyUserForm.email)) {
+                this.modifyUserForm.emailError = this.$i18n.t("form.errorMsg.email.notEmail")
+            }
+
+            if (this.modifyUserForm.email && this.modifyUserForm.username && this.checkValidEmail(this.modifyUserForm.email)) {
+                if (this.isCurrentUser) {
                     this.userService.modifyMe(
                         this.modifyUserForm.username,
                         this.modifyUserForm.email,
@@ -258,21 +263,11 @@ export default {
                             this.$store.state.auth.user = user;
                             this.user = user;
                             this.modifyUserForm.active = false;
-                            this.modifyUserForm.successMsg = this.$i18n.t("form.savedChange")
+                            this.modifyUserForm.successMsg = this.$i18n.t("form.successMsg.savedChanges")
                         },
-                        (error) => this.modifyUserForm.error = this.$i18n.t("form.genericError")
+                        (error) => this.modifyUserForm.error = this.$i18n.t("form.errorMsg.genericError")
                     )
-                }
-
-            } else {
-                if (this.modifyUserForm.username === '' || this.modifyUserForm.username.length < 4) {
-                    this.modifyUserForm.usernameError = this.$i18n.t("form.invalidUsername")
-                }
-                if (this.modifyUserForm.email === '') {
-                    this.modifyUserForm.emailError = this.$i18n.t("entity.user.emailError")
-                }
-
-                if (this.modifyUserForm.email !== '' && this.modifyUserForm.username !== '') {
+                } else {
                     this.userService.modifyUser(
                         this.user.id,
                         this.modifyUserForm.username,
@@ -282,9 +277,9 @@ export default {
                         (user) => {
                             this.user = user;
                             this.modifyUserForm.active = false;
-                            this.modifyUserForm.successMsg = this.$i18n.t("form.savedChange")
+                            this.modifyUserForm.successMsg = this.$i18n.t("form.successMsg.savedChangesChange")
                         },
-                        (error) => this.modifyUserForm.error = this.$i18n.t("form.genericError")
+                        (error) => this.modifyUserForm.error = this.$i18n.t("form.errorMsg.genericError")
                     )
                 }
             }
@@ -295,20 +290,21 @@ export default {
             this.modifyPasswordForm.passwordConfirm = "";
             this.modifyPasswordForm.active = true;
         },
+		checkValidPassword: PasswordHelper.checkValidPassword,
         modifyPassword() {
             if(this.modifyPasswordForm.password.length == 0 || this.modifyPasswordForm.passwordConfirm.length == 0){
                 if(this.modifyPasswordForm.password.length == 0){
-                    this.modifyPasswordForm.passwordError = this.$i18n.t("form.emptyInput")
+                    this.modifyPasswordForm.passwordError = this.$i18n.t("form.errorMsg.emptyInput")
                 }
                 if (this.modifyPasswordForm.passwordConfirm.length == 0){
-                    this.modifyPasswordForm.confirmationError = this.$i18n.t("form.emptyInput")
+                    this.modifyPasswordForm.confirmationError = this.$i18n.t("form.errorMsg.emptyInput")
                 }
             }
-            else if (/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-,;:_]).{8,}$/.test(this.modifyPasswordForm.password) == false) {
-                this.modifyPasswordForm.confirmationError = "Your password should be at least 8 characters long and contain at least 1 upper case, 1 lower case, 1 number and 1 special character."
+            else if (!this.checkValidPassword(this.modifyPasswordForm.password) == false) {
+                this.modifyPasswordForm.confirmationError = this.$i18n.t("form.errorMsg.password.passwordError")
             }
             else if (this.modifyPasswordForm.password != this.modifyPasswordForm.passwordConfirm) {
-                this.modifyPasswordForm.error = this.$i18n.t("form.incorrectConfirmation")
+                this.modifyPasswordForm.error = this.$i18n.t("form.errorMsg.password.incorrectConfirmation")
             }
             else {
                 this.modifyPasswordForm.error = "";
@@ -318,9 +314,9 @@ export default {
                     null,
                     (user) => {
                         this.modifyPasswordForm.active = false;
-                        this.modifyPasswordForm.successMsg = this.$i18n.t("form.savedChange")
+                        this.modifyPasswordForm.successMsg = this.$i18n.t("form.successMsg.savedChangesChange")
                     },
-                    (error) => this.modifyPasswordForm.error = this.$i18n.t("form.genericError")
+                    (error) => this.modifyPasswordForm.error = this.$i18n.t("form.errorMsg.genericError")
                 )
             }
         }
@@ -335,18 +331,10 @@ export default {
                     this.$route.params.id,
                     (user) => {
                         this.user = user
-
-                        if (this.$store.state.auth.user.appRole.name === 'USER') {
-                            this.breadcrumbProps.push({
-                                name: 'Configuration',
-                                path: '/configuration'
-                            })
-                        } else {
-                            this.breadcrumbProps.push({
-                                name: 'Administration',
-                                path: '/administration'
-                            })
-                        }
+                        this.breadcrumbProps.push({
+                            name: 'Administration',
+                            path: '/administration'
+                        })
                         this.breadcrumbProps.push({
                             name: 'Profil de ' + this.user.username,
                             path: '/users/' + this.user.id

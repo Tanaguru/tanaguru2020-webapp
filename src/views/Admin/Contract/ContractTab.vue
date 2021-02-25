@@ -9,7 +9,8 @@
 			<h2 class="admin-contracts__title-2">{{ $t('contracts.createContract') }}</h2>
 			<contract-creation-form
 				:users="users"
-				@createContract="onCreateContract">
+				@createContract="onCreateContract"
+				:selected="selected">
 			</contract-creation-form>
 		</section>
 
@@ -61,7 +62,7 @@ export default {
 		ContractCreationForm,
 		BackToTop
 	},
-	props: ['users'],
+	props: ['users', 'selected' ],
 	data() {
 		return {
 			contracts: [],
@@ -77,6 +78,14 @@ export default {
 			},
 			err => console.error(err)
 		);
+	},
+	watch: {
+    	selected: function(newVal, oldVal) {  
+			if(newVal == 0) {
+				this.searchContract = ""
+				this.liveMsg = ""
+			} 
+		}
 	},
 	computed: {
 		newContractCondition() {
@@ -98,14 +107,23 @@ export default {
 
 		deleteContract(contract) {
 			const index = this.contracts.indexOf(contract);
-			this.contractService.delete(
-				contract.id,
-				() => {
-					this.contracts.splice(index, 1)
-
-				},
-				(error) => console.error(error)
-			)
+            if(index > -1){
+				this.contractService.delete(
+					contract.id,
+					() => {
+						this.contracts.splice(index, 1)
+					},
+					(error) => {
+						if(err.response.data.error == "CONTRACT_NOT_FOUND"){
+							this.deleteContractError = this.$i18n.t("form.errorMsg.contract.notFound")
+						} else if(err.response.status == "403"){
+							this.deleteContractError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+						} else {  
+							this.deleteContractError = this.$i18n.t("form.errorMsg.genericError");
+						}
+					}
+				)
+			}
 		},
 		fireAriaLive() {
 			clearTimeout(this.timer)
@@ -130,4 +148,5 @@ export default {
 		max-width: 38rem;
 	}
 }
+
 </style>

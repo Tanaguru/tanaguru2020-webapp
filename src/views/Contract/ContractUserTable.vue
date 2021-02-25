@@ -36,7 +36,7 @@
 						<button
 							class="btn btn--clipboard"
 							@click="editUser(contractUser)"
-							v-if="contractUser.contractRole.name != 'CONTRACT_OWNER' && promoteCondition"
+							v-if="contractUser.contractRole.name != 'CONTRACT_OWNER' && promoteCondition && isStillValid"
 						>
 							{{$t('action.promote')}}
 						</button>
@@ -89,11 +89,12 @@ export default {
 			editedUser: null
 		}
 	},
-    props: [ 'contractUsers', 'deletingCondition', 'promoteCondition', 'addingCondition' ],
+    props: [ 'contractUsers', 'deletingCondition', 'promoteCondition', 'isStillValid' ],
     methods: {
         confirm(contractUser) {
 			this.$modal
-			.confirm(DeletionModal, this.$t('deletionModal.remove') + contractUser.user.username + this.$t('deletionModal.contrat'), {
+			.confirm(DeletionModal, this.$t('deletionModal.remove') + contractUser.user.username + this.$t('deletionModal.contract'), 
+			{
 				label: "deletion-modal",
 				classes: "modal",
 				attributes: {
@@ -103,13 +104,13 @@ export default {
 				}
 			})
 			.then(() => {
-				this.$emit('remove-user', contractUser)
+				this.$emit('delete-user', contractUser)
 				this.$modal.close()
 			})
 			.catch(() => {
 				this.$modal.close()
 			})
-			.finally(() => {})
+			.finally(() => {this.$modal.close})
 		},
 
         promoteUser(user) {
@@ -124,7 +125,7 @@ export default {
 	},
 	computed: {
 		sortedContractUsers(){
-    		return this.contractUsers.reverse();
+			return this.contractUsers.reverse();
 		}
 	}
 }

@@ -6,29 +6,18 @@
 				<span>{{$t('action.close')}}</span>
 			</button>
 		</header>
-		<!-- first screen -->
+
 		<section v-if="unconfirmed" class="modal-body" id="modalDescription">
             <p>{{ message }}</p>
+			<p v-show="warning">{{ warning }}</p>
 			<div id="buttons">
-				<button type="button" class="btn btn--default btn--icon" @click="confirmDeletion">
+				<button type="button" class="btn btn--default btn--icon" @click="resolveHandler">
 					<icon-base-decorative width="18" height="18"><icon-checked /></icon-base-decorative>
 					<span>{{$t('action.confirm')}}</span>
 				</button>
 				<button type="button" class="btn btn--default btn--icon" @click="rejectHandler" :aria-label="$t('action.closeModal')">
 					<icon-base-decorative width="18" height="18"><icon-close /></icon-base-decorative>
 					<span>{{$t('action.cancel')}}</span>
-				</button>
-			</div>
-		</section>
-
-		<!-- After confirm screen -->
-		<section v-else class="modal-body" id="modalEndMessage">
-            <p>{{$t('deletionModal.done')}}</p>
-			<p>{{$t('deletionModal.actionConfirmed')}}</p>
-			<div id="buttons">
-				<button type="button" class="btn btn--default btn--icon" @click="resolveHandler" :aria-label="$t('action.closeModal')">
-					<icon-base-decorative width="18" height="18"><icon-close /></icon-base-decorative>
-					<span>Close</span>
 				</button>
 			</div>
 		</section>
@@ -57,6 +46,10 @@ import IconChecked from './icons/IconChecked'
 			type: String,
             required: true
 		},
+		warning: {
+			type: String,
+			required: false
+		},
 		resolve: {
 			type: Function,
 			required: true
@@ -75,16 +68,8 @@ import IconChecked from './icons/IconChecked'
 			// this value will be passed to `catch`
 			this.reject()
 		},
-		confirmDeletion() {
-			this.unconfirmed = false
-		},
 		closeModal() {
-			if(this.unconfirmed === true){
-				this.$modal.close()
-			}
-			else {
-				this.resolveHandler()
-			}
+			this.$modal.close()
 		}
     },
   };

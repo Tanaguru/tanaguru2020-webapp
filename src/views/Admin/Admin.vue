@@ -1,19 +1,20 @@
 <template>
     <main class="wrapper" id="page" role="main">
-		<Tabs>
+		<Tabs @activeTab='activeTab'>
 			<Tab :name="$t('entity.contract.contracts')" selected="true" class="tabs-wrapper">
-				<adminContractList :users="users" />
+				<adminContractList :users="users" :selected="selectedTab"/>
 			</Tab>
 
-			<Tab :name="$t('entity.user.users')" class="tabs-wrapper">
-				<adminUserList :users="users"  @create-user="createUser" />
-			</Tab>
+			<div v-if="this.$store.state.auth.user.appRole.name !== 'USER'">
+				<Tab :name="$t('entity.user.users')" class="tabs-wrapper">
+					<adminUserList :users="users"  @create-user="createUser" :selected="selectedTab"/>
+				</Tab>
 
-
-			<Tab v-if="showReferenceTab"
-				 :name="$t('entity.reference.references')" class="tabs-wrapper">
-				<reference-tab />
-			</Tab>
+				<Tab v-if="showReferenceTab"
+					:name="$t('entity.reference.references')" class="tabs-wrapper">
+					<reference-tab :selected="selectedTab"/>
+				</Tab>
+			</div>
 		</Tabs>
     </main>
 </template>
@@ -36,7 +37,8 @@ export default {
 	},
 	data(){
 		return {
-			users: []
+			users: [],
+			selectedTab: null
 		}
 	},
 	metaInfo(){
@@ -53,13 +55,12 @@ export default {
 	methods:{
 		createUser(user){
 			this.users.push(user)
+		},
+		activeTab(value){
+			this.selectedTab = value
 		}
 	},
 	created(){
-		if(this.$store.state.auth.user.appRole.name == 'USER'){
-			this.$router.replace('/configuration')
-		}
-
 		this.userService.findAll(
 			users => {
 				this.users = users

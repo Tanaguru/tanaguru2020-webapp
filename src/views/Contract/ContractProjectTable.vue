@@ -1,6 +1,6 @@
 <template>
 	<div class="table-container">
-		<table class="table table--default" v-show="projects.length > 0">
+		<table class="table table--default" v-show="projects">
 			<caption class="screen-reader-text">{{$t('contract.legendProjects')}}</caption>
 			<thead>
 				<tr>
@@ -25,9 +25,8 @@
 									<span>{{$t('dashboard.actions.archives')}}</span>
 								</router-link>
 							</li>
-							<li class="actions-list__item">
+							<li class="actions-list__item" v-if="hasAuthorityOnProject(project.id, 'DELETE_PROJECT')">
 								<button
-									v-show="deletingCondition"
 									@click="confirm(project)"
 									class="btn btn--nude btn--icon">
 									<icon-base-decorative><icon-delete /></icon-base-decorative>
@@ -59,7 +58,7 @@ export default {
 		IconDelete,
 		DeletionModal
 	},
-    props: [ 'projects', 'deletingCondition' ],
+    props: [ 'projects', 'authorityByProjectId' ],
     methods: {
         confirm(project) {
 			this.$modal
@@ -81,6 +80,12 @@ export default {
 			})
 			.finally(() => {})
 		},
+
+		hasAuthorityOnProject(projectId, needed){
+			return this.authorityByProjectId[projectId] && this.authorityByProjectId[projectId].some(authority => {
+					return authority === needed;
+				});
+		}
     }
 }
 </script>

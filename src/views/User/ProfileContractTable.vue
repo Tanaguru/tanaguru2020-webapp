@@ -13,7 +13,7 @@
 					<th scope="row">{{contract.name}}</th>
 					<td>{{ moment(contract.dateEnd).format('LL') }}</td>
 					<td class="td-actions">
-						<router-link class="link link-independent link-independent--icon" :to="'/contracts/' + contract.id">
+						<router-link class="link link-independent link-independent--icon" :to="'/contracts/' + contract.id" v-on:click.native="activeTab()" >
 							<icon-base-decorative><icon-arrow-blue /></icon-base-decorative>
 							<span>{{$t('action.show')}}</span>
 						</router-link>
@@ -41,7 +41,11 @@ export default {
         moment: function (date) {
             this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
-        }
+		},
+		
+		activeTab(){
+			this.$store.state.activeTab.name = 'information'
+		}
     }
 }
 </script>

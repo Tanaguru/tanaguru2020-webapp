@@ -9,8 +9,8 @@
                 <h3 class="layout-content-heading__subtitle layout-subtitle">
                     {{$t('audit.scenario.subtitle')}} (.side)
                     <span v-if="isValid"
-                          class="screen-reader-text">{{$t('audit.form.help.checked')}}</span>
-                    <span v-else class="screen-reader-text">{{$t('audit.form.help.empty')}}</span>
+                          class="screen-reader-text">{{$t('audit.form.indications.help.checked')}}</span>
+                    <span v-else class="screen-reader-text">{{$t('audit.form.indications.help.empty')}}</span>
                 </h3>
             </div>
 

@@ -8,8 +8,8 @@
             <div class="form-block select-guidelines">
                 <label class="label" for="main-reference-select">{{ $t('audit.guidelines.mainReference.title') }} *
                     <span v-if="mainReference != null"
-                          class="screen-reader-text">{{ $t('audit.form.help.checked') }}</span>
-                    <span v-else class="screen-reader-text">{{ $t('audit.form.help.empty') }}</span>
+                          class="screen-reader-text">{{ $t('audit.form.indications.help.checked') }}</span>
+                    <span v-else class="screen-reader-text">{{ $t('audit.form.indications.help.empty') }}</span>
                 </label>
 
 				<p class="info-text">{{ $t('audit.guidelines.mainReference.explanation') }}</p>

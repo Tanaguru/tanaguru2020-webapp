@@ -21,6 +21,7 @@
 			<page-result-info
                 v-if="audit && page && pageContent && reference"
                 :resultSectionOpen="resultSectionOpen"
+                :display-mode="displayMode"
                 :audit="audit"
                 :page="page"
                 :page-content="pageContent"

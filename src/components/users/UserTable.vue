@@ -66,7 +66,10 @@
 		methods: {
 			confirm(user) {
 				this.$modal
-					.confirm(DeletionModal, this.$t('deletionModal.delete') + user.username + ' ?', {
+					.confirm(DeletionModal, this.$t('deletionModal.delete') + user.username + ' ? ', {
+						props: {
+							warning: this.$t('deletionModal.ownerWarning')
+						},
 						label: "deletion-modal",
 						classes: "modal",
 						attributes: {
@@ -77,9 +80,10 @@
 					})
 					.then(() => {
 						this.$emit('delete-user', user)
+						this.$modal.close()
 					})
 					.catch(() => {
-
+						this.$modal.close()
 					})
 					.finally(() => {
 						this.$modal.close()

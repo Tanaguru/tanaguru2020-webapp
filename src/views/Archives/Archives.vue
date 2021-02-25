@@ -49,7 +49,7 @@
             </ul>
         </header>
 
-        <article class="article-archives" id="page-audit" v-for="type of types" :key="type">
+        <article v-if="audits.length > 0" class="article-archives" id="page-audit" v-for="type of types" :key="type">
             <h2 class="article-archives__title">
                 <icon-base-decorative width="40" height="40" viewBox="0 0 72 72">
                     <icon-audit-page/>
@@ -59,11 +59,10 @@
                 <span v-else-if="type == 'UPLOAD'">{{ $t('entity.audit.upload') }}</span>
                 <span v-else>{{ $t('entity.audit.scenario') }}</span>
             </h2>
-            <div class="table-container" v-if="audits.length > 0">
+            <div class="table-container">
                 <ArchivesTable :audits="audits" :type="type" :deleteCondition="deleteCondition" @delete-audit="deleteAudit"
                                @delete-screenshot="deleteScreenshot"/>
             </div>
-            <p v-else>{{ $t('archives.noAudit') }}</p>
         </article>
     </main>
 </template>
@@ -108,6 +107,7 @@ export default {
             ],
             audits: [],
             types: ['PAGE', 'SITE', 'SCENARIO', 'UPLOAD'],
+            deleteAuditError: ""
         }
     },
     metaInfo() {
@@ -144,7 +144,15 @@ export default {
                     () => {
                         this.audits.splice(index, 1)
                     },
-                    (error) => console.error(error)
+                    (error) => {
+                        if(err.response.data.error == "AUDIT_NOT_FOUND"){
+                            this.deleteAuditError = this.$i18n.t("form.errorMsg.audit.notFound")
+                        } else if(err.response.status == "403"){
+                            this.deleteAuditError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+                        } else {
+                            this.deleteAuditError = this.$i18n.t("form.errorMsg.genericError");
+                        }
+                    }
                 )
             }
         },
@@ -155,7 +163,13 @@ export default {
                 () => {
                 },
                 (error) => {
-                    console.error(error)
+                    if(err.response.data.error == "AUDIT_NOT_FOUND"){
+                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.audit.notFound")
+                    } else if(err.response.status == "403"){
+                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+                    } else {
+                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.genericError");
+                    }
                 }
             );
         }

@@ -9,34 +9,38 @@
 			</tr>
 			</thead>
 			<tbody>
-			<tr v-for="contract of contracts" :key="contract.id">
-				<th scope="row">{{ contract.name }}</th>
-				<td>{{ $moment(contract.dateEnd).format('LL') }}</td>
-				<td class="td-actions">
-					<ul class="actions-list">
-						<li class="actions-list__item">
-							<router-link class="link link-independent link-independent--icon"
-										 :to="'/contracts/' + contract.id">
-								<icon-base-decorative>
-									<icon-arrow-blue/>
-								</icon-base-decorative>
-								<span>{{ $t('action.show') }}</span>
-							</router-link>
-						</li>
-						<li class="actions-list__item">
-							<button
-								class="btn btn--icon btn--nude btn-delete"
-								v-if="$store.state.auth.authorities['DELETE_CONTRACT']"
-								@click="deleteContract(contract)">
-								<icon-base-decorative>
-									<icon-delete/>
-								</icon-base-decorative>
-								<span>{{ $t('action.delete') }}</span>
-							</button>
-						</li>
-					</ul>
-				</td>
-			</tr>
+				<tr v-for="contract of contracts" :key="contract.id">
+					<th scope="row">{{ contract.name }}</th>
+					<td>
+						{{ $moment(contract.dateEnd).format('LL') }}
+						<span class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">Expired</span> 
+					</td>
+					<td class="td-actions">
+						<ul class="actions-list">
+							<li class="actions-list__item">
+								<router-link class="link link-independent link-independent--icon"
+											:to="'/contracts/' + contract.id"
+											v-on:click.native="activeTab()">
+									<icon-base-decorative>
+										<icon-arrow-blue/>
+									</icon-base-decorative>
+									<span>{{ $t('action.show') }}</span>
+								</router-link>
+							</li>
+							<li class="actions-list__item">
+								<button
+									class="btn btn--icon btn--nude btn-delete"
+									v-if="$store.state.auth.authorities['DELETE_CONTRACT']"
+									@click="deleteContract(contract)">
+									<icon-base-decorative>
+										<icon-delete/>
+									</icon-base-decorative>
+									<span>{{ $t('action.delete') }}</span>
+								</button>
+							</li>
+						</ul>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 
@@ -66,7 +70,7 @@ export default {
 	methods: {
 		deleteContract(contract) {
 			this.$modal
-				.confirm(DeletionModal, this.$t('deletionModal.delete') + contract.name + ' ?', {
+				.confirm(DeletionModal, this.$t('deletionModal.delete') + contract.name + this.$t('deletionModal.andProjects'), {
 					label: "deletion-modal",
 					classes: "modal",
 					attributes: {
@@ -76,17 +80,30 @@ export default {
 					}
 				})
 				.then(() => {
-					this.$emit('deleteContract', contract)
-				})
-				.catch(() => {
-
-				})
-				.finally(() => {
+					this.$emit('delete-contract', contract)
 					this.$modal.close()
 				})
+				.catch(() => {
+					this.$modal.close()
+				})
+				.finally(() => {this.$modal.close()})
 		},
+
+		activeTab(){
+			this.$store.state.activeTab.name = 'information'
+		}
 	}
 }
 
 </script>
 
+<style lang="scss" scoped>
+
+.title-logs__status--error {
+	margin: 1rem;
+	padding: .2rem .3rem;
+	border-radius: .2rem;
+	color: $color-white;
+	background-color: $color-alert;
+}
+</style>

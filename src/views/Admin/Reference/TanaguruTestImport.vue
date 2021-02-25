@@ -6,7 +6,7 @@
                 <p class="error">{{testInputError}}</p>
             </div>
 
-            <div class="form-block" v-for="testReference of referencesFromTestList">
+            <div class="form-block" v-for="testReference of referencesFromTestList" :key="testReference">
                 <file-upload :id="'reference-' + testReference" :label="$t('references.form.referenceFile') + ' ' + testReference + ' :'" @load="(content)=>{onAddReferenceJson(content, testReference)}" :required="false" format=".json" />
                 <p class="error" v-if="referenceInputErrorByReferenceCode[testReference]">{{referenceInputErrorByReferenceCode[testReference]}}</p>
 
@@ -87,6 +87,14 @@
                     testHierarchyMax: 0,
                     testHierarchyAssignCount: 0,
                     testHierarchyAssignMax: 0
+                }
+            }
+        },
+        props: [ 'selected' ],
+        watch: {
+            selected: function(newVal, oldVal) {
+                if(newVal == 2) {
+                    this.testInputError = ""
                 }
             }
         },
@@ -274,7 +282,6 @@
 			isLabelUsed(label){
 				return this.existingReferences.some(
 					(existingLabel)=>{
-						console.log(existingLabel.code + ' ' + label)
 						return existingLabel.code === label
 					}
 				)

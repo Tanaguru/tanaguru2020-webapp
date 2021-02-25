@@ -12,6 +12,11 @@
 		<div class="layout-header__content" v-show="number === 4">
 			<p>{{$t('audit.resolution.explanation')}}</p>
 		</div>
+
+        <div class="layout-header__content" v-show="number === 7">
+            <p class="layout-content-heading__info" id='pages-explanations'>
+                {{$t('audit.basicAuth.explanation')}}</p>
+        </div>
     </header>
 </template>
 

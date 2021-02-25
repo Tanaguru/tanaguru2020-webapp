@@ -73,7 +73,7 @@ describe('ContractCreationForm', () => {
     })
 
     describe('form', () => {
-        it('shouldn\'t show error if valid and should show success message ans emit createContract event', async () => {
+        it('shouldn\'t show error if valid and should show success message and emit createContract event', async () => {
             const wrapper = shallowMount(contractCreationForm, {
                 i18n,
                 localVue,
@@ -112,7 +112,7 @@ describe('ContractCreationForm', () => {
             expect(wrapper.emitted()).toHaveProperty('createContract')
         })
 
-        it('should show error server response is error', async () => {
+        it('should show error if server response is error', async () => {
             const wrapper = shallowMount(contractCreationForm, {
                 i18n,
                 localVue,

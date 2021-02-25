@@ -34,10 +34,10 @@
 
                 <div class="audit-infos__inner">
                     <div class="audit-caps"
-                         v-if="mainPageContent"
-                         :style="`background-image:url(data:image/png;base64,` + mainPageContent.screenshot + `)`">
+                        v-if="mainPageContent"
+                        :style="mainPageContent.screenshot ? `background-image:url(data:image/png;base64,` + mainPageContent.screenshot + `)` : defaultImg">
                     </div>
-
+                
                     <div class="audit-list" v-if="pages.length > 1">
                         <ul class="audit-list-infos">
                             <li>
@@ -115,7 +115,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(criteriaResultByPage, criteriaCode, i) in currentSynthesis" :key="criteriaCode">
+                    <tr v-for="(criteriaResultByPage, criteriaCode) in currentSynthesis" :key="criteriaCode">
                       <th scope="row" class="row-header">Test {{ criteriaCode }}</th>
                       <td v-for="(criteriaResult, pageId, indexPage) in criteriaResultByPage" :key="pageId">
                         <button class="btn btn--nude" @click="openModal(audit, pageById[pageId], criteriaResult, indexPage)">
@@ -174,6 +174,8 @@ export default {
     props: ['audit'],
     data() {
         return {
+			defaultImg: { backgroundImage: `url(${require('../../../public/assets/images/logo-desktop.svg')})` },
+
             isModalVisible: false,
             mainPageContent: null,
             principleResultsByReference: {},

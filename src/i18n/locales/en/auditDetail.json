@@ -24,5 +24,12 @@
 		"error": "Error",
 		"pending": "Pending",
 		"running": "Running"
+	},
+	"information": {
+		"parameters": "Audit parameters",
+		"status": "Status : ",
+		"browser": "Browser used to perform the audit : ",
+		"reference": "Main guidelines : ",
+		"type": "Audit type : "
 	}
 }

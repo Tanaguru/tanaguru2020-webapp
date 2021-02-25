@@ -1,6 +1,6 @@
 {
   "name": "tanaguru2020-webapp",
-  "version": "1.0.2-SNAPSHOT",
+  "version": "1.0.3-SNAPSHOT",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode development",
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@bytegem/vue-heroicons": "^0.2.5",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "cache-loader": "^4.1.0",
     "core-js": "^3.6.4",
     "moment": "^2.29.0",
