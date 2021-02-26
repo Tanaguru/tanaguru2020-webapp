@@ -397,7 +397,7 @@ export default {
                 } 
             }
 
-            if(this.checkValidDomain(this.projectCreateForm.domain) && this.projectCreateForm.name && this.projectCreateForm.name.length < 51) {
+            if(this.projectCreateForm.name && this.projectCreateForm.name.length < 51 && (this.checkValidDomain(this.projectCreateForm.domain) || (!this.restrictDomain && !this.projectCreateForm.domain))) {
                 this.projectService.create(
                     this.projectCreateForm.name,
                     this.projectCreateForm.domain.trim(),
