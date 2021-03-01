@@ -494,7 +494,7 @@ export default {
                 'WEBDRIVER_RESOLUTIONS': this.auditConfigurationForm.common.breakpoints.join(';'),
                 'ENABLE_SCREENSHOT': this.auditConfigurationForm.common.enableScreenshot,
 				'WEBDRIVER_BROWSER': this.auditConfigurationForm.common.browser,
-				'CSS_QUERY': this.auditConfigurationForm.common.cssQuery
+				'CSS_QUERY_ON_LOADED_PAGE': this.auditConfigurationForm.common.cssQuery
 			};
 
             switch (this.auditConfigurationForm.common.type) {
