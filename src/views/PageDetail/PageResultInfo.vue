@@ -51,11 +51,10 @@
 		</div>
 
 		<div class="audit-infos">
-			<div class="audit-infos__stats" v-show="displayMode != 'anomaly'">
-				<div class="audit-stats">
+			<div class="audit-infos__stats">
+				<div class="audit-stats" v-if="displayMode != 'anomaly'">
 					<div class="audit-stats__chart">
 						<CircularProgressChart
-                            v-show="displayMode != 'anomaly'"
 							:percentage="percentage"
 							:shadowOne="'chart-shadow1-' + audit.id"
 							:shadowTwo="'chart-shadow2-' + audit.id"
@@ -64,20 +63,13 @@
 					<p class="audit-stats__recap audit-stats-recap">
 						<span class="audit-stats-recap__number">{{nbAnomaly}}</span>
 						<span class="audit-stats-recap__unit">{{$t('entity.generic.anomalies')}}</span>
-						<!--<span class="audit-stats-recap__total">{{nbElementTested}} {{$t('resultAudit.elmtTested')}}</span>-->
                     </p>
-					<!--<hr role="presentation" class="separator" />
-					<p class="audit-stats__history audit-stats-history">
-						<span class="audit-stats-history__date">{{$t('resultAudit.date')}} 5 mars 2020 :</span>
-						<span class="audit-stats-history__number">-25 {{$t('entity.generic.anomalies')}}</span>
-						<span class="audit-stats-history__link">
-							<router-link :to="'/audits/' + audit.id + '/pages/' + page.id + '/history'" class="link-independent link-independent--icon">
-								<icon-base-decorative width="16" height="16"><icon-arrow-blue /></icon-base-decorative>
-								<span>{{$t('action.history')}}</span>
-							</router-link>
-						</span>
-					</p>
-					-->
+				</div>
+                <div class="audit-stats" v-else>
+					<p class="audit-stats__recap audit-stats-recap-no-chart">
+						<span class="audit-stats-recap__number">{{nbAnomaly}}</span>
+						<span class="audit-stats-recap__unit">{{$t('entity.generic.anomalies')}}</span>
+                    </p>
 				</div>
 			</div>
 
@@ -111,13 +103,13 @@
 							</button>
 						</li>-->
 					</ul>
-					<div class="form-block">
+					<!--<div class="form-block">
 						<pagination
 							:current-page="page"
 							:total-pages="pageTotalPage"
 							@changePage="(page) => {loadPages(page, auditPagePageSize)}"
 						/>
-					</div>
+					</div>-->
                     <router-link class="btn btn--nude btn--icon" :to="'/audits/' + audit.id">
                         <icon-base-decorative>
                             <icon-arrow-blue/>
@@ -392,6 +384,33 @@
     @media #{$media-md-viewport} {
         padding: calc(21.7rem / 2 + 3.2rem) 0 2rem; // 21.7rem is CircularProgressChart height
     }
+
+    .audit-stats-recap__number,
+    .audit-stats-recap__unit,
+    .audit-stats-recap__total {
+        display: block;
+    }
+
+    .audit-stats-recap__number {
+        font-size: 3rem;
+        font-weight: 600;
+        line-height: 1;
+        @media #{$media-md-viewport} {
+            font-size: 4rem;
+        }
+    }
+
+    .audit-stats-recap__unit {
+        font-size: 1.8rem;
+        @media #{$media-md-viewport} {
+            font-size: 2.4rem;
+        }
+    }
+}
+
+.audit-stats-recap-no-chart {
+    padding: 8rem;
+    text-align: center;
 
     .audit-stats-recap__number,
     .audit-stats-recap__unit,

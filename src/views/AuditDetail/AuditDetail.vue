@@ -43,11 +43,11 @@
                         :element-by-page="auditPagePageSize"
                         :total-elements="pageTotal"/>
 
-						<pagination
+						<!--<pagination
 							:current-page="pageCurrentPage"
 							:total-pages="pageTotalPage"
 							@changePage="(page) => {loadPages(page, auditPagePageSize)}"
-						/>
+						/>-->
 					</section>
 
 					<hr role="presentation" class="separator" />
