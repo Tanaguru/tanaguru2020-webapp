@@ -565,17 +565,10 @@ export default {
             this.$route.params.id,
             (contract) => {
                 this.contract = contract
-                if(this.$store.state.auth.user.appRole.name == 'USER'){
-                    this.breadcrumbProps.push({
-                        name : 'Configuration',
-                        path : '/configuration'
-                    })
-                } else {
-                    this.breadcrumbProps.push({
-                        name : 'Administration',
-                        path : '/administration'
-                    })
-                }
+                this.breadcrumbProps.push({
+                    name : 'Administration',
+                    path : '/administration'
+                });
                 this.breadcrumbProps.push({
                     name : this.contract.name,
                     path : '/contracts/'+ this.contract.id
