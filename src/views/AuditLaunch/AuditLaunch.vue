@@ -152,7 +152,7 @@
 
                     <audit-upload-form
                         :is-valid="isSelectedUploadResourceValid"
-                        v-model="auditConfigurationForm.resource.id"
+                        v-model="auditConfigurationForm.resources"
                         :project-id="project.id"
                         :has-been-sent="hasTryToLaunch"/>
                 </section>
@@ -402,9 +402,7 @@ export default {
                 scenario: {
                     id: null
                 },
-                resource: {
-                    id: null
-                }
+                resources: []
             },
         }
     },
@@ -492,7 +490,7 @@ export default {
                     parameters['PAGE_URLS'] = this.auditConfigurationForm.page.urls.join(';');
                     break;
                 case 'upload':
-                    parameters['DOM_ID'] = this.auditConfigurationForm.resource.id;
+                    parameters['DOM_IDS'] = this.auditConfigurationForm.resources;
                     break;
                 case 'scenario':
                     parameters['SCENARIO_ID'] = this.auditConfigurationForm.scenario.id;
@@ -571,7 +569,6 @@ export default {
         isBreakpointsValid() {
             return this.auditConfigurationForm.common.breakpoints.filter(breakpoint => {
                 return ! BreakpointHelper.isBreakpointValid(breakpoint);
-                return ! BreakpointHelper.isBreakpointEmpty(breakpoint);
             }).length === 0;
         },
         //Pages
@@ -605,7 +602,7 @@ export default {
         },
         //Upload
         isSelectedUploadResourceValid() {
-            return this.auditConfigurationForm.resource.id != null
+            return this.auditConfigurationForm.resources.length > 0
         },
 
         //Launch condition

@@ -72,14 +72,17 @@
                     <tbody>
                     <tr v-for="resource of resources" :key="resource.id">
                         <td>
-                            <div class="radio">
-                                <input class="radio__input" type="radio" name="select-resource"
-                                       :id="'select-resource' + resource.id"
-                                       v-model="resourceId"
-                                       :value="resource.id"
-                                       @change="$emit('input', resourceId)"
+                            <div>
+                                <input 
+                                    class="checkbox__input" 
+                                    type="checkbox" 
+                                    name="select-resource"
+                                    :id="'select-resource' + resource.id"
+                                    v-model="resourceIds"
+                                    :value="resource.id"
+                                    @change="test()"
                                 />
-                                <label class="radio__label" :for="'select-resource' + resource.id">
+                                <label class="checkbox__label" :for="'select-resource' + resource.id">
                                 </label>
                             </div>
                         </td>
@@ -135,7 +138,7 @@ export default {
     data() {
         return {
             resources: [],
-            resourceId: this.value,
+            resourceIds: this.value,
             createResourceForm:{
                 name: '',
                 content: '',
@@ -156,6 +159,9 @@ export default {
         );
     },
     methods:{
+        test(){
+            console.log(this.resourceIds)
+        },
         onAddResource(content) {
             this.createResourceForm.content = '';
             this.createResourceForm.content = content;

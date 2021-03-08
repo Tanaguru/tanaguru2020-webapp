@@ -19,7 +19,8 @@
                         <input
                             :class="['checkbox__input', {'has-error':!isValid}]"
                             type="checkbox"
-                            :value="reference" :id="'checkbox-' + reference.id"
+                            :value="reference" 
+                            :id="'checkbox-' + reference.id"
                             name="input-reference"
                             v-model="selectedReferences"
                             @change="$emit('input', selectedReferences)"
