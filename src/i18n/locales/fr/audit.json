@@ -117,7 +117,9 @@
 		"name": "Nom",
 		"file": "Fichier",
 		"selectScenario": "Sélectionner un scénario",
-		"noScenario": "Aucun scenario trouvé"
+		"noScenario": "Aucun scenario trouvé",
+		"use": "Sélectionner",
+		"actions": "Action"
 	},
 	"basicAuth": {
 		"basicAuth": "Accès sécurisé",

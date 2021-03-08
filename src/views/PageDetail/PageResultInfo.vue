@@ -93,9 +93,9 @@
 							<span>{{$t('entity.audit.repository')}} : </span>
 							{{reference.name}}
 						</li>
-						<!--<li>
-							<span>Nombre de pages auditées :</span> {{ pages.length}}
-						</li>-->
+						<li>
+							<span>{{ $t('auditDetail.synthesis.pages') }}</span> {{ totalPages }}
+						</li>
 						<!--<li>
 							<button class="btn btn--nude btn--icon">
 								<span>{{$t('entity.audit.parameters')}}</span>
@@ -103,13 +103,9 @@
 							</button>
 						</li>-->
 					</ul>
-					<!--<div class="form-block">
-						<pagination
-							:current-page="page"
-							:total-pages="pageTotalPage"
-							@changePage="(page) => {loadPages(page, auditPagePageSize)}"
-						/>
-					</div>-->
+					<div class="form-block">
+						
+					</div>
                     <router-link class="btn btn--nude btn--icon" :to="'/audits/' + audit.id">
                         <icon-base-decorative>
                             <icon-arrow-blue/>
@@ -157,7 +153,7 @@
 				defaultImg: { backgroundImage: `url(${require('../../../public/assets/images/logo-desktop.svg')})` }
             }
         },
-        props: ['audit', 'displayMode', 'page', 'pages', 'auditParameters', 'percentage', 'nbAnomaly', 'nbElementTested', 'pageContent', 'reference' ],
+        props: ['audit', 'displayMode', 'page', 'pages', 'totalPages', 'auditParameters', 'percentage', 'nbAnomaly', 'nbElementTested', 'pageContent', 'reference' ],
         computed: {
             shareCodeUrl(){
                 return location.origin + '/#/audits/' + this.audit.id + '/pages/' + this.page.id + '/' + this.audit.shareCode
@@ -175,22 +171,6 @@
             moment: function (date) {
                 this.$moment.locale(this.$i18n.locale)
                 return this.$moment(date);
-            },
-
-            loadPages(page, size){
-                this.pageService.findByAuditId(
-                    this.audit.id,
-                    this.audit.sharecode,
-                    page,
-                    size,
-                    (auditPagePage) =>{
-                        /*this.pages = auditPagePage.content;
-                        this.pageCurrentPage = page;
-                        this.pageTotalPage = auditPagePage.totalPages;
-                        this.pageTotal = auditPagePage.totalElements;*/
-                        console.log(auditPagePage)
-                    }
-                )
             },
 
             triggerPrint() {
@@ -220,9 +200,6 @@
                 shareCodeUrl.setAttribute('type', 'hidden')
                 window.getSelection().removeAllRanges()
             },
-        },
-        created() {
-            this.loadPages(this.page.id, )
         }
     }
 

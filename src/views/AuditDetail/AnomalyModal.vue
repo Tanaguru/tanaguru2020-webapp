@@ -2,8 +2,8 @@
     <div class="modal-content">
         <header class="modal-header" id="modalTitle">
             <h1 class="modal-header__title">
-                {{ $t('auditDetail.synthesis.modal.criteria') }} {{ criteriaResult.testHierarchy.code }} -
-                {{ criteriaResult.testHierarchy.name }}
+                Test {{ criteriaResult.testHierarchy.code }} -
+                {{ criteriaResult.testHierarchy.name.replace(/ *\(#[^)]*\) */g, " ").replace(/[\[\]]+/g,'') }}
                 <span>Page {{ index + 1 }} : {{ auditPage.name }} - </span>
                 <p id="status--failed" class="status status--failed" v-if="criteriaResult.status == 'failed'">
                 {{ criteriaResult.status }}</p>
@@ -167,6 +167,9 @@ export default {
     methods: {
         closeModal() {
             this.$modal.close();
+            const el = document.body;
+            el.classList.add('scroll');
+			el.classList.remove('noScroll');
         }
     },
 };

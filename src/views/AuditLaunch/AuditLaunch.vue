@@ -28,7 +28,7 @@
                             </icon-base-decorative>
                             <span>{{ $t('audit.form.help.ready') }}</span>
                         </p>
-                        <p v-else-if="!launchCondition" class="info-error">
+                        <p v-else-if="!launchCondition && hasTryToLaunch" class="info-error">
                             <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                                 <icon-alert/>
                             </icon-base-decorative>
@@ -43,7 +43,7 @@
             <div class="wrapper">
                 <p class="info-form">{{ $t('form.indications.help') }}</p>
                 <section class="layout" id="section-definition">
-                    <p v-if="!launchCondition" role="alert" id="incomplete-form" class="info-error">
+                    <p v-if="!launchCondition && hasTryToLaunch" role="alert" id="incomplete-form" class="info-error">
                         <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                             <icon-alert/>
                         </icon-base-decorative>
@@ -315,7 +315,6 @@ import AuditBrowserForm from "./form/AuditBrowserForm";
 import BasicAuthLoginForm from "./form/BasicAuthLoginForm";
 import BasicAuthPasswordForm from "./form/BasicAuthPasswordForm";
 import BasicAuthUrlForm from "./form/BasicAuthUrlForm";
-import moment from 'moment';
 import UrlHelper from "../../helper/urlhelper"
 import BreakpointHelper from "../../helper/breakpointHelper"
 
@@ -469,13 +468,6 @@ export default {
         );
     },
     methods: {
-        /*showLaunchMsg() {
-            this.launchMsg = true;
-        },
-        hideLaunchMsg() {
-            this.launchMsg = false;
-        },*/
-
         startAudit: function () {
             this.hasTryToLaunch = true;
             if (!this.launchCondition) {

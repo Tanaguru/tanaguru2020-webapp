@@ -19,6 +19,7 @@
                         <div v-if="!modifyContractForm.active">
                             <ul class="infos-list">
                                 <li><span class="infos-list__exergue">{{$t('entity.contract.name')}}</span> : {{contract.name}}</li>
+                                <li><span class="infos-list__exergue">{{$t('entity.contract.owner')}}</span> : {{contractOwnerUsername}}</li>
                                 <li><span class="infos-list__exergue">{{$t('entity.contract.dateStart')}}</span> : {{  moment(contract.dateStart).format('LL') }}</li>
                                 <li><span class="infos-list__exergue">{{$t('entity.contract.dateEnd')}}</span> : {{  moment(contract.dateEnd).format('LL') }}</li>
                             </ul>
@@ -26,7 +27,7 @@
                             <button
                                 class="btn btn--default"
                                 v-if="$store.state.auth.user.appRole.name == 'SUPER_ADMIN'"
-                                @click="showModifyContractForm()">
+                                @click="toggleModifyContractForm()">
                                 {{$t('action.modify')}}
                             </button>
                         </div>
@@ -48,9 +49,6 @@
                                             <p class="info-text" id="name-constraint">{{ $t('form.indications.nameConstraint') }}</p>
                                             <p v-if="modifyContractForm.nameError" class="info-error" id="name-error">{{modifyContractForm.nameError}}</p>
                                         </div>
-                                    </div>
-
-                                    <div class="form-column">
                                         <div class="form-block">
                                             <label class="label" for="dateEnd">{{$t('entity.contract.formDateEnd')}} * :</label>
 
@@ -71,10 +69,26 @@
                                                 v-model="modifyContractForm.dateEnd" >
                                         </div>
                                     </div>
+
+                                    <div class="form-column">
+                                        <div class="form-block">
+                                            <label class="label" for="owner">{{$t('entity.contract.owner')}} * :</label>
+
+                                            <select 
+                                                class="input" 
+                                                name="owner" 
+                                                id="owner"
+                                                v-model="modifyContractForm.owner">
+                                                <option v-for="user in contractUsersUsernames" :key="user" :value="user">{{user}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <button class="btn btn--default" type="submit">{{$t('action.modify')}}</button>
                                 <p v-if="modifyContractForm.error" class="info-error">{{modifyContractForm.error}}</p>
+
+                                <button class="btn btn--default" type="button" @click="toggleModifyContractForm()">Cancel</button>
                             </form>
                         </div>
                     </article>
@@ -228,12 +242,15 @@ export default {
             contract: null,
             users: [],
             contractUsers: [],
-            contractOwner: null,
+            contractOwnerUsername: "",
+            contractUsersUsernames: [],
+            contractOwner: {},
             authorityByProjectId: {},
             modifyContractForm: {
                 active: false,
                 name: "",
                 dateEnd: "",
+                owner: null,
                 error: "",
                 nameError: "",
                 successMsg:""
@@ -320,13 +337,13 @@ export default {
         activeTab(value){
 			this.selectedTab = value
 		},
-        showModifyContractForm(){
+        toggleModifyContractForm(){
             this.modifyContractForm.name = this.contract.name;
+            this.modifyContractForm.owner = this.contractOwnerUsername;
             this.modifyContractForm.dateEnd = this.$moment(this.contract.dateEnd).format('L');
-            this.modifyContractForm.active = true;
+            this.modifyContractForm.active = !this.modifyContractForm.active;
         },
         modifyContract(){
-            
             if(this.modifyContractForm.name == '' || this.modifyContractForm.name.length > 50){
                 this.modifyContractForm.nameError = this.$i18n.t('form.errorMsg.username.invalidUsername')
             }
@@ -349,14 +366,19 @@ export default {
                     dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'DD-MM-YYYY').format("YYYY-MM-DD")
                 }
 
+                let newOwnerId = this.contractUsers.find(user =>
+                    user.user.username == this.modifyContractForm.owner
+                )
+
                 this.modifyContractForm.error = ""
                 this.contractService.modifyById(
                     this.contract.id,
                     this.modifyContractForm.name,
                     dateEnd,
-                    this.contractOwner.user.id,
+                    newOwnerId.user.id,
                     (contract) => {
                         this.contract = contract;
+                        this.contractOwnerUsername = this.modifyContractForm.owner
                         this.modifyContractForm.active = false;
                     },
                     (error) => {
@@ -563,8 +585,10 @@ export default {
                     (contractUsers) => {
 						contractUsers.forEach(contractUser => {
                             this.contractUsers.push(contractUser);
+                            this.contractUsersUsernames.push(contractUser.user.username)
                             if(contractUser.contractRole.name === 'CONTRACT_OWNER'){
                             	this.contractOwner = contractUser;
+                                this.contractOwnerUsername = contractUser.user.username;
 							}
 
                             if(contractUser.user.id === this.$store.state.auth.user.id){

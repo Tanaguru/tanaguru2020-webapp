@@ -1,5 +1,6 @@
 <template>
     <div>
+        <p v-show="this.errorMsg">{{ errorMsg }}</p>
         <div v-if="auditsByType.length > 0">
             <button
                 type="button"
@@ -110,7 +111,8 @@ export default {
         return {
             totalPagesByAudit: {},
             hasScreenShotByAudit: [],
-            firstToLast: false
+            firstToLast: false,
+            errorMsg: ''
         }
     },
     props: ['audits', 'type', 'deleteCondition'],
@@ -179,7 +181,7 @@ export default {
                     this.$set(this.totalPagesByAudit, this.audits[i].id, pagePage.totalPages)
                 },
                 (error) => {
-                    console.error(error)
+                    this.errorMsg = "There was an issue retrieving the data. Please try again later or verify if you are allowed to access it (" + error + ")."
                 }
             )
 
