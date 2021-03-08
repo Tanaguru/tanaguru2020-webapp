@@ -500,7 +500,7 @@ export default {
                         }
                     )
                 } else {
-                    this.userAdditionForm.error = this.$i18n.t('form.errorMsg.user.inexistantUser')
+                    this.userAdditionForm.error = this.$i18n.t('form.errorMsg.user.notFound')
                 }
             }
             this.userAdditionForm.username = "";

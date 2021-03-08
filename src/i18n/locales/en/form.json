@@ -21,7 +21,6 @@
 		"emptyInput": "This field should not be empty.",
 		"missingFields": "Please correct empty fields or incorrect inputs.",
 		"user": {
-			"inexistantUser": "This user does not exist.",
 			"notAMember": "This user can't be added to this project.",
 			"limitReached": "This user has reached their contract limit",
 			"notFound": "This user does not exist",
