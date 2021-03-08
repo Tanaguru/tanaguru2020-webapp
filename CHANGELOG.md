@@ -11,6 +11,4 @@
 
 ## 1.0.2
 - Add browser choice (Mozilla firefox, Google chrome)
-
-## 1.0.3
 - Admin and SuperAdmin can unlock/lock users
