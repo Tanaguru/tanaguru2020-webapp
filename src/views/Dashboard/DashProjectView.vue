@@ -40,7 +40,7 @@
 					<li class="actions-list__item" v-show="auditLaunchCondition && validContract">
 						<router-link :to="'/projects/'+project.id+'/audit'" class='btn btn--icon btn--nude'>
 							<icon-base-decorative><icon-launch /></icon-base-decorative>
-							<span>{{$t('action.auditStart')}}</span>
+							<span>{{$t('action.auditLaunch')}}</span>
 						</router-link>
 					</li>
 					<li class="actions-list__item">
@@ -116,7 +116,7 @@
 
 					<router-link :to="'/projects/'+project.id+'/audit'" class='btn btn--icon btn--default'>
 						<icon-base-decorative><icon-launch /></icon-base-decorative>
-						<span>{{$t('action.auditStart')}}</span>
+						<span>{{$t('action.auditLaunch')}}</span>
 					</router-link>
 				</div>
 
@@ -301,7 +301,7 @@
 						<li class="actions-list__item" v-if="auditLaunchCondition && validContract">
 							<router-link :to="'/projects/'+project.id+'/audit'" class='link-independent link-independent--icon'>
 								<icon-base-decorative><icon-launch /></icon-base-decorative>
-								<span>{{$t('action.auditStart')}}</span>
+								<span>{{$t('action.auditLaunch')}}</span>
 							</router-link>
 						</li>
 

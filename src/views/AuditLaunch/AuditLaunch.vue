@@ -72,6 +72,7 @@
 
             <hr role="presentation" class="separator separator--main"/>
 
+            <!-- PAGE -->
             <div class="wrapper"
                 v-if="isAuditTypeValid && auditConfigurationForm.common.type === 'page'">
                 <section class="layout"  id="section-page">
@@ -87,6 +88,7 @@
                 </section>
             </div>
 
+            <!-- SITE -->
             <div class="wrapper"
                 v-if="isAuditTypeValid && auditConfigurationForm.common.type === 'site'">
                 <section class="layout"  id="section-site">
@@ -95,10 +97,9 @@
                         :number="2"/>
 
                     <audit-site-seeds-form
-                        v-if="project.domain.trim()"
+                        :project-domain="project.domain.trim()"
                         :is-valid="isSiteSeedsValid"
-                        v-model="auditConfigurationForm.site.seeds"
-                        :has-been-sent="hasTryToLaunch"/>
+                        v-model="auditConfigurationForm.site.seeds"/>
 
                     <audit-site-crawler-duration-form
                         :is-valid="isCrawlerMaxDurationValid"
@@ -571,7 +572,6 @@ export default {
         isBreakpointsValid() {
             return this.auditConfigurationForm.common.breakpoints.filter(breakpoint => {
                 return ! BreakpointHelper.isBreakpointValid(breakpoint);
-                return ! BreakpointHelper.isBreakpointEmpty(breakpoint);
             }).length === 0;
         },
         //Pages
