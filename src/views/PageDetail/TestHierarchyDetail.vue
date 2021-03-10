@@ -12,7 +12,7 @@
 				</span>
 				<div v-if="testHierarchyResult">
 					<span v-if='isFirstLevel' class="test-hierarchy-header__title">{{testHierarchy.name}}</span>
-					<span v-else class="test-hierarchy-header__title">{{testHierarchy.name.replace(/ *\(#[^)]*\) */g, " ").replace(/[\[\]]+/g,'')}}</span>
+					<span v-else class="test-hierarchy-header__title">{{testHierarchy.name | format}}</span>
 					<ul v-if="isFirstLevel" class="list-tests">
 						<li class="list-tests__item">
 							<icon-base-decorative width="16" height="16"><icon-compliant /></icon-base-decorative><span class="list-tests__nbr list-tests__nbr--success">{{ testHierarchyResult.nbP }}</span><span class="screen-reader-text">{{$t('entity.audit.passed')}}</span>
@@ -50,7 +50,7 @@
 				</a>
 
 				<button
-					v-if="!isFirstLevel || (isLastLevel && testHierarchyResult && testHierarchyResult.status !== 'untested' && testResultsSelection.length > 0)"
+					v-show="showUnrollButtonCondition && testResultsSelection"
 					class="btn btn--nude btn--icon btn--tab"
 					@click="toggleContent(!showContent)"
 					:aria-expanded="showContent === true ? 'true' : 'false'"
@@ -185,12 +185,31 @@
                             .some(tag => this.tagFilters.includes(tag))
                 })
                 return result;
-            }
+            },
+
+			showUnrollButtonCondition(){
+				let condition = false;
+				if(!this.isFirstLevel) {
+					if(this.testHierarchyResult){
+						if(this.testHierarchyResult.status === 'untested'){
+							condition = false
+						} else { condition = true }
+					} else { condition = false }
+				}
+				return condition;
+			}
         },
 		methods: {
         	toggleContent(value){
         		this.showContent = value;
         		this.hasBeenToggled = true;
+			}
+		},
+		filters: {
+			format: function (value) {
+				if (!value) return ''
+				value = value.replace(/ *\(#[^)]*\) */g, " ").replace(/[\[\]]+/g,'')
+				return value
 			}
 		}
     }

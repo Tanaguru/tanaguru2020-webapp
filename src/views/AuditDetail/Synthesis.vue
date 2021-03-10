@@ -183,7 +183,6 @@ export default {
         return {
 			defaultImg: { backgroundImage: `url(${require('../../../public/assets/images/logo-desktop.svg')})` },
 
-            isModalVisible: false,
             mainPageContent: null,
             principleResultsByReference: {},
 
@@ -303,11 +302,7 @@ export default {
         },
     },
     methods: {
-        openModal(audit, page, criteriaResult, i) {
-			const el = document.body;
-            el.classList.add('noScroll');
-			el.classList.remove('scroll');
-            
+        openModal(audit, page, criteriaResult, i) {            
             this.$modal.show(AnomalyModal, {
                 props: {
                     audit: audit,

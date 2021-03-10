@@ -66,7 +66,7 @@
 					<li><span class="infos-list__exergue">{{$t('dashboard.project.url')}}</span> {{ project.domain }}</li>
 					<li>
 						<span class="infos-list__exergue">{{$t('dashboard.project.repository')}} </span>
-						<span v-for="name in repositoriesNames" :key="name">{{ name }}</span>
+						<span v-for="(name, i) in repositoriesNames" :key="i">{{ name }}<span v-if="i+1 != repositoriesNames.length">, </span></span>
 					</li>
 					<li><span class="infos-list__exergue">{{$t('dashboard.project.date')}}</span> {{ moment(project.contract.dateEnd).format('LL') }}</li>
 				</ul>
