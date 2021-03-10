@@ -386,7 +386,9 @@ export default {
                             this.modifyContractForm.error = this.$i18n.t("form.errorMsg.user.notFound");
                         } else if(error.response.data.error == "CONTRACT_NOT_FOUND") {
                             this.modifyContractForm.error = this.$i18n.t("form.errorMsg.contract.notFound");
-                        } else if(error.response.status == "403"){
+                        } else if(error.response.data.error == "USER_ALREADY_HAS_CONTRACT") {
+                            this.modifyContractForm.error = this.$i18n.t("form.errorMsg.user.limitReached");
+                        }else if(error.response.status == "403"){
                             this.modifyContractForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
                         } else {
                             this.modifyContractForm.error = this.$i18n.t("form.errorMsg.genericError");
