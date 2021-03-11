@@ -7,7 +7,7 @@
 
         <div class="layout-content__main">
             <div class="input-name form-block">
-                <label class="label" for="login">{{ $t('audit.basicAuth.password') }}
+                <label class="label" for="login">{{ $t('audit.basicAuth.login') }}
                     <span v-if="isValid"
                         class="screen-reader-text">{{ $t('audit.form.indications.help.checked') }}</span>
                     <span v-else class="screen-reader-text">{{ $t('audit.form.indications.help.empty') }}</span>

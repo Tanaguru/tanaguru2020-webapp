@@ -17,7 +17,8 @@
 			"criteria": "Critère",
 			"rule": "Allez à la règle concernée",
 			"seeDetails": "Voir le résultat détaillé de la page"
-		}
+		},
+		"loading": "Données en cours de récupération..."
 	},
 	"status": {
 		"done": "Terminé",
@@ -30,6 +31,17 @@
 		"status": "Status : ",
 		"browser": "Navigateur utilisé pour l'audit : ",
 		"reference": "Référentiel principal : ",
-		"type": "Type d'audit : "
+		"type": "Type d'audit : ",
+		"waitTime": "Temps d'attente",
+		"resolution": "Résolution d'écran",
+		"screenshots": "Captures d'écran",
+		"maxDepth": "Profondeur maximum",
+		"maxDoc": "Nombre maximum de pages",
+		"maxDuration": "Durée maximum",
+		"basicUrl": "Url d'accès sécurisé",
+		"basicLogin": "Identifiant d'accès sécurisé",
+		"basicPswd": "Mot de passe d'accès sécurisé",
+		"inclusion": "Inclusion des urls contenant",
+		"exclusion": "Exclusion des urls contenant"
 	}
 }

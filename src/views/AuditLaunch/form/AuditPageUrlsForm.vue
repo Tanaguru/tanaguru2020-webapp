@@ -31,7 +31,7 @@
 					<textarea class="textarea-wrapper__textarea"
 						rows="5"
 						cols="80"
-						:class="{'has-error': showFreeformError}"
+						:class="{'has-error': !isValid && showErrorMsgs}"
 						name="urls"
 						id="urls"
 						required
@@ -39,7 +39,7 @@
 						@input="onPlainTextChange($event.target.value)"
                         @focus="hideErrors()"
                         @blur="showErrors()"
-                        :aria-describedby="showFreeformError ? 'free-url-error' : ''"
+                        :aria-describedby="!isValid && showErrorMsgs ? 'free-url-error' : ''"
 					></textarea>
 
                     <p v-if="showErrorMsgs && !inputPlainText" role="alert" class="info-error" id='empty-freeform-urls-error'>
@@ -48,7 +48,7 @@
                         </icon-base-decorative>
                         <span>{{ $t('form.errorMsg.emptyInput') }}</span>
                     </p>
-                    <p v-if="showErrorMsgs && inputPlainText && !validUrlsInFreeForm" role="alert" class="info-error" id='invalid-freeform-urls-error'>
+                    <p v-if="showErrorMsgs && inputPlainText && !isValid" role="alert" class="info-error" id='invalid-freeform-urls-error'>
                         <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                             <icon-alert/>
                         </icon-base-decorative>
@@ -191,7 +191,9 @@
                 this.showErrorMsgs = false
             },
             showErrors() {
-                this.showErrorMsgs = true
+                if(!this.isValid){
+                    this.showErrorMsgs = true
+                } 
             },
             showItemListError(i) {
                 this.showItemError.push(i)
@@ -204,24 +206,7 @@
                     }
                 }
             }
-        },
-        computed:{
-            validUrlsInFreeForm() {
-                let projectDomain = this.projectDomain
-                return this.inputArray.every(function(url) {
-                    return url.includes(projectDomain)
-                });
-            },
-            showFreeformError(){
-                let error = false;
-                if(this.showErrorMsgs) {
-                    if(!this.inputPlainText || !this.validUrlsInFreeForm) {
-                        error = true;
-                    }
-                }
-                return error;
-            }
-        },
+        }
     }
 </script>
 
