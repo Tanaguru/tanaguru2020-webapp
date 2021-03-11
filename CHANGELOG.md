@@ -28,3 +28,4 @@ Improvements :
 - Added missing translations
 - Improved RGAA text display
 - Improved result diplay in synthesis table pop-ins
+- Admin and SuperAdmin can unlock/lock users

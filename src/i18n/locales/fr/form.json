@@ -8,7 +8,7 @@
 		"urlConstraint": "(exemple : http://www.website.com/)"
 	},
 	"successMsg": {
-		"savedChange": "Modification(s) enregistrée(s).",
+		"savedChanges": "Modification(s) enregistrée(s).",
 		"projectCreation": "Le project a été créé.",
 		"contractCreation": "Le contrat a été créé.",
 		"userCreation": "L'utilisateur a été créé.",
