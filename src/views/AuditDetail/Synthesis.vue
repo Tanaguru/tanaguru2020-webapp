@@ -52,7 +52,7 @@
                             </li>
                             <li v-if="pages.length > 1">
                                 <span>{{ $t('auditDetail.synthesis.pages') }} :</span>
-                                {{ pages.length }}
+                                {{ totalPages }}
                             </li>
                             <li>
                                 <span>{{ $t('auditDetail.synthesis.guidelines') }} :</span>
@@ -107,35 +107,43 @@
                        class="table-tests table-header-rotated table-striped table-striped-column"
                        v-if="currentSynthesis">
                     <thead>
-                    <tr>
-                        <td class="no-border"></td>
-                        <th scope="col" class="rotate" v-for="(page, i) in pages" :key="i">
-                            <HeaderRow :page="page" :i="i" :currentSynthesisPage="currentSynthesisPage"/>
-                        </th>
-                    </tr>
+                        <tr>
+                            <td class="no-border"></td>
+                            <th scope="col" class="rotate" v-for="(page, i) in pages" :key="i">
+                                <HeaderRow :page="page" :i="i" :currentSynthesisPage="currentSynthesisPage"/>
+                            </th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="(criteriaResultByPage, criteriaCode) in currentSynthesis" :key="criteriaCode">
-                      <th scope="row" class="row-header">Test {{ criteriaCode }}</th>
-                      <td v-for="(criteriaResult, pageId, indexPage) in criteriaResultByPage" :key="pageId">
-                        <button class="btn btn--nude" @click="openModal(audit, pageById[pageId], criteriaResult, indexPage)">
-                          <icon-base-decorative>
-                            <icon-improper v-if="criteriaResult.status === 'failed'"/>
-                            <icon-compliant v-else-if="criteriaResult.status === 'passed'"/>
-                              <icon-qualify v-else-if="criteriaResult.status === 'cantTell'"/>
-                            <icon-notApplicable v-else/>
-                          </icon-base-decorative>
-                          <span class="screen-reader-text">{{$t('auditDetail.synthesis.table.btnShow', {status: criteriaResult.status})}}</span>
-                        </button>
-                        <span class="td-background"></span>
-                      </td>
-                    </tr>
+                        <tr v-for="(criteriaResultByPage, criteriaCode) in currentSynthesis" :key="criteriaCode">
+                            <th scope="row" class="row-header">Test {{ criteriaCode }}</th>
+                            <td v-for="(criteriaResult, pageId, indexPage) in criteriaResultByPage" :key="pageId">
+                                <button class="btn btn--nude" @click="openModal(audit, pageById[pageId], criteriaResult, indexPage)">
+                                    <icon-base-decorative>
+                                        <icon-improper v-if="criteriaResult.status === 'failed'"/>
+                                        <icon-compliant v-else-if="criteriaResult.status === 'passed'"/>
+                                        <icon-qualify v-else-if="criteriaResult.status === 'cantTell'"/>
+                                        <icon-notApplicable v-else/>
+                                    </icon-base-decorative>
+                                    <span class="screen-reader-text">{{$t('auditDetail.synthesis.table.btnShow', {status: criteriaResult.status})}}</span>
+                                </button>
+                                <span class="td-background"></span>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
+                <div id="fetching-data" v-else>
+                    <p aria-live="polite">{{$t('auditDetail.synthesis.loading')}}</p>
+                    <img src="/assets/images/desktop-home-middle.svg" alt="" />
+                </div>
                 <vue-accessible-modal>
                     <template v-slot:backdrop></template>
                 </vue-accessible-modal>
             </div>
+        </div>
+        <div id="fetching-data" v-else>
+            <p aria-live="polite">{{$t('auditDetail.synthesis.loading')}}</p>
+            <img src="/assets/images/desktop-home-middle.svg" alt="" />
         </div>
     </div>
 </template>
@@ -149,7 +157,6 @@ import IconInforound from '../../components/icons/IconInforound';
 import IconNotApplicable from '../../components/icons/IconNotApplicable';
 import IconQualify from '../../components/icons/IconQualify';
 import AnomalyModal from './AnomalyModal';
-import moment from 'moment';
 import CircularProgressChart from '../../components/charts/CircularProgressChart';
 import PageResultOverview from "../PageDetail/PageResultOverview";
 import Pagination from "../../components/Pagination";
@@ -171,12 +178,11 @@ export default {
         PageResultOverview,
         HeaderRow
     },
-    props: ['audit'],
+    props: ['audit', 'totalPages'],
     data() {
         return {
 			defaultImg: { backgroundImage: `url(${require('../../../public/assets/images/logo-desktop.svg')})` },
 
-            isModalVisible: false,
             mainPageContent: null,
             principleResultsByReference: {},
 
@@ -296,7 +302,7 @@ export default {
         },
     },
     methods: {
-        openModal(audit, page, criteriaResult, i) {
+        openModal(audit, page, criteriaResult, i) {            
             this.$modal.show(AnomalyModal, {
                 props: {
                     audit: audit,
@@ -354,7 +360,7 @@ export default {
                 this.audit.id,
                 this.sharecode,
                 page,
-                20,
+                10,
                 (pagePage) => {
                     this.pages = pagePage.content;
                     this.pageById = {};
@@ -373,7 +379,7 @@ export default {
                 this.selectedReference.id,
                 this.sharecode,
                 page,
-                20,
+                10,
                 (synthesisPage) => {
                     this.$set(this.synthesisPageByReferenceId[this.selectedReference.id], page, synthesisPage.content);
                     this.$set(this.totalSynthesisPageByReferenceId, this.selectedReference.id, synthesisPage.totalPages)
@@ -533,6 +539,18 @@ export default {
         @media #{$media-md-viewport} {
             font-size: 2.4rem;
         }
+    }
+}
+
+// Loading screen
+#fetching-data {
+    text-align: center;
+    color: $text-secondary;
+    font-family: $font-stack-secondary;
+    font-weight: bold;
+
+    img {
+        max-height: 100rem;
     }
 }
 

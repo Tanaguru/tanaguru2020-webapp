@@ -22,15 +22,17 @@
 								<span v-else-if="audit.type === 'SCENARIO'">{{ $t('entity.audit.scenario') }}</span>
 								<span v-else>{{ $t('entity.audit.upload') }}</span>
 							</li>
-							<li v-if="browser == 'firefox'" >{{ $t('auditDetail.information.browser') }}Mozilla Firefox</li>
-							<li v-else-if="browser == 'chrome'" >{{ $t('auditDetail.information.browser') }}Google Chrome</li>
-							<!--<li>{{ $t('auditDetail.information.reference') }}{{ mainReference }}</li>-->
-
-							<li v-for="parameter in parameters" :key="parameter.id">
-								{{ parameter.auditParameter.code.charAt(0).toUpperCase() + parameter.auditParameter.code.slice(1).toLowerCase().replaceAll('_', ' ') }}
-								:
-								{{ parameter.value }}
-							</li>
+							<li v-if="parameters.browser == 'firefox'" >{{ $t('auditDetail.information.browser') }}Mozilla Firefox</li>
+							<li v-else-if="parameters.browser == 'chrome'" >{{ $t('auditDetail.information.browser') }}Google Chrome</li>
+							<li v-show="parameters.waitTime">{{$t('auditDetail.information.waitTime')}} : {{parameters.waitTime}}</li>
+							<li v-show="parameters.basicAuthLogin">{{$t('auditDetail.information.basicLogin')}} : {{parameters.basicAuthLogin}}</li>
+							<li v-show="parameters.basicAuthPassword">{{$t('auditDetail.information.basicPswd')}} : {{parameters.basicAuthPassword}}</li>
+							<li v-show="parameters.basicAuthUrl">{{$t('auditDetail.information.basicUrl')}} : {{parameters.basicAuthUrl}}</li>
+							<li v-show="parameters.enableScreenshot">{{$t('auditDetail.information.screenshots')}} : {{parameters.enableScreenshot == 'false' ? 'No' : 'Yes'}}</li>
+							<li v-show="parameters.maxDepth">{{$t('auditDetail.information.maxDepth')}} : {{parameters.maxDepth}}</li>
+							<li v-show="parameters.maxDoc">{{$t('auditDetail.information.maxDoc')}} : {{parameters.maxDoc}}</li>
+							<li v-show="parameters.maxDuration">{{$t('auditDetail.information.maxDuration')}} : {{parameters.maxDuration}}</li>
+							<li v-show="parameters.resolutions">{{$t('auditDetail.information.resolution')}} : {{parameters.resolutions}}</li>
 						</ul>
 					</section>
 
@@ -71,7 +73,7 @@
                 </div>
 			</Tab>
 			<Tab :name="$t('auditDetail.tabs.synthesis')" v-if="audit.status=='DONE' && pages.length > 1">
-				<Synthesis :audit="audit"/>
+				<Synthesis :audit="audit" :totalPages="pageTotal" />
 			</Tab>
 		</Tabs>
 	</main>
@@ -118,12 +120,23 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 				audit: null,
 				sharecode: null,
           		project: null,
-				parameters: [],
 				pages: [],
 				auditLogs: [],
-				mainReference: null,
-				browser: null,
-
+				parameters: {
+					mainReference: null,
+					browser: null,
+					waitTime: null,
+					basicAuthUrl: null,
+					basicAuthLogin: null,
+					basicAuthPassword: null,
+					enableScreenshot: null,
+					maxDepth: null,
+					maxDuration: null,
+					maxDoc: null,
+					exclusionRegex: null,
+					inclusionRegex: null,
+					resolutions: null,
+				},
                 auditLogPageSize: 10,
                 auditLogTotalPage : 0,
                 auditLogCurrentPage: 0,
@@ -157,18 +170,43 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 					(parameters) => {
 						parameters.forEach(parameter => {
 							if(parameter.auditParameter.code == "WEBDRIVER_BROWSER") {
-								this.browser = parameter.value
+								this.parameters.browser = parameter.value
 							}
 							else if(parameter.auditParameter.code == "MAIN_REFERENCE") {
-								this.mainReference = parameter.value
+								this.parameters.mainReference = parameter.value
 							}
-							else if(parameter.value
-							&& parameter.auditParameter.code != "SITE_SEEDS"
-							&& parameter.auditParameter.code != "PAGE_URLS"
-							&& parameter.auditParameter.code != "SCENARIO_ID"
-							&& parameter.auditParameter.code != "DOM_ID"
-							&& parameter.auditParameter.code != "WEBDRIVER_BROWSER"){
-								this.parameters.push(parameter)
+							else if(parameter.auditParameter.code == "WAIT_TIME") {
+								this.parameters.waitTime = parameter.value
+							}
+							else if(parameter.auditParameter.code == "BASICAUTH_URL") {
+								this.parameters.basicAuthUrl = parameter.value
+							}
+							else if(parameter.auditParameter.code == "BASICAUTH_LOGIN") {
+								this.parameters.basicAuthLogin = parameter.value
+							}
+							else if(parameter.auditParameter.code == "BASICAUTH_PASSWORD") {
+								this.parameters.basicAuthPassword = parameter.value
+							}
+							else if(parameter.auditParameter.code == "ENABLE_SCREENSHOT") {
+								this.parameters.enableScreenshot = parameter.value
+							}
+							else if(parameter.auditParameter.code == "CRAWLER_MAX_DEPTH") {
+								this.parameters.maxDepth = parameter.value
+							}
+							else if(parameter.auditParameter.code == "CRAWLER_MAX_DURATION") {
+								this.parameters.maxDuration = parameter.value
+							}
+							else if(parameter.auditParameter.code == "CRAWLER_MAX_DOCUMENT") {
+								this.parameters.maxDoc = parameter.value
+							}
+							else if(parameter.auditParameter.code == "CRAWLER_EXCLUSION_REGEX") {
+								this.parameters.exclusionRegex = parameter.value
+							}
+							else if(parameter.auditParameter.code == "CRAWLER_INCLUSION_REGEX") {
+								this.parameters.inclusionRegex = parameter.value
+							}
+							else if(parameter.auditParameter.code == "WEBDRIVER_RESOLUTIONS") {
+								this.parameters.resolutions = parameter.value
 							}
 						});
 					},

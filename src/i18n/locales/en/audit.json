@@ -95,15 +95,15 @@
 		"parameters": {
 			"labelSiteSeeds": "Site seeds",
 			"labelSiteSeedsHelp": "Website seeds separated by a ';'",
-			"labelMaxDepth": "Max Depth",
-			"labelMaxDepthHelp": "Crawler max depth in pages (the value must be an integer between 1 and 10)",
-			"labelMaxDuration": "Max duration",
-			"labelMaxDurationHelp": "Crawler max duration in seconds (the value must be a number between 0.1 and 86400).",
-			"labelMaxDocument": "Max Document",
-			"labelMaxDocumentHelp": "Crawler max pages (the value must be an integer between 1 and 1000).",
-			"labelInclusionRegex": "Inclusion regex",
+			"labelMaxDepth": "Maximum Depth",
+			"labelMaxDepthHelp": "Crawler's maximum depth in pages (the value must be an integral number between 1 and 10)",
+			"labelMaxDuration": "Maximum duration",
+			"labelMaxDurationHelp": "Crawler's maximum duration in seconds (the value must be a number between 0.1 and 86400).",
+			"labelMaxDocument": "Maximum Document",
+			"labelMaxDocumentHelp": "Crawler's maximum pages (the value must be an integral number between 1 and 1000).",
+			"labelInclusionRegex": "Inclusion of pages containing",
 			"labelInclusionRegexHelp": "Only audit URLs containing one or more given strings separated by a ';'",
-			"labelExclusionRegex": "Exclusion regex",
+			"labelExclusionRegex": "Exclusion of pages containing",
 			"labelExclusionRegexHelp": "Exclude URLs containing one or more given strings separated by a ';'"
 		}
 	},
@@ -121,7 +121,9 @@
 		"name": "Name",
 		"file": "File",
 		"selectScenario": "Select a scenario",
-		"noScenario": "No scenario found"
+		"noScenario": "No scenario found",
+		"use": "Use",
+		"actions": "Action"
 	},
 	"basicAuth": {
 		"basicAuth": "Secured access",

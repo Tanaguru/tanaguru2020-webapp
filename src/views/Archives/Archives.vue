@@ -49,7 +49,7 @@
             </ul>
         </header>
 
-        <article v-if="audits.length > 0" class="article-archives" id="page-audit" v-for="type of types" :key="type">
+        <article v-if="audits.length > 0" class="article-archives" :id="type.toLowerCase() + '-audit'" v-for="type of types" :key="type">
             <h2 class="article-archives__title">
                 <icon-base-decorative width="40" height="40" viewBox="0 0 72 72">
                     <icon-audit-page/>

@@ -72,6 +72,12 @@
                                            v-model="modifyUserForm.enabled">
                                     <label class="checkbox__label" for="enabled">{{ $t('entity.user.enabled') }}</label>
                                 </div>
+
+                                <div class="checkbox" v-if="$store.state.auth.authorities['MODIFY_USER']">
+                                    <input class="checkbox__input" type="checkbox" name="accountNonLocked" id="accountNonLocked"
+                                           v-model="modifyUserForm.accountNonLocked">
+                                    <label class="checkbox__label" for="accountNonLocked">{{ $t('entity.user.blocked') }}</label>
+                                </div>
                             </fieldset>
                         </div>
                     </div>
@@ -90,6 +96,8 @@
                         {{ user.appRole.name.charAt(0) + user.appRole.name.slice(1).toLowerCase().replace(/_/g, ' ') }}
                     </li>
                     <li><span class="infos-list__exergue">{{ $t('entity.user.enabled') }}</span> : {{ user.enabled }}
+                    </li>
+                    <li><span class="infos-list__exergue">{{ $t('entity.user.blocked') }}</span> : {{ !user.accountNonLocked }}
                     </li>
                 </ul>
 
@@ -204,6 +212,7 @@ export default {
                 email: "",
                 appRole: "",
                 enabled: false,
+                accountNonLocked: true,
                 emailError: "",
                 usernameError: "",
                 successMsg: ""
@@ -236,6 +245,7 @@ export default {
             this.modifyUserForm.email = this.user.email;
             this.modifyUserForm.appRole = this.user.appRole.name;
             this.modifyUserForm.enabled = this.user.enabled;
+            this.modifyUserForm.accountNonLocked = !this.user.accountNonLocked;
             this.modifyUserForm.active = true;
         },
         checkValidEmail: EmailHelper.checkValidEmail,
@@ -274,10 +284,11 @@ export default {
                         this.modifyUserForm.email,
                         this.modifyUserForm.appRole,
                         this.modifyUserForm.enabled,
+                        !this.modifyUserForm.accountNonLocked,
                         (user) => {
                             this.user = user;
                             this.modifyUserForm.active = false;
-                            this.modifyUserForm.successMsg = this.$i18n.t("form.successMsg.savedChangesChange")
+                            this.modifyUserForm.successMsg = this.$i18n.t("form.successMsg.savedChanges")
                         },
                         (error) => this.modifyUserForm.error = this.$i18n.t("form.errorMsg.genericError")
                     )
