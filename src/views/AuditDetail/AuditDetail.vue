@@ -55,6 +55,40 @@
 					<hr role="presentation" class="separator" />
 
 					<section class="section-logs">
+
+						<h2>{{ $t('auditDetail.logs') }} ({{auditLogTotal}})</h2>
+
+						<div class="form-row">
+							<div class="form-column">
+								<div class="form-block">
+									<div class="select">
+										<select id="level-select"  name="level-select" @change="levelChange($event)" required>
+											<option value="" disabled>{{$t('auditDetail.selectLogLevel')}}</option>
+											<option v-for="level of levels" :key="level" :value="level">{{level}}</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-column">
+								<div class="form-block">
+									<button
+										type="button"
+										:class="firstToLast ? 'btn btn--default-inverse btn--icon' : 'btn btn--default btn--icon'"
+										@click="reverseLogsOrder()"
+										aria-pressed="true">
+										{{ $t('action.sortLogs') }}
+										<icon-base-decorative v-if="firstToLast">
+											<icon-close/>
+										</icon-base-decorative>
+
+										<icon-base-decorative v-else>
+											<icon-checked/>
+										</icon-base-decorative>
+									</button>
+								</div>
+							</div>
+						</div>
+
 						<logs-list
                         :audit="audit"
                         :auditLogs="auditLogs"
@@ -63,12 +97,12 @@
                         :element-by-page="auditLogPageSize"
                         :total-elements="auditLogTotal"
                     	/>
-
 						<pagination
 							:current-page="auditLogCurrentPage"
 							:total-pages="auditLogTotalPage"
-							@changePage="(page) => {loadAuditLogs(page, auditLogPageSize)}"
+							@changePage="(page) => {loadAuditLogs(page, auditLogPageSize, !firstToLast, this.levelsToDisplay)}"
 						/>
+						
 					</section>
                 </div>
 			</Tab>
@@ -89,7 +123,8 @@ import LogsList from "./LogsList";
 import PageList from "./PageList";
 import Pagination from "../../components/Pagination";
 import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
-
+import IconChecked from '../../components/icons/IconChecked'
+import IconClose from '../../components/icons/IconClose'
 	export default {
 		name: "auditDetail",
 		components: {
@@ -101,7 +136,9 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 			Tabs,
 			Logs,
 			Synthesis,
-			IconBaseDecorative
+			IconBaseDecorative,
+			IconChecked,
+			IconClose
 		},
 		metaInfo() {
 			return {
@@ -122,6 +159,9 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
           		project: null,
 				pages: [],
 				auditLogs: [],
+				firstToLast: false,
+				levels: [],
+				levelsToDisplay: ['INFO','WARNING','ERROR'],
 				parameters: {
 					mainReference: null,
 					browser: null,
@@ -151,11 +191,12 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 		created() {
 			this.sharecode = this.$route.params.sharecode;
 			this.getProject();
+			this.getLogLevels();
 			this.refreshPages();
 			this.timer = setInterval(this.refreshPages, 3000);
 
             this.loadPages(this.pageCurrentPage, this.auditPagePageSize);
-			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize);
+			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
 
 			this.getParameters();
 		},
@@ -242,7 +283,7 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 				);
 
                 this.loadPages(this.pageCurrentPage, this.auditPagePageSize);
-                this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize);
+                this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
 			},
 
             loadPages(page, size){
@@ -260,12 +301,14 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
                 )
             },
 
-            loadAuditLogs(page, size){
-                this.auditLogService.findByAuditId(
+            loadAuditLogs(page, size, asc, levelsToDisplay){
+                this.auditLogService.findByAuditIdFiltered(
                     this.$route.params.id,
                     this.sharecode,
                     page,
-                    size,
+					size,
+					asc,
+					levelsToDisplay,
                     (auditLogsPage) => {
                         this.auditLogCurrentPage = page;
                         this.auditLogs = auditLogsPage.content;
@@ -284,7 +327,35 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 				}else{
 					this.getAudit();
 				}
+			},
+
+			reverseLogsOrder(){
+				if(this.firstToLast == true) {
+					this.firstToLast = false
+				} else { this.firstToLast = true }
+				this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
+			},
+
+			getLogLevels(){
+				this.auditLogService.getLogLevels(
+					levels => {
+						this.levels = levels
+					},
+					err => console.error(err)
+				)
+			},
+
+			levelChange(event) {
+				if(event.target.value === 'INFO'){
+					this.levelsToDisplay = ['INFO', 'WARNING', 'ERROR']
+				}else if(event.target.value === 'WARNING'){
+					this.levelsToDisplay = ['WARNING', 'ERROR']
+				}else if(event.target.value === 'ERROR'){
+					this.levelsToDisplay = ['ERROR']
+				}
+				this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
 			}
+
 		},
 		computed: {
 			breadcrumbProps(){
