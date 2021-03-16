@@ -44,9 +44,9 @@ export default class TestHierarchyService extends Service{
             });
     }
 
-    findAllReferences(then, error){
+    findAllReferences(page, size, then, error){
         return this.axios({
-            url: this.controllerName  + "/references",
+            url: this.controllerName  + "/references" + '?page=' + page + '&size=' + size,
             method: 'get',
         })
             .then(resp => {
