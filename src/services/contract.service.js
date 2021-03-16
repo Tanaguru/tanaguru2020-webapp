@@ -44,9 +44,9 @@ export default class ContractService extends Service{
         });
     }
 
-    findByUserId(id, then, error){
+    findByUserId(id, page, size, then, error){
         return this.axios({
-            url: this.controllerName + '/by-user/' + id, 
+            url: this.controllerName + '/by-user/' + id +'?page=' + page + '&size=' + size, 
             method: 'get',
           })
           .then(resp => {

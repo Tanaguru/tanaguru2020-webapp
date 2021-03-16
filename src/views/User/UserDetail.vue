@@ -161,14 +161,29 @@
                 </button>
             </div>
         </article>
-
         <article id="user-contracts">
             <h2 class="user__title-2">{{ $t('user.contracts') }}</h2>
-            <ProfileContractTable v-if="contracts.length > 0" :contracts="contracts"/>
+            
+            <div v-if="contracts.length > 0">
+
+                <profile-contract-table 
+                    :contracts="contracts" 
+                    :current-page="contractCurrentPage"
+                    :total-pages="contractTotalPage"
+                    :element-by-page="contractPageSize"
+                    :total-elements="contractTotal">
+                </profile-contract-table>
+
+                <pagination
+                    :current-page="contractCurrentPage"
+                    :total-pages="contractTotalPage"
+                    @changePage="(page) => {loadContracts(page, contractPageSize)}"
+                />
+            </div>
             <p v-else-if="$route.params.id == $store.state.auth.user.id">{{ $t('user.noContract') }}</p>
             <p v-else>{{ $t('user.adminNoContract') }}</p>
-
         </article>
+        
 
         <BackToTop/>
 
@@ -183,6 +198,7 @@ import ProfileContractTable from './ProfileContractTable';
 import BackToTop from '../../components/BackToTop';
 import EmailHelper from '../../helper/emailHelper'
 import PasswordHelper from '../../helper/PasswordHelper'
+import Pagination from '../../components/Pagination';
 
 export default {
     name: 'userDetail',
@@ -193,7 +209,8 @@ export default {
         Breadcrumbs,
         BackToTop,
         EmailHelper,
-        PasswordHelper
+        PasswordHelper,
+        Pagination
     },
     data() {
         return {
@@ -226,6 +243,10 @@ export default {
                 confirmationError: "",
                 successMsg: ""
             },
+            contractPageSize: 5,
+            contractTotalPage : 0,
+            contractCurrentPage: 0,
+            contractTotal: 0
         }
     },
     metaInfo() {
@@ -330,6 +351,20 @@ export default {
                     (error) => this.modifyPasswordForm.error = this.$i18n.t("form.errorMsg.genericError")
                 )
             }
+        },
+        loadContracts(page, size){
+            this.contractService.findByUserId(
+                this.$route.params.id,
+                page,
+                size,
+                (contracts) => {
+                    this.contractCurrentPage = page;
+                    this.contracts = contracts.content;
+                    this.contractTotalPage = contracts.totalPages;
+                    this.contractTotal = contracts.totalElements;
+                },
+                (error) => console.error(error)
+            )
         }
     },
     created() {
@@ -356,11 +391,7 @@ export default {
                     }
                 )
 
-                this.contractService.findByUserId(
-                    this.$route.params.id,
-                    (contracts) => this.contracts = contracts,
-                    (error) => console.error(error)
-                )
+                this.loadContracts(this.contractCurrentPage, this.contractPageSize);
             }
         } else {
             this.$router.replace('/');
