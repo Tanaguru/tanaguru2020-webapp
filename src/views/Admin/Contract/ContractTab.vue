@@ -76,10 +76,11 @@ export default {
 		BackToTop,
 		Pagination
 	},
-	props: ['users', 'selected' ],
+	props: ['selected' ],
 	data() {
 		return {
 			contracts: [],
+			users: [],
 			searchContract: "",
 			liveMsg: "",
 			timer: null,
@@ -91,12 +92,14 @@ export default {
 	},
 	created() {
 		this.loadContracts(this.contractCurrentPage, this.contractPageSize);
+		this.loadUsers();
 	},
 	watch: {
     	selected: function(newVal, oldVal) {  
 			if(newVal == 0) {
 				this.searchContract = ""
 				this.liveMsg = ""
+				this.loadUsers()
 			} 
 		}
 	},
@@ -116,6 +119,7 @@ export default {
 	methods: {
 		onCreateContract(contract) {
 			this.contracts.push(contract);
+			this.loadContracts(this.contractCurrentPage, this.contractPageSize);
 		},
 
 		deleteContract(contract) {
@@ -135,7 +139,8 @@ export default {
 							this.deleteContractError = this.$i18n.t("form.errorMsg.genericError");
 						}
 					}
-				)
+				);
+				this.loadContracts(this.contractCurrentPage, this.contractPageSize);
 			}
 		},
 		fireAriaLive() {
@@ -158,6 +163,15 @@ export default {
                 this.contractTotal = contracts.totalElements;
             },
 			err => console.error(err)
+			);
+		},
+
+		loadUsers(){
+			this.userService.findAll(
+				users => {
+					this.users = users
+				},
+				err => console.error(err)
 			);
 		}
 	}

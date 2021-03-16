@@ -155,4 +155,17 @@ export default class UserService extends Service{
               error(err);
           });
     }
+
+    findAllPaginated(page, size, sortBy, isAsc, then, error){
+        this.axios({
+            url: this.controllerName + '/paginated' + '?page=' + page + '&size=' + size +'&sortBy=' + sortBy + '&isAsc=' + isAsc,
+            method: 'get',
+          })
+          .then(resp => {
+            then(resp.data)
+          })
+          .catch(err => {
+              error(err);
+          });
+    }
 }

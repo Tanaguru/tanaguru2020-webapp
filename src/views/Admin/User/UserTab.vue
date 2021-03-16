@@ -32,9 +32,15 @@
 
 			<user-table 
 				:users="filteredUsers" 
-				@delete-user="deleteUser"
-			>
+				@delete-user="deleteUser">
 			</user-table>
+
+			<pagination
+				:current-page="usersCurrentPage"
+				:total-pages="usersTotalPage"
+				@changePage="(page) => {loadUsers(page, usersPageSize, usersSortBy, usersIsAsc)}"
+			/>
+
 		</section>
 
         <BackToTop />
@@ -48,6 +54,7 @@
     import IconDelete from '../../../components/icons/IconDelete'
 	import UserTable from "@/components/users/UserTable";
 	import UserCreationForm from "@/components/users/UserCreationForm";
+	import Pagination from "../../../components/Pagination";
 
     export default {
         name: 'adminUserList',
@@ -57,17 +64,24 @@
             IconBaseDecorative,
             IconArrowBlue,
             IconDelete,
-            BackToTop
+			BackToTop,
+			Pagination
         },
         data() {
             return {
 				search : "",
 				liveMsg : "",
-				timer : null
-
+				timer : null,
+				users : [],
+				usersPageSize: 5,
+				usersTotalPage : 0,
+				usersCurrentPage: 0,
+				usersTotal: 0,
+				usersSortBy: "id",
+				usersIsAsc: false
             }
         },
-		props: [ 'users', 'selected' ],
+		props: ['selected'],
 		watch: {
 			selected: function(newVal, oldVal) {  
 				if(newVal == 1) {
@@ -84,7 +98,7 @@
 						user.email.toLowerCase().includes(this.search.toLowerCase())):
 					this.users
 
-				return users.reverse();
+				return users;
 			}
         },
         methods: {
@@ -98,7 +112,8 @@
 			},
 
 			onCreateUser(user){
-				this.$emit('createUser', user)
+				this.$emit('createUser', user);
+				this.loadUsers(this.usersCurrentPage, this.usersPageSize, this.usersSortBy, this.usersIsAsc);
 			},
 
             deleteUser(user){
@@ -110,10 +125,30 @@
                             this.users.splice(index, 1)
                         },
                         (error) => console.error(error)
-                    )
+					);
+					this.loadUsers(this.usersCurrentPage, this.usersPageSize, this.usersSortBy, this.usersIsAsc);
                 }
-            }
-        }
+			},
+
+			loadUsers(page, size, sortBy, isAsc){
+				this.userService.findAllPaginated(
+					page,
+					size,
+					sortBy,
+					isAsc,
+					(users) => {
+						this.usersCurrentPage = page;
+						this.users = users.content;
+						this.usersTotalPage = users.totalPages;
+						this.usersTotal = users.totalElements;
+					},
+					err => console.error(err)
+				);
+			}
+		},
+		created(){
+			this.loadUsers(this.usersCurrentPage,this.usersPageSize,this.usersSortBy,this.usersIsAsc);
+		}
     }
 </script>
 
