@@ -79,15 +79,6 @@ import Navbar from '../Navbar';
     },
 	props: [ 'currentUser' ],
 	methods: {
-		toggleBodyClass(addRemoveClass, noScroll) {
-			const el = document.body;
-
-			if (addRemoveClass === 'addClass') {
-			el.classList.add('noScroll');
-			} else {
-			el.classList.remove('noScroll');
-			}
-		},
 		toggleMenu() {
 			const el = document.body;
 			if(this.burgerOpen === true){

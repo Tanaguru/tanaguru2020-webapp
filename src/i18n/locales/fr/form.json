@@ -8,7 +8,7 @@
 		"urlConstraint": "(exemple : http://www.website.com/)"
 	},
 	"successMsg": {
-		"savedChange": "Modification(s) enregistrée(s).",
+		"savedChanges": "Modification(s) enregistrée(s).",
 		"projectCreation": "Le project a été créé.",
 		"contractCreation": "Le contrat a été créé.",
 		"userCreation": "L'utilisateur a été créé.",
@@ -23,7 +23,7 @@
 		"user": {
 			"notAMember": "Cet utilisateur ne peut être ajouté au projet",
 			"limitReached": "Cet utilisateur a attein sa limite de contrats",
-			"notFound": "Cet utilisateur n'existe pas",
+			"notFound": "Cet utilisateur n'existe pas.",
 			"permissionDenied": "Vous n'avez pas les authorisations requises",
 			"promoteSelf": "Vous ne pouvez vous promouvoir vous-même",
 			"notAllowed": "Votre rôle dans ce projet ne vous autorise pas à promouvoir un utilisateur",

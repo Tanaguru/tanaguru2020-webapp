@@ -55,6 +55,7 @@ export default class UserService extends Service{
         email,
         appRole,
         enabled,
+        accountNonLocked,
         then,
         error
     ){
@@ -63,7 +64,8 @@ export default class UserService extends Service{
             'username' : username,
             'email' : email,
             'appRole' : appRole,
-            'enabled' : enabled
+            'enabled' : enabled,
+            'accountNonLocked' : accountNonLocked
         };
 
         return this.axios({

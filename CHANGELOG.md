@@ -11,3 +11,21 @@
 
 ## 1.0.2
 - Add browser choice (Mozilla firefox, Google chrome)
+
+## 1.0.3
+Functionnalities : 
+- Admin and SuperAdmin can unlock/lock users
+- Admin and SuperAdmin can change contract owner
+
+Bugs fixed :
+- Fixed unnecessary error message on site and file audit forms
+- Fixed incorrect breadcrumbs
+- Fixed incoherent page number on audit synthesis
+- Fixed incoherent test results in synthesis table
+
+Improvements : 
+- Tooltip display in French
+- Added missing translations
+- Improved RGAA text display
+- Improved result diplay in synthesis table pop-ins
+- Admin and SuperAdmin can unlock/lock users
