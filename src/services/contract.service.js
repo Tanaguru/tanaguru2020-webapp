@@ -128,4 +128,17 @@ export default class ContractService extends Service{
         .then(resp => {then(resp.data)})
         .catch(err => {error(err);});
     }
+
+    findAll(page, size, then, error){
+        return this.axios({
+            url: this.controllerName + '/' + '?page=' + page + '&size=' + size + '&sortBy=id',
+            method: 'get',
+          })
+          .then(resp => {
+            then(resp.data)
+          })
+          .catch(err => {
+              error(err);
+          });
+    }
 }

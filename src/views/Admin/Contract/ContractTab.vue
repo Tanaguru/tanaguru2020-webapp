@@ -37,11 +37,23 @@
 					<p>{{ liveMsg }}</p>
 				</div>
 
-				<contract-table
-					:contracts="filteredContracts"
-					@delete-contract="deleteContract"
-				>
-				</contract-table>
+				<section>
+					<contract-table
+						:contracts="filteredContracts"
+						@delete-contract="deleteContract"
+                        :current-page="contractCurrentPage"
+                        :total-pages="contractTotalPage"
+                        :element-by-page="contractPageSize"
+                        :total-elements="contractTotal"
+                    	/>
+
+					<pagination
+						:current-page="contractCurrentPage"
+						:total-pages="contractTotalPage"
+						@changePage="(page) => {loadContracts(page, contractPageSize)}"
+					/>
+				</section>
+
 			</div>
 			<p v-else>{{ $t('contracts.noContract') }}</p>
 		</section>
@@ -54,13 +66,15 @@
 import BackToTop from '../../../components/BackToTop'
 import ContractCreationForm from "@/components/contracts/ContractCreationForm";
 import ContractTable from "@/components/contracts/ContractTable";
+import Pagination from "../../../components/Pagination";
 
 export default {
 	name: 'adminContractList',
 	components: {
 		ContractTable,
 		ContractCreationForm,
-		BackToTop
+		BackToTop,
+		Pagination
 	},
 	props: ['users', 'selected' ],
 	data() {
@@ -68,16 +82,15 @@ export default {
 			contracts: [],
 			searchContract: "",
 			liveMsg: "",
-			timer: null
+			timer: null,
+			contractPageSize: 5,
+            contractTotalPage : 0,
+            contractCurrentPage: 0,
+            contractTotal: 0
 		}
 	},
 	created() {
-		this.contractService.findAll(
-			contracts => {
-				this.contracts = contracts
-			},
-			err => console.error(err)
-		);
+		this.loadContracts(this.contractCurrentPage, this.contractPageSize);
 	},
 	watch: {
     	selected: function(newVal, oldVal) {  
@@ -133,6 +146,20 @@ export default {
 		populateAriaLive() {
 			this.liveMsg = this.filteredContracts.length + ' ' + this.$i18n.t("contract.contracts")
 		},
+
+		loadContracts(page, size){
+			this.contractService.findAll(
+			page,
+            size,
+            (contracts) => {
+                this.contractCurrentPage = page;
+                this.contracts = contracts.content;
+                this.contractTotalPage = contracts.totalPages;
+                this.contractTotal = contracts.totalElements;
+            },
+			err => console.error(err)
+			);
+		}
 	}
 }
 </script>
