@@ -129,9 +129,9 @@ export default class ContractService extends Service{
         .catch(err => {error(err);});
     }
 
-    findAll(page, size, then, error){
+    findAll(page, size, filter, then, error){
         return this.axios({
-            url: this.controllerName + '/' + '?page=' + page + '&size=' + size + '&sortBy=id',
+            url: this.controllerName + '/' + '?page=' + page + '&size=' + size + '&sortBy=id' + '&name=' + filter,
             method: 'get',
           })
           .then(resp => {

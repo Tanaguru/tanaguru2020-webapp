@@ -87,6 +87,7 @@
 				if(newVal == 1) {
 					this.search = ""
 					this.liveMsg = ""
+					this.loadUsers(this.usersCurrentPage, this.usersPageSize, this.usersSortBy, this.usersIsAsc, this.search);
 				} 
 			}
 		},

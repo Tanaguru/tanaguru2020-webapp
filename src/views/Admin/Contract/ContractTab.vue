@@ -16,7 +16,7 @@
 
 		<section id="my-contracts">
 			<h2 class="admin-contracts__title-2">{{ $t('contracts.contractsList') }}</h2>
-			<div v-if="contracts.length > 0">
+			<div>
 				<div class="form-block form-block--half">
 					<label class="label" for="search-contract">{{ $t('action.search') }} : </label>
 					<input
@@ -31,7 +31,7 @@
 					>
 				</div>
 				<p class='screen-reader-text' id="search-explanation-contract">{{ $t('contracts.infoSearch') }} :
-					{{ filteredContracts.length }}</p>
+					{{ contracts.length }}</p>
 
 				<div aria-live="polite" class='screen-reader-text'>
 					<p>{{ liveMsg }}</p>
@@ -39,7 +39,7 @@
 
 				<section>
 					<contract-table
-						:contracts="filteredContracts"
+						:contracts="contracts"
 						@delete-contract="deleteContract"
                         :current-page="contractCurrentPage"
                         :total-pages="contractTotalPage"
@@ -50,12 +50,11 @@
 					<pagination
 						:current-page="contractCurrentPage"
 						:total-pages="contractTotalPage"
-						@changePage="(page) => {loadContracts(page, contractPageSize)}"
+						@changePage="(page) => {loadContracts(page, contractPageSize, searchContract)}"
 					/>
 				</section>
 
 			</div>
-			<p v-else>{{ $t('contracts.noContract') }}</p>
 		</section>
 
 		<BackToTop/>
@@ -87,11 +86,11 @@ export default {
 			contractPageSize: 5,
             contractTotalPage : 0,
             contractCurrentPage: 0,
-            contractTotal: 0
+			contractTotal: 0
 		}
 	},
 	created() {
-		this.loadContracts(this.contractCurrentPage, this.contractPageSize);
+		this.loadContracts(this.contractCurrentPage, this.contractPageSize, this.searchContract);
 		this.loadUsers();
 	},
 	watch: {
@@ -100,6 +99,7 @@ export default {
 				this.searchContract = ""
 				this.liveMsg = ""
 				this.loadUsers()
+				this.loadContracts(this.contractCurrentPage, this.contractPageSize, this.searchContract);
 			} 
 		}
 	},
@@ -108,18 +108,11 @@ export default {
 			return this.$store.state.auth.authorities &&
 				this.$store.state.auth.authorities['CREATE_CONTRACT'];
 		},
-		filteredContracts() {
-			return this.searchContract ?
-				this.contracts.filter(contract =>
-					contract.name.toLowerCase()
-						.includes(this.searchContract.toLowerCase())) :
-				this.contracts;
-		}
 	},
 	methods: {
 		onCreateContract(contract) {
 			this.contracts.push(contract);
-			this.loadContracts(this.contractCurrentPage, this.contractPageSize);
+			this.loadContracts(this.contractCurrentPage, this.contractPageSize, this.searchContract);
 		},
 
 		deleteContract(contract) {
@@ -140,22 +133,28 @@ export default {
 						}
 					}
 				);
-				this.loadContracts(this.contractCurrentPage, this.contractPageSize);
+				this.loadContracts(this.contractCurrentPage, this.contractPageSize, this.searchContract);
 			}
 		},
 		fireAriaLive() {
 			clearTimeout(this.timer)
-			this.timer = setTimeout(this.populateAriaLive, 1500)
+			this.timer = setTimeout(this.populateAriaLive, 1000)
 		},
 
 		populateAriaLive() {
-			this.liveMsg = this.filteredContracts.length + ' ' + this.$i18n.t("contract.contracts")
+			this.liveMsg = this.contracts.length + ' ' + this.$i18n.t("contract.contracts");
+			this.filteredContracts();
 		},
 
-		loadContracts(page, size){
+		filteredContracts() {
+			this.loadContracts(0, this.contractPageSize, this.searchContract);
+		},
+
+		loadContracts(page, size, filter){
 			this.contractService.findAll(
 			page,
-            size,
+			size,
+			filter,
             (contracts) => {
                 this.contractCurrentPage = page;
                 this.contracts = contracts.content;
