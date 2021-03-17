@@ -31,14 +31,14 @@
 			</div>
 
 			<user-table 
-				:users="filteredUsers" 
+				:users="users" 
 				@delete-user="deleteUser">
 			</user-table>
 
 			<pagination
 				:current-page="usersCurrentPage"
 				:total-pages="usersTotalPage"
-				@changePage="(page) => {loadUsers(page, usersPageSize, usersSortBy, usersIsAsc)}"
+				@changePage="(page) => {loadUsers(page, usersPageSize, usersSortBy, usersIsAsc, search)}"
 			/>
 
 		</section>
@@ -90,30 +90,24 @@
 				} 
 			}
 		},
-        computed:{
-			filteredUsers(){
-				let users = this.search ?
-					this.users.filter(user =>
-						user.username.toLowerCase().includes(this.search.toLowerCase()) ||
-						user.email.toLowerCase().includes(this.search.toLowerCase())):
-					this.users
-
-				return users;
-			}
-        },
         methods: {
 			fireAriaLive(){
 				clearTimeout(this.timer)
-				this.timer = setTimeout(this.populateAriaLive, 1500)
+				this.timer = setTimeout(this.populateAriaLive, 1000)
 			},
 
 			populateAriaLive(){
-				this.liveMsg = this.filteredUsers.length + ' ' + this.$i18n.t('users.usersNb')
+				this.liveMsg = this.users.length + ' ' + this.$i18n.t('users.usersNb')
+				this.filteredUsers()
+			},
+
+			filteredUsers(){
+				this.loadUsers(0, this.usersPageSize, this.usersSortBy, this.usersIsAsc, this.search);
 			},
 
 			onCreateUser(user){
 				this.$emit('createUser', user);
-				this.loadUsers(this.usersCurrentPage, this.usersPageSize, this.usersSortBy, this.usersIsAsc);
+				this.loadUsers(this.usersCurrentPage, this.usersPageSize, this.usersSortBy, this.usersIsAsc, this.search);
 			},
 
             deleteUser(user){
@@ -126,16 +120,17 @@
                         },
                         (error) => console.error(error)
 					);
-					this.loadUsers(this.usersCurrentPage, this.usersPageSize, this.usersSortBy, this.usersIsAsc);
+					this.loadUsers(this.usersCurrentPage, this.usersPageSize, this.usersSortBy, this.usersIsAsc, this.search);
                 }
 			},
 
-			loadUsers(page, size, sortBy, isAsc){
+			loadUsers(page, size, sortBy, isAsc, filter){
 				this.userService.findAllPaginated(
 					page,
 					size,
 					sortBy,
 					isAsc,
+					filter,
 					(users) => {
 						this.usersCurrentPage = page;
 						this.users = users.content;
@@ -147,7 +142,7 @@
 			}
 		},
 		created(){
-			this.loadUsers(this.usersCurrentPage,this.usersPageSize,this.usersSortBy,this.usersIsAsc);
+			this.loadUsers(this.usersCurrentPage,this.usersPageSize,this.usersSortBy,this.usersIsAsc, this.search);
 		}
     }
 </script>

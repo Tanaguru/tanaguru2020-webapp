@@ -156,9 +156,13 @@ export default class UserService extends Service{
           });
     }
 
-    findAllPaginated(page, size, sortBy, isAsc, then, error){
+    findAllPaginated(page, size, sortBy, isAsc, usernameOrEmail, then, error){
         this.axios({
-            url: this.controllerName + '/paginated' + '?page=' + page + '&size=' + size +'&sortBy=' + sortBy + '&isAsc=' + isAsc,
+            url: this.controllerName + '/paginated' + '?page=' + page 
+            + '&size=' + size 
+            + '&sortBy=' + sortBy 
+            + '&isAsc=' + isAsc
+            + '&usernameOrEmail=' + usernameOrEmail,
             method: 'get',
           })
           .then(resp => {
