@@ -5,6 +5,7 @@
 	},
 	"pages": "Audit pages",
 	"logs": "Audit logs",
+	"selectLogLevel" : "Select the level of log",
 	"synthesis": {
 		"pages": "Number of pages audited",
 		"guidelines": "guidelines",
