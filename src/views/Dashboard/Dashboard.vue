@@ -31,7 +31,7 @@
 						</router-link>
 					</li>
 
-					<li class="actions-list__item" v-show="userProjects.length > 1">
+					<li class="actions-list__item">
 						<button class='btn btn--icon btn--nude' @click="switchView">
 							<icon-base-decorative width="16" height="16" viewBox="0 0 16 16"><icon-organize /></icon-base-decorative>
 							<span v-if="projectsOrder == 'chronological'">{{$t('dashboard.actions.alphabetical')}}</span>
@@ -46,15 +46,14 @@
 		</div>
 	</header>
 
+	  {{userProjects_page}}
 	<!-- PRIVATE PROJECTS -->
 	<article class="dashboard-section">
 		<h2 class="dashboard-section__title" id="my-projects">{{$t('dashboard.title.myProjects')}}</h2>
-		<div v-if="projectsOrder == 'alphabetical' && privateProjects.length > 0">
+		<div v-if="false">
 			<DashProjectView v-for="project in alphabeticalPrivateProjects" :project="project" :key="project.id" />
 		</div>
-		<div v-else-if="projectsOrder == 'chronological' && privateProjects.length > 0">
-			<DashProjectView v-for="project in chronologicalPrivateProjects" :project="project" :key="project.id" />
-		</div>
+
 		<div v-else>
 			<p>{{$t('dashboard.project.noProject')}}</p>
 		</div>
@@ -63,12 +62,10 @@
 	<!-- PROJECTS SHARED BY USER -->
 	<article class="dashboard-section">
 		<h2 class="dashboard-section__title" id="my-shared-projects">{{$t('dashboard.title.mySharedProjects')}}</h2>
-		<div v-if="projectsOrder == 'alphabetical' && sharedByCurrentUser.length > 0">
-			<DashProjectView v-for="project in alphabeticalSharedProjects" :project="project" :key="project.id" />
+		<div v-if="false">
+			<DashProjectView v-for="project in []" :project="project" :key="project.id" />
 		</div>
-		<div v-else-if="projectsOrder == 'chronological' && sharedByCurrentUser.length > 0">
-			<DashProjectView v-for="project in chronologicalSharedProjects" :project="project" :key="project.id" />
-		</div>
+
 		<div v-else>
 			<p>{{$t('dashboard.project.noProject')}}</p>
 		</div>
@@ -77,7 +74,8 @@
 	<!-- PROJECTS SHARED WITH USER -->
 	<article class="dashboard-section">
 		<h2 id="shared-with-me">{{$t('dashboard.title.sharedProjects')}}</h2>
-		<div v-if="sharedProjects.length > 0">
+		{{sharedProjects_page}}
+		<div v-if="sharedProjects_page && sharedProjects_page">
 			<DashProjectView v-for="project in sharedProjects" :project="project" :key="project.id" />
 		</div>
 		<div v-else>
@@ -153,104 +151,57 @@
 		},
 		data() {
 			return {
-				currentUserRole : '',
-				contractsOwned : [],
 				currentContractId : null,
-				sharedContracts : [],
-				privateProjects: [],
-				sharedByCurrentUser: [],
-				sharedProjects : [],
-				projects: {},
-				userProjects: [],
-				audits: [],
+
+				sharedByCurrentUser_page: null,
+				sharedProjects_page : null,
+				userProjects_page: null,
+
 				circularChartProps: {
 					percentage : 56,
 				},
+
 				projectsOrder: 'chronological'
 			}
 		},
 		created() {
-			this.contractService.findOwned(
-				(contracts) => {
-					/* KEEP FOR FUTURE CHANGES
-					var contracts = contracts;
-					for (let i = 0; i < contracts.length; i++) {
-						this.projectService.findMemberOfByContractId(
-							contracts[i].id,
-							(projects) => {
-								this.userProjects = projects
-							},
-							(error) => { 'error' }
-						)
-					}*/
-					this.currentContractId = contracts[0].id
-					this.projectService.findMemberOfByContractId(
-						contracts[0].id,
-						(projects) => {
-							projects.forEach(project => {
-								this.userService.findAllByProject(
-									project.id,
-									(users) => {
-										if(users.length > 1){
-											this.sharedByCurrentUser.push(project)
-										} else {
-											this.privateProjects.push(project)
-										}
-									},
-									(error) => { 'error' }
-								)
-							});
-						},
-					)
-
-					this.userService.findAllByContract(
-						this.currentContractId,
-						(users) => {
-							let currentUser = users.filter(user =>
-								user.id == this.$store.state.auth.user.id
-							)
-							this.currentUserRole = currentUser[0].contractRole.name
-						},
-						(error) => { 'error' }
-					)
-				},
-				(error) => { 'error' }
-			)
-
-			this.projectService.findMemberOfNotOwner(
-				(projects) => {
-					this.sharedProjects = projects
-				},
-				(error) => { console.error(error) }
-			)
+			this.getMyProjects(0);
+			this.getMySharedProjects(0);
+			this.getProjectsSharedWithMe(0);
 		},
 		computed: {
-			alphabeticalPrivateProjects(){
-				return this.privateProjects.sort(function(a, b){
-                    return a.name.localeCompare(b.name)
-				})
-			},
-
-			chronologicalPrivateProjects(){
-				return this.privateProjects.sort((a, b) => b.id - a.id);
-			},
-
-			alphabeticalSharedProjects(){
-				return this.sharedByCurrentUser.sort(function(a, b){
-                    return a.name.localeCompare(b.name)
-				})
-			},
-
-			chronologicalSharedProjects(){
-				return this.sharedByCurrentUser.sort((a, b) => b.id - a.id);
-			},
-
-
 			createProjectCondition(){
 				return this.currentContractId;
 			}
 		},
 		methods: {
+			getMyProjects(page){
+				this.projectService.findMyProjects(page, 10,
+					(projects_page) => {
+						this.userProjects_page = projects_page;
+					},
+					(error) =>{
+						console.error(error)
+					})
+			},
+			getMySharedProjects(page){
+				this.projectService.findMySharedProjects(page, 10,
+					(projects_page) => {
+						this.sharedByCurrentUser_page = projects_page;
+					},
+					(error) =>{
+						console.error(error)
+					})
+			},
+			getProjectsSharedWithMe(page){
+				this.projectService.findMemberOfNotOwner(page, 10,
+					(projects_page) => {
+						this.sharedProjects_page = projects_page;
+					},
+					(error) =>{
+						console.error(error)
+					})
+			},
 			switchView(){
 				if(this.projectsOrder == 'chronological'){
 					this.projectsOrder = 'alphabetical'
