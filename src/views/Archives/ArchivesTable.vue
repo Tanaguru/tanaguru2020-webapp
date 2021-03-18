@@ -1,7 +1,7 @@
 <template>
     <div>
         <p v-show="this.errorMsg">{{ errorMsg }}</p>
-        <div v-if="auditsByType.length > 0">
+        <div v-if="this.audits.length > 0">
             <button
                 type="button"
                 :class="firstToLast ? 'btn btn--default-inverse btn--icon' : 'btn btn--default btn--icon'"
@@ -37,7 +37,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="audit of auditOrder" :key="audit.id" v-if="audit.type === type && totalPagesByAudit[audit.id] && totalPagesByAudit[audit.id] > 0">
+                <tr v-for="audit of auditOrder" :key="audit.id" > <!--v-if="totalPagesByAudit[audit.id] > 0"-->
                     <th scope="row">{{ audit.name }}</th>
                     <td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
                     <td>{{ totalPagesByAudit[audit.id] }}</td>
@@ -79,6 +79,13 @@
                 </tr>
                 </tbody>
             </table>
+
+            <pagination
+				:current-page="auditCurrentPage"
+				:total-pages="auditTotalPage"
+				@changePage="(page) => {loadAudits(this.projectId,this.type,page,this.auditPageSize,this.auditSortBy,this.firstToLast)}"
+			/>
+
         </div>
         <div v-else>
             <p>{{ $t('archives.noAudit') }}</p>
@@ -96,6 +103,7 @@ import IconDelete from '../../components/icons/IconDelete'
 import IconChecked from '../../components/icons/IconChecked'
 import IconClose from '../../components/icons/IconClose'
 import DeletionModal from '../../components/DeleteModal'
+import Pagination from "../../components/Pagination";
 
 export default {
     name: 'ArchivesTable',
@@ -105,17 +113,25 @@ export default {
         IconDelete,
         IconChecked,
         IconClose,
-        DeletionModal
+        DeletionModal,
+        Pagination
     },
     data() {
         return {
+            audits: [],
             totalPagesByAudit: {},
             hasScreenShotByAudit: [],
             firstToLast: false,
-            errorMsg: ''
+            errorMsg: '',
+            auditPageSize: 5,
+            auditTotalPage : 0,
+            auditCurrentPage: 0,
+            auditTotal: 0,
+            auditSortBy: 'id',
+        
         }
     },
-    props: ['audits', 'type', 'deleteCondition'],
+    props: ['type', 'deleteCondition', 'projectId',],
     methods: {
         confirmAuditDeletion(audit) {
 			this.$modal
@@ -169,50 +185,63 @@ export default {
             this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
         },
+
+        loadAudits(projectId, type, page, size, sortBy, isAsc){
+            this.auditService.findByProjectIdAndTypePaginated(
+                projectId,
+                type,
+                page,
+                size,
+                sortBy,
+                isAsc,
+                (audits) => {
+                    this.audits = audits.content;
+                },
+                err => console.error(err)
+            );
+        },
+
+        loadAuditPageScreenshot(){
+            for (let i = 0; i < this.audits.length; i++) {
+                this.pageService.findByAuditIdSorted(
+                    this.audits[i].id,
+                    this.audits[i].shareCode,
+                    this.auditCurrentPage,
+                    this.auditPageSize,
+                    this.auditSortBy,
+                    this.firstToLast,
+                    (pagePage) => {
+                        this.totalPagesByAudit[this.audits[i].id] = pagePage.totalElements;
+                    },
+                    (error) => {
+                        this.errorMsg = "There was an issue retrieving the data. Please try again later or verify if you are allowed to access it (" + error + ")."
+                    }
+                )
+
+                this.auditService.hasScreenshotsById(
+                    this.audits[i].id,
+                    this.audits[i].shareCode,
+                    (hasScreenshot) => {
+                        this.$set(this.hasScreenShotByAudit, this.audits[i].id, hasScreenshot)
+                    },
+                    (error) => {
+                        console.error(error)
+                    }
+                )
+            }
+        }
+    
     },
     created() {
-        for (let i = 0; i < this.audits.length; i++) {
-            this.pageService.findByAuditId(
-                this.audits[i].id,
-                this.audits[i].shareCode,
-                0,
-                1,
-                (pagePage) => {
-                    this.$set(this.totalPagesByAudit, this.audits[i].id, pagePage.totalPages)
-                },
-                (error) => {
-                    this.errorMsg = "There was an issue retrieving the data. Please try again later or verify if you are allowed to access it (" + error + ")."
-                }
-            )
-
-            this.auditService.hasScreenshotsById(
-                this.audits[i].id,
-                this.audits[i].shareCode,
-                (hasScreenshot) => {
-                    this.$set(this.hasScreenShotByAudit, this.audits[i].id, hasScreenshot)
-                },
-                (error) => {
-                    console.error(error)
-                }
-            )
-        }
+        this.loadAudits(this.projectId, this.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast);
+          
     },
     computed: {
-        auditsByType() {
-            let auditsOfType = [];
-            this.audits.forEach(audit => {
-                if(audit.type === this.type){
-                    auditsOfType.push(audit)
-                }
-            });
-
-            return auditsOfType;
-        },
         auditOrder() {
-            let auditOrder = this.auditsByType;
+            let auditOrder = this.audits;
             if(this.firstToLast == true){
-                auditOrder = this.auditsByType
-            } else { auditOrder = this.auditsByType.slice().reverse()}
+                auditOrder = this.audits
+            } else { auditOrder = this.audits.slice().reverse()}
             return auditOrder;
         },
     }

@@ -49,7 +49,7 @@
             </ul>
         </header>
 
-        <article v-if="audits.length > 0" class="article-archives" :id="type.toLowerCase() + '-audit'" v-for="type of types" :key="type">
+        <article class="article-archives" :id="type.toLowerCase() + '-audit'" v-for="type of types" :key="type">
             <h2 class="article-archives__title">
                 <icon-base-decorative width="40" height="40" viewBox="0 0 72 72">
                     <icon-audit-page/>
@@ -60,8 +60,8 @@
                 <span v-else>{{ $t('entity.audit.scenario') }}</span>
             </h2>
             <div class="table-container">
-                <ArchivesTable :audits="audits" :type="type" :deleteCondition="deleteCondition" @delete-audit="deleteAudit"
-                               @delete-screenshot="deleteScreenshot"/>
+                <ArchivesTable :type="type" :projectId="projectId" :deleteCondition="deleteCondition" @delete-audit="deleteAudit"
+                @delete-screenshot="deleteScreenshot"/>
             </div>
         </article>
     </main>
@@ -105,9 +105,9 @@ export default {
                     path: '/'
                 },
             ],
-            audits: [],
             types: ['PAGE', 'SITE', 'SCENARIO', 'UPLOAD'],
-            deleteAuditError: ""
+            deleteAuditError: "",
+            projectId : ""
         }
     },
     metaInfo() {
@@ -172,14 +172,15 @@ export default {
                     }
                 }
             );
-        }
+        },
+
     },
     created() {
+        this.projectId = this.$route.params.id;
         this.projectService.findById(
             this.$route.params.id,
             (project) => {
                 this.project = project;
-
                 // Breadcrumbs
                 this.breadcrumbProps.push({
                     name: project.contract.name,

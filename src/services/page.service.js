@@ -30,4 +30,18 @@ export default class PageService extends Service{
               error(err);
           });
     }
+
+    findByAuditIdSorted(id, sharecode, page, size, sortBy, isAsc, then, error){
+      return this.axios({
+          url: this.controllerName + '/by-audit-paginated/' + id + '/' + sharecode + '?page=' + page + '&size=' + size
+          + '&sortBy=' + sortBy + '&isAsc=' + isAsc,
+          method: 'get',
+        })
+        .then(resp => {
+          then(resp.data)
+        })
+        .catch(err => {
+            error(err);
+        });
+  }
 }
