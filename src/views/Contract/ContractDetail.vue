@@ -555,7 +555,8 @@ export default {
 				contractUser.user.id,
 				this.contract.id,
 				() => {
-					this.contractUsers.splice(this.contractUsers.indexOf(contractUser), 1);
+                    this.contractUsers.splice(this.contractUsers.indexOf(contractUser), 1);
+                    this.loadContractUsersPaginated(0, this.contractUsersPageSize, this.contractUsersSortBy);
 				},
 				(error) => {
                     if(err.response.data.error == "CONTRACT_NOT_FOUND"){
