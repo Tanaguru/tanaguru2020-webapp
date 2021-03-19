@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h2>{{ $t('auditDetail.pages') }} ({{totalElements}})</h2>
         <div role="list" class="list-pages" v-if="audit && pages.length > 0">
             <p role="listitem" class="list-pages__item" v-for="(page, i) of pages" :key="page.id">
                 <span class="list-pages__number">{{minElementIndex + i}}.</span>

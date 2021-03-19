@@ -37,6 +37,28 @@
 					</section>
 
 					<section class="section-logs">
+
+						<h2>{{ $t('auditDetail.pages') }} ({{pageTotal}})</h2>
+
+						<div class="form-block form-block--half">
+						<label class="label" for="search-page">{{$t('action.search')}} : </label>
+						<input
+							class="input"
+							type="search"
+							name="search-page"
+							id="search-page"
+							v-model="search"
+							aria-describedby="search-explanation"
+							autocomplete="off"
+							@keydown="fireAriaLive"
+						>
+						</div>
+						<p class='screen-reader-text' id="search-explanation">{{$t('auditDetail.infoSearch')}} : {{ pageTotal }}</p>
+
+						<div aria-live="polite" class='screen-reader-text'>
+							<p>{{ liveMsg }} {{$t('auditDetail.results')}}</p>
+						</div>
+					
 						<page-list
                         :audit="audit"
                         :pages="pages"
@@ -48,7 +70,7 @@
 						<pagination
 							:current-page="pageCurrentPage"
 							:total-pages="pageTotalPage"
-							@changePage="(page) => {loadPages(page, auditPagePageSize)}"
+							@changePage="(page) => {loadPages(page, auditPagePageSize, search)}"
 						/>
 					</section>
 
@@ -116,6 +138,8 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 		},
 		data() {
 			return {
+				search : "",
+				liveMsg : "",
 				timer: null,
 				audit: null,
 				sharecode: null,
@@ -154,7 +178,7 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 			this.refreshPages();
 			this.timer = setInterval(this.refreshPages, 3000);
 
-            this.loadPages(this.pageCurrentPage, this.auditPagePageSize);
+            this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
 			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize);
 
 			this.getParameters();
@@ -241,13 +265,14 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 					}
 				);
 
-                this.loadPages(this.pageCurrentPage, this.auditPagePageSize);
+                this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
                 this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize);
 			},
 
-            loadPages(page, size){
-                this.pageService.findByAuditId(
-                    this.$route.params.id,
+            loadPages(page, size, name){
+                this.pageService.findByAuditIdAndName(
+					this.$route.params.id,
+					name,
                     this.sharecode,
                     page,
                     size,
@@ -284,6 +309,16 @@ import IconBaseDecorative from '../../components/icons/IconBaseDecorative';
 				}else{
 					this.getAudit();
 				}
+			},
+
+			fireAriaLive(){
+				clearTimeout(this.timer)
+				this.timer = setTimeout(this.populateAriaLive, 1000)
+			},
+
+			populateAriaLive(){
+				this.loadPages(0, this.auditPagePageSize, this.search)
+				this.liveMsg = this.pages.length + ' ' + this.$i18n.t('auditDetail.pagesNb')
 			}
 		},
 		computed: {

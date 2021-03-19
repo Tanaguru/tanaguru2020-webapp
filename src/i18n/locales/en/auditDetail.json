@@ -4,6 +4,9 @@
 		"synthesis": "Synthesis"
 	},
 	"pages": "Audit pages",
+	"infoSearch": "The list underneath contains all visited pages. Use the search bar to start typing the name of the page you are looking for and filter out the list rows that don't match. Current number of pages listed",
+	"results": "results",
+	"pagesNb": "page(s)",
 	"logs": "Audit logs",
 	"synthesis": {
 		"pages": "Number of pages audited",
