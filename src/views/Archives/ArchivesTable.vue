@@ -37,7 +37,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="audit of auditOrder" :key="audit.id" > <!--v-if="totalPagesByAudit[audit.id] > 0"-->
+                <tr v-for="audit of this.audits" :key="audit.id" > <!--v-if="totalPagesByAudit[audit.id] > 0"-->
                     <th scope="row">{{ audit.name }}</th>
                     <td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
                     <td>{{ totalPagesByAudit[audit.id] }}</td>
@@ -179,6 +179,7 @@ export default {
             if(this.firstToLast == true) {
                 this.firstToLast = false
             } else { this.firstToLast = true }
+            this.loadAudits(this.projectId, this.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast);
         },
 
         moment: function (date) {
@@ -196,12 +197,15 @@ export default {
                 isAsc,
                 (audits) => {
                     this.audits = audits.content;
+                    this.auditCurrentPage = page;
+                    this.auditTotalPage = audits.totalPages;
+					this.auditTotal = audits.totalElements;
                 },
                 err => console.error(err)
             );
         },
-
-        loadAuditPageScreenshot(){
+        //n'attends pas que this.audits soit chargé..
+        loadAuditNumberOfPageAndScreenshot(){
             for (let i = 0; i < this.audits.length; i++) {
                 this.pageService.findByAuditIdSorted(
                     this.audits[i].id,
@@ -234,16 +238,7 @@ export default {
     },
     created() {
         this.loadAudits(this.projectId, this.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast);
-          
-    },
-    computed: {
-        auditOrder() {
-            let auditOrder = this.audits;
-            if(this.firstToLast == true){
-                auditOrder = this.audits
-            } else { auditOrder = this.audits.slice().reverse()}
-            return auditOrder;
-        },
+        this.loadAuditNumberOfPageAndScreenshot();
     }
 }
 </script>
