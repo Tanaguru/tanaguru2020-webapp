@@ -60,9 +60,9 @@ export default class ProjectService extends Service{
             })
     }
 
-    findMyProjects(page, size, then, error){
+    findMyProjects(page, size, search, then, error){
         return this.axios({
-            url: this.controllerName + '/my-projects' + '?page=' + page + '&size=' + size,
+            url: this.controllerName + '/my-projects' + '?page=' + page + '&size=' + size + '&search=' + search,
             method: 'get',
         })
             .then(resp => {
@@ -73,9 +73,9 @@ export default class ProjectService extends Service{
             });
     }
 
-    findMySharedProjects(page, size, then, error){
+    findMySharedProjects(page, size, search, then, error){
         return this.axios({
-            url: this.controllerName + '/my-shared-projects' + '?page=' + page + '&size=' + size,
+            url: this.controllerName + '/my-shared-projects' + '?page=' + page + '&size=' + size + '&search=' + search,
             method: 'get',
         })
             .then(resp => {
@@ -86,9 +86,9 @@ export default class ProjectService extends Service{
             });
     }
 
-    findMemberOfNotOwner(page, size, then, error){
+    findMemberOfNotOwner(page, size, search, then, error){
         return this.axios({
-            url: this.controllerName + '/member-of' + '?page=' + page + '&size=' + size,
+            url: this.controllerName + '/member-of' + '?page=' + page + '&size=' + size + '&search=' + search,
             method: 'get',
         })
             .then(resp => {
