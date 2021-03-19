@@ -37,7 +37,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="audit of this.audits" :key="audit.id" > <!--v-if="totalPagesByAudit[audit.id] > 0"-->
+                <tr v-for="audit of this.audits" :key="audit.id" v-if="totalPagesByAudit[audit.id] && totalPagesByAudit[audit.id] > 0">
                     <th scope="row">{{ audit.name }}</th>
                     <td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
                     <td>{{ totalPagesByAudit[audit.id] }}</td>
@@ -151,7 +151,7 @@ export default {
 			.catch(() => {
                 this.$modal.close()
 			})
-			.finally(() => {this.$modal.close})
+            .finally(() => {this.$modal.close})
         },
 
         confirmAuditScreenshotDeletion(audit) {
@@ -199,12 +199,13 @@ export default {
                     this.audits = audits.content;
                     this.auditCurrentPage = page;
                     this.auditTotalPage = audits.totalPages;
-					this.auditTotal = audits.totalElements;
+                    this.auditTotal = audits.totalElements;
+                    this.loadAuditNumberOfPageAndScreenshot();
                 },
                 err => console.error(err)
             );
         },
-        //n'attends pas que this.audits soit chargé..
+
         loadAuditNumberOfPageAndScreenshot(){
             for (let i = 0; i < this.audits.length; i++) {
                 this.pageService.findByAuditIdSorted(
@@ -215,7 +216,7 @@ export default {
                     this.auditSortBy,
                     this.firstToLast,
                     (pagePage) => {
-                        this.totalPagesByAudit[this.audits[i].id] = pagePage.totalElements;
+                        this.$set(this.totalPagesByAudit, this.audits[i].id, pagePage.totalElements);
                     },
                     (error) => {
                         this.errorMsg = "There was an issue retrieving the data. Please try again later or verify if you are allowed to access it (" + error + ")."
@@ -238,7 +239,6 @@ export default {
     },
     created() {
         this.loadAudits(this.projectId, this.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast);
-        this.loadAuditNumberOfPageAndScreenshot();
     }
 }
 </script>
