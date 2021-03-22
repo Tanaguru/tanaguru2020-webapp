@@ -60,8 +60,7 @@
                 <span v-else>{{ $t('entity.audit.scenario') }}</span>
             </h2>
             <div class="table-container">
-                <ArchivesTable :type="type" :projectId="projectId" :deleteCondition="deleteCondition" @delete-audit="deleteAudit"
-                @delete-screenshot="deleteScreenshot"/>
+                <ArchivesTable :type="type" :projectId="projectId" :deleteCondition="deleteCondition"/>
             </div>
         </article>
     </main>
@@ -132,47 +131,6 @@ export default {
             return condition
         },
 
-
-    },
-    methods: {
-        deleteAudit(audit) {
-            var index = this.audits.indexOf(audit);
-
-            if(index > -1){
-                this.auditService.delete(
-                    audit.id,
-                    () => {
-                        this.audits.splice(index, 1)
-                    },
-                    (error) => {
-                        if(err.response.data.error == "AUDIT_NOT_FOUND"){
-                            this.deleteAuditError = this.$i18n.t("form.errorMsg.audit.notFound")
-                        } else if(err.response.status == "403"){
-                            this.deleteAuditError = this.$i18n.t("form.errorMsg.user.permissionDenied")
-                        } else {
-                            this.deleteAuditError = this.$i18n.t("form.errorMsg.genericError");
-                        }
-                    }
-                )
-            }
-        },
-
-        deleteScreenshot(audit){
-            this.pageContentService.deleteScreenshotByAudit(
-                audit.id,
-                () => {
-                },
-                (error) => {
-                    if(err.response.data.error == "AUDIT_NOT_FOUND"){
-                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.audit.notFound")
-                    } else if(err.response.status == "403"){
-                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.user.permissionDenied")
-                    } else {
-                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.genericError");
-                    }
-                }
-            );
-        },
 
     },
     created() {

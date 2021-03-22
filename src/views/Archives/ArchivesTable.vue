@@ -128,7 +128,8 @@ export default {
             auditCurrentPage: 0,
             auditTotal: 0,
             auditSortBy: 'id',
-        
+            deleteAuditError: "",
+            deleteScreenshotError: ""
         }
     },
     props: ['type', 'deleteCondition', 'projectId',],
@@ -145,7 +146,7 @@ export default {
 				}
 			})
 			.then(() => {
-                this.$emit('delete-audit', audit)
+                this.deleteAudit(audit)
 			    this.$modal.close()
 			})
 			.catch(() => {
@@ -166,7 +167,7 @@ export default {
 				}
 			})
 			.then(() => {
-                this.$emit('delete-screenshot', audit)
+                this.deleteScreenshot(audit)
 			    this.$modal.close()
 			})
 			.catch(() => {
@@ -234,6 +235,47 @@ export default {
                     }
                 )
             }
+        },
+
+        deleteAudit(audit) {
+            var index = this.audits.indexOf(audit);
+            
+            if(index > -1){
+                this.auditService.delete(
+                    audit.id,
+                    () => {
+                        this.audits.splice(index, 1)
+                        this.loadAudits(this.projectId, audit.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast)
+                    },
+                    (error) => {
+                        if(error.response.data.error == "AUDIT_NOT_FOUND"){
+                            this.deleteAuditError = this.$i18n.t("form.errorMsg.audit.notFound")
+                        } else if(error.response.status == "403"){
+                            this.deleteAuditError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+                        } else {
+                            this.deleteAuditError = this.$i18n.t("form.errorMsg.genericError");
+                        }
+                    }
+                )
+            }
+        },
+
+        deleteScreenshot(audit){
+            this.pageContentService.deleteScreenshotByAudit(
+                audit.id,
+                () => {
+                    this.loadAudits(this.projectId, audit.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast)
+                },
+                (error) => {
+                    if(error.response.data.error == "AUDIT_NOT_FOUND"){
+                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.audit.notFound")
+                    } else if(error.response.status == "403"){
+                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+                    } else {
+                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.genericError");
+                    }
+                }
+            );
         }
     
     },
