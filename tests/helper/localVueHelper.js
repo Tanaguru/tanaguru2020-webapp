@@ -45,6 +45,7 @@ const tanaguruLocalVueHelper = {
         localVue.prototype.$http = axios;
         localVue.config.productionTip = false
 
+        localVue.prototype.bus = createLocalVue()
         localVue.prototype.userService = new UserService(axios);
         localVue.prototype.contractService = new ContractService(axios);
         localVue.prototype.projectService = new ProjectService(axios);

@@ -25,12 +25,10 @@
                 :audit="audit"
                 :page="page"
                 :page-content="pageContent"
-                :pages="pages"
                 :totalPages="totalPages"
                 :reference="reference"
                 :percentage="percentageSuccess"
                 :nb-anomaly="nbAnomaly"
-                :audit-parameters="parameters"
                 :nb-element-tested="nbElementTested"
                 :sharecode="sharecode"
             />

@@ -76,8 +76,6 @@
 			<div class="audit-infos__inner">
 				<div class="audit-caps" v-if="pageContent.screenshot" :style="`background-image:url(data:image/png;base64,` + pageContent.screenshot + `)`">
 				</div>
-				<div class="audit-caps" :style="defaultImg" v-else >
-				</div>
 
 				<div class="audit-list">
 					<ul class="audit-list-infos">
@@ -104,7 +102,7 @@
 						</li>-->
 					</ul>
 					<div class="form-block">
-						
+
 					</div>
                     <router-link class="btn btn--nude btn--icon" :to="'/audits/' + audit.id">
                         <icon-base-decorative>
@@ -119,7 +117,6 @@
 </template>
 
 <script>
-	import { bus } from '../../vue'
     import IconBaseDecorative from "../../components/icons/IconBaseDecorative";
     import IconArrowBlue from "../../components/icons/IconArrowBlue";
     import IconExport from "../../components/icons/IconExport";
@@ -150,21 +147,13 @@
 				screenReaderInfo: '',
 				selectedPage: '',
 				value: "Select a page",
-				defaultImg: { backgroundImage: `url(${require('../../../public/assets/images/logo-desktop.svg')})` }
             }
         },
-        props: ['audit', 'displayMode', 'page', 'pages', 'totalPages', 'auditParameters', 'percentage', 'nbAnomaly', 'nbElementTested', 'pageContent', 'reference' ],
+        props: ['audit', 'displayMode', 'page', 'totalPages', 'percentage', 'nbAnomaly', 'nbElementTested', 'pageContent', 'reference' ],
         computed: {
             shareCodeUrl(){
                 return location.origin + '/#/audits/' + this.audit.id + '/pages/' + this.page.id + '/' + this.audit.shareCode
 			},
-			/*otherPages(){
-				let otherPages = this.pages.filter(page =>
-					page.id != this.page.id
-				)
-				return auditPages;
-				return otherPages
-			}*/
         },
 
         methods: {
@@ -174,7 +163,7 @@
             },
 
             triggerPrint() {
-                bus.$emit("allShown", true);
+                this.bus.$emit("allShown", true);
                 setTimeout(() => (
                     window.print()
                 ), 50)
