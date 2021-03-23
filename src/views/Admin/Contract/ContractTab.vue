@@ -16,7 +16,7 @@
 
 		<section id="my-contracts">
 			<h2 class="admin-contracts__title-2">{{ $t('contracts.contractsList') }}</h2>
-			<div>
+			<div v-if="initWithContracts">
 				<div class="form-block form-block--half">
 					<label class="label" for="search-contract">{{ $t('action.search') }} : </label>
 					<input
@@ -31,7 +31,7 @@
 					>
 				</div>
 				<p class='screen-reader-text' id="search-explanation-contract">{{ $t('contracts.infoSearch') }} :
-					{{ contracts.length }}</p>
+					{{ contracts.length }} </p>
 
 				<div aria-live="polite" class='screen-reader-text'>
 					<p>{{ liveMsg }}</p>
@@ -53,8 +53,8 @@
 						@changePage="(page) => {loadContracts(page, contractPageSize, searchContract)}"
 					/>
 				</section>
-
 			</div>
+			<div v-else>{{ $t('contracts.noContract') }} </div>
 		</section>
 
 		<BackToTop/>
@@ -86,7 +86,9 @@ export default {
 			contractPageSize: 5,
             contractTotalPage : 0,
             contractCurrentPage: 0,
-			contractTotal: 0
+			contractTotal: 0,
+			initWithContracts: false,
+			cpt: 0
 		}
 	},
 	created() {
@@ -157,9 +159,15 @@ export default {
 			filter,
             (contracts) => {
                 this.contractCurrentPage = page;
-                this.contracts = contracts.content;
+				this.contracts = contracts.content;
                 this.contractTotalPage = contracts.totalPages;
-                this.contractTotal = contracts.totalElements;
+				this.contractTotal = contracts.totalElements;
+				if(this.cpt==0){
+					if(this.contractTotal>0){
+						this.initWithContracts = true;
+					}
+					this.cpt = this.cpt+1;
+				}
             },
 			err => console.error(err)
 			);
