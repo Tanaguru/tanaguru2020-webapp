@@ -74,7 +74,7 @@ import Navbar from '../Navbar';
       return{
 		burgerOpen: false,
 		menuType: "mobile",
-		locale : "en"
+		locale : this.$i18n.locale
       }
     },
 	props: [ 'currentUser' ],
@@ -97,8 +97,7 @@ import Navbar from '../Navbar';
 			}
 		},
         updateLocale : function(){
-            this.$i18n.locale = this.locale;
-			this.$moment.locale(this.locale)
+           this.bus.$emit("updateLocale", this.locale);
         },
         logout : function(event){
 			this.toggleMenu()

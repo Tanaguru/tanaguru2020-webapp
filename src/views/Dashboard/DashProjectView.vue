@@ -388,13 +388,13 @@ export default {
 	computed: {
 		auditLaunchCondition(){
 			let condition = false;
-			
+
 			if(this.$store.state.auth.user.appRole.overrideProjectRole.name === 'PROJECT_MANAGER' || this.$store.state.auth.user.appRole.overrideProjectRole.name === 'PROJECT_USER'){
 				condition = true
 			}
 			else if(this.currentUserRole === "PROJECT_MANAGER" || this.currentUserRole === "PROJECT_USER" ){
 				condition = true
-			}			
+			}
 			return condition
 		},
 
@@ -416,7 +416,6 @@ export default {
 	},
 	methods: {
 		moment: function (date) {
-            this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
 		},
 

@@ -37,7 +37,7 @@
                         v-if="mainPageContent"
                         :style="mainPageContent.screenshot ? `background-image:url(data:image/png;base64,` + mainPageContent.screenshot + `)` : defaultImg">
                     </div>
-                
+
                     <div class="audit-list" v-if="pages.length > 1">
                         <ul class="audit-list-infos">
                             <li>
@@ -302,7 +302,7 @@ export default {
         },
     },
     methods: {
-        openModal(audit, page, criteriaResult, i) {            
+        openModal(audit, page, criteriaResult, i) {
             this.$modal.show(AnomalyModal, {
                 props: {
                     audit: audit,
@@ -391,7 +391,6 @@ export default {
         },
 
         moment: function (date) {
-            this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
         },
     }

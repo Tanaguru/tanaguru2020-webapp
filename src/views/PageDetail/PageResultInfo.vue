@@ -104,7 +104,7 @@
 						</li>-->
 					</ul>
 					<div class="form-block">
-						
+
 					</div>
                     <router-link class="btn btn--nude btn--icon" :to="'/audits/' + audit.id">
                         <icon-base-decorative>
@@ -169,7 +169,6 @@
 
         methods: {
             moment: function (date) {
-                this.$moment.locale(this.$i18n.locale)
                 return this.$moment(date);
             },
 

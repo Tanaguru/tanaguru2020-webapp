@@ -44,7 +44,7 @@ export default {
 	},
     methods: {
         updateLocale : function(){
-            this.$i18n.locale = this.locale;
+        	this.bus.$emit("updateLocale", this.locale)
             this.$moment.locale(this.locale)
 		},
         logout : function(event){
@@ -84,7 +84,7 @@ export default {
 		font-size: $small-font-size;
 	}
 
-	&__item { 
+	&__item {
 		&:not(:last-child) {
 			padding-right: .6rem;
 

@@ -5,7 +5,7 @@
 		<header class="headline headline--top">
 			<h1>
                 {{contract.name}}
-                <span aria-live="polite" class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">{{$t('contract.expired')}}</span>    
+                <span aria-live="polite" class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">{{$t('contract.expired')}}</span>
             </h1>
 		</header>
 
@@ -52,20 +52,20 @@
                                         <div class="form-block">
                                             <label class="label" for="dateEnd">{{$t('entity.contract.formDateEnd')}} * :</label>
 
-                                            <input 
+                                            <input
                                                 v-if="$i18n.locale.toLowerCase() == 'en'"
-                                                class="input" 
-                                                type="text" 
-                                                name="dateEnd" 
-                                                id="dateEnd" 
+                                                class="input"
+                                                type="text"
+                                                name="dateEnd"
+                                                id="dateEnd"
                                                 v-model="modifyContractForm.dateEnd" >
 
-                                            <input 
-                                                v-else 
-                                                class="input" 
-                                                type="text" 
-                                                name="dateEnd" 
-                                                id="dateEnd" 
+                                            <input
+                                                v-else
+                                                class="input"
+                                                type="text"
+                                                name="dateEnd"
+                                                id="dateEnd"
                                                 v-model="modifyContractForm.dateEnd" >
                                         </div>
                                     </div>
@@ -74,9 +74,9 @@
                                         <div class="form-block">
                                             <label class="label" for="owner">{{$t('entity.contract.owner')}} * :</label>
 
-                                            <select 
-                                                class="input" 
-                                                name="owner" 
+                                            <select
+                                                class="input"
+                                                name="owner"
                                                 id="owner"
                                                 v-model="modifyContractForm.owner">
                                                 <option v-for="user in contractUsersUsernames" :key="user" :value="user">{{user}}</option>
@@ -330,7 +330,6 @@ export default {
     },
     methods: {
         moment: function (date) {
-            this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
         },
         checkValidDomain: DomainHelper.checkValidDomain,
@@ -360,7 +359,7 @@ export default {
             else {
 
                 let dateEnd = this.modifyContractForm.dateEnd;
-                if(this.$i18n.locale.toLowerCase() == 'en'){ 
+                if(this.$i18n.locale.toLowerCase() == 'en'){
                     dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'MM-DD-YYYY').format("YYYY-MM-DD")
                 } else {
                     dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'DD-MM-YYYY').format("YYYY-MM-DD")
@@ -400,7 +399,7 @@ export default {
         },
         createProject: function(){
             this.projectCreateForm.successMsg = '';
-            
+
 			if(this.projectCreateForm.name.length === 0){
 				this.projectCreateForm.nameError = this.$i18n.t("form.errorMsg.emptyInput");
 			} else if(this.projectCreateForm.name.length > 50){
@@ -410,15 +409,15 @@ export default {
             if(this.contract.restrictDomain) {
                 if(!this.checkValidDomain(this.projectCreateForm.domain)){
                     this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
-                } else if(!this.projectCreateForm.domain) { 
-                    this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError") 
+                } else if(!this.projectCreateForm.domain) {
+                    this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
                 }
             } else {
                 if(this.projectCreateForm.domain){
                     if(!this.checkValidDomain(this.projectCreateForm.domain)){
                         this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
                     }
-                } 
+                }
             }
 
             if(this.projectCreateForm.name && this.projectCreateForm.name.length < 51 && (this.checkValidDomain(this.projectCreateForm.domain) || (!this.restrictDomain && !this.projectCreateForm.domain))) {
