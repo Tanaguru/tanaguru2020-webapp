@@ -113,6 +113,7 @@ export default {
 	},
 	methods: {
 		onCreateContract(contract) {
+			this.initWithContracts = true;
 			this.contracts.push(contract);
 			this.loadContracts(this.contractCurrentPage, this.contractPageSize, this.searchContract);
 		},
@@ -134,7 +135,7 @@ export default {
 							this.deleteContractError = this.$i18n.t("form.errorMsg.genericError");
 						}
 					}
-				);
+				);				
 				this.loadContracts(this.contractCurrentPage, this.contractPageSize, this.searchContract);
 			}
 		},
@@ -168,9 +169,13 @@ export default {
 					}
 					this.cpt = this.cpt+1;
 				}
+				if(this.contracts.length==0){
+					this.initWithContracts=false;
+				}
             },
 			err => console.error(err)
 			);
+			
 		},
 
 		loadUsers(){
