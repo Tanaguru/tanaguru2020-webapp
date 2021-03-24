@@ -218,7 +218,7 @@ import IconClose from '../../components/icons/IconClose'
 			this.getLogLevels();
 			this.refreshPages();
 			this.timer = setInterval(this.refreshPages, 3000);
-      this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
+      		this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
 			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
 			this.getParameters();
 		},
@@ -303,8 +303,8 @@ import IconClose from '../../components/icons/IconClose'
 						console.error(error);
 					}
 				);
-        this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
-        this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
+        		this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
+        		this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
 			},
 
             loadPages(page, size, name){
@@ -359,7 +359,7 @@ import IconClose from '../../components/icons/IconClose'
 			populateAriaLive(){
 				this.loadPages(0, this.auditPagePageSize, this.search)
 				this.liveMsg = this.pages.length + ' ' + this.$i18n.t('auditDetail.pagesNb')
-      },
+      		},
       
 			reverseLogsOrder(){
 				if(this.firstToLast == true) {
