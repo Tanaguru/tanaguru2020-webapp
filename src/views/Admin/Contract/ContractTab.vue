@@ -169,7 +169,7 @@ export default {
 					}
 					this.cpt = this.cpt+1;
 				}
-				if(contracts.totalElements == 0){
+				if(contracts.totalElements == 0 && filter==""){
 					this.initWithContracts = false;
 				}
             },
