@@ -107,6 +107,7 @@
 			},
 
 			onCreateUser(user){
+				this.users.push(user);
 				this.$emit('createUser', user);
 				this.loadUsers(this.usersCurrentPage, this.usersPageSize, this.usersSortBy, this.usersIsAsc, this.search);
 			},

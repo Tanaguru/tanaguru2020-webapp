@@ -35,14 +35,28 @@ const CREATE_CONTRACT_STORE = new Vuex.Store({
 })
 
 const EMPTY_CONTRACT_LIST = []
-const NOT_EMPTY_CONTRACT_LIST = [
-    {
-        name: 'test1'
-    },
-    {
-        name: 'test2'
-    }
-]
+const NOT_EMPTY_CONTRACT_LIST = {
+    content:[
+        {
+            name: 'test1'
+        },
+        {
+            name: 'test2'
+        }
+    ],
+    totalPages:1,
+    totalElements:2
+}
+
+const FILTER_CONTRACT_LIST = {
+    content:[
+        {
+            name: 'test1'
+        }
+    ],
+    totalPages:1,
+    totalElements:1
+}
 
 describe('ContractTab', () => {
     describe('Contract creation form', () => {
@@ -51,7 +65,19 @@ describe('ContractTab', () => {
                 i18n,
                 localVue,
                 store: NO_AUTHORITY_STORE,
-                stubs: ['router-link', 'router-view']
+                stubs: ['router-link', 'router-view'],
+                mocks: {
+                    contractService: {
+                        findAll(page, size, filter, then, error){
+                            then(EMPTY_CONTRACT_LIST)
+                        }
+                    },
+                    userService: {
+                        findAll(then, error){
+                            then()
+                        }
+                    }
+                }
             })
 
             expect(wrapper.findComponent(ContractCreationForm).exists()).toBe(false);
@@ -65,8 +91,13 @@ describe('ContractTab', () => {
                 stubs: ['router-link', 'router-view'],
                 mocks: {
                     contractService: {
-                        findAll(then, error){
+                        findAll(page, size, filter, then, error){
                             then(EMPTY_CONTRACT_LIST)
+                        }
+                    },
+                    userService: {
+                        findAll(then, error){
+                            then()
                         }
                     }
                 }
@@ -84,8 +115,13 @@ describe('ContractTab', () => {
                 stubs: ['router-link', 'router-view'],
                 mocks: {
                     contractService: {
-                        findAll(then, error){
+                        findAll(page, size, filter, then, error){
                             then(EMPTY_CONTRACT_LIST)
+                        }
+                    },
+                    userService: {
+                        findAll(then, error){
+                            then()
                         }
                     }
                 }
@@ -96,16 +132,26 @@ describe('ContractTab', () => {
             expect(wrapper.findComponent(ContractTable).exists()).toBe(false)
         })
 
-        it('should show table if contracts found', () => {
+        it('should show table if contracts found', async () => {
             const wrapper = shallowMount(ContractTab, {
                 i18n,
                 localVue,
                 store: NO_AUTHORITY_STORE,
                 stubs: ['router-link', 'router-view'],
+                data() {
+                    return {
+                      initWithContracts: 'true'
+                    }
+                },
                 mocks: {
                     contractService: {
-                        findAll(then, error){
+                        findAll(page, size, filter, then, error){
                             then(NOT_EMPTY_CONTRACT_LIST)
+                        }
+                    },
+                    userService: {
+                        findAll(then, error){
+                            then()
                         }
                     }
                 }
@@ -113,38 +159,61 @@ describe('ContractTab', () => {
             expect(wrapper.findComponent(ContractTable).exists()).toBe(true)
         })
 
-        it('should filter contracts with filter input string', () => {
+        it('should filter contracts with filter input string', async () => {
             const wrapper = shallowMount(ContractTab, {
                 i18n,
                 localVue,
+                data() {
+                    return {
+                      initWithContracts: 'true',
+                      searchContract: 'test1'
+                    }
+                },
                 store: NO_AUTHORITY_STORE,
                 stubs: ['router-link', 'router-view'],
                 mocks: {
                     contractService: {
+                        findAll(page, size, filter, then, error){
+                            if(filter == 'test1'){
+                                then(FILTER_CONTRACT_LIST)
+                            }else{
+                                then(NOT_EMPTY_CONTRACT_LIST)
+                            }
+                        }
+                    },
+                    userService: {
                         findAll(then, error){
-                            then(NOT_EMPTY_CONTRACT_LIST)
+                            then()
                         }
                     }
                 }
             })
-
-            wrapper.setData({
-                searchContract: 'test1'
-            })
-            expect(wrapper.vm.filteredContracts.length).toBe(1);
+            
+            expect(wrapper.vm.contracts.length).toBe(1);
+            
         })
     })
 
-    it('should add contract to list when a new contract is created', () => {
+    it('should add contract to list when a new contract is created', async () => {
         const wrapper = shallowMount(ContractTab, {
             i18n,
             localVue,
             store: CREATE_CONTRACT_STORE,
             stubs: ['router-link', 'router-view'],
+            data() {
+                return {
+                  initWithContracts: 'true'
+                }
+            },
             mocks: {
                 contractService: {
+                    findAll(page, size, filter, then, error){
+                        then(NOT_EMPTY_CONTRACT_LIST)
+                    }
+                },
+                userService: {
                     findAll(then, error){
-                        then(EMPTY_CONTRACT_LIST)
+                        then()
                     }
                 }
             }
@@ -152,6 +221,6 @@ describe('ContractTab', () => {
 
         const contractForm = wrapper.findComponent(ContractCreationForm)
         contractForm.vm.$emit('createContract', {name: 'test'})
-        expect(wrapper.vm.contracts.length).toBe(1)
+        expect(wrapper.vm.contracts.length).toBe(3)
     })
 })
