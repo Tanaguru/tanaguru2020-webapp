@@ -8,6 +8,7 @@
 	"results": "résultat(s)",
 	"pagesNb": "page(s)",
 	"logs": "Historique de l'audit",
+	"selectLogLevel" : "Sélectionner le niveau de log",
 	"synthesis": {
 		"pages": "Nombre de pages à auditer",
 		"guidelines": "Référentiel",

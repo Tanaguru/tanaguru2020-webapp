@@ -30,4 +30,5 @@ Improvements :
 - Improved RGAA text display
 - Improved result diplay in synthesis table pop-ins
 - Admin and SuperAdmin can unlock/lock users
+- Audit logs can be filtered by level and sort by date
 - Pagination of lists

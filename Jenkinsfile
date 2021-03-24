@@ -47,6 +47,7 @@ pipeline {
                 anyOf {
                     branch 'develop'
                     branch 'master'
+                    branch 'beta'
                 }
             }
             steps {
@@ -163,7 +164,7 @@ pipeline {
 
 					def image = docker.image("tanaguru2020-webapp:${WEBAPP_VERSION}")
 					docker.withRegistry('https://registry.tanaguru.com', 'registry') {
-						image.push('beta-${TIMESTAMP}')
+						image.push("beta-${TIMESTAMP}")
 					}
 				}
 			}
