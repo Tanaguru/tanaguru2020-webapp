@@ -76,7 +76,7 @@ describe('UserTable', () => {
         })
 
         const deleteButton = wrapper.find('.btn-delete')
-        expect(deleteButton.exists()).toBe(true);
+        expect(deleteButton.exists()).toBe(false);
     })
 })
 
