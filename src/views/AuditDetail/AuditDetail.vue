@@ -138,7 +138,7 @@
 <script>
 import Breadcrumbs from "../../components/Breadcrumbs";
 import Tab from '../../components/Tab';
-import Tabs from '../../components/Tabs';search bar for users/contrats adapted for pagination
+import Tabs from '../../components/Tabs';
 import Logs from './LogsList';
 import Synthesis from './Synthesis';
 import LogsList from "./LogsList";
