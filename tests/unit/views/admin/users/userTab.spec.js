@@ -4,6 +4,7 @@ import i18n from "@/i18n";
 import Vuex from "vuex";
 import UserTab from "@/views/Admin/User/UserTab";
 import UserCreationForm from "@/components/users/UserCreationForm";
+import Pagination from "@/components/Pagination";
 
 const localVue = tanaguruLocalVueHelper.getTanaguruLocalVue()
 const NO_AUTHORITY_STORE = new Vuex.Store({
@@ -64,6 +65,32 @@ const FILTER_USER_LIST = {
     totalElements:1
 }
 
+const PAGE0_USER_LIST = {
+    content:[
+        {
+            username: 'admin',
+            email: 'admin@test.com'
+        },
+        {
+            username: 'test',
+            email: 'test@test.com'
+        },
+        {
+            username: 'admin2',
+            email: 'admin2@test.com'
+        },
+        {
+            username: 'test2',
+            email: 'test2@test.com'
+        },
+        {
+            username: 'admin3',
+            email: 'admin3@test.com'
+        }
+    ],
+    totalPages:2,
+    totalElements:6
+}
 describe('UserTab', () => {
     describe('User creation form', () => {
         it('should hide if user does not have authority to create user', () => {
@@ -161,6 +188,70 @@ describe('UserTab', () => {
             const userForm = wrapper.findComponent(UserCreationForm)
             userForm.vm.$emit('createUser', {name: 'test3'})
             expect(wrapper.vm.users.length).toBe(3)
+        })
+
+        it('should show pagination elements if totalPages > 1', async () => {
+            const wrapper = shallowMount(UserTab, {
+                i18n,
+                localVue,
+                store: NO_AUTHORITY_STORE,
+                stubs: ['router-link', 'router-view'],
+                propsData: {
+                    users: PAGE0_USER_LIST
+                },
+                mocks: {
+                    userService : {
+                        findAllPaginated(page,size,sortBy,isAsc,filter,then,error){
+                            then(PAGE0_USER_LIST)    
+                        }
+                    }
+                }
+            })
+            
+            const wrapperPagination = shallowMount(Pagination, {
+                i18n,
+                localVue,
+                stubs: ['router-link', 'router-view'],
+                propsData: {
+                    totalPages : PAGE0_USER_LIST.totalPages,
+                    currentPage : 0
+                }
+                
+            })
+
+            expect(wrapperPagination.find('ul.pagination').isVisible()).toBe(true)
+        })
+
+        it('should not show pagination elements if totalPages <= 1', async () => {
+            const wrapper = shallowMount(UserTab, {
+                i18n,
+                localVue,
+                store: NO_AUTHORITY_STORE,
+                stubs: ['router-link', 'router-view'],
+                propsData: {
+                    users: NOT_EMPTY_USER_LIST
+                },
+                mocks: {
+                    userService : {
+                        findAllPaginated(page,size,sortBy,isAsc,filter,then,error){
+                            then(NOT_EMPTY_USER_LIST)    
+                        }
+                    }
+                }
+            })
+
+            const wrapperPagination = shallowMount(Pagination, {
+                i18n,
+                localVue,
+                stubs: ['router-link', 'router-view'],
+                propsData: {
+                    totalPages : NOT_EMPTY_USER_LIST.totalPages,
+                    currentPage : 0
+                }
+                
+            })
+
+            expect(wrapperPagination.find('ul.pagination').isVisible()).toBe(false)
         })
     })
 })

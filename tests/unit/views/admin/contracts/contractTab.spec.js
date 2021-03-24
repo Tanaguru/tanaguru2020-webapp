@@ -5,6 +5,7 @@ import i18n from "@/i18n";
 import Vuex from "vuex";
 import ContractCreationForm from "@/components/contracts/ContractCreationForm";
 import ContractTable from "@/components/contracts/ContractTable";
+import Pagination from "@/components/Pagination";
 
 const localVue = tanaguruLocalVueHelper.getTanaguruLocalVue()
 const NO_AUTHORITY_STORE = new Vuex.Store({
@@ -56,6 +57,28 @@ const FILTER_CONTRACT_LIST = {
     ],
     totalPages:1,
     totalElements:1
+}
+
+const PAGE0_CONTRACT_LIST = {
+    content:[
+        {
+            name: 'test1'
+        },
+        {
+            name: 'test2'
+        },
+        {
+            name: 'test3'
+        },
+        {
+            name: 'test4'
+        },
+        {
+            name: 'test5'
+        }
+    ],
+    totalPages:2,
+    totalElements:6
 }
 
 describe('ContractTab', () => {
@@ -191,6 +214,86 @@ describe('ContractTab', () => {
             
             expect(wrapper.vm.contracts.length).toBe(1);
             
+        })
+
+        it('should show pagination elements if totalPages > 1', async () => {
+            const wrapper = shallowMount(ContractTab, {
+                i18n,
+                localVue,
+                store: NO_AUTHORITY_STORE,
+                stubs: ['router-link', 'router-view'],
+                data() {
+                    return {
+                      initWithContracts: 'true'
+                    }
+                },
+                mocks: {
+                    contractService: {
+                        findAll(page, size, filter, then, error){
+                            then(PAGE0_CONTRACT_LIST)
+                        }
+                    },
+                    userService: {
+                        findAll(then, error){
+                            then()
+                        }
+                    }
+                }
+            })
+            expect(wrapper.findComponent(ContractTable).exists()).toBe(true)
+            
+            const wrapperPagination = shallowMount(Pagination, {
+                i18n,
+                localVue,
+                stubs: ['router-link', 'router-view'],
+                propsData: {
+                    totalPages : PAGE0_CONTRACT_LIST.totalPages,
+                    currentPage : 0
+                }
+                
+            })
+
+            expect(wrapperPagination.find('ul.pagination').isVisible()).toBe(true)
+        })
+
+        it('should not show pagination elements if totalPages <= 1', async () => {
+            const wrapper = shallowMount(ContractTab, {
+                i18n,
+                localVue,
+                store: NO_AUTHORITY_STORE,
+                stubs: ['router-link', 'router-view'],
+                data() {
+                    return {
+                      initWithContracts: 'true'
+                    }
+                },
+                mocks: {
+                    contractService: {
+                        findAll(page, size, filter, then, error){
+                            then(NOT_EMPTY_CONTRACT_LIST)
+                        }
+                    },
+                    userService: {
+                        findAll(then, error){
+                            then()
+                        }
+                    }
+                }
+            })
+            expect(wrapper.findComponent(ContractTable).exists()).toBe(true)
+
+            const wrapperPagination = shallowMount(Pagination, {
+                i18n,
+                localVue,
+                stubs: ['router-link', 'router-view'],
+                propsData: {
+                    totalPages : NOT_EMPTY_CONTRACT_LIST.totalPages,
+                    currentPage : 0
+                }
+                
+            })
+
+            expect(wrapperPagination.find('ul.pagination').isVisible()).toBe(false)
         })
     })
 

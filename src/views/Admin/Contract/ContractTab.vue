@@ -169,8 +169,8 @@ export default {
 					}
 					this.cpt = this.cpt+1;
 				}
-				if(this.contracts.length==0){
-					this.initWithContracts=false;
+				if(contracts.totalElements == 0){
+					this.initWithContracts = false;
 				}
             },
 			err => console.error(err)
