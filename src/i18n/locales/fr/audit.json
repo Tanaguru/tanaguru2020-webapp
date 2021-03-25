@@ -125,8 +125,8 @@
 		"basicAuth": "Accès sécurisé",
 		"login": "Identifiant",
 		"password": "Mot de passe",
-		"explanation": "Indiquez les informations de connexion sécurisée aux pages de l'audit. Si la page de connexion est inclue dans les pages à tester (renseignées en section 2), laisser le champ 'URL' vide.",
-		"urlError": "L'URL doit être valide et ne doit pas être cité dans les pages à tester.",
+		"explanation": "Indiquez les informations de connexion sécurisée aux pages de l'audit.",
+		"urlError": "L'URL doit être valide et renseignée.",
 		"loginError": "L'identifiant doit contenir plus de 3 caractères.",
 		"passwordError": "Le mot de passe doit contenir plus de 5 caractères."
 	},
