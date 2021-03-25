@@ -23,6 +23,10 @@
 			"radioLegend": "Option de choix de navigateur",
 			"firefox": "Mozilla Firefox",
 			"chrome": "Google Chrome"
+		},
+		"cssQuery": {
+			"title": "Sélecteur(s) css",
+			"help": "Exemple de sélecteurs css : #id ; .class ; element.class ; * ; element ; element,element,.. "
 		}
 	},
 	"guidelines": {
@@ -159,6 +163,7 @@
 			"crawlerDuration": "Veuillez entrer un nombre compris entre 0 (non inclus) et 86400, pour la durée en secondes du crawler.",
 			"crawlerDepth": "Veuillez entrer un nombre entier, compris entre 1 et 10 pages, pour la profondeur du crawler.",
 			"crawlerDocument": "Veuillez entrer un nombre entier compris entre 1 et 1000 pour le nombre de pages à auditer.",
+			"cssQuery": "Veuillez entrer un sélecteur css correct.",
 			"noMainReference": "Aucun référentiel n'a été donné pour cet audit",
 			"noUsableReference": "Aucun réfétentiel valide n'a été donné pour cet audit"
 		}

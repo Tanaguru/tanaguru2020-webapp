@@ -16,6 +16,7 @@
 Functionnalities : 
 - Admin and SuperAdmin can unlock/lock users
 - Admin and SuperAdmin can change contract owner
+- Add a form field to find a css selector in a page (audit creation form)
 
 Bugs fixed :
 - Fixed unnecessary error message on site and file audit forms
