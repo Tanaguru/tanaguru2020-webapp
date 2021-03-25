@@ -296,7 +296,6 @@
 	}
 
 	.dashboard-header__actions {
-		display: none;
 		margin: 1.6rem 0 0;
 		text-align: right;
 

@@ -75,7 +75,6 @@
 								v-model="userCreateForm.appRole"
 								:key="'role-error'"
 								required>
-								<option value="">{{ $t('entity.user.selectStatus') }}</option>
 								<option value="SUPER_ADMIN">{{ $t('entity.user.role.superAdmin') }}</option>
 								<option value="ADMIN">{{ $t('entity.user.role.admin') }}</option>
 								<option value="USER">{{ $t('entity.user.role.user') }}</option>
@@ -123,7 +122,7 @@ export default {
 				username: "",
 				password: "",
 				email: "",
-				appRole: null,
+				appRole: 'USER',
 				enabled: false,
 				successMsg: "",
 				error: "",
@@ -141,7 +140,7 @@ export default {
 			this.userCreateForm.username = ""
 			this.userCreateForm.password = ""
 			this.userCreateForm.email = ""
-			this.userCreateForm.appRole = ""
+			this.userCreateForm.appRole = this.$store.state.auth.authorities['PROMOTE_USER'] ? "" : "USER"
 			this.userCreateForm.enabled = ""
 			this.userCreateForm.usernameError = ""
 			this.userCreateForm.passwordError = ""
@@ -273,7 +272,7 @@ export default {
 			}
 			this.userCreateForm.username = "";
 			this.userCreateForm.email = "";
-			this.userCreateForm.appRole = "";
+			this.userCreateForm.appRole = this.$store.state.auth.authorities['PROMOTE_USER'] ? "" : 'USER';
 			this.userCreateForm.enable = "";
 		},
 	}
