@@ -12,7 +12,7 @@
                     <span v-else class="screen-reader-text">{{ $t('audit.form.indications.help.empty') }}</span>
                 </label>
                 <input class="input" :class="[{'has-error':passwordError && !isValid}]"
-                       type="text"
+                       type="password"
                        name="password"
                        id="password"
                        v-model="password"
