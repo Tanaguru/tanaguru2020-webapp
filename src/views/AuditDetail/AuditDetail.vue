@@ -26,7 +26,6 @@
 							<li v-else-if="parameters.browser == 'chrome'" >{{ $t('auditDetail.information.browser') }}Google Chrome</li>
 							<li v-show="parameters.waitTime">{{$t('auditDetail.information.waitTime')}} : {{parameters.waitTime}}</li>
 							<li v-show="parameters.basicAuthLogin">{{$t('auditDetail.information.basicLogin')}} : {{parameters.basicAuthLogin}}</li>
-							<li v-show="parameters.basicAuthPassword">{{$t('auditDetail.information.basicPswd')}} : {{parameters.basicAuthPassword}}</li>
 							<li v-show="parameters.basicAuthUrl">{{$t('auditDetail.information.basicUrl')}} : {{parameters.basicAuthUrl}}</li>
 							<li v-show="parameters.enableScreenshot">{{$t('auditDetail.information.screenshots')}} : {{parameters.enableScreenshot == 'false' ? 'No' : 'Yes'}}</li>
 							<li v-show="parameters.maxDepth">{{$t('auditDetail.information.maxDepth')}} : {{parameters.maxDepth}}</li>

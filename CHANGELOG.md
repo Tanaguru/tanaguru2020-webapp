@@ -22,6 +22,8 @@ Bugs fixed :
 - Fixed incorrect breadcrumbs
 - Fixed incoherent page number on audit synthesis
 - Fixed incoherent test results in synthesis table
+- Fix password display in basic auth form
+- Fix url format in basic auth form
 
 Improvements : 
 - Tooltip display in French
