@@ -285,7 +285,7 @@ export default {
             contractUsersTotalPage : 0,
             contractUsersCurrentPage: 0,
             contractUsersTotal: 0,
-            contractUsersSortBy: "id"
+            contractUsersSortBy: "username"
         }
     },
     metaInfo() {

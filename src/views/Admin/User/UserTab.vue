@@ -77,8 +77,8 @@
 				usersTotalPage : 0,
 				usersCurrentPage: 0,
 				usersTotal: 0,
-				usersSortBy: "id",
-				usersIsAsc: false
+				usersSortBy: "username",
+				usersIsAsc: true
             }
         },
 		props: ['selected'],
