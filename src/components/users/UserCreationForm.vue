@@ -15,7 +15,7 @@
 							name="username"
 							id="username"
 							:placeholder="$t('entity.user.username')"
-							v-model="userCreateForm.username"
+							v-model.trim="userCreateForm.username"
 							required>
 						<p class="info-text" id="username-constraint">{{ $t('form.indications.usernameConstraint') }}</p>
 						<p v-if="userCreateForm.usernameError" id="username-error" class="info-error">
@@ -30,11 +30,11 @@
 							class="input"
 							v-bind:class="{'has-error': userCreateForm.emailError}"
 							:aria-describedby="emailDescribedBy"
-							type="email"
+							type="text"
 							name="email"
 							id="email"
 							:placeholder="$t('entity.user.email')"
-							v-model="userCreateForm.email"
+							v-model.trim="userCreateForm.email"
 							required>
 						<p id="email-constraint" class="info-text">(exemple: nom.prenom@boitemail.com)</p>
 						<p v-if="userCreateForm.emailError" id="email-error" class="info-error">
@@ -186,7 +186,6 @@ export default {
         checkValidEmail: EmailHelper.checkValidEmail,
 		checkValidPassword: PasswordHelper.checkValidPassword,
 		checkUsername(){
-			this.userCreateForm.username = this.userCreateForm.username.trim()
 			this.userCreateForm.usernameError = "";
 			if (!this.userCreateForm.username) {
 				this.userCreateForm.usernameError = this.$i18n.t("form.errorMsg.emptyInput");
@@ -201,7 +200,6 @@ export default {
 		},
 		checkEmail(){
 			this.userCreateForm.emailError = "";
-			this.userCreateForm.email = this.userCreateForm.email.trim()
 			if (!this.userCreateForm.email) {
 				this.userCreateForm.emailError = this.$i18n.t("form.errorMsg.emptyInput");
 				return false;
