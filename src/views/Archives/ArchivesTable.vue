@@ -184,7 +184,6 @@ export default {
         },
 
         moment: function (date) {
-            this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
         },
 

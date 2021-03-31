@@ -59,5 +59,4 @@ if (token) {
     Vue.prototype.$http.defaults.headers.common['Authorization'] = 'Bearer ' + token
 }
 
-export const bus = new Vue()
 export default Vue

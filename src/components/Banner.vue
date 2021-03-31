@@ -41,13 +41,12 @@ import IconArrowBlue from './icons/IconArrowBlue'
       name: 'banner',
       data(){
         return{
-          locale : "en"
+          locale : this.$i18n.locale
         }
       },
       methods: {
         updateLocale : function(){
-          this.$i18n.locale = this.locale;
-		  this.$moment.locale(this.locale)
+			this.bus.$emit("updateLocale", this.locale);
         },
       },
 	  components: {

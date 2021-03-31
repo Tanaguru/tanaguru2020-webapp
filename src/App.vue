@@ -27,6 +27,15 @@ export default {
 		}
 	},
 	created() {
+		let _locale = localStorage.getItem("locale") || "en"
+		this.$moment.locale(_locale)
+		this.$i18n.locale = _locale
+
+		this.bus.$on("updateLocale", (locale) => {
+			this.$i18n.locale = locale;
+			this.$moment.locale(this.locale)
+			localStorage.setItem("locale", locale);
+		})
 		this.$store.dispatch('getServerVersion');
 		this.configService.getSessionDuration(
 			(sessionDuration) => {

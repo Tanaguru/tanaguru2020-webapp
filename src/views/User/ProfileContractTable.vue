@@ -39,10 +39,9 @@ export default {
     props: [ 'contracts' ],
     methods: {
         moment: function (date) {
-            this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
 		},
-		
+
 		activeTab(){
 			this.$store.state.activeTab.name = 'information'
 		}
