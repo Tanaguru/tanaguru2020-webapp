@@ -136,7 +136,7 @@ export default {
 	},
 	props: [ 'selected' ],
 	watch: {
-    	selected: function(newVal, oldVal) {  
+    	selected: function(newVal, oldVal) {
 			if(newVal == 1) {
 			this.userCreateForm.username = ""
 			this.userCreateForm.password = ""
@@ -149,7 +149,7 @@ export default {
 			this.userCreateForm.roleError = ""
 			this.userCreateForm.error = ""
 			this.userCreateForm.successMsg = ""
-			} 
+			}
 		}
 	},
 	computed: {
@@ -186,6 +186,7 @@ export default {
         checkValidEmail: EmailHelper.checkValidEmail,
 		checkValidPassword: PasswordHelper.checkValidPassword,
 		checkUsername(){
+			this.userCreateForm.username = this.userCreateForm.username.trim()
 			this.userCreateForm.usernameError = "";
 			if (!this.userCreateForm.username) {
 				this.userCreateForm.usernameError = this.$i18n.t("form.errorMsg.emptyInput");
@@ -200,6 +201,7 @@ export default {
 		},
 		checkEmail(){
 			this.userCreateForm.emailError = "";
+			this.userCreateForm.email = this.userCreateForm.email.trim()
 			if (!this.userCreateForm.email) {
 				this.userCreateForm.emailError = this.$i18n.t("form.errorMsg.emptyInput");
 				return false;
