@@ -6,7 +6,7 @@
 
 		<section>
 			<h2 class="admin-references__title-2">{{ $t('references.referencesList') }}</h2>
-			<div class="table-container" v-if="references.length > 0">
+			<div class="table-container" v-if="references_page && references_page.content.length > 0">
 				<table class="table table--default table-references">
 					<caption class="screen-reader-text">{{ $t('references.legendReferences') }}</caption>
 
@@ -17,7 +17,7 @@
 					</tr>
 					</thead>
 					<tbody>
-					<tr v-for="reference of notDeletedReferences" :key="reference.id">
+					<tr v-for="reference of references_page.content" :key="reference.id">
 						<td class="td-title">{{ reference.name }} ({{ reference.code }})</td>
 						<td class="td-actions">
 							<button
@@ -36,8 +36,8 @@
 				</table>
 
 				<pagination
-					:current-page="referencesCurrentPage"
-					:total-pages="referencesTotalPage"
+					:current-page="references_page.number"
+					:total-pages="references_page.totalPages"
 					@changePage="(page) => {loadReferences(page, referencesPageSize)}"
 				/>
 
@@ -64,26 +64,23 @@ export default {
 	components: {TanaguruTestImport, IconBaseDecorative, IconArrowBlue, Pagination},
 	data() {
 		return {
-			references: [],
-			referencesPageSize: 5,
-            referencesTotalPage : 0,
-            referencesCurrentPage: 0,
-            referencesTotal: 0
+			references_page: [],
+			referencesPageSize: 5
 		}
 	},
 	props: [ 'selected'],
 	created() {
-		this.loadReferences(this.referencesCurrentPage, this.referencesPageSize)
+		this.loadReferences(0, this.referencesPageSize)
 	},
 	methods: {
 		onAddReference(reference) {
-			this.references.push(reference);
+			this.loadReferences(this.references_page.number, this.referencesPageSize);
 		},
 
 		removeReference(reference) {
 			this.testHierarchyService.deleteReference(reference.id,
 				() => {
-					reference.deleted = true;
+					this.loadReferences(0, this.referencesPageSize);
 				},
 				(error => {
 					console.error(error)
@@ -94,11 +91,8 @@ export default {
 			this.testHierarchyService.findAllReferences(
 				page,
 				size,
-				(references) => {
-					this.referencesCurrentPage = page;
-					this.references = references.content;
-					this.referencesTotalPage = references.totalPages;
-					this.referencesTotal = references.totalElements;
+				(references_page) => {
+					this.references_page = references_page
 				},
 				(error) => {
 					console.error(error)
@@ -106,13 +100,6 @@ export default {
 			)
 		}
 	},
-	computed: {
-		notDeletedReferences() {
-			return this.references.filter(reference => {
-				return !reference.deleted
-			})
-		}
-	}
 }
 
 </script>

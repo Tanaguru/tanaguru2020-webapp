@@ -12,7 +12,7 @@
 			</thead>
 
 			<tbody>
-				<tr v-for="contractUser of sortedContractUsers" :key="contractUser.id" :class="{editing: contractUser == editedUser}" v-cloak >
+				<tr v-for="contractUser of contractUsers" :key="contractUser.id" :class="{editing: contractUser == editedUser}" v-cloak >
 					<th scope="row">{{contractUser.user.username}}</th>
 					<td class="edit">
 						<label :for="`status-select-${contractUser.user.id}`" hidden>{{ contractUser.contractRole.name.charAt(0) + contractUser.contractRole.name.slice(1).toLowerCase().replace(/_/g,' ') }}</label>
@@ -93,7 +93,7 @@ export default {
     methods: {
         confirm(contractUser) {
 			this.$modal
-			.confirm(DeletionModal, this.$t('deletionModal.remove') + contractUser.user.username + this.$t('deletionModal.contract'), 
+			.confirm(DeletionModal, this.$t('deletionModal.remove') + contractUser.user.username + this.$t('deletionModal.contract'),
 			{
 				label: "deletion-modal",
 				classes: "modal",
@@ -121,11 +121,6 @@ export default {
 		editUser(user) {
 			this.beforeEditCache = user
 			this.editedUser = user
-		}
-	},
-	computed: {
-		sortedContractUsers(){
-			return this.contractUsers.reverse();
 		}
 	}
 }
