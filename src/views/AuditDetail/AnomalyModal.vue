@@ -2,20 +2,21 @@
     <div class="modal-content">
         <header class="modal-header" id="modalTitle">
             <h1 class="modal-header__title">
-                {{ $t('auditDetail.synthesis.modal.criteria') }} {{ criteriaResult.testHierarchy.code }} -
-                {{ criteriaResult.testHierarchy.name }}
+                Test {{ criteriaResult.testHierarchy.code }} -
+                {{ criteriaResult.testHierarchy.name | format }}
                 <span>Page {{ index + 1 }} : {{ auditPage.name }} - </span>
                 <p id="status--failed" class="status status--failed" v-if="criteriaResult.status == 'failed'">
-                {{ criteriaResult.status }}</p>
+                    {{$t('entity.audit.result.failed')}}</p>
                 <p id="status--passed" class="status status--passed" v-if="criteriaResult.status == 'passed'">
-                    {{ criteriaResult.status }}</p>
+                    {{$t('entity.audit.result.passed')}}</p>
                 <p id="status--cantTell" class="status status--cantTell" v-if="criteriaResult.status == 'cantTell'">
-                    {{ criteriaResult.status }}</p>
+                   {{$t('entity.audit.result.cantTell')}}</p>
                 <p id="status--inapplicable" class="status status--inapplicable"
-                v-if="criteriaResult.status == 'inapplicable'">{{ criteriaResult.status }}</p>
+                v-if="criteriaResult.status == 'inapplicable'">
+                    {{$t('entity.audit.result.inapplicable')}}</p>
             </h1>
 
-            <button type="button" class="btn btn--nude btn--icon" @click="closeModal"
+            <button type="button" class="btn btn--nude btn--icon" @click="closeModal()"
                     :aria-label="$t('action.closeModal')">
                 <icon-base-decorative width="18" height="18">
                     <icon-close/>
@@ -42,59 +43,64 @@
             </div>
 
             <ul class="list-anomaly">
-                <li class="list-anomaly__item" v-if="testResultByStatus['inapplicable']">
+                <li class="list-anomaly__item" v-if="testResultByStatus['inapplicable'] && criteriaResult.nbET > 0">
                     <span class="error-nbr error-nbr--inapplicable">
-                        {{ criteriaResult.nbTI }}
+                        {{ criteriaResult.nbET }}
 
                         <icon-base-informative icon-label="results inapplicable" width="20" height="20">
                             <icon-not-applicable/>
                         </icon-base-informative>
                     </span>
-                    <span class="status status--inapplicable">Inapplicable :</span>
-                    <p class="test-description" v-for="testResult in testResultByStatus['inapplicable']" v-if="testById[testResult.tanaguruTest]" :key="testResult.id">
-                            {{ testById[testResult.tanaguruTest].name }}
+                    <span class="status status--inapplicable">{{$t('entity.audit.result.inapplicable')}} :</span>
+                    <p class="test-description" v-for="testResult in testResultByStatus['inapplicable']" v-if="testById[testResult.tanaguruTest] && testResult.nbElementPassed" :key="testResult.id">
+                            {{ testById[testResult.tanaguruTest].name }} 
+                            <span>({{ testResult.nbElementUntested }})</span>
                     </p>
                 </li>
 
-                <li class="list-anomaly__item" v-if="testResultByStatus['passed']">
+                <li class="list-anomaly__item" v-if="testResultByStatus['passed'] && criteriaResult.nbEP > 0">
                     <span class="error-nbr error-nbr--passed">
-                        {{ criteriaResult.nbTP }}
+                        {{ criteriaResult.nbEP }}
 
                         <icon-base-informative icon-label="results passed" width="20" height="20">
                             <icon-compliant/>
                         </icon-base-informative>
                     </span>
-                    <span class="status status--passed">passed :</span>
-                    <p class="test-description" v-for="testResult in testResultByStatus['passed']" v-if="testById[testResult.tanaguruTest]" :key="testResult.id">
+                    <span class="status status--passed">{{$t('entity.audit.result.passed')}} :</span>
+                    <p class="test-description" v-for="testResult in testResultByStatus['passed']" v-if="testById[testResult.tanaguruTest] && testResult.nbElementPassed" :key="testResult.id">
                             {{ testById[testResult.tanaguruTest].name }}
+                            <span>({{ testResult.nbElementPassed }})</span>
+
                     </p>
                 </li>
 
-                <li class="list-anomaly__item" v-if="testResultByStatus['failed']">
+                <li class="list-anomaly__item" v-if="testResultByStatus['failed'] && criteriaResult.nbEF > 0">
                     <span class="error-nbr error-nbr--failed">
-                        {{ criteriaResult.nbTF }}
+                        {{ criteriaResult.nbEF }}
 
                         <icon-base-informative icon-label="results failed" width="20" height="20">
                             <icon-improper/>
                         </icon-base-informative>
                     </span>
-                    <span class="status status--failed">failed :</span>
-                    <p class="test-description" v-for="testResult in testResultByStatus['failed']" v-if="testById[testResult.tanaguruTest]" :key="testResult.id">
+                    <span class="status status--failed">{{$t('entity.audit.result.failed')}} :</span>
+                    <p class="test-description" v-for="testResult in testResultByStatus['failed']" v-if="testById[testResult.tanaguruTest] && testResult.nbElementFailed" :key="testResult.id">
                             {{ testById[testResult.tanaguruTest].name }}
+                            <span>({{ testResult.nbElementFailed }})</span>
                     </p>
                 </li>
 
-                <li class="list-anomaly__item" v-if="testResultByStatus['cantTell']">
+                <li class="list-anomaly__item" v-if="testResultByStatus['cantTell'] && criteriaResult.nbECT > 0">
                     <span class="error-nbr error-nbr--cantTell">
-                        {{ criteriaResult.nbTCT }}
+                        {{ criteriaResult.nbECT }}
 
                         <icon-base-informative icon-label="results cantTell" width="20" height="20">
                             <icon-qualify/>
                         </icon-base-informative>
                     </span>
-                    <span class="status status--cantTell">cantTell :</span>
-                    <p class="test-description" v-for="testResult in testResultByStatus['cantTell']" v-if="testById[testResult.tanaguruTest]" :key="testResult.id">
+                    <span class="status status--cantTell">{{$t('entity.audit.result.cantTell')}} :</span>
+                    <p class="test-description" v-for="testResult in testResultByStatus['cantTell']" v-if="testById[testResult.tanaguruTest] && testResult.nbElementCantTell" :key="testResult.id">
                             {{ testById[testResult.tanaguruTest].name }}
+                            <span>({{ testResult.nbElementCantTell }})</span>
                     </p>
                 </li>
             </ul>
@@ -169,6 +175,13 @@ export default {
             this.$modal.close();
         }
     },
+    filters: {
+        format: function (value) {
+            if (!value) return ''
+            value = value.replace(/ *\(#[^)]*\) */g, " ").replace(/[\[\]]+/g,'')
+            return value
+        }
+    }
 };
 </script>
 

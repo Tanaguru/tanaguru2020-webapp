@@ -40,7 +40,7 @@
 					<li class="actions-list__item" v-show="auditLaunchCondition && validContract">
 						<router-link :to="'/projects/'+project.id+'/audit'" class='btn btn--icon btn--nude'>
 							<icon-base-decorative><icon-launch /></icon-base-decorative>
-							<span>{{$t('action.auditStart')}}</span>
+							<span>{{$t('action.auditLaunch')}}</span>
 						</router-link>
 					</li>
 					<li class="actions-list__item">
@@ -66,7 +66,7 @@
 					<li><span class="infos-list__exergue">{{$t('dashboard.project.url')}}</span> {{ project.domain }}</li>
 					<li>
 						<span class="infos-list__exergue">{{$t('dashboard.project.repository')}} </span>
-						<span v-for="name in repositoriesNames" :key="name">{{ name }}</span>
+						<span v-for="(name, i) in repositoriesNames" :key="i">{{ name }}<span v-if="i+1 != repositoriesNames.length">, </span></span>
 					</li>
 					<li><span class="infos-list__exergue">{{$t('dashboard.project.date')}}</span> {{ moment(project.contract.dateEnd).format('LL') }}</li>
 				</ul>
@@ -116,7 +116,7 @@
 
 					<router-link :to="'/projects/'+project.id+'/audit'" class='btn btn--icon btn--default'>
 						<icon-base-decorative><icon-launch /></icon-base-decorative>
-						<span>{{$t('action.auditStart')}}</span>
+						<span>{{$t('action.auditLaunch')}}</span>
 					</router-link>
 				</div>
 
@@ -301,7 +301,7 @@
 						<li class="actions-list__item" v-if="auditLaunchCondition && validContract">
 							<router-link :to="'/projects/'+project.id+'/audit'" class='link-independent link-independent--icon'>
 								<icon-base-decorative><icon-launch /></icon-base-decorative>
-								<span>{{$t('action.auditStart')}}</span>
+								<span>{{$t('action.auditLaunch')}}</span>
 							</router-link>
 						</li>
 

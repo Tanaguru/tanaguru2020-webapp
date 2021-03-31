@@ -4,9 +4,13 @@
 		"synthesis": "Synthesis"
 	},
 	"pages": "Audit pages",
+	"infoSearch": "The list underneath contains all visited pages. Use the search bar to start typing the name of the page you are looking for and filter out the list rows that don't match. Current number of pages listed",
+	"results": "results",
+	"pagesNb": "page(s)",
 	"logs": "Audit logs",
+	"selectLogLevel" : "Select the level of log",
 	"synthesis": {
-		"pages": "Number of pages to audit",
+		"pages": "Number of pages audited",
 		"guidelines": "guidelines",
 		"table": {
 			"title": "Summary of audited pages",
@@ -17,7 +21,8 @@
 			"criteria": "Criteria",
 			"rule": "Go to relevant rule page",
 			"seeDetails": "See detailed results for this page"
-		}
+		},
+		"loading": "Fetching data..."
 	},
 	"status": {
 		"done": "Done",
@@ -30,6 +35,17 @@
 		"status": "Status : ",
 		"browser": "Browser used to perform the audit : ",
 		"reference": "Main guidelines : ",
-		"type": "Audit type : "
+		"type": "Audit type : ",
+		"waitTime": "Wait time",
+		"resolution": "Screen resolution",
+		"screenshots": "Screenshots",
+		"maxDepth": "Maximum depth",
+		"maxDoc": "Maximum document",
+		"maxDuration": "Maximum duration",
+		"basicUrl": "Basic authentification url",
+		"basicLogin": "Basic authentification login",
+		"basicPswd": "Basic authentification password",
+		"inclusion": "Inclusion of pages containing",
+		"exclusion": "Exclusion of pages containing"
 	}
 }

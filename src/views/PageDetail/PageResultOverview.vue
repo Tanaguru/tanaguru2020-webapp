@@ -36,12 +36,12 @@
                             <span class="screen-reader-text">{{$t('resultAudit.overview.tests.tooltipHelp')}}</span>
                         </button>
                         <div
-                        id="number-of-test"
-						class="tooltip__info"
-						role="tooltip"
-						v-show="showNbTestTooltip">
-							<span class="tooltip__header">
-								<icon-base-decorative><icon-inforound /></icon-base-decorative>
+							id="number-of-test"
+							class="tooltip__info"
+							role="tooltip"
+							v-show="showNbTestTooltip">
+								<span class="tooltip__header">
+									<icon-base-decorative><icon-inforound /></icon-base-decorative>
 								<span class="tooltip__title">{{$t('resultAudit.overview.tests.tooltipTitle')}}</span>
 							</span>
                             {{$t('resultAudit.overview.tests.tooltipContent')}}
@@ -228,7 +228,6 @@
 
 		@media #{$media-md-viewport} {
 			flex: 0 1 30%;
-			overflow: hidden;
 		}
 	}
 

@@ -14,12 +14,23 @@ def createDockerEnvFileContent(String propertyFileName){
 pipeline {
     agent any
     stages {
+
+		stage('Test') {
+            agent {
+                docker 'node'
+            }
+            steps {  
+				sh 'npm i' 
+				sh 'npm run test:unit'
+            }
+        }
+
         stage('Build') {
             agent {
                 docker 'node'
             }
             steps {
-                sh 'npm i'
+				sh 'npm i'
                 sh 'npm run build'
                 sh 'tar -czvf tanaguru2020-webapp.tar.gz dist'
                 sh '''
@@ -36,6 +47,7 @@ pipeline {
                 anyOf {
                     branch 'develop'
                     branch 'master'
+                    branch 'beta'
                 }
             }
             steps {
@@ -152,7 +164,7 @@ pipeline {
 
 					def image = docker.image("tanaguru2020-webapp:${WEBAPP_VERSION}")
 					docker.withRegistry('https://registry.tanaguru.com', 'registry') {
-						image.push('beta-${TIMESTAMP}')
+						image.push("beta-${TIMESTAMP}")
 					}
 				}
 			}

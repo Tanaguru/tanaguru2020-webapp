@@ -11,7 +11,8 @@
 					<icon-base-informative icon-label="results not tested" v-if="!testHierarchyResult || testHierarchyResult.status === 'untested'"><icon-untested /></icon-base-informative>
 				</span>
 				<div v-if="testHierarchyResult">
-					<span class="test-hierarchy-header__title">{{testHierarchy.name}}</span>
+					<span v-if='isFirstLevel' class="test-hierarchy-header__title">{{testHierarchy.name}}</span>
+					<span v-else class="test-hierarchy-header__title">{{testHierarchy.name | format}}</span>
 					<ul v-if="isFirstLevel" class="list-tests">
 						<li class="list-tests__item">
 							<icon-base-decorative width="16" height="16"><icon-compliant /></icon-base-decorative><span class="list-tests__nbr list-tests__nbr--success">{{ testHierarchyResult.nbP }}</span><span class="screen-reader-text">{{$t('entity.audit.passed')}}</span>
@@ -31,6 +32,7 @@
 					</ul>
 				</div>
 			</div>
+			
 			<button
 				v-if="isFirstLevel"
 				class="btn btn--icon btn--nude btn--tab test-hierarchy-header__btn"
@@ -42,31 +44,17 @@
 				<span v-else>{{ $t('resultAudit.testResult.detailTabHide') }}</span>
 			</button>
 
-			<div v-else-if="isLastLevel" class="test-hierarchy-header__actions">
-				<a v-if="testHierarchy.urls[0]" :href="testHierarchy.urls[0]" class="test-link">
-					<img :alt="$t('resultAudit.testResult.ruleLink') + ' ' + reference.name + '-' + testHierarchy.code" src="/assets/images/explication.svg" />
-				</a>
-
-				<button
-                    v-if="testHierarchyResult && testHierarchyResult.status !== 'untested' && testResultsSelection.length > 0"
-					class="btn btn--icon btn--nude btn--tab"
-					@click="toggleContent(!showContent)"
-					:aria-expanded="showContent === true ? 'true' : 'false'"
-				>
-					<icon-base-decorative :class="showContent === true ? 'hide' : 'show'"><icon-arrow-blue /></icon-base-decorative>
-					<span class="screen-reader-text" v-if="showContent">{{ $t('resultAudit.testResult.hide') }}</span>
-					<span class="screen-reader-text" v-else>{{ $t('resultAudit.testResult.show') }}</span>
-				</button>
-			</div>
-
 			<div v-else class="test-hierarchy-header__actions">
 				<a v-if="testHierarchy.urls[0]" :href="testHierarchy.urls[0]" class="test-link">
 					<img :alt="$t('resultAudit.testResult.ruleLink') + ' ' + reference.name + '-' + testHierarchy.code" src="/assets/images/explication.svg" />
 				</a>
+
 				<button
+					v-show="showUnrollButtonCondition && testResultsSelection"
 					class="btn btn--nude btn--icon btn--tab"
 					@click="toggleContent(!showContent)"
-					:aria-expanded="showContent === true ? 'true' : 'false'">
+					:aria-expanded="showContent === true ? 'true' : 'false'"
+				>
 					<icon-base-decorative :class="showContent === true ? 'hide' : 'show'"><icon-arrow-blue /></icon-base-decorative>
 					<span class="screen-reader-text" v-if="showContent">{{ $t('resultAudit.testResult.hide') }}</span>
 					<span class="screen-reader-text" v-else>{{ $t('resultAudit.testResult.show') }}</span>
@@ -197,12 +185,31 @@
                             .some(tag => this.tagFilters.includes(tag))
                 })
                 return result;
-            }
+            },
+
+			showUnrollButtonCondition(){
+				let condition = false;
+				if(!this.isFirstLevel) {
+					if(this.testHierarchyResult){
+						if(this.testHierarchyResult.status === 'untested'){
+							condition = false
+						} else { condition = true }
+					} else { condition = false }
+				}
+				return condition;
+			}
         },
 		methods: {
         	toggleContent(value){
         		this.showContent = value;
         		this.hasBeenToggled = true;
+			}
+		},
+		filters: {
+			format: function (value) {
+				if (!value) return ''
+				value = value.replace(/ *\(#[^)]*\) */g, " ").replace(/[\[\]]+/g,'')
+				return value
 			}
 		}
     }
@@ -286,6 +293,7 @@
 
 	.test-hierarchy-header__actions {
 		display: flex;
+		align-items: center;
 
 		.btn--tab {
 			margin-left: 1.6rem;
@@ -446,30 +454,6 @@
 			&.list-tests__nbr--untested {
 				color: $color-untested;
 			}
-		}
-	}
-}
-
-.list-explanations {
-	margin: 0 0 3.2rem 0;
-	padding-left: 12.6rem;
-	max-width: 80rem;
-	font-family: $font-stack-secondary;
-	font-size: $medium-font-size;
-	list-style-type: none;
-
-	.list-explanations__item {
-		position: relative;
-
-		&::before {
-			position: absolute;
-			top: 1.8rem;
-			left: -2rem;
-			width: .3rem;
-			height: .3rem;
-			background-color: $text-primary;
-			border-radius: 50%;
-			content: "";
 		}
 	}
 }

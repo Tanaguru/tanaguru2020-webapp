@@ -26,6 +26,7 @@
 		"passwordConfirm": "Confirmation du mot de passe",
 		"enabled": "Activé",
 		"status": "Statut",
+		"blocked": "Bloqué",
 		"selectStatus": "Sélectionner le statut",
 		"emailError": "Le champ ne peut pas être vide."
 	},

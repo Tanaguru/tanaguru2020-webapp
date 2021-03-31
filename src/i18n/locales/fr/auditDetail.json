@@ -4,7 +4,11 @@
 		"synthesis": "Synthèse"
 	},
 	"pages": "Pages de l'audit",
+	"infoSearch": "La liste ci-dessous contient toutes les pages visitées. Utilisez la barre de recherche pour commencer à taper le nom de la page que vous recherchez et filtrer les lignes de la liste qui ne correspondent pas. Nombre actuel de pages répertoriées",
+	"results": "résultat(s)",
+	"pagesNb": "page(s)",
 	"logs": "Historique de l'audit",
+	"selectLogLevel" : "Sélectionner le niveau de log",
 	"synthesis": {
 		"pages": "Nombre de pages à auditer",
 		"guidelines": "Référentiel",
@@ -17,7 +21,8 @@
 			"criteria": "Critère",
 			"rule": "Allez à la règle concernée",
 			"seeDetails": "Voir le résultat détaillé de la page"
-		}
+		},
+		"loading": "Données en cours de récupération..."
 	},
 	"status": {
 		"done": "Terminé",
@@ -30,6 +35,17 @@
 		"status": "Status : ",
 		"browser": "Navigateur utilisé pour l'audit : ",
 		"reference": "Référentiel principal : ",
-		"type": "Type d'audit : "
+		"type": "Type d'audit : ",
+		"waitTime": "Temps d'attente",
+		"resolution": "Résolution d'écran",
+		"screenshots": "Captures d'écran",
+		"maxDepth": "Profondeur maximum",
+		"maxDoc": "Nombre maximum de pages",
+		"maxDuration": "Durée maximum",
+		"basicUrl": "Url d'accès sécurisé",
+		"basicLogin": "Identifiant d'accès sécurisé",
+		"basicPswd": "Mot de passe d'accès sécurisé",
+		"inclusion": "Inclusion des urls contenant",
+		"exclusion": "Exclusion des urls contenant"
 	}
 }

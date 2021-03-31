@@ -31,6 +31,20 @@ export default class AuditService extends Service{
           });
     }
 
+    findByProjectIdAndTypePaginated(id, type, page, size, sortBy, isAsc, then, error){
+        return this.axios({
+            url: this.controllerName + '/by-project-and-type-paginated/' + id + '/' + type
+            + '?&page=' + page + '&size=' + size + '&sortBy=' + sortBy + '&isAsc=' + isAsc, 
+            method: 'get',
+          })
+          .then(resp => {
+            then(resp.data)
+          })
+          .catch(err => {
+              error(err);
+          });
+    }
+
     start(name, references, mainReference, projectId, type, parameters, then, error){
         const auditConfiguration = {
             'name': name,

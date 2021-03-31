@@ -31,10 +31,16 @@
 			</div>
 
 			<user-table 
-				:users="filteredUsers" 
-				@delete-user="deleteUser"
-			>
+				:users="users" 
+				@delete-user="deleteUser">
 			</user-table>
+
+			<pagination
+				:current-page="usersCurrentPage"
+				:total-pages="usersTotalPage"
+				@changePage="(page) => {loadUsers(page, usersPageSize, usersSortBy, usersIsAsc, search)}"
+			/>
+
 		</section>
 
         <BackToTop />
@@ -48,6 +54,7 @@
     import IconDelete from '../../../components/icons/IconDelete'
 	import UserTable from "@/components/users/UserTable";
 	import UserCreationForm from "@/components/users/UserCreationForm";
+	import Pagination from "../../../components/Pagination";
 
     export default {
         name: 'adminUserList',
@@ -57,48 +64,52 @@
             IconBaseDecorative,
             IconArrowBlue,
             IconDelete,
-            BackToTop
+			BackToTop,
+			Pagination
         },
         data() {
             return {
 				search : "",
 				liveMsg : "",
-				timer : null
-
+				timer : null,
+				users : [],
+				usersPageSize: 5,
+				usersTotalPage : 0,
+				usersCurrentPage: 0,
+				usersTotal: 0,
+				usersSortBy: "id",
+				usersIsAsc: false
             }
         },
-		props: [ 'users', 'selected' ],
+		props: ['selected'],
 		watch: {
 			selected: function(newVal, oldVal) {  
 				if(newVal == 1) {
 					this.search = ""
 					this.liveMsg = ""
+					this.loadUsers(this.usersCurrentPage, this.usersPageSize, this.usersSortBy, this.usersIsAsc, this.search);
 				} 
 			}
 		},
-        computed:{
-			filteredUsers(){
-				let users = this.search ?
-					this.users.filter(user =>
-						user.username.toLowerCase().includes(this.search.toLowerCase()) ||
-						user.email.toLowerCase().includes(this.search.toLowerCase())):
-					this.users
-
-				return users.reverse();
-			}
-        },
         methods: {
 			fireAriaLive(){
 				clearTimeout(this.timer)
-				this.timer = setTimeout(this.populateAriaLive, 1500)
+				this.timer = setTimeout(this.populateAriaLive, 1000)
 			},
 
 			populateAriaLive(){
-				this.liveMsg = this.filteredUsers.length + ' ' + this.$i18n.t('users.usersNb')
+				this.liveMsg = this.users.length + ' ' + this.$i18n.t('users.usersNb')
+				this.filteredUsers()
+			},
+
+			filteredUsers(){
+				this.loadUsers(0, this.usersPageSize, this.usersSortBy, this.usersIsAsc, this.search);
 			},
 
 			onCreateUser(user){
-				this.$emit('createUser', user)
+				this.users.push(user);
+				this.$emit('createUser', user);
+				this.loadUsers(this.usersCurrentPage, this.usersPageSize, this.usersSortBy, this.usersIsAsc, this.search);
 			},
 
             deleteUser(user){
@@ -110,10 +121,31 @@
                             this.users.splice(index, 1)
                         },
                         (error) => console.error(error)
-                    )
+					);
+					this.loadUsers(this.usersCurrentPage, this.usersPageSize, this.usersSortBy, this.usersIsAsc, this.search);
                 }
-            }
-        }
+			},
+
+			loadUsers(page, size, sortBy, isAsc, filter){
+				this.userService.findAllPaginated(
+					page,
+					size,
+					sortBy,
+					isAsc,
+					filter,
+					(users) => {
+						this.usersCurrentPage = page;
+						this.users = users.content;
+						this.usersTotalPage = users.totalPages;
+						this.usersTotal = users.totalElements;
+					},
+					err => console.error(err)
+				);
+			}
+		},
+		created(){
+			this.loadUsers(this.usersCurrentPage,this.usersPageSize,this.usersSortBy,this.usersIsAsc, this.search);
+		}
     }
 </script>
 

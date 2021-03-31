@@ -49,7 +49,7 @@
             </ul>
         </header>
 
-        <article v-if="audits.length > 0" class="article-archives" id="page-audit" v-for="type of types" :key="type">
+        <article class="article-archives" :id="type.toLowerCase() + '-audit'" v-for="type of types" :key="type">
             <h2 class="article-archives__title">
                 <icon-base-decorative width="40" height="40" viewBox="0 0 72 72">
                     <icon-audit-page/>
@@ -60,8 +60,7 @@
                 <span v-else>{{ $t('entity.audit.scenario') }}</span>
             </h2>
             <div class="table-container">
-                <ArchivesTable :audits="audits" :type="type" :deleteCondition="deleteCondition" @delete-audit="deleteAudit"
-                               @delete-screenshot="deleteScreenshot"/>
+                <ArchivesTable :type="type" :projectId="projectId" :deleteCondition="deleteCondition"/>
             </div>
         </article>
     </main>
@@ -105,9 +104,9 @@ export default {
                     path: '/'
                 },
             ],
-            audits: [],
             types: ['PAGE', 'SITE', 'SCENARIO', 'UPLOAD'],
-            deleteAuditError: ""
+            deleteAuditError: "",
+            projectId : ""
         }
     },
     metaInfo() {
@@ -134,52 +133,12 @@ export default {
 
 
     },
-    methods: {
-        deleteAudit(audit) {
-            var index = this.audits.indexOf(audit);
-
-            if(index > -1){
-                this.auditService.delete(
-                    audit.id,
-                    () => {
-                        this.audits.splice(index, 1)
-                    },
-                    (error) => {
-                        if(err.response.data.error == "AUDIT_NOT_FOUND"){
-                            this.deleteAuditError = this.$i18n.t("form.errorMsg.audit.notFound")
-                        } else if(err.response.status == "403"){
-                            this.deleteAuditError = this.$i18n.t("form.errorMsg.user.permissionDenied")
-                        } else {
-                            this.deleteAuditError = this.$i18n.t("form.errorMsg.genericError");
-                        }
-                    }
-                )
-            }
-        },
-
-        deleteScreenshot(audit){
-            this.pageContentService.deleteScreenshotByAudit(
-                audit.id,
-                () => {
-                },
-                (error) => {
-                    if(err.response.data.error == "AUDIT_NOT_FOUND"){
-                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.audit.notFound")
-                    } else if(err.response.status == "403"){
-                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.user.permissionDenied")
-                    } else {
-                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.genericError");
-                    }
-                }
-            );
-        }
-    },
     created() {
+        this.projectId = this.$route.params.id;
         this.projectService.findById(
             this.$route.params.id,
             (project) => {
                 this.project = project;
-
                 // Breadcrumbs
                 this.breadcrumbProps.push({
                     name: project.contract.name,
