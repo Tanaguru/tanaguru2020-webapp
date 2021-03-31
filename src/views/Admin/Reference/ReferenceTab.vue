@@ -34,6 +34,13 @@
 					</tr>
 					</tbody>
 				</table>
+
+				<pagination
+					:current-page="referencesCurrentPage"
+					:total-pages="referencesTotalPage"
+					@changePage="(page) => {loadReferences(page, referencesPageSize)}"
+				/>
+
 			</div>
 			<p v-else>{{ $t('references.noReference') }}</p>
 		</section>
@@ -50,25 +57,23 @@
 import TanaguruTestImport from "./TanaguruTestImport.vue";
 import IconArrowBlue from "@/components/icons/IconArrowBlue";
 import IconBaseDecorative from "@/components/icons/IconBaseDecorative";
+import Pagination from "../../../components/Pagination";
 
 export default {
 	name: 'referenceTab',
-	components: {TanaguruTestImport, IconBaseDecorative, IconArrowBlue},
+	components: {TanaguruTestImport, IconBaseDecorative, IconArrowBlue, Pagination},
 	data() {
 		return {
-			references: []
+			references: [],
+			referencesPageSize: 5,
+            referencesTotalPage : 0,
+            referencesCurrentPage: 0,
+            referencesTotal: 0
 		}
 	},
 	props: [ 'selected'],
 	created() {
-		this.testHierarchyService.findAllReferences(
-			(references) => {
-				this.references = references;
-			},
-			(error) => {
-				console.error(error)
-			}
-		)
+		this.loadReferences(this.referencesCurrentPage, this.referencesPageSize)
 	},
 	methods: {
 		onAddReference(reference) {
@@ -83,6 +88,21 @@ export default {
 				(error => {
 					console.error(error)
 				})
+			)
+		},
+		loadReferences(page, size){
+			this.testHierarchyService.findAllReferences(
+				page,
+				size,
+				(references) => {
+					this.referencesCurrentPage = page;
+					this.references = references.content;
+					this.referencesTotalPage = references.totalPages;
+					this.referencesTotal = references.totalElements;
+				},
+				(error) => {
+					console.error(error)
+				}
 			)
 		}
 	},

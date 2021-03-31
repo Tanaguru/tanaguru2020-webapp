@@ -129,6 +129,12 @@
                                 :promoteCondition="promoteCondition"
                                 :isStillValid="isStillValid"
                                 :promoteSuccessMsg="promoteSuccessMsg" />
+
+                                <pagination
+                                    :current-page="contractUsersCurrentPage"
+                                    :total-pages="contractUsersTotalPage"
+                                    @changePage="(page) => {loadContractUsersPaginated(page, contractUsersPageSize, contractUsersSortBy)}"
+                                />
                         </article>
                     </Tab>
 
@@ -215,6 +221,7 @@ import IconArrowBlue from '../../components//icons/IconArrowBlue'
 import IconDelete from '../../components//icons/IconDelete'
 import Breadcrumbs from '../../components/Breadcrumbs';
 import DomainHelper from '../../helper/DomainHelper'
+import Pagination from "../../components/Pagination";
 
 export default {
     name: 'contractDetail',
@@ -228,7 +235,8 @@ export default {
         BackToTop,
         ContractUserTable,
         ContractProjectTable,
-        DomainHelper
+        DomainHelper,
+        Pagination
     },
     data() {
         return {
@@ -272,6 +280,11 @@ export default {
             },
             promoteSuccessMsg: "",
             userRemoveError: "",
+            contractUsersPageSize: 5,
+            contractUsersTotalPage : 0,
+            contractUsersCurrentPage: 0,
+            contractUsersTotal: 0,
+            contractUsersSortBy: "id"
         }
     },
     metaInfo() {
@@ -499,7 +512,8 @@ export default {
                                 this.userAdditionForm.error = this.$i18n.t("form.errorMsg.genericError");
                             }
                         }
-                    )
+                    );
+                    this.loadContractUsersPaginated(this.contractUsersCurrentPage, this.contractUsersPageSize, this.contractUsersSortBy);
                 } else {
                     this.userAdditionForm.error = this.$i18n.t('form.errorMsg.user.notFound')
                 }
@@ -540,7 +554,8 @@ export default {
 				contractUser.user.id,
 				this.contract.id,
 				() => {
-					this.contractUsers.splice(this.contractUsers.indexOf(contractUser), 1);
+                    this.contractUsers.splice(this.contractUsers.indexOf(contractUser), 1);
+                    this.loadContractUsersPaginated(0, this.contractUsersPageSize, this.contractUsersSortBy);
 				},
 				(error) => {
                     if(err.response.data.error == "CONTRACT_NOT_FOUND"){
@@ -553,7 +568,36 @@ export default {
                         this.userRemoveError = this.$i18n.t("form.errorMsg.genericError");
                     }
                 },
-			)
+            );
+        },
+
+        loadContractUsersPaginated(page,size,sortBy){
+            this.contractUsersUsernames = [];
+            this.userService.findAllByContractPaginated(
+                    this.contract.id,
+                    page,
+                    size,
+                    sortBy,
+                    (contractUsers) => {
+                        this.contractUsers = contractUsers.content;
+						contractUsers.content.forEach(contractUser => {
+                            this.contractUsersUsernames.push(contractUser.user.username)
+                            if(contractUser.contractRole.name === 'CONTRACT_OWNER'){
+                            	this.contractOwner = contractUser;
+                                this.contractOwnerUsername = contractUser.user.username;
+							}
+
+                            if(contractUser.user.id === this.$store.state.auth.user.id){
+                                this.currentContractUser = contractUser;
+                            }
+                            
+                        });
+                        this.contractUsersCurrentPage = page;
+                        this.contractUsersTotalPage = contractUsers.totalPages;
+                        this.contractUsersTotal = contractUsers.totalElements;
+                    },
+			        (error) => { 'error' }
+                );
         }
     },
     created() {
@@ -574,24 +618,7 @@ export default {
                     name : this.contract.name,
                     path : '/contracts/'+ this.contract.id
                 });
-                this.userService.findAllByContract(
-                    this.contract.id,
-                    (contractUsers) => {
-						contractUsers.forEach(contractUser => {
-                            this.contractUsers.push(contractUser);
-                            this.contractUsersUsernames.push(contractUser.user.username)
-                            if(contractUser.contractRole.name === 'CONTRACT_OWNER'){
-                            	this.contractOwner = contractUser;
-                                this.contractOwnerUsername = contractUser.user.username;
-							}
-
-                            if(contractUser.user.id === this.$store.state.auth.user.id){
-                                this.currentContractUser = contractUser;
-                            }
-                        });
-                    },
-			        (error) => { 'error' }
-                )
+                this.loadContractUsersPaginated(this.contractUsersCurrentPage, this.contractUsersPageSize, this.contractUsersSortBy);
             },
             (error) => { this.$router.replace('/404') }
         );

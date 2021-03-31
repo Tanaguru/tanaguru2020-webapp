@@ -10,7 +10,6 @@
 
 <script>
 import SessionPopup from "./components/SessionPopup";
-import {bus} from './vue';
 import TngHeader from "@/components/Header";
 import TngFooter from "@/components/Footer";
 
@@ -18,12 +17,10 @@ export default {
 	components: {
 		TngFooter,
 		TngHeader,
-		SessionPopup,
-		bus
+		SessionPopup
 	},
 	data() {
 		return {
-			bus: bus,
 			sessionTimer: null,
 			sessionDuration: 3600000,
 			currentDate: new Date(),

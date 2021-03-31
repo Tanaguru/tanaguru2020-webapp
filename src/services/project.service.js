@@ -47,7 +47,7 @@ export default class ProjectService extends Service{
         })
     }
 
-    findByAuthorityByProjectId(id, then, error){
+    findAuthoritiesByProjectId(id, then, error){
         return this.axios({
             url: this.controllerName + '/' + id + '/authorities',
             method: 'get',
@@ -60,22 +60,35 @@ export default class ProjectService extends Service{
             })
     }
 
-    findMemberOfByContractId(id, then, error){
+    findMyProjects(page, size, search, then, error){
         return this.axios({
-            url: this.controllerName + '/member-of/by-contract/' + id,
+            url: this.controllerName + '/my-projects' + '?page=' + page + '&size=' + size + '&search=' + search,
             method: 'get',
-          })
-          .then(resp => {
-            then(resp.data)
-          })
-          .catch(err => {
-              error(err);
-          });
+        })
+            .then(resp => {
+                then(resp.data)
+            })
+            .catch(err => {
+                error(err);
+            });
     }
 
-    findMemberOfNotOwner(then, error){
+    findMySharedProjects(page, size, search, then, error){
         return this.axios({
-            url: this.controllerName + '/member-of',
+            url: this.controllerName + '/my-shared-projects' + '?page=' + page + '&size=' + size + '&search=' + search,
+            method: 'get',
+        })
+            .then(resp => {
+                then(resp.data)
+            })
+            .catch(err => {
+                error(err);
+            });
+    }
+
+    findMemberOfNotOwner(page, size, search, then, error){
+        return this.axios({
+            url: this.controllerName + '/member-of' + '?page=' + page + '&size=' + size + '&search=' + search,
             method: 'get',
         })
             .then(resp => {

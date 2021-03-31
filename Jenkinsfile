@@ -14,12 +14,23 @@ def createDockerEnvFileContent(String propertyFileName){
 pipeline {
     agent any
     stages {
+
+		stage('Test') {
+            agent {
+                docker 'node'
+            }
+            steps {  
+				sh 'npm i' 
+				sh 'npm run test:unit'
+            }
+        }
+
         stage('Build') {
             agent {
                 docker 'node'
             }
             steps {
-                sh 'npm i'
+				sh 'npm i'
                 sh 'npm run build'
                 sh 'tar -czvf tanaguru2020-webapp.tar.gz dist'
                 sh '''

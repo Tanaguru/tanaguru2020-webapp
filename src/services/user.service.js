@@ -143,9 +143,39 @@ export default class UserService extends Service{
     }
 
 
+    findAllByContractPaginated(id, page, size, sortBy, then, error){
+        this.axios({
+            url: this.controllerName + '/by-contract-paginated/' + id + '?page=' + page + '&size=' + size + '&sortBy=' + sortBy,
+            method: 'get',
+          })
+          .then(resp => {
+            then(resp.data)
+          })
+          .catch(err => {
+              error(err);
+          });
+    }
+
     findAllByContract(id, then, error){
         this.axios({
             url: this.controllerName + '/by-contract/' + id,
+            method: 'get',
+          })
+          .then(resp => {
+            then(resp.data)
+          })
+          .catch(err => {
+              error(err);
+          });
+    }
+
+    findAllPaginated(page, size, sortBy, isAsc, usernameOrEmail, then, error){
+        this.axios({
+            url: this.controllerName + '/paginated' + '?page=' + page 
+            + '&size=' + size 
+            + '&sortBy=' + sortBy 
+            + '&isAsc=' + isAsc
+            + '&usernameOrEmail=' + usernameOrEmail,
             method: 'get',
           })
           .then(resp => {

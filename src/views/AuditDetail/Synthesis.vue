@@ -34,8 +34,8 @@
 
                 <div class="audit-infos__inner">
                     <div class="audit-caps"
-                        v-if="mainPageContent"
-                        :style="mainPageContent.screenshot ? `background-image:url(data:image/png;base64,` + mainPageContent.screenshot + `)` : defaultImg">
+                        v-if="mainPageContent && mainPageContent.screenshot"
+                        :style="`background-image:url(data:image/png;base64,` + mainPageContent.screenshot + `)`">
                     </div>
 
                     <div class="audit-list" v-if="pages.length > 1">
@@ -181,7 +181,6 @@ export default {
     props: ['audit', 'totalPages'],
     data() {
         return {
-			defaultImg: { backgroundImage: `url(${require('../../../public/assets/images/logo-desktop.svg')})` },
 
             mainPageContent: null,
             principleResultsByReference: {},
