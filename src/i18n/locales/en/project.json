@@ -2,5 +2,6 @@
 	"infos": "Project informations",
 	"users": "Project's users",
 	"legendUsers": "Project's users table",
-	"selectUser": "Select user"
+	"selectUser": "Select user",
+	"infoSearch": "The list underneath contains all existing projects owned by the user. Use the search bar to start typing the name of the project you are looking for and filter projects that doesn't match"
 }

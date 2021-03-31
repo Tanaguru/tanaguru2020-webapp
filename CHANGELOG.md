@@ -16,6 +16,7 @@
 Functionnalities : 
 - Admin and SuperAdmin can unlock/lock users
 - Admin and SuperAdmin can change contract owner
+- Search for an audit page by name
 
 Bugs fixed :
 - Fixed unnecessary error message on site and file audit forms
@@ -32,3 +33,4 @@ Improvements :
 - Improved result diplay in synthesis table pop-ins
 - Admin and SuperAdmin can unlock/lock users
 - Audit logs can be filtered by level and sort by date
+- Pagination of lists

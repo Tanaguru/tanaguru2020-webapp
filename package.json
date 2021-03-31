@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build --mode production",
-    "test": "vue-cli-service test:unit",
+    "test:unit": "vue-cli-service test:unit",
     "sass-lint-vue": "./node_modules/.bin/sass-lint-vue",
     "version": "echo $npm_package_version"
   },

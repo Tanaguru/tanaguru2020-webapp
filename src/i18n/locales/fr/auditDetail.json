@@ -4,6 +4,9 @@
 		"synthesis": "Synthèse"
 	},
 	"pages": "Pages de l'audit",
+	"infoSearch": "La liste ci-dessous contient toutes les pages visitées. Utilisez la barre de recherche pour commencer à taper le nom de la page que vous recherchez et filtrer les lignes de la liste qui ne correspondent pas. Nombre actuel de pages répertoriées",
+	"results": "résultat(s)",
+	"pagesNb": "page(s)",
 	"logs": "Historique de l'audit",
 	"selectLogLevel" : "Sélectionner le niveau de log",
 	"synthesis": {

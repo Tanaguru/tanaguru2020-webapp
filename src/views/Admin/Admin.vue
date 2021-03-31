@@ -2,12 +2,12 @@
     <main class="wrapper" id="page" role="main">
 		<Tabs @activeTab='activeTab'>
 			<Tab :name="$t('entity.contract.contracts')" selected="true" class="tabs-wrapper">
-				<adminContractList :users="users" :selected="selectedTab"/>
+				<adminContractList :selected="selectedTab"/>
 			</Tab>
 
 			<div v-if="this.$store.state.auth.user.appRole.name !== 'USER'">
 				<Tab :name="$t('entity.user.users')" class="tabs-wrapper">
-					<adminUserList :users="users"  @create-user="createUser" :selected="selectedTab"/>
+					<adminUserList :selected="selectedTab"/>
 				</Tab>
 
 				<Tab v-if="showReferenceTab"
@@ -37,7 +37,6 @@ export default {
 	},
 	data(){
 		return {
-			users: [],
 			selectedTab: null
 		}
 	},
@@ -53,20 +52,9 @@ export default {
 		}
 	},
 	methods:{
-		createUser(user){
-			this.users.push(user)
-		},
 		activeTab(value){
 			this.selectedTab = value
-		}
-	},
-	created(){
-		this.userService.findAll(
-			users => {
-				this.users = users
-			},
-			err => console.error(err)
-		);
+		},
 	},
 
 	computed : {
