@@ -27,7 +27,7 @@
 						v-model="searchContract"
 						aria-describedby="search-explanation-contract"
 						autocomplete="off"
-						@keydown="fireAriaLive"
+						@input="fireAriaLive"
 					>
 				</div>
 				<p class='screen-reader-text' id="search-explanation-contract">{{ $t('contracts.infoSearch') }} :
@@ -96,13 +96,13 @@ export default {
 		this.loadUsers();
 	},
 	watch: {
-    	selected: function(newVal, oldVal) {  
+    	selected: function(newVal, oldVal) {
 			if(newVal == 0) {
 				this.searchContract = ""
 				this.liveMsg = ""
 				this.loadUsers()
 				this.loadContracts(this.contractCurrentPage, this.contractPageSize, this.searchContract);
-			} 
+			}
 		}
 	},
 	computed: {
@@ -131,11 +131,11 @@ export default {
 							this.deleteContractError = this.$i18n.t("form.errorMsg.contract.notFound")
 						} else if(err.response.status == "403"){
 							this.deleteContractError = this.$i18n.t("form.errorMsg.user.permissionDenied")
-						} else {  
+						} else {
 							this.deleteContractError = this.$i18n.t("form.errorMsg.genericError");
 						}
 					}
-				);				
+				);
 				this.loadContracts(this.contractCurrentPage, this.contractPageSize, this.searchContract);
 			}
 		},
@@ -175,7 +175,7 @@ export default {
             },
 			err => console.error(err)
 			);
-			
+
 		},
 
 		loadUsers(){

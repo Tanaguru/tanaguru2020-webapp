@@ -21,7 +21,7 @@
 					v-model="search"
 					aria-describedby="search-explanation"
 					autocomplete="off"
-					@keydown="fireAriaLive"
+					@input="fireAriaLive"
 				>
 			</div>
 			<p class='screen-reader-text' id="search-explanation">{{$t('users.infoSearch')}} : {{ users.length }}</p>
@@ -30,8 +30,8 @@
 				<p>{{ liveMsg }} {{$t('user.results')}}</p>
 			</div>
 
-			<user-table 
-				:users="users" 
+			<user-table
+				:users="users"
 				@delete-user="deleteUser">
 			</user-table>
 
@@ -83,12 +83,12 @@
         },
 		props: ['selected'],
 		watch: {
-			selected: function(newVal, oldVal) {  
+			selected: function(newVal, oldVal) {
 				if(newVal == 1) {
 					this.search = ""
 					this.liveMsg = ""
 					this.loadUsers(this.usersCurrentPage, this.usersPageSize, this.usersSortBy, this.usersIsAsc, this.search);
-				} 
+				}
 			}
 		},
         methods: {

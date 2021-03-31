@@ -50,7 +50,7 @@
 							v-model="search"
 							aria-describedby="search-explanation"
 							autocomplete="off"
-							@keydown="fireAriaLive"
+							@input="fireAriaLive"
 						>
 						</div>
 						<p class='screen-reader-text' id="search-explanation">{{$t('auditDetail.infoSearch')}} : {{ pageTotal }}</p>
@@ -58,7 +58,7 @@
 						<div aria-live="polite" class='screen-reader-text'>
 							<p>{{ liveMsg }} {{$t('auditDetail.results')}}</p>
 						</div>
-					
+
 						<page-list
                         :audit="audit"
                         :pages="pages"
@@ -124,7 +124,7 @@
 							:total-pages="auditLogTotalPage"
 							@changePage="(page) => {loadAuditLogs(page, auditLogPageSize, !firstToLast, this.levelsToDisplay)}"
 						/>
-						
+
 					</section>
                 </div>
 			</Tab>
@@ -278,7 +278,7 @@ import IconClose from '../../components/icons/IconClose'
 					}
 				)
 			},
-			
+
 			getProject(){
 				this.projectService.findByAuditId(
 						this.$route.params.id,
@@ -350,7 +350,7 @@ import IconClose from '../../components/icons/IconClose'
 					this.getAudit();
 				}
 			},
-      
+
 			fireAriaLive(){
 				clearTimeout(this.timer)
 				this.timer = setTimeout(this.populateAriaLive, 1000)
@@ -360,7 +360,7 @@ import IconClose from '../../components/icons/IconClose'
 				this.loadPages(0, this.auditPagePageSize, this.search)
 				this.liveMsg = this.pages.length + ' ' + this.$i18n.t('auditDetail.pagesNb')
       		},
-      
+
 			reverseLogsOrder(){
 				if(this.firstToLast == true) {
 					this.firstToLast = false

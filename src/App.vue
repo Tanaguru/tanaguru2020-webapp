@@ -17,7 +17,7 @@ export default {
 	components: {
 		TngFooter,
 		TngHeader,
-		SessionPopup,
+		SessionPopup
 	},
 	data() {
 		return {
