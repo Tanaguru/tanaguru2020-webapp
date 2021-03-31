@@ -21,9 +21,9 @@ export default class ProjectService extends Service{
         .catch(err => {error(err)});
     }
 
-    findByContractId(id, then, error){
+    findByContractId(id, page, size, then, error){
         return this.axios({
-            url: this.controllerName + '/by-contract/' + id,
+            url: this.controllerName + '/by-contract/' + id + '?page=' + page + '&size=' + size,
             method: 'get',
           })
           .then(resp => {
