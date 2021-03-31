@@ -190,7 +190,7 @@
                             </form>
                         </article>
 
-                        <article v-if="projects_page">
+                        <article v-if="projects_page && projects_page.content > 0">
                             <h2 class="contract__title-2" id="table-projects">{{$t('contract.projectsList')}}</h2>
 
                             <ContractProjectTable
@@ -464,7 +464,7 @@ export default {
                     this.projectCreateForm.domain.trim(),
                     this.contract.id,
                     (project) => {
-                        this.projects.push(project)
+                        this.loadProjects(this.projects_page.number, 10)
                         this.projectCreateForm.successMsg = this.$i18n.t('form.successMsg.projectCreation')
                     },
                     (error) => {
@@ -489,12 +489,15 @@ export default {
             }
         },
         deleteProject(project){
-            const index = this.projects.indexOf(project);
+            const index = this.projects_page.content.indexOf(project);
             if(index > -1){
                 this.projectService.delete(
                     project.id,
                     () => {
-                        this.projects.splice(index, 1)
+                        this.loadProjects(this.projects_page.totalElements === 1 ?
+							this.projects_page.totalPages === 1 ? 0 : this.projects_page.number - 1 :
+							this.projects_page.number,
+							10)
                     },
                     (error) => {
                         if(err.response.data.error == "PROJECT_NOT_FOUND"){

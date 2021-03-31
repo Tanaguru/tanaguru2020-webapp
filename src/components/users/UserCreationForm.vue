@@ -15,7 +15,7 @@
 							name="username"
 							id="username"
 							:placeholder="$t('entity.user.username')"
-							v-model="userCreateForm.username"
+							v-model.trim="userCreateForm.username"
 							required>
 						<p class="info-text" id="username-constraint">{{ $t('form.indications.usernameConstraint') }}</p>
 						<p v-if="userCreateForm.usernameError" id="username-error" class="info-error">
@@ -30,11 +30,11 @@
 							class="input"
 							v-bind:class="{'has-error': userCreateForm.emailError}"
 							:aria-describedby="emailDescribedBy"
-							type="email"
+							type="text"
 							name="email"
 							id="email"
 							:placeholder="$t('entity.user.email')"
-							v-model="userCreateForm.email"
+							v-model.trim="userCreateForm.email"
 							required>
 						<p id="email-constraint" class="info-text">(exemple: nom.prenom@boitemail.com)</p>
 						<p v-if="userCreateForm.emailError" id="email-error" class="info-error">
@@ -135,7 +135,7 @@ export default {
 	},
 	props: [ 'selected' ],
 	watch: {
-    	selected: function(newVal, oldVal) {  
+    	selected: function(newVal, oldVal) {
 			if(newVal == 1) {
 			this.userCreateForm.username = ""
 			this.userCreateForm.password = ""
@@ -148,7 +148,7 @@ export default {
 			this.userCreateForm.roleError = ""
 			this.userCreateForm.error = ""
 			this.userCreateForm.successMsg = ""
-			} 
+			}
 		}
 	},
 	computed: {
