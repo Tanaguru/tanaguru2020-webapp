@@ -190,7 +190,7 @@
                             </form>
                         </article>
 
-                        <article v-if="projects_page && projects_page.content > 0">
+                        <article v-if="projects_page && projects_page.content.length > 0">
                             <h2 class="contract__title-2" id="table-projects">{{$t('contract.projectsList')}}</h2>
 
                             <ContractProjectTable
