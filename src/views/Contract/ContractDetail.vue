@@ -190,13 +190,14 @@
                             </form>
                         </article>
 
-                        <article v-if="projects.length > 0">
+                        <article v-if="projects_page">
                             <h2 class="contract__title-2" id="table-projects">{{$t('contract.projectsList')}}</h2>
 
                             <ContractProjectTable
-                                :projects="projects"
+                                :projects="projects_page.content"
                                 :authorityByProjectId="authorityByProjectId"
                                 @delete-project="deleteProject"/>
+							<pagination :current-page="projects_page.number" :total-pages="projects_page.totalPages" @changePage="loadProjects"/>
                         </article>
                         <article v-else>
                             <p v-if=" $moment(contract.dateEnd).isAfter(new Date())">{{$t('contract.noProjectYet')}}</p>
@@ -269,7 +270,7 @@ export default {
                 successMsg: ""
             },
             currentContractUser: null,
-            projects: [],
+			projects_page: null,
             projectCreateForm: {
                 name: "",
                 domain: "",
@@ -348,6 +349,30 @@ export default {
         checkValidDomain: DomainHelper.checkValidDomain,
         activeTab(value){
 			this.selectedTab = value
+		},
+		loadProjects(page, size=10){
+			this.projectService.findByContractId(
+				this.$route.params.id,
+				page,
+				size,
+				(projects_page) => {
+					this.projects_page = projects_page
+					for(let project of projects_page.content){
+						if(! this.authorityByProjectId[project.id]){
+							this.projectService.findAuthoritiesByProjectId(
+								project.id,
+								(authorities) => {
+									this.$set(this.authorityByProjectId, project.id, authorities);
+								},
+								(error) => {
+									console.error("Unable to get authorities for project ", project.id);
+								}
+							)
+						}
+					}
+				},
+				(error) => {console.error(error)}
+			);
 		},
         toggleModifyContractForm(){
             this.modifyContractForm.name = this.contract.name;
@@ -590,7 +615,7 @@ export default {
                             if(contractUser.user.id === this.$store.state.auth.user.id){
                                 this.currentContractUser = contractUser;
                             }
-                            
+
                         });
                         this.contractUsersCurrentPage = page;
                         this.contractUsersTotalPage = contractUsers.totalPages;
@@ -622,24 +647,7 @@ export default {
             },
             (error) => { this.$router.replace('/404') }
         );
-        this.projectService.findByContractId(
-            this.$route.params.id,
-            (projects) => {
-            	this.projects = projects
-				for(let project of projects){
-					this.projectService.findByAuthorityByProjectId(
-						project.id,
-						(authorities) => {
-							this.$set(this.authorityByProjectId, project.id, authorities);
-						},
-						(error) => {
-							console.error("Unable to get authorities for project ", project.id);
-						}
-					)
-				}
-			},
-            (error) => {console.error(error)}
-        );
+        this.loadProjects(0, 10)
     },
 }
 </script>
