@@ -12,10 +12,10 @@
 					<h2 class="project__title-2">{{$t('project.infos')}}</h2>
 					<ul class="infos-list">
 						<li>
-							<span class="infos-list__exergue">{{$t('entity.project.contract')}}</span> 
-							: 
+							<span class="infos-list__exergue">{{$t('entity.project.contract')}}</span>
+							:
 							{{ contract.name }}
-							<span class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">{{$t('contract.expired')}}</span>    
+							<span class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">{{$t('contract.expired')}}</span>
 						</li>
 						<li><span class="infos-list__exergue">{{$t('entity.project.domain')}}</span> : <a :href="project.domain"> {{ project.domain }} </a></li>
 					</ul>
@@ -113,11 +113,11 @@
 					</form>
 				</article>
 
-				<ProjectUserTable 
-					:users="projectUsers" 
-					@remove-user="removeUser" 
-					@promote-user="promoteUser" 
-					:managerCondition="managerCondition" 
+				<ProjectUserTable
+					:users="projectUsers"
+					@remove-user="removeUser"
+					@promote-user="promoteUser"
+					:managerCondition="managerCondition"
 					:promoteSuccessMsg="promoteSuccessMsg" />
 			</Tab>
 		</Tabs>
@@ -195,7 +195,7 @@
 				]
 			}
 		},
-		created(){			
+		created(){
 			this.projectService.findById(
 				this.$route.params.id,
 				(project) => {
@@ -309,8 +309,8 @@
 				if(this.contract.restrictDomain) {
 					if(!this.checkValidDomain(this.projectCreateForm.domain)){
 						this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
-					} else { 
-						this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError") 
+					} else {
+						this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
 					}
 				}
 
@@ -323,7 +323,7 @@
                         this.modifyProjectForm.active = false;
                     },
                     (error) => {
-						console.log(error)
+						console.error(error)
 					}
 				)
 
@@ -350,7 +350,7 @@
 								this.userRemoveError = this.$i18n.t("form.errorMsg.user.notFound")
 							} else if(err.response.status == "403"){
 								this.userRemoveError = this.$i18n.t("form.errorMsg.user.permissionDenied")
-							} else {  
+							} else {
 								this.userRemoveError = this.$i18n.t("form.errorMsg.genericError");
 							}
 						}
@@ -383,7 +383,7 @@
 								this.modifyProjectForm.error = this.$i18n.t("form.errorMsg.project.notFound")
 							} else if(err.response.status == "403"){
 								this.modifyProjectForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
-							} else {  
+							} else {
 								this.modifyProjectForm.error = this.$i18n.t("form.errorMsg.genericError");
 							}
 						}
@@ -410,7 +410,7 @@
 								this.userAdditionForm.error = this.$i18n.t("form.errorMsg.user.notFound")
 							} else if(err.response.status == "403"){
 								this.userAdditionForm.error = this.$i18n.t("form.errorMsg.user.permissionDenied")
-							} else {  
+							} else {
 								this.userAdditionForm.error = this.$i18n.t("form.errorMsg.genericError");
 							}
 						}

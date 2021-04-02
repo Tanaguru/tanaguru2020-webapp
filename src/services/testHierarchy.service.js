@@ -5,6 +5,20 @@ export default class TestHierarchyService extends Service{
         super('test-hierarchies', axios)
     }
 
+    //This function can receive null value and not 404 error if entity is not found
+    findReferenceByCode(code, then, error){
+        return this.axios({
+            url: this.controllerName + "/reference-by-code/" + code,
+            method: 'get',
+        })
+            .then(resp => {
+                then(resp.data)
+            })
+            .catch(err => {
+                error(err);
+            });
+    }
+
     findAllByTestSetId(id, then, error){
         return this.axios({
             url: this.controllerName + "/by-test-set/" + id,

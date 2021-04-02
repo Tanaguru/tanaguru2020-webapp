@@ -47,8 +47,7 @@
 
 		<section v-if="$store.state.auth.authorities['CREATE_REFERENCE']">
 			<h2>{{ $t('references.referenceCreateForm') }}</h2>
-			<tanaguru-test-import :existing-references="references"
-								  @addReference="onAddReference"></tanaguru-test-import>
+			<tanaguru-test-import @addReference="onAddReference"></tanaguru-test-import>
 		</section>
 	</article>
 </template>
@@ -64,7 +63,7 @@ export default {
 	components: {TanaguruTestImport, IconBaseDecorative, IconArrowBlue, Pagination},
 	data() {
 		return {
-			references_page: [],
+			references_page: null,
 			referencesPageSize: 5
 		}
 	},

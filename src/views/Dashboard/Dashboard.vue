@@ -205,7 +205,6 @@ export default {
 	},
 	methods: {
 		fireAriaLive() {
-			console.log("test")
 			clearTimeout(this.timer)
 			this.timer = setTimeout(this.populateAriaLive, 1000)
 		},
