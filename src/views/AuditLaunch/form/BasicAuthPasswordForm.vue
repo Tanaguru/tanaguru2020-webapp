@@ -19,7 +19,7 @@
                        @input="onPasswordInput"
                        @focus="hideError"
                        @blur="showError"
-					   autocomplete="basic-auth-password"
+					   autocomplete="off"
                        :aria-describedby="passwordError ? 'info-error' : ''"/>
 
                 <p v-if="!isValid && passwordError" role="alert" class="info-error" id="password-error">

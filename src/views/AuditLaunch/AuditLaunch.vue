@@ -39,7 +39,7 @@
             </header>
         </div>
 
-        <form novalidate>
+        <form autocomplete="off" novalidate>
             <div class="wrapper">
                 <p class="info-form">{{ $t('form.indications.help') }}</p>
                 <section class="layout" id="section-definition">
