@@ -21,7 +21,7 @@ describe('AuditBasicAuthForm', () => {
                 }
             })
 
-            const passwordInput = wrapper.find('#password');
+            const passwordInput = wrapper.find('#basic-auth-password');
             await passwordInput.setValue('test');
             await passwordInput.trigger('blur')
 
@@ -39,7 +39,7 @@ describe('AuditBasicAuthForm', () => {
                 }
             })
 
-            const passwordInput = wrapper.find('#password');
+            const passwordInput = wrapper.find('#basic-auth-password');
             await passwordInput.setValue('validpassword');
 
             const passwordError = wrapper.find('#password-error')
@@ -70,7 +70,7 @@ describe('AuditBasicAuthForm', () => {
                 }
             })
 
-            const passwordInput = wrapper.find('#password');
+            const passwordInput = wrapper.find('#basic-auth-password');
             await passwordInput.setValue('Password!5');
             await passwordInput.trigger('blur')
 
@@ -89,15 +89,15 @@ describe('AuditBasicAuthForm', () => {
                     value: ''
                 }
             })
-    
-            const urlInput = wrapper.find('#url');
+
+            const urlInput = wrapper.find('#basic-auth-url');
             await urlInput.setValue('test');
             await urlInput.trigger('blur')
-    
+
             const urlError = wrapper.find('#url-error')
             expect(urlError.exists()).toBe(true)
         })
-    
+
         it('should not show error if url is empty', async () => {
             const wrapper = shallowMount(AuditBasicAuthUrlForm, {
                 i18n,
@@ -107,13 +107,13 @@ describe('AuditBasicAuthForm', () => {
                     value: ''
                 }
             })
-    
-            const urlInput = wrapper.find('#url');
-    
+
+            const urlInput = wrapper.find('#basic-auth-url');
+
             const urlError = wrapper.find('#url-error')
             expect(urlError.exists()).toBe(false)
         })
-    
+
         it('should not show error if url is valid', async () => {
             const wrapper = shallowMount(AuditBasicAuthUrlForm, {
                 i18n,
@@ -123,14 +123,14 @@ describe('AuditBasicAuthForm', () => {
                     value: ''
                 }
             })
-    
-            const urlInput = wrapper.find('#url');
+
+            const urlInput = wrapper.find('#basic-auth-url');
             await urlInput.setValue('https://docs.python.org');
-    
+
             const urlError = wrapper.find('#url-error')
             expect(urlError.exists()).toBe(false)
         })
-    
+
         it('should emit input signal when field change', async () => {
             const wrapper = shallowMount(AuditBasicAuthUrlForm, {
                 i18n,
@@ -140,11 +140,11 @@ describe('AuditBasicAuthForm', () => {
                     value: ''
                 }
             })
-    
-            const urlInput = wrapper.find('#url');
+
+            const urlInput = wrapper.find('#basic-auth-url');
             await urlInput.setValue('https://docs.python.org');
             await urlInput.trigger('blur')
-            
+
             expect(wrapper.emitted()).toHaveProperty('input')
         })
     })
