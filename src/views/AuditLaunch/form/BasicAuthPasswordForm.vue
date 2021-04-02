@@ -13,7 +13,7 @@
                 </label>
                 <input class="input" :class="[{'has-error':passwordError && !isValid}]"
                        type="password"
-					   :name="'basic-auth-password-' + new Date()"
+                       name="basic-auth-password"
                        id="basic-auth-password"
                        v-model="password"
                        @input="onPasswordInput"

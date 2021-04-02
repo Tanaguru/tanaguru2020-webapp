@@ -468,7 +468,12 @@ export default {
             }
         );
     },
-    methods: {
+	mounted() {
+		this.auditConfigurationForm.common.login = ""
+		this.auditConfigurationForm.common.password = ""
+		this.auditConfigurationForm.common.url = ""
+	}
+	methods: {
         startAudit: function () {
             this.hasTryToLaunch = true;
             if (!this.launchCondition) {
