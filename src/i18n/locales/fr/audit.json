@@ -123,6 +123,7 @@
 	},
 	"basicAuth": {
 		"basicAuth": "Accès sécurisé",
+		"active": "Activer basic authentication",
 		"login": "Identifiant basic auth",
 		"password": "Mot de passe basic auth",
 		"url": "Url basic auth",
