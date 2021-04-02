@@ -7,15 +7,15 @@
 
 		<div class="layout-content__main">
 			<div class="input-name form-block">
-				<label class="label" for="login">{{ $t('audit.basicAuth.login') }}
+				<label class="label" for="basic-auth-login">{{ $t('audit.basicAuth.login') }}
 					<span v-if="isValid"
 						  class="screen-reader-text">{{ $t('audit.form.indications.help.checked') }}</span>
 					<span v-else class="screen-reader-text">{{ $t('audit.form.indications.help.empty') }}</span>
 				</label>
 				<input class="input" :class="[{'has-error':loginError && !isValid}]"
 					   type="text"
-					   name="login"
-					   id="login"
+					   name="basic-auth-login"
+					   id="basic-auth-login"
 					   v-model="login"
 					   @input="onLoginInput"
 					   @focus="hideError"
