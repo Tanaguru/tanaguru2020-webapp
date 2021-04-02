@@ -123,8 +123,9 @@
 	},
 	"basicAuth": {
 		"basicAuth": "Accès sécurisé",
-		"login": "Identifiant",
-		"password": "Mot de passe",
+		"login": "Identifiant basic auth",
+		"password": "Mot de passe basic auth",
+		"url": "Url basic auth",
 		"explanation": "Indiquez les informations de connexion sécurisée aux pages de l'audit.",
 		"urlError": "L'URL doit être valide et renseignée.",
 		"loginError": "L'identifiant doit contenir plus de 3 caractères.",

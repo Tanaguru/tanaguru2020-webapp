@@ -6,7 +6,7 @@
 
         <div class="layout-content__main">
             <div class="input-name form-block">
-                <label class="label" for="basic-auth-url">URL
+                <label class="label" for="basic-auth-url">{{ $t('audit.basicAuth.url') }}
                     <span v-if="isValid"
                           class="screen-reader-text">{{ $t('audit.form.indications.help.checked') }}</span>
                     <span v-else class="screen-reader-text">{{ $t('audit.form.indications.help.empty') }}</span>

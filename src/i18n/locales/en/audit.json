@@ -123,8 +123,9 @@
 	},
 	"basicAuth": {
 		"basicAuth": "Secured access",
-		"login": "Login",
-		"password": "Password",
+		"login": "Basic auth login",
+		"url": "Basic auth url",
+		"password": "Basic auth password",
 		"explanation": "Please provide basic authentification informations to allow quick and easy protected access to the audit's pages.",
 		"urlError": "URL should be valid and not empty.",
 		"loginError": "Login should be longer than 3 characters",
