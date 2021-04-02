@@ -469,9 +469,12 @@ export default {
         );
     },
 	mounted() {
-		this.auditConfigurationForm.common.login = ""
-		this.auditConfigurationForm.common.password = ""
-		this.auditConfigurationForm.common.url = ""
+    	setTimeout(() => {
+			this.auditConfigurationForm.common.login = ""
+			this.auditConfigurationForm.common.password = ""
+			this.auditConfigurationForm.common.url = ""
+		}, 500)
+
 	},
 	methods: {
         startAudit: function () {
