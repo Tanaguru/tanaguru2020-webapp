@@ -14,7 +14,7 @@
 				</label>
 				<input class="input" :class="[{'has-error':loginError && !isValid}]"
 					   type="text"
-					   name="basic-auth-login"
+					   :name="'basic-auth-login-' + new Date()"
 					   id="basic-auth-login"
 					   v-model="login"
 					   @input="onLoginInput"

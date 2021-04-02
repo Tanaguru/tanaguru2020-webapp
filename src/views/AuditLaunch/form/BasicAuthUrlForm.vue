@@ -13,7 +13,7 @@
                 </label>
                 <input class="input" :class="[{'has-error':urlError && !isValid}]"
                        type="text"
-                       name="basic-auth-url"
+					   :name="'basic-auth-url-' + new Date()"
                        id="basic-auth-url"
                        v-model="url"
                        @input="onUrlInput"
