@@ -20,7 +20,7 @@
 					   @input="onLoginInput"
 					   @focus="hideError"
 					   @blur="showError"
-					   autocomplete="off"
+					   autocomplete="basic-auth-login"
 					   :aria-describedby="loginError ? 'info-error' : ''"/>
 
 				<p v-if="!isValid && loginError" role="alert" class="info-error" id="login-error">

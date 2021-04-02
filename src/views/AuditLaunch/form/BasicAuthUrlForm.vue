@@ -19,7 +19,7 @@
                        @input="onUrlInput"
                        @focus="hideError"
                        @blur="showError"
-					   autocomplete="off"
+					   autocomplete="basic-auth-url"
                        :aria-describedby="urlError ? 'info-error' : ''"/>
 
                 <p v-if="!isValid && urlError" role="alert" class="info-error" id="url-error">
