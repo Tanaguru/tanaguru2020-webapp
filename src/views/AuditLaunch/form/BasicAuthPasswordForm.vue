@@ -19,6 +19,7 @@
                        @input="onPasswordInput"
                        @focus="hideError"
                        @blur="showError"
+					   autocomplete="false"
                        :aria-describedby="passwordError ? 'info-error' : ''"/>
 
                 <p v-if="!isValid && passwordError" role="alert" class="info-error" id="password-error">
@@ -63,7 +64,7 @@ export default {
             this.passwordError = false
         }
     },
-    
+
 }
 </script>
 
