@@ -133,7 +133,7 @@
                                 <pagination
                                     :current-page="contractUsersCurrentPage"
                                     :total-pages="contractUsersTotalPage"
-                                    @changePage="(page) => {loadContractUsersPaginated(page, contractUsersPageSize, contractUsersSortBy)}"
+                                    @changePage="(page) => {loadContractUsersPaginated(page, contractUsersPageSize)}"
                                 />
                         </article>
                     </Tab>
@@ -285,7 +285,6 @@ export default {
             contractUsersTotalPage : 0,
             contractUsersCurrentPage: 0,
             contractUsersTotal: 0,
-            contractUsersSortBy: "username"
         }
     },
     metaInfo() {
@@ -541,7 +540,7 @@ export default {
                             }
                         }
                     );
-                    this.loadContractUsersPaginated(this.contractUsersCurrentPage, this.contractUsersPageSize, this.contractUsersSortBy);
+                    this.loadContractUsersPaginated(this.contractUsersCurrentPage, this.contractUsersPageSize);
                 } else {
                     this.userAdditionForm.error = this.$i18n.t('form.errorMsg.user.notFound')
                 }
@@ -583,7 +582,7 @@ export default {
 				this.contract.id,
 				() => {
                     this.contractUsers.splice(this.contractUsers.indexOf(contractUser), 1);
-                    this.loadContractUsersPaginated(0, this.contractUsersPageSize, this.contractUsersSortBy);
+                    this.loadContractUsersPaginated(0, this.contractUsersPageSize);
 				},
 				(error) => {
                     if(err.response.data.error == "CONTRACT_NOT_FOUND"){
@@ -599,13 +598,12 @@ export default {
             );
         },
 
-        loadContractUsersPaginated(page,size,sortBy){
+        loadContractUsersPaginated(page,size){
             this.contractUsersUsernames = [];
             this.userService.findAllByContractPaginated(
                     this.contract.id,
                     page,
                     size,
-                    sortBy,
                     (contractUsers) => {
                         this.contractUsers = contractUsers.content;
 						contractUsers.content.forEach(contractUser => {
@@ -646,7 +644,7 @@ export default {
                     name : this.contract.name,
                     path : '/contracts/'+ this.contract.id
                 });
-                this.loadContractUsersPaginated(this.contractUsersCurrentPage, this.contractUsersPageSize, this.contractUsersSortBy);
+                this.loadContractUsersPaginated(this.contractUsersCurrentPage, this.contractUsersPageSize);
             },
             (error) => { this.$router.replace('/404') }
         );

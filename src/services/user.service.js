@@ -143,9 +143,9 @@ export default class UserService extends Service{
     }
 
 
-    findAllByContractPaginated(id, page, size, sortBy, then, error){
+    findAllByContractPaginated(id, page, size, then, error){
         this.axios({
-            url: this.controllerName + '/by-contract-paginated/' + id + '?page=' + page + '&size=' + size + '&sortBy=' + sortBy,
+            url: this.controllerName + '/by-contract-paginated/' + id + '?page=' + page + '&size=' + size,
             method: 'get',
           })
           .then(resp => {
@@ -171,9 +171,9 @@ export default class UserService extends Service{
 
     findAllPaginated(page, size, sortBy, isAsc, usernameOrEmail, then, error){
         this.axios({
-            url: this.controllerName + '/paginated' + '?page=' + page 
-            + '&size=' + size 
-            + '&sortBy=' + sortBy 
+            url: this.controllerName + '/paginated' + '?page=' + page
+            + '&size=' + size
+            + '&sortBy=' + sortBy
             + '&isAsc=' + isAsc
             + '&usernameOrEmail=' + usernameOrEmail,
             method: 'get',
