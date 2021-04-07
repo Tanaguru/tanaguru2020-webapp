@@ -1,322 +1,364 @@
 <template>
-    <div>
-        <form>
-            <div class="form-block">
-                <file-upload :id="'test-uploader'" :label="$t('references.form.testListFile') + ' :'" @load="onAddTestListJson" :required="true" format=".json" />
-                <p class="error">{{testInputError}}</p>
-            </div>
+	<div>
+		<form>
+			<div class="form-block">
+				<file-upload :id="'test-uploader'" :label="$t('references.form.testListFile') + ' :'"
+							 @load="onAddTestListJson" :required="true" format=".json"/>
+				<p class="error">{{ testInputError }}</p>
+			</div>
 
-            <div class="form-block" v-for="testReference of referencesFromTestList" :key="testReference">
-                <file-upload :id="'reference-' + testReference" :label="$t('references.form.referenceFile') + ' ' + testReference + ' :'" @load="(content)=>{onAddReferenceJson(content, testReference)}" :required="false" format=".json" />
-                <p class="error" v-if="referenceInputErrorByReferenceCode[testReference]">{{referenceInputErrorByReferenceCode[testReference]}}</p>
+			<div class="form-block" v-for="testReference of referencesFromTestList" :key="testReference">
+				<file-upload :id="'reference-' + testReference"
+							 :label="$t('references.form.referenceFile') + ' ' + testReference + ' :'"
+							 @load="(content)=>{onAddReferenceJson(content, testReference)}" :required="false"
+							 format=".json"/>
+				<p class="error" v-if="referenceInputErrorByReferenceCode[testReference]">
+					{{ referenceInputErrorByReferenceCode[testReference] }}</p>
 
-                    <div v-if="testHierarchyByReferenceCode[testReference]">
-                        <label for="reference-code-reset">{{$t('references.form.codeResetLabel')}} : </label>
-                        <input id="reference-code-reset" type="text"  v-model="testHierarchyByReferenceCode[testReference].code" placeholder="Code" required/>
-						<p class="info-error" v-if="!testHierarchyByReferenceCode[testReference].code">
-							<icon-base-decorative width="16" height="16" viewBox="0 0 16 16"><icon-alert /></icon-base-decorative>
-							<span>{{$t('references.form.emptyLabel')}}</span>
-						</p>
+				<div v-if="testHierarchyByReferenceCode[testReference]">
+					<label for="reference-code-reset">{{ $t('references.form.codeResetLabel') }} : </label>
+					<input id="reference-code-reset" type="text"
+						   v-model="testHierarchyByReferenceCode[testReference].code"
+						   @input="fireAriaLive(testReference)" placeholder="Code" required/>
+					<p class="info-error" v-if="!testHierarchyByReferenceCode[testReference].code">
+						<icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
+							<icon-alert/>
+						</icon-base-decorative>
+						<span>{{ $t('references.form.emptyLabel') }}</span>
+					</p>
 
-						<p class="info-error" v-if="isLabelUsed(testHierarchyByReferenceCode[testReference].code)">
-							<icon-base-decorative width="16" height="16" viewBox="0 0 16 16"><icon-alert /></icon-base-decorative>
-							<span>{{$t('references.form.labelAlreadyExists')}}</span>
-						</p>
-					</div>
-                </div>
+					<p class="info-error" v-if="isLabelUsed(testHierarchyByReferenceCode[testReference].code)">
+						<icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
+							<icon-alert/>
+						</icon-base-decorative>
+						<span>{{ $t('references.form.labelAlreadyExists') }}</span>
+					</p>
+				</div>
+			</div>
 
-            <div v-if="isCreationButtonVisible">
-                <button type="button" class="btn btn--default" @click="createTestsAndReferences">{{$t('action.create')}}</button>
-                <p class="info-success" v-if="isCreationButtonEnabled">
-                    <icon-base-decorative width="16" height="16" viewBox="0 0 16 16"><icon-valid /></icon-base-decorative>
-                    <span>{{$t('references.form.ready')}}</span>
-                </p>
-                <p v-else class="info-error">
-                    <icon-base-decorative width="16" height="16" viewBox="0 0 16 16"><icon-alert /></icon-base-decorative>
-                    <span>{{$t('references.form.disabled')}}</span>
-                </p>
-            </div>
-            <div id="result-output" v-if="isWorking">
-                <p>Tests : {{creationOutput.testCount}} / {{tests.length}}</p>
-                <p>Test Hierarchies : {{creationOutput.testHierarchyCount}} / {{creationOutput.testHierarchyMax}}</p>
-                <p>Test Hierarchies rule assign : {{creationOutput.testHierarchyAssignCount}} / {{creationOutput.testHierarchyAssignMax}}</p>
-            </div>
-        </form>
+			<div v-if="isCreationButtonVisible">
+				<button type="button" class="btn btn--default" @click="createTestsAndReferences">
+					{{ $t('action.create') }}
+				</button>
+				<p class="info-success" v-if="isCreationButtonEnabled">
+					<icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
+						<icon-valid/>
+					</icon-base-decorative>
+					<span>{{ $t('references.form.ready') }}</span>
+				</p>
+				<p v-else class="info-error">
+					<icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
+						<icon-alert/>
+					</icon-base-decorative>
+					<span>{{ $t('references.form.disabled') }}</span>
+				</p>
+			</div>
+			<div id="result-output" v-if="isWorking">
+				<p>Tests : {{ creationOutput.testCount }} / {{ tests.length }}</p>
+				<p>Test Hierarchies : {{ creationOutput.testHierarchyCount }} /
+					{{ creationOutput.testHierarchyMax }}</p>
+				<p>Test Hierarchies rule assign : {{ creationOutput.testHierarchyAssignCount }} /
+					{{ creationOutput.testHierarchyAssignMax }}</p>
+			</div>
+		</form>
 
-        <div v-if="Object.keys(testHierarchyByReferenceCode).length > 0">
-            <h3>{{$t('references.overview')}}</h3>
-            <label for="overview-select">{{$t('references.overviewSelect')}} :</label>
-            <div class="select">
-                <select v-model="overviewSelection" id="overview-select">
-                    <option v-for="reference of Object.keys(testHierarchyByReferenceCode)" :key="reference.id" :value="reference" selected>{{reference}}</option>
-                </select>
-            </div>
+		<div v-if="Object.keys(testHierarchyByReferenceCode).length > 0">
+			<h3>{{ $t('references.overview') }}</h3>
+			<label for="overview-select">{{ $t('references.overviewSelect') }} :</label>
+			<div class="select">
+				<select v-model="overviewSelection" id="overview-select">
+					<option v-for="reference of Object.keys(testHierarchyByReferenceCode)" :key="reference.id"
+							:value="reference" selected>{{ reference }}
+					</option>
+				</select>
+			</div>
 
-            <div v-if="overviewSelection && testHierarchyByReferenceCode[overviewSelection]">
-                <test-hierarchy-json-overview v-for="child of testHierarchyByReferenceCode[overviewSelection].children" :key="child.name" :test-hierarchy="child" :tests-by-test-hierarchy-code="testsByRuleByReferenceCode[overviewSelection]"/>
-            </div>
-        </div>
-    </div>
+			<div v-if="overviewSelection && testHierarchyByReferenceCode[overviewSelection]">
+				<test-hierarchy-json-overview v-for="child of testHierarchyByReferenceCode[overviewSelection].children"
+											  :key="child.name" :test-hierarchy="child"
+											  :tests-by-test-hierarchy-code="testsByRuleByReferenceCode[overviewSelection]"/>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script>
-    import FileUpload from "@/components/FileUpload";
-	import TestHierarchyJsonOverview from "./TestHierarchyJsonOverview";
-	import IconValid from "@/components/icons/IconValid";
-	import IconAlert from "@/components/icons/IconAlert";
-	import IconBaseDecorative from "@/components/icons/IconBaseDecorative";
-	export default {
-        name: 'tanaguru-test-import',
-        components: {FileUpload, TestHierarchyJsonOverview, IconValid, IconAlert, IconBaseDecorative},
-        props: ['existingReferences'],
-        data(){
-            return {
-                tests: [],
-                testsByRuleByReferenceCode: {},
-                testHierarchyByReferenceCode: {},
+import FileUpload from "@/components/FileUpload";
+import TestHierarchyJsonOverview from "./TestHierarchyJsonOverview";
+import IconValid from "@/components/icons/IconValid";
+import IconAlert from "@/components/icons/IconAlert";
+import IconBaseDecorative from "@/components/icons/IconBaseDecorative";
 
-                testInputError: "",
-                referenceInputErrorByReferenceCode: {},
+export default {
+	name: 'tanaguru-test-import',
+	components: {FileUpload, TestHierarchyJsonOverview, IconValid, IconAlert, IconBaseDecorative},
+	data() {
+		return {
+			tests: [],
+			testsByRuleByReferenceCode: {},
+			testHierarchyByReferenceCode: {},
+			existingReferencesByCode: {},
 
-                overviewSelection: '',
+			timerByTestReference: {},
 
-                isWorking: false,
-                creationOutput: {
-                    testCount: 0,
-                    testHierarchyCount: 0,
-                    testHierarchyMax: 0,
-                    testHierarchyAssignCount: 0,
-                    testHierarchyAssignMax: 0
-                }
-            }
-        },
-        props: [ 'selected' ],
-        watch: {
-            selected: function(newVal, oldVal) {
-                if(newVal == 2) {
-                    this.testInputError = ""
-                }
-            }
-        },
-        methods : {
-            onAddTestListJson(content){
-                this.testInputError = "";
-                this.testsByRuleByReferenceCode = {};
-                this.testHierarchyByReferenceCode = {};
-                this.referenceInputErrorByReferenceCode = {};
+			testInputError: "",
+			referenceInputErrorByReferenceCode: {},
 
-                try{
-                    let parsedContent = JSON.parse(content);
-                    if(parsedContent instanceof Array){
+			overviewSelection: '',
 
-                        let isError = false;
-                        for(const test of parsedContent){
-                            //check test validity
-                            if(!test.name || !test.ressources){
-                                this.testInputError = this.$t('references.form.invalidTestFile');
-                                isError = true;
-                                break;
-                            }
+			isWorking: false,
+			creationOutput: {
+				testCount: 0,
+				testHierarchyCount: 0,
+				testHierarchyMax: 0,
+				testHierarchyAssignCount: 0,
+				testHierarchyAssignMax: 0
+			}
+		}
+	},
+	props: ['selected'],
+	watch: {
+		selected: function (newVal, oldVal) {
+			if (newVal == 2) {
+				this.testInputError = ""
+			}
+		}
+	},
+	methods: {
+		fireAriaLive(testReference) {
+			clearTimeout(this.timerByTestReference[testReference])
+			this.timerByTestReference[testReference] = setTimeout(this.populateAriaLive, 1000, testReference)
+		},
 
-                            if(test.ressources){
-                                for(const reference of Object.keys(test.ressources)){
-                                    if(! this.testsByRuleByReferenceCode[reference]){
-                                        this.$set(this.testsByRuleByReferenceCode, reference, {});
-                                    }
-                                    for(const rule of test.ressources[reference]){
-                                        if(! this.testsByRuleByReferenceCode[reference][rule]){
-                                            this.$set(this.testsByRuleByReferenceCode[reference], rule, []);
-                                        }
-                                        this.testsByRuleByReferenceCode[reference][rule].push(test);
-                                    }
-                                }
-                            }
-                        }
+		populateAriaLive(testReference) {
+			if(this.testHierarchyByReferenceCode[testReference].code && !this.existingReferencesByCode[this.testHierarchyByReferenceCode[testReference].code]){
+				this.searchReference(this.testHierarchyByReferenceCode[testReference].code);
+			}
+		},
 
-                        if(isError){
-                            this.testsByRuleByReferenceCode = {};
-                            this.testInputError = this.$t('references.form.invalidTestFile');
-                        }else{
-                            this.tests = parsedContent;
-                        }
-                    }else{
-                        this.tests = [];
-                        this.testInputError = this.$t('references.form.invalidTestFile');
-                    }
-                }catch (e) {
-                    this.testInputError = this.$t('error.parseJson')
-                }
+		onAddTestListJson(content) {
+			this.testInputError = "";
+			this.testsByRuleByReferenceCode = {};
+			this.testHierarchyByReferenceCode = {};
+			this.referenceInputErrorByReferenceCode = {};
 
-            },
-            onAddReferenceJson(content, reference){
-                this.$delete(this.referenceInputErrorByReferenceCode, reference);
-                try{
-                    let parsedContent = JSON.parse(content);
-                    if(this.checkTestHierarchyRec(parsedContent, reference, {})){
-                        this.$set(this.testHierarchyByReferenceCode, reference, parsedContent);
-                    }
-                }catch (e) {
-                    console.error(e);
-                    this.$set(this.referenceInputErrorByReferenceCode, reference, this.$t('error.parseJson'));
-                }
+			try {
+				let parsedContent = JSON.parse(content);
+				if (parsedContent instanceof Array) {
 
-            },
+					let isError = false;
+					for (const test of parsedContent) {
+						//check test validity
+						if (!test.name || !test.ressources) {
+							this.testInputError = this.$t('references.form.invalidTestFile');
+							isError = true;
+							break;
+						}
 
-            checkTestHierarchyRec(testHierarchy, reference, codes){
-                let result = true;
-                if(! testHierarchy.name ||
-                ! testHierarchy.code){
-                    this.$set(this.referenceInputErrorByReferenceCode, reference, this.$t('references.form.invalidReferenceFile'));
-                    result = false;
-                }else{
-                    let hierarchyRanks = {};
-                    for(const child of testHierarchy.children){
-                        if(hierarchyRanks[child.rank]){
-                            result = false;
-                            this.$set(this.referenceInputErrorByReferenceCode, reference, this.$t('references.form.duplicatedRank') + ' ' + child.code);
-                            break;
-                        }
+						if (test.ressources) {
+							for (const reference of Object.keys(test.ressources)) {
+								if (!this.testsByRuleByReferenceCode[reference]) {
+									this.$set(this.testsByRuleByReferenceCode, reference, {});
+								}
+								for (const rule of test.ressources[reference]) {
+									if (!this.testsByRuleByReferenceCode[reference][rule]) {
+										this.$set(this.testsByRuleByReferenceCode[reference], rule, []);
+									}
+									this.testsByRuleByReferenceCode[reference][rule].push(test);
+								}
+							}
+						}
+					}
 
-                        if(codes[child.code]){
-                            result = false;
-                            this.$set(this.referenceInputErrorByReferenceCode, reference, this.$t('references.form.duplicatedCode') + ' ' + child.code);
-                            break;
-                        }else{
-                            codes[child.code] = true
-                        }
+					if (isError) {
+						this.testsByRuleByReferenceCode = {};
+						this.testInputError = this.$t('references.form.invalidTestFile');
+					} else {
+						this.tests = parsedContent;
+					}
+				} else {
+					this.tests = [];
+					this.testInputError = this.$t('references.form.invalidTestFile');
+				}
+			} catch (e) {
+				this.testInputError = this.$t('error.parseJson')
+			}
 
-                        if(!this.checkTestHierarchyRec(child, reference, codes)){
-                            result = false;
-                            break;
-                        }
-                    }
-                }
-                return result
-            },
+		},
+		onAddReferenceJson(content, reference) {
+			this.$delete(this.referenceInputErrorByReferenceCode, reference);
+			try {
+				let parsedContent = JSON.parse(content);
+				if (this.checkTestHierarchyRec(parsedContent, reference, {})) {
+					this.$set(this.testHierarchyByReferenceCode, reference, parsedContent);
+				}
+			} catch (e) {
+				console.error(e);
+				this.$set(this.referenceInputErrorByReferenceCode, reference, this.$t('error.parseJson'));
+			}
 
-            createTestsAndReferences(){
-                if(this.isCreationButtonEnabled){
-                    this.isWorking = true;
-                    this.creationOutput.testCount = 0;
-                    this.creationOutput.testHierarchyCount = 0;
-                    this.creationOutput.testHierarchyMax = 0;
-                    this.creationOutput.testHierarchyAssignCount = 0;
-                    this.creationOutput.testHierarchyAssignMax = 0;
+		},
 
-                    let persistedTestByTest = {};
-                    let promises = [];
-                    for(const test of this.tests){
-                        promises.push(
-                            this.tanaguruTestService.create(test,
-                                (persistedTest)=>{
+		checkTestHierarchyRec(testHierarchy, reference, codes) {
+			let result = true;
+			if (!testHierarchy.name ||
+				!testHierarchy.code) {
+				this.$set(this.referenceInputErrorByReferenceCode, reference, this.$t('references.form.invalidReferenceFile'));
+				result = false;
+			} else {
+				let hierarchyRanks = {};
+				for (const child of testHierarchy.children) {
+					if (hierarchyRanks[child.rank]) {
+						result = false;
+						this.$set(this.referenceInputErrorByReferenceCode, reference, this.$t('references.form.duplicatedRank') + ' ' + child.code);
+						break;
+					}
 
-                                    this.creationOutput.testCount += 1;
-                                    persistedTestByTest[test.name] = persistedTest;
-                                },
-                                (error)=>{
-                                    console.error(error)
-                                }
-                            )
-                        )
-                    }
+					if (codes[child.code]) {
+						result = false;
+						this.$set(this.referenceInputErrorByReferenceCode, reference, this.$t('references.form.duplicatedCode') + ' ' + child.code);
+						break;
+					} else {
+						codes[child.code] = true
+					}
 
-                    Promise.all(promises).then(() =>{
-                        for(const referenceCode of Object.keys(this.testHierarchyByReferenceCode)){
-                            this.createTestHierarchyRec(null, null, referenceCode, this.testHierarchyByReferenceCode[referenceCode], persistedTestByTest);
-                        }
-                    });
-                }
-            },
+					if (!this.checkTestHierarchyRec(child, reference, codes)) {
+						result = false;
+						break;
+					}
+				}
+			}
+			return result
+		},
 
-            createTestHierarchyRec(parent, reference, baseReferenceCode,  testHierarchy, persistedTestByTestName){
-                let testHierarchyToPersist = {};
-                Object.assign(testHierarchyToPersist, testHierarchy);
-                delete testHierarchyToPersist.children;
+		createTestsAndReferences() {
+			if (this.isCreationButtonEnabled) {
+				this.isWorking = true;
+				this.creationOutput.testCount = 0;
+				this.creationOutput.testHierarchyCount = 0;
+				this.creationOutput.testHierarchyMax = 0;
+				this.creationOutput.testHierarchyAssignCount = 0;
+				this.creationOutput.testHierarchyAssignMax = 0;
 
-                if(parent){
-                    testHierarchyToPersist.parentId = parent.id;
-                }
+				let persistedTestByTest = {};
+				let promises = [];
+				for (const test of this.tests) {
+					promises.push(
+						this.tanaguruTestService.create(test,
+							(persistedTest) => {
 
-                if(reference){
-                    testHierarchyToPersist.referenceId = reference.id;
-                }
+								this.creationOutput.testCount += 1;
+								persistedTestByTest[test.name] = persistedTest;
+							},
+							(error) => {
+								console.error(error)
+							}
+						)
+					)
+				}
 
-                this.creationOutput.testHierarchyMax += 1;
-                this.testHierarchyService.create(
-                    testHierarchyToPersist,
-                    (persistedTestHierarchy) =>{
-                        this.creationOutput.testHierarchyCount += 1;
-                        this.assignTestHierarchyTests(persistedTestHierarchy, baseReferenceCode, persistedTestByTestName);
-                        if(!reference){
-                            this.$emit('addReference', persistedTestHierarchy)
-                        }
-                        for(const child of testHierarchy.children){
-                            this.createTestHierarchyRec(persistedTestHierarchy, reference ? reference : persistedTestHierarchy, baseReferenceCode, child, persistedTestByTestName);
-                        }
-                    },
-                    (error) => {
-                        console.error(error);
-                    }
-                )
-            },
+				Promise.all(promises).then(() => {
+					for (const referenceCode of Object.keys(this.testHierarchyByReferenceCode)) {
+						this.createTestHierarchyRec(null, null, referenceCode, this.testHierarchyByReferenceCode[referenceCode], persistedTestByTest);
+					}
+				});
+			}
+		},
 
-            assignTestHierarchyTests(persistedTestHierarchy, baseReferenceCode,  persistedTestByTestName){
-                if(this.testsByRuleByReferenceCode[baseReferenceCode] &&
-                    this.testsByRuleByReferenceCode[baseReferenceCode][persistedTestHierarchy.code]){
-                    this.creationOutput.testHierarchyAssignMax += this.testsByRuleByReferenceCode[baseReferenceCode][persistedTestHierarchy.code].length;
-                    this.testHierarchyService.addTestList(
-                        persistedTestHierarchy.id,
-                        this.testsByRuleByReferenceCode[baseReferenceCode][persistedTestHierarchy.code]
-                            .map((test)=>{
-                                return persistedTestByTestName[test.name].id;
-                            }),
-                        () =>{
-                            this.creationOutput.testHierarchyAssignCount += this.testsByRuleByReferenceCode[baseReferenceCode][persistedTestHierarchy.code].length;
-                        },
-                        (error)=>{
-                            console.error(error)
-                        });
-                }
-            },
+		createTestHierarchyRec(parent, reference, baseReferenceCode, testHierarchy, persistedTestByTestName) {
+			let testHierarchyToPersist = {};
+			Object.assign(testHierarchyToPersist, testHierarchy);
+			delete testHierarchyToPersist.children;
 
-			isLabelUsed(label){
-				return this.existingReferences.some(
-					(existingLabel)=>{
-						return existingLabel.code === label
+			if (parent) {
+				testHierarchyToPersist.parentId = parent.id;
+			}
+
+			if (reference) {
+				testHierarchyToPersist.referenceId = reference.id;
+			}
+
+			this.creationOutput.testHierarchyMax += 1;
+			this.testHierarchyService.create(
+				testHierarchyToPersist,
+				(persistedTestHierarchy) => {
+					this.creationOutput.testHierarchyCount += 1;
+					this.assignTestHierarchyTests(persistedTestHierarchy, baseReferenceCode, persistedTestByTestName);
+					if (!reference) {
+						this.$emit('addReference', persistedTestHierarchy)
+					}
+					for (const child of testHierarchy.children) {
+						this.createTestHierarchyRec(persistedTestHierarchy, reference ? reference : persistedTestHierarchy, baseReferenceCode, child, persistedTestByTestName);
+					}
+				},
+				(error) => {
+					console.error(error);
+				}
+			)
+		},
+
+		assignTestHierarchyTests(persistedTestHierarchy, baseReferenceCode, persistedTestByTestName) {
+			if (this.testsByRuleByReferenceCode[baseReferenceCode] &&
+				this.testsByRuleByReferenceCode[baseReferenceCode][persistedTestHierarchy.code]) {
+				this.creationOutput.testHierarchyAssignMax += this.testsByRuleByReferenceCode[baseReferenceCode][persistedTestHierarchy.code].length;
+				this.testHierarchyService.addTestList(
+					persistedTestHierarchy.id,
+					this.testsByRuleByReferenceCode[baseReferenceCode][persistedTestHierarchy.code]
+						.map((test) => {
+							return persistedTestByTestName[test.name].id;
+						}),
+					() => {
+						this.creationOutput.testHierarchyAssignCount += this.testsByRuleByReferenceCode[baseReferenceCode][persistedTestHierarchy.code].length;
+					},
+					(error) => {
+						console.error(error)
+					});
+			}
+		},
+		searchReference(code) {
+			if (!this.existingReferencesByCode[code]) {
+				this.testHierarchyService.findReferenceByCode(
+					code,
+					(testHierarchy) => {
+						if(testHierarchy != null){
+							this.$set(this.existingReferencesByCode, code, testHierarchy)
+						}
+					},
+					(error) => {
+						console.error(error);
 					}
 				)
 			}
-        },
-        computed : {
-            referencesFromTestList(){
-                return Object.keys(this.testsByRuleByReferenceCode);
-            },
+		},
+		isLabelUsed(label) {
+			return !!this.existingReferencesByCode[label];
+		}
+	},
+	computed: {
+		referencesFromTestList() {
+			return Object.keys(this.testsByRuleByReferenceCode);
+		},
 
-            isCreationButtonVisible(){
-                return !this.isWorking && Object.keys(this.testHierarchyByReferenceCode).length > 0;
-            },
+		isCreationButtonVisible() {
+			return !this.isWorking && Object.keys(this.testHierarchyByReferenceCode).length > 0;
+		},
 
-            isCreationButtonEnabled(){
-                return this.isCreationButtonVisible && !Object.keys(this.testHierarchyByReferenceCode).some(
-                    (baseReferenceCode)=>{
-                        let newCode = this.testHierarchyByReferenceCode[baseReferenceCode].code;
-                        return ! newCode ||
-                            this.existingReferences.some(
-                            (existingReference)=>{
-                                return existingReference.code === newCode;
-                            }
-                        )
-                    }
-                )
-            }
-        }
-    }
+		isCreationButtonEnabled() {
+			return this.isCreationButtonVisible && !Object.keys(this.testHierarchyByReferenceCode).some(
+				(baseReferenceCode) => {
+					return !this.testHierarchyByReferenceCode[baseReferenceCode].code ||
+						this.isLabelUsed(this.testHierarchyByReferenceCode[baseReferenceCode].code)
+				}
+			)
+		}
+	}
+}
 </script>
 
 <style lang="scss">
-.error{
-    margin: .5rem 0 0;
-    color: $color-red;
-    font-size: $small-font-size;
+.error {
+	margin: .5rem 0 0;
+	color: $color-red;
+	font-size: $small-font-size;
 }
 </style>

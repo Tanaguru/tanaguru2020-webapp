@@ -29,7 +29,8 @@ Vue.use(VueMeta)
 Vue.component('v-icon', Icon)
 Vue.component('prism', Prism)
 
-Vue.prototype.$moment = Moment
+Vue.prototype.bus = new Vue();
+Vue.prototype.$moment = Moment;
 Vue.prototype.window = window;
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false
@@ -58,5 +59,4 @@ if (token) {
     Vue.prototype.$http.defaults.headers.common['Authorization'] = 'Bearer ' + token
 }
 
-export const bus = new Vue()
 export default Vue

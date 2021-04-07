@@ -9,7 +9,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="project of projects.slice().reverse()" :key="project.id">
+				<tr v-for="project of projects" :key="project.id">
 					<th scope="row">{{project.name}}</th>
 					<td class="td-actions">
 						<ul class="actions-list">

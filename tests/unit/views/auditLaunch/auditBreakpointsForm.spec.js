@@ -18,9 +18,10 @@ describe('AuditBreakpointsForm', () => {
 
         const breakpointInput = wrapper.find('#breakpoint-length-0');
         await breakpointInput.setValue('');
+        await breakpointInput.trigger('blur');
 
         const emptyError = wrapper.find('#empty-error-0')
-        expect(emptyError.exists()).toBe(true)
+        expect(emptyError.isVisible()).toBe(true)
     })
 
     it('should show error if breakpoint is invalid (0)', async () => {
@@ -35,6 +36,7 @@ describe('AuditBreakpointsForm', () => {
 
         const breakpointInput = wrapper.find('#breakpoint-length-0');
         await breakpointInput.setValue('0');
+        await breakpointInput.trigger('blur');
 
         const validError = wrapper.find('#valid-error-0')
         expect(validError.exists()).toBe(true)
@@ -51,6 +53,7 @@ describe('AuditBreakpointsForm', () => {
         })
         const breakpointInput = wrapper.find('#breakpoint-length-0');
         await breakpointInput.setValue('3841');
+        await breakpointInput.trigger('blur');
 
         const validError = wrapper.find('#valid-error-0')
         expect(validError.exists()).toBe(true)

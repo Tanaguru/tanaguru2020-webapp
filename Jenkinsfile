@@ -14,12 +14,23 @@ def createDockerEnvFileContent(String propertyFileName){
 pipeline {
     agent any
     stages {
+
+		stage('Test') {
+            agent {
+                docker 'node'
+            }
+            steps {
+				sh 'npm i'
+				sh 'npm run test:unit'
+            }
+        }
+
         stage('Build') {
             agent {
                 docker 'node'
             }
             steps {
-                sh 'npm i'
+				sh 'npm i'
                 sh 'npm run build'
                 sh 'tar -czvf tanaguru2020-webapp.tar.gz dist'
                 sh '''
@@ -125,8 +136,10 @@ pipeline {
                 unstash 'version'
 
                 sh '''
-                    WEBAPP_VERSION=$(cat version.txt)
-                    mkdir -p /html/tanaguru2020-webapp/${WEBAPP_VERSION}
+                	WEBAPP_VERSION=$(cat version.txt)
+					DIR = /html/tanaguru2020-webapp/${WEBAPP_VERSION}
+					if [ -d "$DIR" ]; then rm -Rf $DIR; fi
+					mkdir -p $DIR
 					mv -f tanaguru2020-webapp.tar.gz /html/tanaguru2020-webapp/${WEBAPP_VERSION}/tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz
                     chown 1000:1000 /html/tanaguru2020-webapp/${WEBAPP_VERSION}/tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz
                 '''

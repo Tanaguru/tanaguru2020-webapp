@@ -9,12 +9,12 @@ export default class Service {
             url: this.controllerName + "/" + id,
             method: 'get',
         })
-            .then(resp => {
-                then(resp.data)
-            })
-            .catch(err => {
-                error(err);
-            });
+        .then(resp => {
+            then(resp.data)
+        })
+        .catch(err => {
+            error(err);
+        });
     }
 
     findAll(then, error) {
@@ -22,12 +22,12 @@ export default class Service {
             url: this.controllerName + '/',
             method: 'get',
         })
-            .then(resp => {
-                then(resp.data)
-            })
-            .catch(err => {
-                error(err);
-            });
+        .then(resp => {
+            then(resp.data)
+        })
+        .catch(err => {
+            error(err);
+        });
     }
 
     delete(id, then, error) {

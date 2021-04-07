@@ -15,7 +15,7 @@
 							name="username"
 							id="username"
 							:placeholder="$t('entity.user.username')"
-							v-model="userCreateForm.username"
+							v-model.trim="userCreateForm.username"
 							required>
 						<p class="info-text" id="username-constraint">{{ $t('form.indications.usernameConstraint') }}</p>
 						<p v-if="userCreateForm.usernameError" id="username-error" class="info-error">
@@ -30,11 +30,11 @@
 							class="input"
 							v-bind:class="{'has-error': userCreateForm.emailError}"
 							:aria-describedby="emailDescribedBy"
-							type="email"
+							type="text"
 							name="email"
 							id="email"
 							:placeholder="$t('entity.user.email')"
-							v-model="userCreateForm.email"
+							v-model.trim="userCreateForm.email"
 							required>
 						<p id="email-constraint" class="info-text">(exemple: nom.prenom@boitemail.com)</p>
 						<p v-if="userCreateForm.emailError" id="email-error" class="info-error">
@@ -75,7 +75,6 @@
 								v-model="userCreateForm.appRole"
 								:key="'role-error'"
 								required>
-								<option value="">{{ $t('entity.user.selectStatus') }}</option>
 								<option value="SUPER_ADMIN">{{ $t('entity.user.role.superAdmin') }}</option>
 								<option value="ADMIN">{{ $t('entity.user.role.admin') }}</option>
 								<option value="USER">{{ $t('entity.user.role.user') }}</option>
@@ -123,7 +122,7 @@ export default {
 				username: "",
 				password: "",
 				email: "",
-				appRole: null,
+				appRole: 'USER',
 				enabled: false,
 				successMsg: "",
 				error: "",
@@ -136,12 +135,12 @@ export default {
 	},
 	props: [ 'selected' ],
 	watch: {
-    	selected: function(newVal, oldVal) {  
+    	selected: function(newVal, oldVal) {
 			if(newVal == 1) {
 			this.userCreateForm.username = ""
 			this.userCreateForm.password = ""
 			this.userCreateForm.email = ""
-			this.userCreateForm.appRole = ""
+			this.userCreateForm.appRole = this.$store.state.auth.authorities['PROMOTE_USER'] ? "" : "USER"
 			this.userCreateForm.enabled = ""
 			this.userCreateForm.usernameError = ""
 			this.userCreateForm.passwordError = ""
@@ -149,7 +148,7 @@ export default {
 			this.userCreateForm.roleError = ""
 			this.userCreateForm.error = ""
 			this.userCreateForm.successMsg = ""
-			} 
+			}
 		}
 	},
 	computed: {
@@ -273,7 +272,7 @@ export default {
 			}
 			this.userCreateForm.username = "";
 			this.userCreateForm.email = "";
-			this.userCreateForm.appRole = "";
+			this.userCreateForm.appRole = this.$store.state.auth.authorities['PROMOTE_USER'] ? "" : 'USER';
 			this.userCreateForm.enable = "";
 		},
 	}

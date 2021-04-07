@@ -61,7 +61,7 @@ const messages = {
 }
 
 const i18n = new VueI18n({
-    locale: 'en',
+    locale: "en",
     silentFallbackWarn: true,
     silentTranslationWarn: true,
     messages

@@ -1,9 +1,25 @@
 import {shallowMount} from '@vue/test-utils'
 import tanaguruLocalVueHelper from "../../../helper/localVueHelper";
 import i18n from "@/i18n";
+import Vuex from "vuex";
 import UserCreationForm from "../../../../src/components/users/UserCreationForm"
 
 const localVue = tanaguruLocalVueHelper.getTanaguruLocalVue()
+
+const CREATE_CONTRACT_STORE = new Vuex.Store({
+    state : {
+        auth : {
+            authorities : {
+                CREATE_CONTRACT: true
+            },
+            user : {
+                appRole: {
+                    name: 'TEST'
+                }
+            }
+        }
+    }
+})
 
 describe('UserCreationForm', () => {
     describe('name input', () => {
@@ -11,6 +27,7 @@ describe('UserCreationForm', () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,
+                store: CREATE_CONTRACT_STORE,
                 stubs: ['router-link', 'router-view']
 
             })
@@ -26,6 +43,7 @@ describe('UserCreationForm', () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,
+                store: CREATE_CONTRACT_STORE,
                 stubs: ['router-link', 'router-view'],
             })
 
@@ -42,6 +60,7 @@ describe('UserCreationForm', () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,
+                store: CREATE_CONTRACT_STORE,
                 stubs: ['router-link', 'router-view'],
             })
 
@@ -57,6 +76,7 @@ describe('UserCreationForm', () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,
+                store: CREATE_CONTRACT_STORE,
                 stubs: ['router-link', 'router-view'],
             })
 
@@ -74,6 +94,7 @@ describe('UserCreationForm', () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,
+                store: CREATE_CONTRACT_STORE,
                 stubs: ['router-link', 'router-view'],
             })
 
@@ -112,6 +133,7 @@ describe('UserCreationForm', () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,
+                store: CREATE_CONTRACT_STORE,
                 stubs: ['router-link', 'router-view'],
                 propsData: {
                     users: [
@@ -154,6 +176,7 @@ describe('UserCreationForm', () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,
+                store: CREATE_CONTRACT_STORE,
                 stubs: ['router-link', 'router-view'],
                 propsData: {
                     users: [

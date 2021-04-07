@@ -5,7 +5,7 @@
 		<header class="headline headline--top">
 			<h1>
                 {{contract.name}}
-                <span aria-live="polite" class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">{{$t('contract.expired')}}</span>    
+                <span aria-live="polite" class="title-logs__status--error" v-show="$moment(contract.dateEnd).isBefore(new Date())">{{$t('contract.expired')}}</span>
             </h1>
 		</header>
 
@@ -52,20 +52,20 @@
                                         <div class="form-block">
                                             <label class="label" for="dateEnd">{{$t('entity.contract.formDateEnd')}} * :</label>
 
-                                            <input 
+                                            <input
                                                 v-if="$i18n.locale.toLowerCase() == 'en'"
-                                                class="input" 
-                                                type="text" 
-                                                name="dateEnd" 
-                                                id="dateEnd" 
+                                                class="input"
+                                                type="text"
+                                                name="dateEnd"
+                                                id="dateEnd"
                                                 v-model="modifyContractForm.dateEnd" >
 
-                                            <input 
-                                                v-else 
-                                                class="input" 
-                                                type="text" 
-                                                name="dateEnd" 
-                                                id="dateEnd" 
+                                            <input
+                                                v-else
+                                                class="input"
+                                                type="text"
+                                                name="dateEnd"
+                                                id="dateEnd"
                                                 v-model="modifyContractForm.dateEnd" >
                                         </div>
                                     </div>
@@ -74,9 +74,9 @@
                                         <div class="form-block">
                                             <label class="label" for="owner">{{$t('entity.contract.owner')}} * :</label>
 
-                                            <select 
-                                                class="input" 
-                                                name="owner" 
+                                            <select
+                                                class="input"
+                                                name="owner"
                                                 id="owner"
                                                 v-model="modifyContractForm.owner">
                                                 <option v-for="user in contractUsersUsernames" :key="user" :value="user">{{user}}</option>
@@ -129,6 +129,12 @@
                                 :promoteCondition="promoteCondition"
                                 :isStillValid="isStillValid"
                                 :promoteSuccessMsg="promoteSuccessMsg" />
+
+                                <pagination
+                                    :current-page="contractUsersCurrentPage"
+                                    :total-pages="contractUsersTotalPage"
+                                    @changePage="(page) => {loadContractUsersPaginated(page, contractUsersPageSize)}"
+                                />
                         </article>
                     </Tab>
 
@@ -184,13 +190,14 @@
                             </form>
                         </article>
 
-                        <article v-if="projects.length > 0">
+                        <article v-if="projects_page && projects_page.content.length > 0">
                             <h2 class="contract__title-2" id="table-projects">{{$t('contract.projectsList')}}</h2>
 
                             <ContractProjectTable
-                                :projects="projects"
+                                :projects="projects_page.content"
                                 :authorityByProjectId="authorityByProjectId"
                                 @delete-project="deleteProject"/>
+							<pagination :current-page="projects_page.number" :total-pages="projects_page.totalPages" @changePage="loadProjects"/>
                         </article>
                         <article v-else>
                             <p v-if=" $moment(contract.dateEnd).isAfter(new Date())">{{$t('contract.noProjectYet')}}</p>
@@ -215,6 +222,7 @@ import IconArrowBlue from '../../components//icons/IconArrowBlue'
 import IconDelete from '../../components//icons/IconDelete'
 import Breadcrumbs from '../../components/Breadcrumbs';
 import DomainHelper from '../../helper/DomainHelper'
+import Pagination from "../../components/Pagination";
 
 export default {
     name: 'contractDetail',
@@ -228,7 +236,8 @@ export default {
         BackToTop,
         ContractUserTable,
         ContractProjectTable,
-        DomainHelper
+        DomainHelper,
+        Pagination
     },
     data() {
         return {
@@ -261,7 +270,7 @@ export default {
                 successMsg: ""
             },
             currentContractUser: null,
-            projects: [],
+			projects_page: null,
             projectCreateForm: {
                 name: "",
                 domain: "",
@@ -272,6 +281,10 @@ export default {
             },
             promoteSuccessMsg: "",
             userRemoveError: "",
+            contractUsersPageSize: 5,
+            contractUsersTotalPage : 0,
+            contractUsersCurrentPage: 0,
+            contractUsersTotal: 0,
         }
     },
     metaInfo() {
@@ -330,12 +343,35 @@ export default {
     },
     methods: {
         moment: function (date) {
-            this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
         },
         checkValidDomain: DomainHelper.checkValidDomain,
         activeTab(value){
 			this.selectedTab = value
+		},
+		loadProjects(page, size=10){
+			this.projectService.findByContractId(
+				this.$route.params.id,
+				page,
+				size,
+				(projects_page) => {
+					this.projects_page = projects_page
+					for(let project of projects_page.content){
+						if(! this.authorityByProjectId[project.id]){
+							this.projectService.findAuthoritiesByProjectId(
+								project.id,
+								(authorities) => {
+									this.$set(this.authorityByProjectId, project.id, authorities);
+								},
+								(error) => {
+									console.error("Unable to get authorities for project ", project.id);
+								}
+							)
+						}
+					}
+				},
+				(error) => {console.error(error)}
+			);
 		},
         toggleModifyContractForm(){
             this.modifyContractForm.name = this.contract.name;
@@ -360,7 +396,7 @@ export default {
             else {
 
                 let dateEnd = this.modifyContractForm.dateEnd;
-                if(this.$i18n.locale.toLowerCase() == 'en'){ 
+                if(this.$i18n.locale.toLowerCase() == 'en'){
                     dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'MM-DD-YYYY').format("YYYY-MM-DD")
                 } else {
                     dateEnd = this.$moment(this.modifyContractForm.dateEnd, 'DD-MM-YYYY').format("YYYY-MM-DD")
@@ -400,7 +436,7 @@ export default {
         },
         createProject: function(){
             this.projectCreateForm.successMsg = '';
-            
+
 			if(this.projectCreateForm.name.length === 0){
 				this.projectCreateForm.nameError = this.$i18n.t("form.errorMsg.emptyInput");
 			} else if(this.projectCreateForm.name.length > 50){
@@ -410,15 +446,15 @@ export default {
             if(this.contract.restrictDomain) {
                 if(!this.checkValidDomain(this.projectCreateForm.domain)){
                     this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
-                } else if(!this.projectCreateForm.domain) { 
-                    this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError") 
+                } else if(!this.projectCreateForm.domain) {
+                    this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
                 }
             } else {
                 if(this.projectCreateForm.domain){
                     if(!this.checkValidDomain(this.projectCreateForm.domain)){
                         this.projectCreateForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
                     }
-                } 
+                }
             }
 
             if(this.projectCreateForm.name && this.projectCreateForm.name.length < 51 && (this.checkValidDomain(this.projectCreateForm.domain) || (!this.restrictDomain && !this.projectCreateForm.domain))) {
@@ -427,7 +463,7 @@ export default {
                     this.projectCreateForm.domain.trim(),
                     this.contract.id,
                     (project) => {
-                        this.projects.push(project)
+                        this.loadProjects(this.projects_page.number, 10)
                         this.projectCreateForm.successMsg = this.$i18n.t('form.successMsg.projectCreation')
                     },
                     (error) => {
@@ -452,12 +488,15 @@ export default {
             }
         },
         deleteProject(project){
-            const index = this.projects.indexOf(project);
+            const index = this.projects_page.content.indexOf(project);
             if(index > -1){
                 this.projectService.delete(
                     project.id,
                     () => {
-                        this.projects.splice(index, 1)
+                        this.loadProjects(this.projects_page.totalElements === 1 ?
+							this.projects_page.totalPages === 1 ? 0 : this.projects_page.number - 1 :
+							this.projects_page.number,
+							10)
                     },
                     (error) => {
                         if(err.response.data.error == "PROJECT_NOT_FOUND"){
@@ -500,7 +539,8 @@ export default {
                                 this.userAdditionForm.error = this.$i18n.t("form.errorMsg.genericError");
                             }
                         }
-                    )
+                    );
+                    this.loadContractUsersPaginated(this.contractUsersCurrentPage, this.contractUsersPageSize);
                 } else {
                     this.userAdditionForm.error = this.$i18n.t('form.errorMsg.user.notFound')
                 }
@@ -541,7 +581,8 @@ export default {
 				contractUser.user.id,
 				this.contract.id,
 				() => {
-					this.contractUsers.splice(this.contractUsers.indexOf(contractUser), 1);
+                    this.contractUsers.splice(this.contractUsers.indexOf(contractUser), 1);
+                    this.loadContractUsersPaginated(0, this.contractUsersPageSize);
 				},
 				(error) => {
                     if(err.response.data.error == "CONTRACT_NOT_FOUND"){
@@ -554,7 +595,35 @@ export default {
                         this.userRemoveError = this.$i18n.t("form.errorMsg.genericError");
                     }
                 },
-			)
+            );
+        },
+
+        loadContractUsersPaginated(page,size){
+            this.contractUsersUsernames = [];
+            this.userService.findAllByContractPaginated(
+                    this.contract.id,
+                    page,
+                    size,
+                    (contractUsers) => {
+                        this.contractUsers = contractUsers.content;
+						contractUsers.content.forEach(contractUser => {
+                            this.contractUsersUsernames.push(contractUser.user.username)
+                            if(contractUser.contractRole.name === 'CONTRACT_OWNER'){
+                            	this.contractOwner = contractUser;
+                                this.contractOwnerUsername = contractUser.user.username;
+							}
+
+                            if(contractUser.user.id === this.$store.state.auth.user.id){
+                                this.currentContractUser = contractUser;
+                            }
+
+                        });
+                        this.contractUsersCurrentPage = page;
+                        this.contractUsersTotalPage = contractUsers.totalPages;
+                        this.contractUsersTotal = contractUsers.totalElements;
+                    },
+			        (error) => { 'error' }
+                );
         }
     },
     created() {
@@ -575,45 +644,11 @@ export default {
                     name : this.contract.name,
                     path : '/contracts/'+ this.contract.id
                 });
-                this.userService.findAllByContract(
-                    this.contract.id,
-                    (contractUsers) => {
-						contractUsers.forEach(contractUser => {
-                            this.contractUsers.push(contractUser);
-                            this.contractUsersUsernames.push(contractUser.user.username)
-                            if(contractUser.contractRole.name === 'CONTRACT_OWNER'){
-                            	this.contractOwner = contractUser;
-                                this.contractOwnerUsername = contractUser.user.username;
-							}
-
-                            if(contractUser.user.id === this.$store.state.auth.user.id){
-                                this.currentContractUser = contractUser;
-                            }
-                        });
-                    },
-			        (error) => { 'error' }
-                )
+                this.loadContractUsersPaginated(this.contractUsersCurrentPage, this.contractUsersPageSize);
             },
             (error) => { this.$router.replace('/404') }
         );
-        this.projectService.findByContractId(
-            this.$route.params.id,
-            (projects) => {
-            	this.projects = projects
-				for(let project of projects){
-					this.projectService.findByAuthorityByProjectId(
-						project.id,
-						(authorities) => {
-							this.$set(this.authorityByProjectId, project.id, authorities);
-						},
-						(error) => {
-							console.error("Unable to get authorities for project ", project.id);
-						}
-					)
-				}
-			},
-            (error) => {console.error(error)}
-        );
+        this.loadProjects(0, 10)
     },
 }
 </script>

@@ -26,7 +26,6 @@
 							<li v-else-if="parameters.browser == 'chrome'" >{{ $t('auditDetail.information.browser') }}Google Chrome</li>
 							<li v-show="parameters.waitTime">{{$t('auditDetail.information.waitTime')}} : {{parameters.waitTime}}</li>
 							<li v-show="parameters.basicAuthLogin">{{$t('auditDetail.information.basicLogin')}} : {{parameters.basicAuthLogin}}</li>
-							<li v-show="parameters.basicAuthPassword">{{$t('auditDetail.information.basicPswd')}} : {{parameters.basicAuthPassword}}</li>
 							<li v-show="parameters.basicAuthUrl">{{$t('auditDetail.information.basicUrl')}} : {{parameters.basicAuthUrl}}</li>
 							<li v-show="parameters.enableScreenshot">{{$t('auditDetail.information.screenshots')}} : {{parameters.enableScreenshot == 'false' ? 'No' : 'Yes'}}</li>
 							<li v-show="parameters.maxDepth">{{$t('auditDetail.information.maxDepth')}} : {{parameters.maxDepth}}</li>
@@ -37,6 +36,28 @@
 					</section>
 
 					<section class="section-logs">
+
+						<h2>{{ $t('auditDetail.pages') }} ({{pageTotal}})</h2>
+
+						<div class="form-block form-block--half">
+						<label class="label" for="search-page">{{$t('action.search')}} : </label>
+						<input
+							class="input"
+							type="search"
+							name="search-page"
+							id="search-page"
+							v-model="search"
+							aria-describedby="search-explanation"
+							autocomplete="off"
+							@input="fireAriaLive"
+						>
+						</div>
+						<p class='screen-reader-text' id="search-explanation">{{$t('auditDetail.infoSearch')}} : {{ pageTotal }}</p>
+
+						<div aria-live="polite" class='screen-reader-text'>
+							<p>{{ liveMsg }} {{$t('auditDetail.results')}}</p>
+						</div>
+
 						<page-list
                         :audit="audit"
                         :pages="pages"
@@ -48,7 +69,7 @@
 						<pagination
 							:current-page="pageCurrentPage"
 							:total-pages="pageTotalPage"
-							@changePage="(page) => {loadPages(page, auditPagePageSize)}"
+							@changePage="(page) => {loadPages(page, auditPagePageSize, search)}"
 						/>
 					</section>
 
@@ -102,7 +123,7 @@
 							:total-pages="auditLogTotalPage"
 							@changePage="(page) => {loadAuditLogs(page, auditLogPageSize, !firstToLast, this.levelsToDisplay)}"
 						/>
-						
+
 					</section>
                 </div>
 			</Tab>
@@ -153,6 +174,8 @@ import IconClose from '../../components/icons/IconClose'
 		},
 		data() {
 			return {
+				search : "",
+				liveMsg : "",
 				timer: null,
 				audit: null,
 				sharecode: null,
@@ -194,10 +217,8 @@ import IconClose from '../../components/icons/IconClose'
 			this.getLogLevels();
 			this.refreshPages();
 			this.timer = setInterval(this.refreshPages, 3000);
-
-            this.loadPages(this.pageCurrentPage, this.auditPagePageSize);
+      		this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
 			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
-
 			this.getParameters();
 		},
 		beforeDestroy () {
@@ -256,7 +277,7 @@ import IconClose from '../../components/icons/IconClose'
 					}
 				)
 			},
-			
+
 			getProject(){
 				this.projectService.findByAuditId(
 						this.$route.params.id,
@@ -281,14 +302,14 @@ import IconClose from '../../components/icons/IconClose'
 						console.error(error);
 					}
 				);
-
-                this.loadPages(this.pageCurrentPage, this.auditPagePageSize);
-                this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
+        		this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
+        		this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
 			},
 
-            loadPages(page, size){
-                this.pageService.findByAuditId(
-                    this.$route.params.id,
+            loadPages(page, size, name){
+                this.pageService.findByAuditIdAndName(
+					this.$route.params.id,
+					name,
                     this.sharecode,
                     page,
                     size,
@@ -328,6 +349,16 @@ import IconClose from '../../components/icons/IconClose'
 					this.getAudit();
 				}
 			},
+
+			fireAriaLive(){
+				clearTimeout(this.timer)
+				this.timer = setTimeout(this.populateAriaLive, 1000)
+			},
+
+			populateAriaLive(){
+				this.loadPages(0, this.auditPagePageSize, this.search)
+				this.liveMsg = this.pages.length + ' ' + this.$i18n.t('auditDetail.pagesNb')
+      		},
 
 			reverseLogsOrder(){
 				if(this.firstToLast == true) {
