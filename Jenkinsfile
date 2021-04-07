@@ -19,8 +19,8 @@ pipeline {
             agent {
                 docker 'node'
             }
-            steps {  
-				sh 'npm i' 
+            steps {
+				sh 'npm i'
 				sh 'npm run test:unit'
             }
         }
@@ -136,8 +136,10 @@ pipeline {
                 unstash 'version'
 
                 sh '''
-                    WEBAPP_VERSION=$(cat version.txt)
-                    mkdir -p /html/tanaguru2020-webapp/${WEBAPP_VERSION}
+                	WEBAPP_VERSION=$(cat version.txt)
+					DIR = /html/tanaguru2020-webapp/${WEBAPP_VERSION}
+					if [ -d "$DIR" ]; then rm -Rf $DIR; fi
+					mkdir -p $DIR
 					mv -f tanaguru2020-webapp.tar.gz /html/tanaguru2020-webapp/${WEBAPP_VERSION}/tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz
                     chown 1000:1000 /html/tanaguru2020-webapp/${WEBAPP_VERSION}/tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz
                 '''
