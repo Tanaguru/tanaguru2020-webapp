@@ -37,7 +37,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="audit of this.audits" :key="audit.id" v-if="totalPagesByAudit[audit.id] && totalPagesByAudit[audit.id] > 0">
+                <tr v-for="audit of this.audits" :key="audit.id">
                     <th scope="row">{{ audit.name }}</th>
                     <td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
                     <td>{{ totalPagesByAudit[audit.id] }}</td>
@@ -238,7 +238,7 @@ export default {
 
         deleteAudit(audit) {
             var index = this.audits.indexOf(audit);
-            
+
             if(index > -1){
                 this.auditService.delete(
                     audit.id,
@@ -276,7 +276,7 @@ export default {
                 }
             );
         }
-    
+
     },
     created() {
         this.loadAudits(this.projectId, this.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast);
