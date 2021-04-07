@@ -98,7 +98,7 @@
 		<article class="dashboard-section">
 			<h2 id="shared-with-me">{{ $t('dashboard.title.sharedProjects') }}</h2>
 			<div v-if="sharedProjects_page && sharedProjects_page.content.length > 0">
-				<DashProjectView v-for="project in sharedByCurrentUser_page.content" :project="project"
+				<DashProjectView v-for="project in sharedProjects_page.content" :project="project"
 								 :key="project.id"/>
 				<pagination :total-pages="sharedProjects_page.totalPages" :current-page="sharedProjects_page.number"
 							@changePage="(page)=> getProjectsSharedWithMe(page)"/>
