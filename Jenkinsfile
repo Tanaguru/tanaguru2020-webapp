@@ -129,7 +129,10 @@ pipeline {
 
         stage('Store packages') {
             when {
-                branch 'master'
+            	anyOf{
+                	branch 'master'
+                	branch 'beta'
+                }
             }
             steps {
                 unstash 'tanaguru2020-webapp'
