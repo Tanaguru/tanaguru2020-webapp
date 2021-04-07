@@ -140,7 +140,7 @@ pipeline {
 
                 sh '''
                 	WEBAPP_VERSION=$(cat version.txt)
-					DIR = /html/tanaguru2020-webapp/${WEBAPP_VERSION}
+					DIR=/html/tanaguru2020-webapp/${WEBAPP_VERSION}
 					if [ -d "$DIR" ]; then rm -Rf $DIR; fi
 					mkdir -p $DIR
 					mv -f tanaguru2020-webapp.tar.gz /html/tanaguru2020-webapp/${WEBAPP_VERSION}/tanaguru2020-webapp-${WEBAPP_VERSION}.tar.gz
