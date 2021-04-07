@@ -504,7 +504,7 @@ export default {
 		},
 		toggleProject() {
 			this.projectOpen = !this.projectOpen;
-			if(this.projectOpen && this.lastAudit && !this.lastAuditFirstPageContent){
+			if(this.projectOpen && this.lastAudit){
 				this.auditService.findLastByProjectAndType(
 					this.project.id,
 					'PAGE',
