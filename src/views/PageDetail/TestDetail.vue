@@ -32,7 +32,7 @@
 
                 <div class="result-header-arrow">
                     <button class="btn btn--nude btn--icon btn--tab"
-                            v-if="testResult.elementResults.length > 0"
+                            v-if="testResult.hasElementResults"
                             :aria-expanded="ruleOpen === true ? 'true' : 'false'"
                             :aria-controls="'rule-content-' + testResult.type + '-' + index"
                             @click="toggleContent(!ruleOpen)">
