@@ -87,7 +87,6 @@
 			</div>
 
 			<fieldset class="checkbox-wrapper">
-				<legend class="checkbox-wrapper__legend">{{ $t('entity.user.enabled') }}</legend>
 				<div class="checkbox">
 					<input
 						class="checkbox__input"
@@ -96,6 +95,18 @@
 						id="enabled"
 						v-model="userCreateForm.enabled">
 					<label class="checkbox__label" for="enabled">{{ $t('entity.user.enabled') }}</label>
+				</div>
+			</fieldset>
+
+			<fieldset class="checkbox-wrapper">
+				<div class="checkbox">
+					<input
+						class="checkbox__input"
+						type="checkbox"
+						name="userCreateForm"
+						id="createContract"
+						v-model="userCreateForm.createContract">
+					<label class="checkbox__label" for="createContract">{{ $t('entity.user.createContract') }}</label>
 				</div>
 			</fieldset>
 
@@ -129,7 +140,8 @@ export default {
 				emailError: "",
 				passwordError: "",
 				usernameError: "",
-				roleError: ""
+				roleError: "",
+				createContract: false
 			}
 		}
 	},
@@ -148,6 +160,7 @@ export default {
 			this.userCreateForm.roleError = ""
 			this.userCreateForm.error = ""
 			this.userCreateForm.successMsg = ""
+			this.userCreateForm.createContract = false
 			}
 		}
 	},
@@ -246,6 +259,7 @@ export default {
 					this.userCreateForm.password,
 					this.userCreateForm.appRole,
 					this.userCreateForm.enabled,
+					this.userCreateForm.createContract,
 					(user) => {
 						this.$emit('createUser', user)
 						this.userCreateForm.successMsg = this.$i18n.t("form.successMsg.userCreation")
