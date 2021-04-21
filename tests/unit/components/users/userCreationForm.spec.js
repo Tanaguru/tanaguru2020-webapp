@@ -142,7 +142,7 @@ describe('UserCreationForm', () => {
                 },
                 mocks: {
                     userService : {
-                        create(name, email, password, appRole, enabled, then, error) {
+                        create(name, email, password, appRole, enabled, createContract, then, error) {
                             then({
                                 // user
                             })
@@ -185,7 +185,7 @@ describe('UserCreationForm', () => {
                 },
                 mocks: {
                     userService : {
-                        create(name, email, password, appRole, enabled, then, error) {
+                        create(name, email, password, appRole, enabled, createContract, then, error) {
                             error({
                                 response: {
                                     data: {
