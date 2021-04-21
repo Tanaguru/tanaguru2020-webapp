@@ -17,7 +17,7 @@ export default class UserService extends Service{
           .catch(err => {error(err)})
     }
 
-    create(username, email, password, appRole, enabled, createContract = false, then, error){
+    create(username, email, password, appRole, enabled, createContract, then, error){
         const user = {
             'username' : username,
             'email' : email,

@@ -17,7 +17,9 @@
 							:placeholder="$t('entity.user.username')"
 							v-model.trim="userCreateForm.username"
 							required>
-						<p class="info-text" id="username-constraint">{{ $t('form.indications.usernameConstraint') }}</p>
+						<p class="info-text" id="username-constraint">{{
+								$t('form.indications.usernameConstraint')
+							}}</p>
 						<p v-if="userCreateForm.usernameError" id="username-error" class="info-error">
 							{{ userCreateForm.usernameError }}</p>
 					</div>
@@ -111,7 +113,9 @@
 			</fieldset>
 
 			<button class="btn btn--default btn-create" type="submit">{{ $t('action.create') }}</button>
-			<p class="info-success" id="form-success" v-if="userCreateForm.successMsg">{{ userCreateForm.successMsg }}</p>
+			<p class="info-success" id="form-success" v-if="userCreateForm.successMsg">{{
+					userCreateForm.successMsg
+				}}</p>
 			<p v-if="userCreateForm.error" class="info-error" id="form-error">{{ userCreateForm.error }}</p>
 		</form>
 	</div>
@@ -145,22 +149,22 @@ export default {
 			}
 		}
 	},
-	props: [ 'selected' ],
+	props: ['selected'],
 	watch: {
-    	selected: function(newVal, oldVal) {
-			if(newVal == 1) {
-			this.userCreateForm.username = ""
-			this.userCreateForm.password = ""
-			this.userCreateForm.email = ""
-			this.userCreateForm.appRole = this.$store.state.auth.authorities['PROMOTE_USER'] ? "" : "USER"
-			this.userCreateForm.enabled = ""
-			this.userCreateForm.usernameError = ""
-			this.userCreateForm.passwordError = ""
-			this.userCreateForm.emailError = ""
-			this.userCreateForm.roleError = ""
-			this.userCreateForm.error = ""
-			this.userCreateForm.successMsg = ""
-			this.userCreateForm.createContract = false
+		selected: function (newVal, oldVal) {
+			if (newVal == 1) {
+				this.userCreateForm.username = ""
+				this.userCreateForm.password = ""
+				this.userCreateForm.email = ""
+				this.userCreateForm.appRole = this.$store.state.auth.authorities['PROMOTE_USER'] ? "" : "USER"
+				this.userCreateForm.enabled = ""
+				this.userCreateForm.usernameError = ""
+				this.userCreateForm.passwordError = ""
+				this.userCreateForm.emailError = ""
+				this.userCreateForm.roleError = ""
+				this.userCreateForm.error = ""
+				this.userCreateForm.successMsg = ""
+				this.userCreateForm.createContract = false
 			}
 		}
 	},
@@ -187,17 +191,17 @@ export default {
 			return description;
 		},
 	},
-	created(){
-		if(this.$store.state.auth.authorities['CREATE_CONTRACT']){
+	created() {
+		if (this.$store.state.auth.authorities['CREATE_CONTRACT']) {
 			this.userCreateForm.appRole = null;
 		} else {
 			this.userCreateForm.appRole = 'User'
 		}
 	},
 	methods: {
-        checkValidEmail: EmailHelper.checkValidEmail,
+		checkValidEmail: EmailHelper.checkValidEmail,
 		checkValidPassword: PasswordHelper.checkValidPassword,
-		checkUsername(){
+		checkUsername() {
 			this.userCreateForm.usernameError = "";
 			if (!this.userCreateForm.username) {
 				this.userCreateForm.usernameError = this.$i18n.t("form.errorMsg.emptyInput");
@@ -210,7 +214,7 @@ export default {
 			}
 			return true;
 		},
-		checkEmail(){
+		checkEmail() {
 			this.userCreateForm.emailError = "";
 			if (!this.userCreateForm.email) {
 				this.userCreateForm.emailError = this.$i18n.t("form.errorMsg.emptyInput");
@@ -223,7 +227,7 @@ export default {
 			}
 			return true;
 		},
-		checkPassword(){
+		checkPassword() {
 			this.userCreateForm.passwordError = "";
 			if (!this.userCreateForm.password) {
 				this.userCreateForm.passwordError = this.$i18n.t("form.errorMsg.emptyInput")
@@ -236,7 +240,7 @@ export default {
 			}
 			return true;
 		},
-		checkStatus(){
+		checkStatus() {
 			this.userCreateForm.roleError = "";
 			if (!this.userCreateForm.appRole) {
 				this.userCreateForm.roleError = this.$i18n.t("form.errorMsg.emptyInput")
@@ -252,7 +256,7 @@ export default {
 			isFormValid &= this.checkPassword();
 			isFormValid &= this.checkStatus();
 
-			if(isFormValid){
+			if (isFormValid) {
 				this.userService.create(
 					this.userCreateForm.username,
 					this.userCreateForm.email,
@@ -266,8 +270,8 @@ export default {
 					},
 					(error) => {
 						this.userCreateForm.error = this.$i18n.t("form.errorMsg.genericError");
-						if(error.response.data.error){
-							switch(error.response.data.error){
+						if (error.response.data.error) {
+							switch (error.response.data.error) {
 								case this.userService.USERNAME_ALREADY_EXISTS:
 									this.userCreateForm.usernameError = this.$i18n.t("form.errorMsg.username.existingUsername");
 									break;
