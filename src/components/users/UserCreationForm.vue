@@ -242,7 +242,7 @@ export default {
 			if(isFormValid){
 				this.userService.create(
 					this.userCreateForm.username,
-					this.userCreateForm.email,
+					this.userCreateForm.email.toLowerCase(),
 					this.userCreateForm.password,
 					this.userCreateForm.appRole,
 					this.userCreateForm.enabled,

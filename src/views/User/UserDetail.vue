@@ -91,7 +91,7 @@
                 <ul class="infos-list">
                     <li><span class="infos-list__exergue">{{ $t('entity.user.username') }}</span> : {{ user.username }}
                     </li>
-                    <li><span class="infos-list__exergue">{{ $t('entity.user.email') }}</span> : {{ user.email }}</li>
+                    <li v-show="$store.state.auth.authorities['MODIFY_USER'] || isCurrentUser"><span class="infos-list__exergue">{{ $t('entity.user.email') }}</span> : {{ user.email }}</li>
                     <li><span class="infos-list__exergue">{{ $t('entity.user.role.role') }}</span> :
                         {{ user.appRole.name.charAt(0) + user.appRole.name.slice(1).toLowerCase().replace(/_/g, ' ') }}
                     </li>
@@ -287,7 +287,7 @@ export default {
                 if (this.isCurrentUser) {
                     this.userService.modifyMe(
                         this.modifyUserForm.username,
-                        this.modifyUserForm.email,
+                        this.modifyUserForm.email.toLowerCase(),
                         this.user.appRole.name,
                         this.user.enabled,
                         (user) => {
@@ -302,7 +302,7 @@ export default {
                     this.userService.modifyUser(
                         this.user.id,
                         this.modifyUserForm.username,
-                        this.modifyUserForm.email,
+                        this.modifyUserForm.email.toLowerCase(),
                         this.modifyUserForm.appRole,
                         this.modifyUserForm.enabled,
                         !this.modifyUserForm.accountNonLocked,

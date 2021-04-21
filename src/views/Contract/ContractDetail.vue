@@ -350,6 +350,8 @@ export default {
 			this.selectedTab = value
 		},
 		loadProjects(page, size=10){
+            console.log("size : ", size)
+            console.log("page : ", page)
 			this.projectService.findByContractId(
 				this.$route.params.id,
 				page,
@@ -369,6 +371,7 @@ export default {
 							)
 						}
 					}
+                console.log(this.projects_page)
 				},
 				(error) => {console.error(error)}
 			);
@@ -604,6 +607,7 @@ export default {
                     this.contract.id,
                     page,
                     size,
+    
                     (contractUsers) => {
                         this.contractUsers = contractUsers.content;
 						contractUsers.content.forEach(contractUser => {
