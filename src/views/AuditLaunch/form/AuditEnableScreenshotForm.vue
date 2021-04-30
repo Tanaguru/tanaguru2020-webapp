@@ -17,7 +17,7 @@
                     <div class="radio">
                         <input class="radio__input" id="screenshotYes" type="radio" :value="true"
                                v-model="enableScreenShot"
-                               @input="$emit('input', true)"
+                               @change="$emit('input', true)"
                                name="screenshot"/>
                         <label class="radio__label"
                                for="screenshotYes">{{ $t('audit.definition.screenshot.radioYes') }}</label>

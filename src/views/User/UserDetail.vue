@@ -49,7 +49,7 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-column">
+                        <div class="form-column" v-show="$store.state.auth.user.appRole.name == 'SUPER_ADMIN'">
                             <div class="form-block"
                                  v-show="isCurrentUser == false && $store.state.auth.user.appRole.name != 'USER'">
                                 <label class="label" for="status-select">{{ $t('entity.user.role.role') }} *</label>
@@ -97,7 +97,7 @@
                     </li>
                     <li><span class="infos-list__exergue">{{ $t('entity.user.enabled') }}</span> : {{ user.enabled }}
                     </li>
-                    <li><span class="infos-list__exergue">{{ $t('entity.user.blocked') }}</span> : {{ !user.accountNonLocked }}
+                    <li v-show="$store.state.auth.authorities['MODIFY_USER'] || isCurrentUser"><span class="infos-list__exergue">{{ $t('entity.user.blocked') }}</span> : {{ !user.accountNonLocked }}
                     </li>
                 </ul>
 
@@ -161,7 +161,7 @@
                 </button>
             </div>
         </article>
-        <article id="user-contracts">
+        <article id="user-contracts" v-if="$store.state.auth.user.appRole.name != 'USER' || isCurrentUser">
             <h2 class="user__title-2">{{ $t('user.contracts') }}</h2>
             
             <div v-if="contracts.length > 0">

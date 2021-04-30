@@ -34,7 +34,7 @@ describe('AuditSiteSeedsForm', () => {
         await seedsInput.setValue('');
         await seedsInput.trigger('blur');
 
-        const emptyError = wrapper.find('#seed-error')
+        const emptyError = wrapper.find('#free-seed-error')
 
         expect(emptyError.exists()).toBe(true)
     })
@@ -53,7 +53,7 @@ describe('AuditSiteSeedsForm', () => {
         await seedsInput.setValue('http://wrong.com');
         await seedsInput.trigger('blur');
 
-        const wrongError = wrapper.find('#seed-error')
+        const wrongError = wrapper.find('#free-seed-error')
         expect(wrongError.exists()).toBe(true)
     })
 
@@ -72,7 +72,7 @@ describe('AuditSiteSeedsForm', () => {
         await seedsInput.setValue('http://test.com;http://test.com/contact;http://test.com/contact');
         await seedsInput.trigger('blur');
 
-        const errorMsg = wrapper.find('#seed-error')
+        const errorMsg = wrapper.find('#free-seed-error')
         expect(errorMsg.exists()).toBe(false)
     })*/
 })

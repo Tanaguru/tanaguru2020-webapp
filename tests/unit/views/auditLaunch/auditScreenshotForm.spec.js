@@ -12,8 +12,8 @@ describe('AuditEnableScreenshotForm', () => {
             localVue,
             stubs: ['router-link', 'router-view'],
             propsData: {
-                value: 'no',
-                screenshot: ['yes', 'no']
+                value: false,
+                screenshot: [true, false]
             }
         })
 
@@ -21,6 +21,5 @@ describe('AuditEnableScreenshotForm', () => {
         await screenshotInput.setChecked(true)
         
         expect(wrapper.emitted()).toHaveProperty('input')
-
     })
 })

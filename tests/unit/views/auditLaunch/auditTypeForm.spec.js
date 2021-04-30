@@ -17,7 +17,7 @@ describe('AuditTypeForm', () => {
             }
         })
 
-        const typeInput = wrapper.find('#type-site');
+        const typeInput = wrapper.find('#site');
         await typeInput.setChecked(true)
 
         expect(wrapper.emitted()).toHaveProperty('input')
