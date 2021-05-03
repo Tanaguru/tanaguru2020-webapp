@@ -221,7 +221,7 @@ export default {
 			}
 
 			if (this.userCreateForm.username.length < 4 || this.userCreateForm.username.length > 30) {
-				this.userCreateForm.usernameError = this.$i18n.t("form.errorMsg.username.usernameError");
+				this.userCreateForm.usernameError = this.$i18n.t("form.errorMsg.username.invalidUsername");
 				return false;
 			}
 			return true;

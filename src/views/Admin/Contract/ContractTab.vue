@@ -94,7 +94,6 @@ export default {
 	created() {
 		this.loadContracts(this.contractCurrentPage, this.contractPageSize, this.searchContract);
 		this.loadUsers();
-		console.log(this.contracts)
 	},
 	watch: {
     	selected: function(newVal, oldVal) {
