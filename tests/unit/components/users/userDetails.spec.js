@@ -36,7 +36,7 @@ describe('UserDetail', () => {
         expect(blockedLine.exists()).toBe(false);
     })
 
-    it('should not show modify button if user isnt admin or on his own profile', () => {
+    it('should not show modify button if user isn\'t admin or on his own profile', () => {
         const wrapper = shallowMount(UserDetail, {
             i18n,
             localVue,
@@ -49,7 +49,7 @@ describe('UserDetail', () => {
         expect(modifyButton.exists()).toBe(false);
     })
 
-    it('should not show app role select if user isnt SUPER_ADMIN', () => {
+    it('should not show app role select if user doesn\'t have PROMOTE_USER authority', () => {
         const wrapper = shallowMount(UserDetail, {
             i18n,
             localVue,

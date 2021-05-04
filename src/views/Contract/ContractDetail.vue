@@ -26,7 +26,7 @@
 
                             <button
                                 class="btn btn--default"
-                                v-if="$store.state.auth.user.appRole.name == 'SUPER_ADMIN'"
+                                v-if="$store.state.auth.authorities['MODIFY_CONTRACT']"
                                 @click="toggleModifyContractForm()">
                                 {{$t('action.modify')}}
                             </button>

@@ -49,9 +49,8 @@
                     </div>
 
                     <div class="form-row">
-                        <div class="form-column" id="select-approle" v-show="$store.state.auth.user.appRole.name == 'SUPER_ADMIN'">
-                            <div class="form-block"
-                                 v-show="isCurrentUser == false && $store.state.auth.user.appRole.name != 'USER'">
+                        <div class="form-column">
+                            <div class="form-block" id="select-approle" v-if="!isCurrentUser && $store.state.auth.authorities['PROMOTE_USER']">
                                 <label class="label" for="status-select">{{ $t('entity.user.role.role') }} *</label>
                                 <div class="select">
                                     <select name="status-select" id="status-select" v-model="modifyUserForm.appRole">

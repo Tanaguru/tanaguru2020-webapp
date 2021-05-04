@@ -240,25 +240,12 @@
 			)
 		},
 		computed: {
-			auditCondition(){
-				let condition = false
-				if(this.$store.state.auth.user.appRole.name == 'SUPER_ADMIN' || this.$store.state.auth.user.appRole.name == 'ADMIN'){
-					condition = true
-				}
-				else if(this.currentUserRole == 'PROJECT_MANAGER' || this.currentUserRole
-				 == 'PROJECT_USER'){
-					condition = true
-				}
-				return condition;
-			},
-
 			managerCondition(){
 				let condition = false
-				if(this.$store.state.auth.user.appRole.name == 'SUPER_ADMIN' || this.$store.state.auth.user.appRole.name == 'ADMIN'){
+				if(this.$store.state.auth.user.appRole.overrideContractRole.authorities.find( authority => authority.name === 'INVITE_MEMBER')){
 					condition = true
-				}
-				else if(this.currentUserRole == 'PROJECT_MANAGER'){
-					condition = true
+				} else {
+					condition = false
 				}
 				return condition;
 			},
