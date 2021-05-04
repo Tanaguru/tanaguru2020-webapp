@@ -43,6 +43,7 @@
 							</router-link>
 						</li>
 					</ul>
+					<p v-if="modifyProjectForm.success" aria-live="polite">{{ modifyProjectForm.success }}</p>
 				</article>
 				<article v-else>
 					<form @submit.prevent="modifyProject">
@@ -180,7 +181,8 @@
 					name: "",
 					domain: "",
 					nameError: "",
-					domainError: ""
+					domainError: "",
+					success: ""
 				}
 			}
 		},
@@ -308,17 +310,22 @@
 					(project) => {
 						this.project = project;
                         this.modifyProjectForm.active = false;
+
+						this.modifyProjectForm.error = "";
+						this.modifyProjectForm.nameError = "";
+						this.modifyProjectForm.domainError = "";
+						this.modifyProjectForm.name = "";
+						this.modifyProjectForm.domain = "";
+
+						this.modifyProjectForm.success = this.$i18n.t("form.successMsg.savedChanges");
+						setTimeout(() => (
+							this.modifyProjectForm.success = ""
+						), 3000)
                     },
                     (error) => {
 						console.error(error)
 					}
 				)
-
-				this.modifyProjectForm.error = "";
-				this.modifyProjectForm.nameError = "";
-				this.modifyProjectForm.domainError = "";
-				this.modifyProjectForm.name = "";
-				this.modifyProjectForm.domain = "";
 			},
 
 			removeUser(user){
