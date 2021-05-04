@@ -15,6 +15,12 @@
 					<reference-tab :selected="selectedTab"/>
 				</Tab>
 			</div>
+
+			<div v-if="this.$store.state.auth.user.appRole.name == 'SUPER_ADMIN'">
+				<Tab name="Statistiques" class="tabs-wrapper"> <!--modifier nom avec trad -->
+					<statsTab/>
+				</Tab>
+			</div>
 		</Tabs>
     </main>
 </template>
@@ -25,6 +31,7 @@ import Tabs from '../../components/Tabs';
 import adminUserList from './User/UserTab';
 import adminContractList from './Contract/ContractTab';
 import ReferenceTab from "@/views/Admin/Reference/ReferenceTab";
+import statsTab from "./Stats/Stats";
 
 export default {
     name: 'Admin',
@@ -33,7 +40,8 @@ export default {
         Tab,
         Tabs,
         adminUserList,
-        adminContractList
+		adminContractList,
+		statsTab
 	},
 	data(){
 		return {

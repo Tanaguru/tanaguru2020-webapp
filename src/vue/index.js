@@ -19,6 +19,7 @@ import ElementResultService from "../services/elementResult.service";
 import TanaguruTestService from "../services/tanaguruTest.service";
 import StatusResultService from "../services/statusResult.service";
 import ConfigService from "../services/config.service";
+import StatsService from "../services/stats.service";
 import 'prismjs'
 import 'prismjs/themes/prism.css'
 import 'prismjs/components/prism-scss.min'
@@ -53,6 +54,7 @@ Vue.prototype.elementResultService = new ElementResultService(axios);
 Vue.prototype.tanaguruTestService = new TanaguruTestService(axios);
 Vue.prototype.statusResultService = new StatusResultService(axios);
 Vue.prototype.configService = new ConfigService(axios);
+Vue.prototype.statsService = new StatsService(axios);
 
 const token = localStorage.getItem('token')
 if (token) {
