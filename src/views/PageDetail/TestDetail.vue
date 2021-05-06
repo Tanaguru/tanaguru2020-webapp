@@ -1,168 +1,182 @@
 <template>
-    <div>
-        <header class="result-header">
-            <div class="result-header__errors">
+	<div>
+		<header class="result-header">
+			<div class="result-header__errors">
                 <span :class="'error-nbr error-nbr--' + testResult.status">
                     {{ nbElementForStatus }}
-                    <icon-base-informative icon-label="results failed" v-if="testResult.status === 'failed'"><icon-improper /></icon-base-informative>
-                    <icon-base-informative icon-label="results can't tell" v-if="testResult.status === 'cantTell'"><icon-qualify /></icon-base-informative>
-                    <icon-base-informative icon-label="results passed" v-if="testResult.status === 'passed'"><icon-compliant /></icon-base-informative>
-                    <icon-base-informative icon-label="results inapplicable" v-if="testResult.status === 'inapplicable'"><icon-not-applicable /></icon-base-informative>
+                    <icon-base-informative icon-label="results failed" v-if="testResult.status === 'failed'"><icon-improper/></icon-base-informative>
+                    <icon-base-informative icon-label="results can't tell" v-if="testResult.status === 'cantTell'"><icon-qualify/></icon-base-informative>
+                    <icon-base-informative icon-label="results passed" v-if="testResult.status === 'passed'"><icon-compliant/></icon-base-informative>
+                    <icon-base-informative icon-label="results inapplicable"
+										   v-if="testResult.status === 'inapplicable'"><icon-not-applicable/></icon-base-informative>
                 </span>
-            </div>
+			</div>
 
-            <div class="result-header__tab">
-                <div class="result-header-content">
-                    <h3 class="result-header-content__name">{{test.name}}</h3>
-                    <span v-show="false" class="results-type-details__errors">{{$t('resultAudit.testResult.errors', {nbAnomaly: testResult.nbElementFailed, nbElementTested: testResult.nbElementTested})}}</span>
-                    <p class="result-header-content__explanation" v-if="test.description">{{$t('resultAudit.testResult.explanation')}} : {{test.description}}</p>
-                    <p v-if="displayMode==='anomaly' && test.rules"
-                       class="result-header-content__details results-type-details"
-                       v-for="testHierarchy of test.rules" :key="testHierarchy.id">
-                        <a class="link-simple" v-if="testHierarchy.urls[0]" :href="testHierarchy.urls[0]" :aria-label="$t('resultAudit.testResult.ruleLink') + ' ' + reference.name + '-' + testHierarchy.code">{{reference.name}} - {{testHierarchy.code}}</a>
-                        <a class="link-simple" v-if="testHierarchy.urls[1]"  :href="testHierarchy.urls[1]" :aria-label="$t('resultAudit.testResult.ruleInfo') + ' ' + reference.name + '-' + testHierarchy.code">{{$t('resultAudit.testResult.ruleInfo')}}</a>
-                    </p>
+			<div class="result-header__tab">
+				<div class="result-header-content">
+					<h3 class="result-header-content__name">{{ test.name }}</h3>
+					<span v-show="false" class="results-type-details__errors">{{
+							$t('resultAudit.testResult.errors', {
+								nbAnomaly: testResult.nbElementFailed,
+								nbElementTested: testResult.nbElementTested
+							})
+						}}</span>
+					<p class="result-header-content__explanation" v-if="test.description">
+						{{ $t('resultAudit.testResult.explanation') }} : {{ test.description }}</p>
+					<p v-if="displayMode==='anomaly' && test.rules"
+					   class="result-header-content__details results-type-details"
+					   v-for="testHierarchy of test.rules" :key="testHierarchy.id">
+						<a class="link-simple" v-if="testHierarchy.urls[0]" :href="testHierarchy.urls[0]"
+						   :aria-label="$t('resultAudit.testResult.ruleLink') + ' ' + reference.name + '-' + testHierarchy.code">{{ reference.name }}
+							- {{ testHierarchy.code }}</a>
+						<a class="link-simple" v-if="testHierarchy.urls[1]" :href="testHierarchy.urls[1]"
+						   :aria-label="$t('resultAudit.testResult.ruleInfo') + ' ' + reference.name + '-' + testHierarchy.code">{{ $t('resultAudit.testResult.ruleInfo') }}</a>
+					</p>
 					<!-- ETIQUETTES -->
-                    <ul class="list-tags list-unstyled">
-                        <li class="list-tags__item" v-for='tag in test.tags' :key='tag'>
-                            {{ tag }}
-                        </li>
-                    </ul>
-                </div>
+					<ul class="list-tags list-unstyled">
+						<li class="list-tags__item" v-for='tag in test.tags' :key='tag'>
+							{{ tag }}
+						</li>
+					</ul>
+				</div>
 
-                <div class="result-header-arrow">
-                    <button class="btn btn--nude btn--icon btn--tab"
-                            v-if="testResult.elementResults.length > 0"
-                            :aria-expanded="ruleOpen === true ? 'true' : 'false'"
-                            :aria-controls="'rule-content-' + testResult.type + '-' + index"
-                            @click="toggleContent(!ruleOpen)">
-                        <icon-base-decorative :class="ruleOpen ? 'hide' : 'show'"><icon-arrow-blue /></icon-base-decorative>
-                        <span class="screen-reader-text" v-if="ruleOpen">{{$t('action.hide')}}</span>
-                        <span class="screen-reader-text" v-else>{{$t('action.show')}}</span>
-                    </button>
-                </div>
-            </div>
-        </header>
+				<div class="result-header-arrow">
+					<button class="btn btn--nude btn--icon btn--tab"
+							v-if="testResult && testResult.nbElementFailed + testResult.nbElementPassed + testResult.nbElementCantTell > 0"
+							:aria-expanded="ruleOpen === true ? 'true' : 'false'"
+							:aria-controls="'rule-content-' + testResult.type + '-' + index"
+							@click="toggleContent(!ruleOpen)">
+						<icon-base-decorative :class="ruleOpen ? 'hide' : 'show'">
+							<icon-arrow-blue/>
+						</icon-base-decorative>
+						<span class="screen-reader-text" v-if="ruleOpen">{{ $t('action.hide') }}</span>
+						<span class="screen-reader-text" v-else>{{ $t('action.show') }}</span>
+					</button>
+				</div>
+			</div>
+		</header>
 
 
-        <div
-            v-if="this.testResult.resolvedElementResults"
-            v-show="ruleOpen"
-            class="result-content" :id="'rule-content-' + testResult.type + '-' + index">
-            <anomaly-detail
-                    v-for="(anomaly, i) of testResult.resolvedElementResults"
-                    :key='i'
-                    :page-content="pageContent"
-                    :anomaly="anomaly"
-					:has-accessible-name-tag="hasAccessibleNameTag"
-                    :index="i" />
+		<div
+			v-if="this.testResult.resolvedElementResults"
+			v-show="ruleOpen"
+			class="result-content" :id="'rule-content-' + testResult.type + '-' + index">
+			<anomaly-detail
+				v-for="(anomaly, i) of testResult.resolvedElementResults"
+				:key='i'
+				:page-content="pageContent"
+				:anomaly="anomaly"
+				:has-accessible-name-tag="hasAccessibleNameTag"
+				:index="i"/>
 
-            <div v-if="!lastPageLoaded && !isLoading">
-                <button class="btn btn--default btn-load" type="button" @click="loadMoreElementResults">{{$t('action.loadMore')}}</button>
-            </div>
-        </div>
-    </div>
+			<div v-if="!lastPageLoaded && !isLoading">
+				<button class="btn btn--default btn-load" type="button" @click="loadMoreElementResults">
+					{{ $t('action.loadMore') }}
+				</button>
+			</div>
+		</div>
+	</div>
 </template>
 <script>
-    import AnomalyDetail from './AnomalyDetail'
-    import IconBaseInformative from '../../components/icons/IconBaseInformative'
-    import IconBaseDecorative from '../../components/icons/IconBaseDecorative'
-    import IconArrowBlue from '../../components/icons/IconArrowBlue'
-    import IconCompliant from '../../components/icons/IconCompliant'
-    import IconImproper from '../../components/icons/IconImproper'
-    import IconInforound from '../../components/icons/IconInforound'
-    import IconNotApplicable from '../../components/icons/IconNotApplicable'
-    import IconQualify from '../../components/icons/IconQualify'
+import AnomalyDetail from './AnomalyDetail'
+import IconBaseInformative from '../../components/icons/IconBaseInformative'
+import IconBaseDecorative from '../../components/icons/IconBaseDecorative'
+import IconArrowBlue from '../../components/icons/IconArrowBlue'
+import IconCompliant from '../../components/icons/IconCompliant'
+import IconImproper from '../../components/icons/IconImproper'
+import IconInforound from '../../components/icons/IconInforound'
+import IconNotApplicable from '../../components/icons/IconNotApplicable'
+import IconQualify from '../../components/icons/IconQualify'
 
-    export default {
-        name: 'testDetail',
-        components: {
-            AnomalyDetail,
-            IconBaseDecorative,
-            IconBaseInformative,
-            IconArrowBlue,
-            IconInforound,
-            IconCompliant,
-            IconImproper,
-            IconNotApplicable,
-            IconQualify,
-        },
-        props: ['test', 'testResult', 'sharecode', 'index', 'reference', 'pageContent', 'displayMode'],
-        data(){
-            return{
-                ruleOpen: false,
-                isLoading: false,
-                lastPageLoaded: false,
-            }
-        },
-        methods : {
-            loadMoreElementResults(){
-                this.isLoading = true;
-                this.elementResultService.findPageableByTestResultId(
-                    this.testResult.id,
-                    this.sharecode,
-                    this.testResult.resolvedElementResults ?
-                        Math.floor(this.testResult.resolvedElementResults.length / 10) :
-                        0,
-                    (elementResultsPage) => {
-                        this.isLoading = false;
-                        this.testResult.resolvedElementResults.push(...elementResultsPage.content);
-                        this.lastPageLoaded = elementResultsPage.last;
-                    },
-                    (error) => {
-                        console.error(error);
-                    }
-                )
+export default {
+	name: 'testDetail',
+	components: {
+		AnomalyDetail,
+		IconBaseDecorative,
+		IconBaseInformative,
+		IconArrowBlue,
+		IconInforound,
+		IconCompliant,
+		IconImproper,
+		IconNotApplicable,
+		IconQualify,
+	},
+	props: ['test', 'testResult', 'sharecode', 'index', 'reference', 'pageContent', 'displayMode'],
+	data() {
+		return {
+			ruleOpen: false,
+			isLoading: false,
+			lastPageLoaded: false,
+		}
+	},
+	methods: {
+		loadMoreElementResults() {
+			this.isLoading = true;
+			this.elementResultService.findPageableByTestResultId(
+				this.testResult.id,
+				this.sharecode,
+				this.testResult.resolvedElementResults ?
+					Math.floor(this.testResult.resolvedElementResults.length / 10) :
+					0,
+				(elementResultsPage) => {
+					this.isLoading = false;
+					this.testResult.resolvedElementResults.push(...elementResultsPage.content);
+					this.lastPageLoaded = elementResultsPage.last;
+				},
+				(error) => {
+					console.error(error);
+				}
+			)
 
-            },
+		},
 
-            toggleContent(showContent) {
-                this.ruleOpen = showContent;
-                if (this.ruleOpen) {
+		toggleContent(showContent) {
+			this.ruleOpen = showContent;
+			if (this.ruleOpen) {
 
-                    if(!this.test.rules){
-                        this.testHierarchyService.findAllByTestAndReference(
-                            this.test.id,
-                            this.reference.id,
-                            (testHierarchies) => {
-                                this.$set(this.test, "rules", testHierarchies);
-                            },
-                            (error) => {
-                                console.error(error)
-                            }
-                        )
-                    }
+				if (!this.test.rules) {
+					this.testHierarchyService.findAllByTestAndReference(
+						this.test.id,
+						this.reference.id,
+						(testHierarchies) => {
+							this.$set(this.test, "rules", testHierarchies);
+						},
+						(error) => {
+							console.error(error)
+						}
+					)
+				}
 
-                    if (!this.testResult.resolvedElementResults) {
-                        this.testResult.resolvedElementResults = [];
-                        this.loadMoreElementResults();
-                    }
-                }
-            }
-        },
-        computed: {
-			hasAccessibleNameTag(){
-				return this.test.tags.includes('accessiblename')
-			},
-            nbElementForStatus(){
-                let result = 0;
-                switch (this.testResult.status) {
-                    case 'passed':
-                        result = this.testResult.nbElementPassed;
-                        break;
+				if (!this.testResult.resolvedElementResults) {
+					this.testResult.resolvedElementResults = [];
+					this.loadMoreElementResults();
+				}
+			}
+		}
+	},
+	computed: {
+		hasAccessibleNameTag() {
+			return this.test.tags.includes('accessiblename')
+		},
+		nbElementForStatus() {
+			let result = 0;
+			switch (this.testResult.status) {
+				case 'passed':
+					result = this.testResult.nbElementPassed;
+					break;
 
-                    case 'failed':
-                        result = this.testResult.nbElementFailed;
-                        break;
+				case 'failed':
+					result = this.testResult.nbElementFailed;
+					break;
 
-                    case 'cantTell':
-                        result = this.testResult.nbElementCantTell;
-                        break;
-                }
-                return result;
-            }
-        }
-    }
+				case 'cantTell':
+					result = this.testResult.nbElementCantTell;
+					break;
+			}
+			return result;
+		}
+	}
+}
 </script>
 
 <style lang="scss" scoped>
@@ -350,6 +364,7 @@
 		> .link-simple {
 			display: block;
 		}
+
 		> .link-simple:not(:first-child) {
 			padding-left: 0;
 		}
