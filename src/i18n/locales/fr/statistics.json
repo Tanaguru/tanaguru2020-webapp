@@ -24,5 +24,7 @@
     "file": "Fichier",
     "from": "Du",
     "to": "Au",
-    "keyFigures": "Chiffres clé"
+    "keyFigures": "Chiffres clés",
+    "legendTab": "Tableau des chiffres clés",
+    "legendTabPeriod": "Tableau des nombres de ressources audités par période"
 }

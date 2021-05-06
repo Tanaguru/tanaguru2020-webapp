@@ -6,7 +6,7 @@
                 <div class="form-block">
                     <h3> {{ $t('statistics.keyFigures') }} </h3>
                     <table class="table table--default table-references">
-                        <caption class="screen-reader-text">{{ $t('references.legendReferences') }}</caption>
+                        <caption class="screen-reader-text">{{ $t('statistics.legendTab') }}</caption>
                         <tbody>
                             <tr>
                                 <th scope="row"> {{ $t('statistics.nbUsers') }} </th>
@@ -35,7 +35,15 @@
                             <tr>
                                 <th scope="row"> {{ $t('statistics.nbErrorMeanByProject') }} </th>
                                 <td>{{ stats.meanNbErrorsProject.toFixed(1) }}</td>
-                            </tr>                       
+                            </tr>
+                            <tr>
+                                <th scope="row"> Nombre moyen d'audits par projet</th>
+                                <td> {{ stats.meanNbAuditsByProject.toFixed(1) }} </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> Nombre moyen d'utilisateurs par projet</th>
+                                <td> {{ stats.meanNbUsersByProject.toFixed(1) }} </td>
+                            </tr>                  
                         </tbody>
                     </table>
                 </div>
@@ -63,6 +71,7 @@
                     name="dateStart"
                     id="dateStart"
                     v-model="dateForm.dateStart"
+                    :aria-describedby="dateForm.dateError ? 'date-error' : ''"
                     required>
 
                 <input
@@ -73,6 +82,7 @@
                     name="dateStart"
                     id="dateStart"
                     v-model="dateForm.dateStart"
+                    :aria-describedby="dateForm.dateError ? 'date-error' : ''"
                     required>
                     <p v-show="dateForm.dateStartError" id="date-error" class="info-error">{{dateForm.dateStartError}}</p>
                 </div>
@@ -88,6 +98,7 @@
                     name="dateEnd"
                     id="dateEnd"
                     v-model="dateForm.dateEnd"
+                    :aria-describedby="dateForm.dateError ? 'date-error' : ''"
                     required>
 
                 <input
@@ -98,6 +109,7 @@
                     name="dateEnd"
                     id="dateEnd"
                     v-model="dateForm.dateEnd"
+                    :aria-describedby="dateForm.dateError ? 'date-error' : ''"
                     required>
                     <p v-show="dateForm.dateEndError" id="date-error" class="info-error">{{dateForm.dateEndError}}</p>
                 </div>
@@ -110,13 +122,14 @@
         <div class="table-container" v-if="auditedOverPeriod.dateStart">
                 <h4> {{ $t('statistics.from') }} {{ auditedOverPeriod.dateStart }} {{ $t('statistics.to') }} {{ auditedOverPeriod.dateEnd }} </h4>
 				<table class="table table--default table-references">
-					<caption class="screen-reader-text">{{ $t('references.legendReferences') }}</caption>
+					<caption class="screen-reader-text">{{ $t('statistics.legendTabPeriod') }}</caption>
 					<thead>
 					<tr>
 						<th scope="col"> {{ $t('statistics.nbPages') }} </th>
 						<th scope="col"> {{ $t('statistics.nbSites') }} </th>
                         <th scope="col"> {{ $t('statistics.nbScenarios') }} </th>
 						<th scope="col"> {{ $t('statistics.nbFiles') }} </th>
+                        <th scope="col"> {{ $t('statistics.nbErrorMeanByPage') }} </th>
 					</tr>
 					</thead>
 					<tbody>
@@ -125,6 +138,7 @@
                         <td class="td-title"> {{ auditedOverPeriod.nbSites }} </td>
                         <td class="td-title"> {{ auditedOverPeriod.nbScenarios }} </td>
                         <td class="td-title"> {{ auditedOverPeriod.nbFiles }} </td>
+                        <td class="td-title"> {{ auditedOverPeriod.averagePageError.toFixed(1) }} </td>
 					</tr>
 					</tbody>
 				</table>
@@ -150,10 +164,12 @@ export default {
                 meanNbErrorsPage: 0,
                 meanNbErrorsProject: 0,
                 meanNbErrorsAudit: 0,
-                nbSITEAudit: 1,
-                nbPAGEAudit: 1,
-                nbSCENARIOAudit: 1,
-                nbUPLOADAudit: 1
+                nbSITEAudit: 0,
+                nbPAGEAudit: 0,
+                nbSCENARIOAudit: 0,
+                nbUPLOADAudit: 0,
+                meanNbAuditsByProject: 0,
+                meanNbUsersByProject: 0
             },
             dateForm: {
                 dateStart: null,
@@ -170,7 +186,8 @@ export default {
                 nbPages: 0,
                 nbSites: 0,
                 nbScenarios: 0,
-                nbFiles: 0
+                nbFiles: 0,
+                averagePageError: 0
             }
         }
 	},
@@ -181,7 +198,7 @@ export default {
         loadStats(){
 			this.statsService.getStats(
 				stats => {
-                    this.stats = stats;                    
+                    this.stats = stats;
                 },
 				err => console.error(err)
             );
@@ -261,6 +278,15 @@ export default {
                     },
                     err => console.error(err)
                 );
+
+                this.statsService.getAverageNbErrorsForPageByPeriod(
+                    dateStart,
+                    dateEnd,
+                    resp => {
+                        this.auditedOverPeriod.averagePageError = resp;
+                    },
+                    err => console.error(err)
+                ); 
 
                 this.dateForm.dateStart = "";
                 this.dateForm.dateEnd = "";

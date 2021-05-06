@@ -24,5 +24,7 @@
     "file": "File",
     "from": "From",
     "to": "to",
-    "keyFigures": "Key figures"
+    "keyFigures": "Key figures",
+    "legendTab": "Table of key figures",
+    "legendTabPeriod": "Table of the number of resources audited per period"
 }

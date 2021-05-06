@@ -70,4 +70,17 @@ export default class StatsService extends Service{
             error(err);
         });
     }
+
+    getAverageNbErrorsForPageByPeriod(dateStart, dateEnd, then, error){
+        return this.axios({
+            url: this.controllerName + '/average-page-error-period/' + dateStart + '/' + dateEnd + '/',
+            method: 'get',
+        })
+        .then(resp => {
+            then(resp.data)
+        })
+        .catch(err => {
+            error(err);
+        });
+    }
 }
