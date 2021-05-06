@@ -29,7 +29,8 @@ const messages = {
         'resultAudit' : require('./locales/en/resultAudit.json'),
         'title' : require('./locales/en/title.json'),
         'user' : require('./locales/en/user.json'),
-        'users' : require('./locales/en/users.json')
+        'users' : require('./locales/en/users.json'),
+        'statistics' : require('./locales/en/statistics.json')
     },
     fr : {
         'action' : require('./locales/fr/action.json'),
@@ -56,7 +57,9 @@ const messages = {
         'resultAudit' : require('./locales/fr/resultAudit.json'),
         'title' : require('./locales/fr/title.json'),
         'user' : require('./locales/fr/user.json'),
-        'users' : require('./locales/fr/users.json')
+        'users' : require('./locales/fr/users.json'),
+        'statistics' : require('./locales/fr/statistics.json')
+
     }
 }
 

@@ -17,7 +17,7 @@
 			</div>
 
 			<div v-if="this.$store.state.auth.user.appRole.name == 'SUPER_ADMIN'">
-				<Tab name="Statistiques" class="tabs-wrapper"> <!--modifier nom avec trad -->
+				<Tab :name="$t('title.statistics')" class="tabs-wrapper">
 					<statsTab/>
 				</Tab>
 			</div>

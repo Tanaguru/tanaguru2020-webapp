@@ -13,5 +13,6 @@
 	"profile": "Profile",
 	"auditSummary": "Audit synthesis",
 	"notFound": "Page not found !",
-	"forbidden": "Unauthorized page !"
+	"forbidden": "Unauthorized page !",
+	"statistics": "Statistics"
 }

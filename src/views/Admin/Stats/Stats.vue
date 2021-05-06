@@ -1,34 +1,135 @@
 <template>
     <div>
-        <h1> Statistiques </h1>
-        <div>
-            Nombre d'utilisateurs : {{ stats.nbUsers }}
+        <h1> {{ $t('title.statistics') }} </h1>
+        <div class="form-row">
+			<div class="form-column">
+                <div class="form-block">
+                    <h3> {{ $t('statistics.keyFigures') }} </h3>
+                    <table class="table table--default table-references">
+                        <caption class="screen-reader-text">{{ $t('references.legendReferences') }}</caption>
+                        <tbody>
+                            <tr>
+                                <th scope="row"> {{ $t('statistics.nbUsers') }} </th>
+                                <td>{{ stats.nbUsers }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> {{ $t('statistics.nbProjects') }} </th>
+                                <td>{{ stats.nbProjects }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> {{ $t('statistics.nbAudits') }} </th>
+                                <td>{{ stats.nbAudits }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> {{ $t('statistics.nbContracts') }} </th>
+                                <td>{{ stats.nbContracts }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> {{ $t('statistics.nbErrorMeanByPage') }} </th>
+                                <td>{{ stats.meanNbErrorsPage.toFixed(1) }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> {{ $t('statistics.nbErrorMeanByAudit') }} </th>
+                                <td>{{ stats.meanNbErrorsAudit.toFixed(1) }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> {{ $t('statistics.nbErrorMeanByProject') }} </th>
+                                <td>{{ stats.meanNbErrorsProject.toFixed(1) }}</td>
+                            </tr>                       
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="form-column">
+                <div class="form-block">
+                    <div>
+                        <h3> {{ $t('statistics.nbAuditByType') }} </h3>
+                        <Piechart :nbPage="stats.nbPAGEAudit" :nbSite="stats.nbSITEAudit" :nbScenario="stats.nbSCENARIOAudit" :nbFile="stats.nbUPLOADAudit"></Piechart>
+                    </div>
+                </div>
+            </div>
         </div>
+        
+        <h3> {{ $t('statistics.nbResourcesByPeriod') }} </h3>
+        <div class="form-row">
+            <div class="form-column">
+                <div class="form-block">
+                    <label class="label" for="dateStart"> {{ $t('statistics.dateForm.dateStart') }} </label>
+                    <input
+                    v-if="$i18n.locale.toLowerCase() == 'en'"
+                    class="input"
+                    v-bind:class="{'has-error': dateForm.dateStartError}"
+                    type="text"
+                    name="dateStart"
+                    id="dateStart"
+                    v-model="dateForm.dateStart"
+                    required>
 
-        <div>
-            Nombre de projets : {{ stats.nbProjects }}
+                <input
+                    v-else
+                    class="input"
+                    v-bind:class="{'has-error': dateForm.dateStartError}"
+                    type="text"
+                    name="dateStart"
+                    id="dateStart"
+                    v-model="dateForm.dateStart"
+                    required>
+                    <p v-show="dateForm.dateStartError" id="date-error" class="info-error">{{dateForm.dateStartError}}</p>
+                </div>
+            </div>
+            <div class="form-column">
+                <div class="form-block">
+                    <label class="label" for="dateEnd"> {{ $t('statistics.dateForm.dateEnd') }} </label>
+                    <input
+                    v-if="$i18n.locale.toLowerCase() == 'en'"
+                    class="input"
+                    v-bind:class="{'has-error': dateForm.dateEndError}"
+                    type="text"
+                    name="dateEnd"
+                    id="dateEnd"
+                    v-model="dateForm.dateEnd"
+                    required>
+
+                <input
+                    v-else
+                    class="input"
+                    v-bind:class="{'has-error': dateForm.dateEndError}"
+                    type="text"
+                    name="dateEnd"
+                    id="dateEnd"
+                    v-model="dateForm.dateEnd"
+                    required>
+                    <p v-show="dateForm.dateEndError" id="date-error" class="info-error">{{dateForm.dateEndError}}</p>
+                </div>
+            </div>
         </div>
+        <button class="btn btn--default" v-on:click="displayStats">{{ $t('action.search') }}</button>
+        <p v-if="dateForm.error" id="form-error" class="info-error">{{ dateForm.error }}</p>
+        <p v-if="dateForm.successMsg" id="form-success" class="info-success">{{ dateForm.successMsg }}</p>
 
-        <div>
-            Nombre d'erreur moyen par page : {{ stats.meanNbErrorsPage }}
-        </div>
+        <div class="table-container" v-if="auditedOverPeriod.dateStart">
+                <h4> {{ $t('statistics.from') }} {{ auditedOverPeriod.dateStart }} {{ $t('statistics.to') }} {{ auditedOverPeriod.dateEnd }} </h4>
+				<table class="table table--default table-references">
+					<caption class="screen-reader-text">{{ $t('references.legendReferences') }}</caption>
+					<thead>
+					<tr>
+						<th scope="col"> {{ $t('statistics.nbPages') }} </th>
+						<th scope="col"> {{ $t('statistics.nbSites') }} </th>
+                        <th scope="col"> {{ $t('statistics.nbScenarios') }} </th>
+						<th scope="col"> {{ $t('statistics.nbFiles') }} </th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td class="td-title"> {{ auditedOverPeriod.nbPages }} </td>
+                        <td class="td-title"> {{ auditedOverPeriod.nbSites }} </td>
+                        <td class="td-title"> {{ auditedOverPeriod.nbScenarios }} </td>
+                        <td class="td-title"> {{ auditedOverPeriod.nbFiles }} </td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
 
-        <div>
-            Nombre d'erreur moyen par audit : {{ stats.meanNbErrorsAudit }}
-        </div>
-
-        <div>
-            Nombre d'erreur moyen par projet : {{ stats.meanNbErrorsProject }}
-        </div>
-
-        Site : {{ stats.nbSITEAudit }}
-        Page : {{ stats.nbPAGEAudit }}
-        Scenario : {{ stats.nbSCENARIOAudit }}
-        Upload : {{ stats.nbUPLOADAudit }}
-
-        <!--<div>
-            <Piechart :data="data" :labels="labels"></Piechart>
-        </div>-->
     </div>
 </template>
 
@@ -44,16 +145,33 @@ export default {
             stats: {
                 nbProjects: 0,
                 nbUsers: 0,
+                nbAudits: 0,
+                nbContracts: 0,
                 meanNbErrorsPage: 0,
                 meanNbErrorsProject: 0,
                 meanNbErrorsAudit: 0,
-                nbSITEAudit: 0,
-                nbPAGEAudit: 0,
-                nbSCENARIOAudit: 0,
-                nbUPLOADAudit: 0
+                nbSITEAudit: 1,
+                nbPAGEAudit: 1,
+                nbSCENARIOAudit: 1,
+                nbUPLOADAudit: 1
             },
-            data: [1,1,1,1],
-            labels: ["Site","Page","Scenario","Fichier"]
+            dateForm: {
+                dateStart: null,
+                dateEnd: null,
+                error: "",
+                nameError: "",
+                dateStartError: "",
+                dateEndError: "",
+                successMsg: ""
+            },
+            auditedOverPeriod: {
+                dateStart: null,
+                dateEnd: null,
+                nbPages: 0,
+                nbSites: 0,
+                nbScenarios: 0,
+                nbFiles: 0
+            }
         }
 	},
 	created() {
@@ -63,11 +181,91 @@ export default {
         loadStats(){
 			this.statsService.getStats(
 				stats => {
-                    this.stats = stats;
-                    this.data = [this.stats.nbSITEAudit, this.stats.nbPAGEAudit, this.stats.nbSCENARIOAudit, this.stats.nbUPLOADAudit];
-				},
+                    this.stats = stats;                    
+                },
 				err => console.error(err)
             );
+        },
+        checkDate() {
+            let dateRegex = null;
+            if(this.$i18n.locale.toLowerCase() == 'en'){
+                dateRegex = /^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$/
+            } else { dateRegex = /^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$/ }
+
+            if(dateRegex.test(this.dateForm.dateEnd) && dateRegex.test(this.dateForm.dateStart) ){
+                return true;
+            } else if( !dateRegex.test(this.dateForm.dateEnd) && !dateRegex.test(this.dateForm.dateStart) ) {
+                this.dateForm.dateEndError = this.$i18n.t('statistics.dateForm.invalidDateEnd')
+                this.dateForm.dateStartError = this.$i18n.t('statistics.dateForm.invalidDateStart')
+                return false;
+            } else  if( !dateRegex.test(this.dateForm.dateEnd) ){
+                this.dateForm.dateEndError = this.$i18n.t('statistics.dateForm.invalidDateEnd')
+                return false;
+            }else{
+                this.dateForm.dateStartError = this.$i18n.t('statistics.dateForm.invalidDateStart')
+                return false;
+            }
+        },
+        displayStats(){
+            this.dateForm.error = "";
+            this.dateForm.dateStartError = "";
+            this.dateForm.dateEndError = "";
+            this.successMsg = "";
+
+            if (this.checkDate()) {
+
+                let dateEnd = this.dateForm.dateEnd;
+                let dateStart = this.dateForm.dateStart;
+                this.auditedOverPeriod.dateStart = dateStart;
+                this.auditedOverPeriod.dateEnd = dateEnd;
+                if(this.$i18n.locale.toLowerCase() == 'en'){ 
+                    dateEnd = this.$moment(this.dateForm.dateEnd, 'MM-DD-YYYY').format("YYYY-MM-DD")
+                    dateStart = this.$moment(this.dateForm.dateStart, 'MM-DD-YYYY').format("YYYY-MM-DD")
+                } else {
+                    dateEnd = this.$moment(this.dateForm.dateEnd, 'DD-MM-YYYY').format("YYYY-MM-DD")
+                    dateStart = this.$moment(this.dateForm.dateStart, 'DD-MM-YYYY').format("YYYY-MM-DD")
+                }
+                
+                this.statsService.getNbPageAuditedByPeriod(
+                    dateStart,
+                    dateEnd,
+                    resp => {
+                        this.auditedOverPeriod.nbPages = resp;
+                    },
+                    err => console.error(err)
+                );
+
+                this.statsService.getNbSiteAuditedByPeriod(
+                    dateStart,
+                    dateEnd,
+                    resp => {
+                        this.auditedOverPeriod.nbSites = resp;
+                    },
+                    err => console.error(err)
+                );
+
+                this.statsService.getNbScenarioAuditedByPeriod(
+                    dateStart,
+                    dateEnd,
+                    resp => {
+                        this.auditedOverPeriod.nbScenarios = resp;
+                    },
+                    err => console.error(err)
+                );
+
+                this.statsService.getNbFilesAuditedByPeriod(
+                    dateStart,
+                    dateEnd,
+                    resp => {
+                        this.auditedOverPeriod.nbFiles = resp;
+                    },
+                    err => console.error(err)
+                );
+
+                this.dateForm.dateStart = "";
+                this.dateForm.dateEnd = "";
+
+            }
         }
     }
 }
