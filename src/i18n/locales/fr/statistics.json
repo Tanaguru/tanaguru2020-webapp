@@ -6,6 +6,8 @@
     "nbErrorMeanByPage": "Nombre moyen d'erreurs par page",
     "nbErrorMeanByAudit": "Nombre moyen d'erreurs par audit",
     "nbErrorMeanByProject": "Nombre moyen d'erreurs par projet",
+    "nbAuditMeanByProject": "Nombre moyen d'audits par projet",
+    "nbUsersMeanByProject": "Nombre moyen d'utilisateurs par projet",
     "nbAuditByType": "Nombre d'audits réalisés par type",
     "nbResourcesByPeriod": "Nombre de ressources auditées par périodes",
     "dateForm": {

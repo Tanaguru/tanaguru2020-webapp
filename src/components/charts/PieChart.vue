@@ -22,6 +22,16 @@ export default {
   },
   computed : {
         chartData(){
+          if(this.nbPage ==0 && this.nbSite ==0 && this.nbScenario ==0 && this.nbFile ==0){
+            return{
+              labels: ["No data"],
+              datasets: [{
+                labels:'No data',
+                backgroundColor: ['#D3D3D3'],
+                data: [100]
+              }]
+            }
+          }else{
             return {
                 labels: [this.$i18n.t('statistics.page'),
                 this.$i18n.t('statistics.site'),
@@ -29,7 +39,7 @@ export default {
                 this.$i18n.t('statistics.file')],
                     datasets: [
                     {
-                        label: 'Polar Area Chart',
+                        label: 'Pie Chart',
                         borderWidth: '0',
                         backgroundColor: [
                             '#CE0F75',
@@ -42,6 +52,7 @@ export default {
                     }
                 ]
             }
+          }
         }
     }
 }

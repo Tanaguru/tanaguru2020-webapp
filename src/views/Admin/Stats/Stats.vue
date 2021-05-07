@@ -37,11 +37,11 @@
                                 <td>{{ stats.meanNbErrorsProject.toFixed(1) }}</td>
                             </tr>
                             <tr>
-                                <th scope="row"> Nombre moyen d'audits par projet</th>
+                                <th scope="row"> {{ $t('statistics.nbAuditMeanByProject') }} </th>
                                 <td> {{ stats.meanNbAuditsByProject.toFixed(1) }} </td>
                             </tr>
                             <tr>
-                                <th scope="row"> Nombre moyen d'utilisateurs par projet</th>
+                                <th scope="row"> {{ $t('statistics.nbUsersMeanByProject') }} </th>
                                 <td> {{ stats.meanNbUsersByProject.toFixed(1) }} </td>
                             </tr>                  
                         </tbody>
