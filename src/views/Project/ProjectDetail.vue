@@ -54,6 +54,7 @@
 							</router-link>
 						</li>
 					</ul>
+					<p v-if="modifyProjectForm.success" aria-live="polite">{{ modifyProjectForm.success }}</p>
 				</article>
 				<article v-else>
 					<modify-project-form :project="project" @updateProject="onProjectUpdate"/>

@@ -114,7 +114,7 @@ export default {
 			this.beforeEditCache = user
 			this.editedUser = user
 		}
-	}
+	},
 }
 </script>
 

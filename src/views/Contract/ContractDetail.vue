@@ -26,7 +26,7 @@
 
                             <button
                                 class="btn btn--default"
-                                v-if="$store.state.auth.user.appRole.name == 'SUPER_ADMIN'"
+                                v-if="$store.state.auth.authorities['MODIFY_CONTRACT']"
                                 @click="toggleModifyContractForm()">
                                 {{$t('action.modify')}}
                             </button>
@@ -604,6 +604,7 @@ export default {
                     this.contract.id,
                     page,
                     size,
+    
                     (contractUsers) => {
                         this.contractUsers = contractUsers.content;
 						contractUsers.content.forEach(contractUser => {
@@ -627,6 +628,8 @@ export default {
         }
     },
     created() {
+        console.log(this.$store.state)
+        
         this.userService.findAll(
             (users) => {
                 this.users = users

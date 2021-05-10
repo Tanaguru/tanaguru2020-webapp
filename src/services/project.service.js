@@ -142,5 +142,19 @@ export default class ProjectService extends Service{
         .catch((err) => {error(err)});
     }
 
+    modifyById(id, name, domain, then, error ){
+        const project = {
+            'id' : id,
+            'name' : name,
+            'domain' : domain
+        };
 
+        return this.axios({
+            url: this.controllerName + "/" + id,
+            method: 'put',
+            data: project
+        })
+        .then((resp) => {then(resp.data)})
+        .catch((err) => {error(err)});
+    }
 }

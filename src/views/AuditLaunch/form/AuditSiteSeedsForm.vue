@@ -30,7 +30,7 @@
                     <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
                         <icon-alert/>
                     </icon-base-decorative>
-                    <span>{{ $t("audit.form.error.emptyUrlsError") }}</span>
+                    <span>{{ $t("audit.form.error.emptySeeds") }}</span>
                 </p>
             </div>
         </div>
@@ -42,6 +42,7 @@ import IconBaseDecorative from "../../../components/icons/IconBaseDecorative";
 import IconAlert from "../../../components/icons/IconAlert";
 import InputValidationDisplay from "../InputValidationDisplay";
 import UrlHelper from "../../../helper/urlhelper";
+
 export default {
     name: 'auditSiteSeedsForm',
     components: {

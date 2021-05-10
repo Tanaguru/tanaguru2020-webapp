@@ -16,6 +16,7 @@
 							id="username"
 							:placeholder="$t('entity.user.username')"
 							v-model.trim="userCreateForm.username"
+							@focus="hideErrorMsg('username')"
 							required>
 						<p class="info-text" id="username-constraint">{{
 								$t('form.indications.usernameConstraint')
@@ -37,6 +38,7 @@
 							id="email"
 							:placeholder="$t('entity.user.email')"
 							v-model.trim="userCreateForm.email"
+							@focus="hideErrorMsg('email')"
 							required>
 						<p id="email-constraint" class="info-text">(exemple: nom.prenom@boitemail.com)</p>
 						<p v-if="userCreateForm.emailError" id="email-error" class="info-error">
@@ -58,6 +60,7 @@
 							id="password"
 							:placeholder="$t('entity.user.password')"
 							v-model="userCreateForm.password"
+							@focus="hideErrorMsg('password')"
 							required>
 						<p class="info-text">{{ $t('form.indications.passwordConstraint') }}</p>
 						<p v-if="userCreateForm.passwordError" id="password-error" class="info-error">
@@ -199,6 +202,15 @@ export default {
 		}
 	},
 	methods: {
+		hideErrorMsg(field){
+			if(field == 'email'){
+				this.userCreateForm.emailError = ""
+			} else if (field == 'password'){
+				this.userCreateForm.passwordError = ""
+			} else {
+				this.userCreateForm.usernameError = ""
+			}
+		},
 		checkValidEmail: EmailHelper.checkValidEmail,
 		checkValidPassword: PasswordHelper.checkValidPassword,
 		checkUsername() {
@@ -209,7 +221,7 @@ export default {
 			}
 
 			if (this.userCreateForm.username.length < 4 || this.userCreateForm.username.length > 30) {
-				this.userCreateForm.usernameError = this.$i18n.t("form.errorMsg.username.usernameError");
+				this.userCreateForm.usernameError = this.$i18n.t("form.errorMsg.username.invalidUsername");
 				return false;
 			}
 			return true;
@@ -259,7 +271,7 @@ export default {
 			if (isFormValid) {
 				this.userService.create(
 					this.userCreateForm.username,
-					this.userCreateForm.email,
+					this.userCreateForm.email.toLowerCase(),
 					this.userCreateForm.password,
 					this.userCreateForm.appRole,
 					this.userCreateForm.enabled,
@@ -287,11 +299,11 @@ export default {
 
 					}
 				)
+				this.userCreateForm.username = "";
+				this.userCreateForm.email = "";
+				this.userCreateForm.appRole = this.$store.state.auth.authorities['PROMOTE_USER'] ? "" : 'USER';
+				this.userCreateForm.enable = "";
 			}
-			this.userCreateForm.username = "";
-			this.userCreateForm.email = "";
-			this.userCreateForm.appRole = this.$store.state.auth.authorities['PROMOTE_USER'] ? "" : 'USER';
-			this.userCreateForm.enable = "";
 		},
 	}
 }
