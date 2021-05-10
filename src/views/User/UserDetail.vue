@@ -50,8 +50,7 @@
 
                     <div class="form-row">
                         <div class="form-column">
-                            <div class="form-block"
-                                 v-show="isCurrentUser == false && $store.state.auth.user.appRole.name != 'USER'">
+                            <div class="form-block" id="select-approle" v-if="!isCurrentUser && $store.state.auth.authorities['PROMOTE_USER']">
                                 <label class="label" for="status-select">{{ $t('entity.user.role.role') }} *</label>
                                 <div class="select">
                                     <select name="status-select" id="status-select" v-model="modifyUserForm.appRole">
@@ -89,15 +88,15 @@
 
             <div v-else>
                 <ul class="infos-list">
-                    <li><span class="infos-list__exergue">{{ $t('entity.user.username') }}</span> : {{ user.username }}
+                    <li id="username"><span class="infos-list__exergue">{{ $t('entity.user.username') }}</span> : {{ user.username }}
                     </li>
-                    <li><span class="infos-list__exergue">{{ $t('entity.user.email') }}</span> : {{ user.email }}</li>
+                    <li id="email" v-if="$store.state.auth.user.appRole.name != 'USER' || isCurrentUser"><span class="infos-list__exergue">{{ $t('entity.user.email') }}</span> : {{ user.email }}</li>
                     <li><span class="infos-list__exergue">{{ $t('entity.user.role.role') }}</span> :
                         {{ user.appRole.name.charAt(0) + user.appRole.name.slice(1).toLowerCase().replace(/_/g, ' ') }}
                     </li>
-                    <li><span class="infos-list__exergue">{{ $t('entity.user.enabled') }}</span> : {{ user.enabled }}
+                    <li id="enabled"><span class="infos-list__exergue">{{ $t('entity.user.enabled') }}</span> : {{ user.enabled }}
                     </li>
-                    <li><span class="infos-list__exergue">{{ $t('entity.user.blocked') }}</span> : {{ !user.accountNonLocked }}
+                    <li id="blocked" v-if="$store.state.auth.user.appRole.name != 'USER' || isCurrentUser"><span class="infos-list__exergue">{{ $t('entity.user.blocked') }}</span> : {{ !user.accountNonLocked }}
                     </li>
                 </ul>
 
@@ -161,7 +160,7 @@
                 </button>
             </div>
         </article>
-        <article id="user-contracts">
+        <article id="user-contracts" v-if="$store.state.auth.user.appRole.name != 'USER' || isCurrentUser">
             <h2 class="user__title-2">{{ $t('user.contracts') }}</h2>
             
             <div v-if="contracts.length > 0">
@@ -287,7 +286,7 @@ export default {
                 if (this.isCurrentUser) {
                     this.userService.modifyMe(
                         this.modifyUserForm.username,
-                        this.modifyUserForm.email,
+                        this.modifyUserForm.email.toLowerCase(),
                         this.user.appRole.name,
                         this.user.enabled,
                         (user) => {
@@ -302,7 +301,7 @@ export default {
                     this.userService.modifyUser(
                         this.user.id,
                         this.modifyUserForm.username,
-                        this.modifyUserForm.email,
+                        this.modifyUserForm.email.toLowerCase(),
                         this.modifyUserForm.appRole,
                         this.modifyUserForm.enabled,
                         !this.modifyUserForm.accountNonLocked,
