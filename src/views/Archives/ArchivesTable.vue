@@ -13,72 +13,83 @@
                     <icon-close/>
                 </icon-base-decorative>
 
-                <icon-base-decorative v-else>
-                    <icon-checked/>
-                </icon-base-decorative>
-            </button>
-            <table class="table table--default">
-                <caption class="screen-reader-text">{{ $t('archives.legendUpload') }}</caption>
-                <thead>
-                <tr>
-                    <th scope="col">
-                        {{ $t('entity.audit.name') }}
-                    </th>
-                    <th scope="col">
-                        {{ $t('entity.audit.status') }}
-                    </th>
-                    <th scope="col">
-                        {{ $t('entity.audit.nbPage') }}
-                    </th>
-                    <th scope="col">
-                        {{ $t('entity.audit.dateEnd') }}
-                    </th>
-                    <th scope="col">{{ $t('entity.generic.actions') }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="audit of this.audits" :key="audit.id">
-                    <th scope="row">{{ audit.name }}</th>
-                    <td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
-                    <td>{{ totalPagesByAudit[audit.id] }}</td>
-                    <td>{{ audit.dateEnd ? moment(audit.dateEnd).format('LL') : '' }}</td>
-                    <td class="td-actions">
-                        <ul class="actions-list">
-                            <li class="actions-list__item">
-                                <router-link class="link link-independent link-independent--icon" :to="'/audits/' + audit.id">
-                                    <icon-base-decorative>
-                                        <icon-arrow-blue/>
-                                    </icon-base-decorative>
-                                    <span>{{ $t('action.show') }}</span>
-                                </router-link>
-                            </li>
-                            <li class="actions-list__item"
-                                v-if="audit.status === 'DONE' || audit.status === 'ERROR'">
-                                <button
-                                    class="btn btn--icon btn--nude"
-                                    @click="confirmAuditDeletion(audit)">
-                                    <icon-base-decorative>
-                                        <icon-delete/>
-                                    </icon-base-decorative>
-                                    <span>{{ $t('action.delete') }}</span>
-                                </button>
-                            </li>
-                            <li class="actions-list__item"
-                                v-if="(hasScreenShotByAudit[audit.id] && audit.status === 'DONE') || (hasScreenShotByAudit[audit.id] && audit.status === 'ERROR')">
-                                <button
-                                    class="btn btn--icon btn--nude"
-                                    @click="confirmAuditScreenshotDeletion(audit)">
-                                    <icon-base-decorative>
-                                        <icon-delete/>
-                                    </icon-base-decorative>
-                                    <span>{{ $t('action.deleteScreenshot') }}</span>
-                                </button>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+				<icon-base-decorative v-else>
+					<icon-checked/>
+				</icon-base-decorative>
+			</button>
+			<table class="table table--default">
+				<caption class="screen-reader-text">{{ $t('archives.legendUpload') }}</caption>
+				<thead>
+				<tr>
+					<th scope="col">
+						{{ $t('entity.audit.name') }}
+					</th>
+					<th scope="col">
+						{{ $t('entity.audit.status') }}
+					</th>
+					<th scope="col">
+						{{ $t('entity.audit.nbPage') }}
+					</th>
+					<th scope="col">
+						{{ $t('entity.audit.dateEnd') }}
+					</th>
+					<th scope="col">{{ $t('entity.generic.actions') }}</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr v-for="audit of this.audits" :key="audit.id">
+					<th scope="row">{{ audit.name }}</th>
+					<td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
+					<td>{{ totalPagesByAudit[audit.id] }}</td>
+					<td>{{ audit.dateEnd ? moment(audit.dateEnd).format('LL') : '' }}</td>
+					<td class="td-actions">
+						<ul class="actions-list">
+							<li class="actions-list__item">
+								<router-link class="link link-independent link-independent--icon"
+											 :to="'/audits/' + audit.id">
+									<icon-base-decorative>
+										<icon-arrow-blue/>
+									</icon-base-decorative>
+									<span>{{ $t('action.show') }}</span>
+								</router-link>
+							</li>
+							<li class="actions-list__item"
+								v-if="audit.status === 'DONE' || audit.status === 'ERROR'">
+								<button
+									class="btn btn--icon btn--nude"
+									@click="confirmAuditDeletion(audit)">
+									<icon-base-decorative>
+										<icon-delete/>
+									</icon-base-decorative>
+									<span>{{ $t('action.delete') }}</span>
+								</button>
+							</li>
+							<li v-else class="actions-list__item">
+								<button
+									class="btn btn--icon btn--nude"
+									@click="stopAudit(audit)">
+									<icon-base-decorative>
+										<icon-close/>
+									</icon-base-decorative>
+									<span>{{ $t('action.stop') }}</span>
+								</button>
+							</li>
+							<li class="actions-list__item"
+								v-if="(hasScreenShotByAudit[audit.id] && audit.status === 'DONE') || (hasScreenShotByAudit[audit.id] && audit.status === 'ERROR')">
+								<button
+									class="btn btn--icon btn--nude"
+									@click="confirmAuditScreenshotDeletion(audit)">
+									<icon-base-decorative>
+										<icon-delete/>
+									</icon-base-decorative>
+									<span>{{ $t('action.deleteScreenshot') }}</span>
+								</button>
+							</li>
+						</ul>
+					</td>
+				</tr>
+				</tbody>
+			</table>
 
             <pagination
 				:current-page="auditCurrentPage"
@@ -206,22 +217,22 @@ export default {
             );
         },
 
-        loadAuditNumberOfPageAndScreenshot(){
-            for (let i = 0; i < this.audits.length; i++) {
-                this.pageService.findByAuditIdSorted(
-                    this.audits[i].id,
-                    this.audits[i].shareCode,
-                    this.auditCurrentPage,
-                    this.auditPageSize,
-                    this.auditSortBy,
-                    this.firstToLast,
-                    (pagePage) => {
-                        this.$set(this.totalPagesByAudit, this.audits[i].id, pagePage.totalElements);
-                    },
-                    (error) => {
-                        this.errorMsg = "There was an issue retrieving the data. Please try again later or verify if you are allowed to access it (" + error + ")."
-                    }
-                )
+		loadAuditNumberOfPageAndScreenshot() {
+			for (let i = 0; i < this.audits.length; i++) {
+				this.pageService.findByAuditIdSorted(
+					this.audits[i].id,
+					this.audits[i].shareCode,
+					this.auditCurrentPage,
+					this.auditPageSize,
+					this.auditSortBy,
+					this.firstToLast,
+					(pagePage) => {
+						this.$set(this.totalPagesByAudit, this.audits[i].id, pagePage.totalElements);
+					},
+					(error) => {
+						this.errorMsg = "There was an issue retrieving the data. Please try again later or verify if you are allowed to access it (" + error + ")."
+					}
+				)
 
                 this.auditService.hasScreenshotsById(
                     this.audits[i].id,
@@ -236,51 +247,63 @@ export default {
             }
         },
 
-        deleteAudit(audit) {
-            var index = this.audits.indexOf(audit);
+		deleteAudit(audit) {
+			var index = this.audits.indexOf(audit);
 
-            if(index > -1){
-                this.auditService.delete(
-                    audit.id,
-                    () => {
-                        this.audits.splice(index, 1)
-                        this.loadAudits(this.projectId, audit.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast)
-                    },
-                    (error) => {
-                        if(error.response.data.error == "AUDIT_NOT_FOUND"){
-                            this.deleteAuditError = this.$i18n.t("form.errorMsg.audit.notFound")
-                        } else if(error.response.status == "403"){
-                            this.deleteAuditError = this.$i18n.t("form.errorMsg.user.permissionDenied")
-                        } else {
-                            this.deleteAuditError = this.$i18n.t("form.errorMsg.genericError");
-                        }
-                    }
-                )
-            }
-        },
+			if (index > -1) {
+				this.auditService.delete(
+					audit.id,
+					() => {
+						this.audits.splice(index, 1)
+						this.loadAudits(this.projectId, audit.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast)
+					},
+					(error) => {
+						if (error.response.data.error == "AUDIT_NOT_FOUND") {
+							this.deleteAuditError = this.$i18n.t("form.errorMsg.audit.notFound")
+						} else if (error.response.status == "403") {
+							this.deleteAuditError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+						} else {
+							this.deleteAuditError = this.$i18n.t("form.errorMsg.genericError");
+						}
+					}
+				)
+			}
+		},
 
-        deleteScreenshot(audit){
-            this.pageContentService.deleteScreenshotByAudit(
-                audit.id,
-                () => {
-                    this.loadAudits(this.projectId, audit.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast)
-                },
-                (error) => {
-                    if(error.response.data.error == "AUDIT_NOT_FOUND"){
-                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.audit.notFound")
-                    } else if(error.response.status == "403"){
-                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.user.permissionDenied")
-                    } else {
-                        this.deleteScreenshotError = this.$i18n.t("form.errorMsg.genericError");
-                    }
-                }
-            );
-        }
+		stopAudit(audit) {
+			this.auditService.stop(
+				audit.id,
+				() => {
+        			audit.status = "DONE";
+				},
+				(error) => {
+					console.error(error);
+				}
+			)
+		},
 
-    },
-    created() {
-        this.loadAudits(this.projectId, this.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast);
-    }
+		deleteScreenshot(audit) {
+			this.pageContentService.deleteScreenshotByAudit(
+				audit.id,
+				() => {
+					this.loadAudits(this.projectId, audit.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast)
+				},
+				(error) => {
+					if (error.response.data.error == "AUDIT_NOT_FOUND") {
+						this.deleteScreenshotError = this.$i18n.t("form.errorMsg.audit.notFound")
+					} else if (error.response.status == "403") {
+						this.deleteScreenshotError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+					} else {
+						this.deleteScreenshotError = this.$i18n.t("form.errorMsg.genericError");
+					}
+				}
+			);
+		}
+
+	},
+	created() {
+		this.loadAudits(this.projectId, this.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast);
+	}
 }
 </script>
 
