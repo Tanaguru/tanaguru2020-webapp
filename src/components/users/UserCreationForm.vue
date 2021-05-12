@@ -249,6 +249,11 @@ export default {
 					(user) => {
 						this.$emit('createUser', user)
 						this.userCreateForm.successMsg = this.$i18n.t("form.successMsg.userCreation")
+
+						this.userCreateForm.username = "";
+						this.userCreateForm.email = "";
+						this.userCreateForm.appRole = this.$store.state.auth.authorities['PROMOTE_USER'] ? "" : 'USER';
+						this.userCreateForm.enable = "";
 					},
 					(error) => {
 						this.userCreateForm.error = this.$i18n.t("form.errorMsg.genericError");
@@ -270,10 +275,6 @@ export default {
 					}
 				)
 			}
-			this.userCreateForm.username = "";
-			this.userCreateForm.email = "";
-			this.userCreateForm.appRole = this.$store.state.auth.authorities['PROMOTE_USER'] ? "" : 'USER';
-			this.userCreateForm.enable = "";
 		},
 	}
 }
