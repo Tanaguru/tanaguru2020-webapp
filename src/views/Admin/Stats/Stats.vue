@@ -5,7 +5,7 @@
 			<div class="form-column">
                 <div class="form-block">
                     <h3> {{ $t('statistics.keyFigures') }} </h3>
-                    <table class="table table--default table-references">
+                    <table class="table table--default table-references" id="stats-table">
                         <caption class="screen-reader-text">{{ $t('statistics.legendTab') }}</caption>
                         <tbody>
                             <tr>
@@ -115,13 +115,13 @@
                 </div>
             </div>
         </div>
-        <button class="btn btn--default" v-on:click="displayStats">{{ $t('action.search') }}</button>
+        <button id="displayStatsButton" class="btn btn--default" v-on:click="displayStats">{{ $t('action.search') }}</button>
         <p v-if="dateForm.error" id="form-error" class="info-error">{{ dateForm.error }}</p>
         <p v-if="dateForm.successMsg" id="form-success" class="info-success">{{ dateForm.successMsg }}</p>
 
         <div class="table-container" v-if="auditedOverPeriod.dateStart">
                 <h4> {{ $t('statistics.from') }} {{ auditedOverPeriod.dateStart }} {{ $t('statistics.to') }} {{ auditedOverPeriod.dateEnd }} </h4>
-				<table class="table table--default table-references">
+				<table class="table table--default table-references" id="table-stats-period">
 					<caption class="screen-reader-text">{{ $t('statistics.legendTabPeriod') }}</caption>
 					<thead>
 					<tr>
