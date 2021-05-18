@@ -17,7 +17,7 @@ export default class UserService extends Service{
           .catch(err => {error(err)})
     }
 
-    create(username, email, password, appRole, enabled, then, error){
+    create(username, email, password, appRole, enabled, createContract, then, error){
         const user = {
             'username' : username,
             'email' : email,
@@ -27,7 +27,7 @@ export default class UserService extends Service{
         };
 
         this.axios({
-            url: this.controllerName + "/",
+            url: this.controllerName + "/" + "?create-contract=" + createContract,
             method: 'post',
             data: user
         })

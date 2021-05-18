@@ -25,6 +25,7 @@
 		"newPassword": "Nouveau mot de passe",
 		"passwordConfirm": "Confirmation du mot de passe",
 		"enabled": "Activé",
+		"createContract": "Créer un contrat",
 		"status": "Statut",
 		"blocked": "Bloqué",
 		"selectStatus": "Sélectionner le statut",

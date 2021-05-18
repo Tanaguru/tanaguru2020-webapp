@@ -152,6 +152,7 @@
 			"emptyScenarioId": "Please choose a scenario.",
 			"fileNameError": "Please give a name to your file",
 			"seedsError": "You cannot audit a different website than the one declared on the project.",
+			"emptySeeds": "Please enter a URL.",
 			"emptyUrlError": "The first slot has to be filled. ",
 			"emptyUrlsError": "Please enter at least one url. ",
 			"scenarioSuccess": "The scenario has been added. ",

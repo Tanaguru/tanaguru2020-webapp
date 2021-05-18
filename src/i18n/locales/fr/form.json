@@ -38,8 +38,7 @@
 		},
 		"username": {
 			"existingUsername": "Ce nom d'utilisateur n'est pas disponible",
-			"invalidUsername": "Le nom d'utilisateur doit contenir plus de 4 charactères et moins de 30.",
-			"usernameError": "Le nom d'utilisateur doit contenir moins de 30 caractères."
+			"invalidUsername": "Le nom d'utilisateur doit contenir plus de 4 charactères et moins de 30."
 		},
 		"email": {
 			"existingEmail": "Cette adresse e-mail est déjà enregistrée.",
