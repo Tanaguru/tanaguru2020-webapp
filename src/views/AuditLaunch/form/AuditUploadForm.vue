@@ -111,7 +111,6 @@
 </template>
 
 <script>
-
 import InputValidationDisplay from "../InputValidationDisplay";
 import IconBaseDecorative from "../../../components/icons/IconBaseDecorative";
 import IconAlert from "../../../components/icons/IconAlert";
@@ -119,7 +118,6 @@ import IconPlus from "../../../components/icons/IconPlus";
 import IconDelete from "../../../components/icons/IconDelete";
 import IconValid from "../../../components/icons/IconValid";
 import FileUpload from "../../../components/FileUpload";
-
 export default {
     name: 'auditUploadForm',
     components: {
@@ -139,7 +137,6 @@ export default {
             createResourceForm:{
                 name: '',
                 content: '',
-
                 errorMsg: '',
                 successMsg: ''
             }
@@ -147,7 +144,7 @@ export default {
     },
     created() {
         this.resourceService.findByProjectId(
-            this.$route.params.id,
+            this.projectId,
             (resources) =>
                 this.resources = resources,
             (error) => {
@@ -160,18 +157,15 @@ export default {
             this.createResourceForm.content = '';
             this.createResourceForm.content = content;
         },
-
         createResource() {
             if(!this.isNameValid){
                 this.createResourceForm.errorMsg = this.$t("audit.form.error.fileNameError");
                 return;
             }
-
             if(!this.isContentValid){
                 this.createResourceForm.errorMsg = this.$t("audit.form.error.uploadError");
                 return;
             }
-
             this.resourceService.create(
                 this.createResourceForm.name,
                 this.projectId,
@@ -184,7 +178,6 @@ export default {
                 (error) => console.error(error)
             )
         },
-
         deleteResource(resource) {
             this.resourceService.delete(
                 resource.id,
@@ -202,7 +195,6 @@ export default {
         isNameValid(){
             return !! this.createResourceForm.name;
         },
-
         isContentValid(){
             return !!this.createResourceForm.content;
         },
@@ -224,10 +216,8 @@ export default {
         }
     }
 }
-
 </script>
 
 <style lang="scss" scoped>
 @import "../AuditLaunch.style";
-
 </style>

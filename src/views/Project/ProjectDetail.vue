@@ -43,6 +43,7 @@
 							</router-link>
 						</li>
 					</ul>
+					<p v-if="modifyProjectForm.success" aria-live="polite">{{ modifyProjectForm.success }}</p>
 				</article>
 				<article v-else>
 					<form @submit.prevent="modifyProject">
@@ -180,7 +181,8 @@
 					name: "",
 					domain: "",
 					nameError: "",
-					domainError: ""
+					domainError: "",
+					success: ""
 				}
 			}
 		},
@@ -240,25 +242,12 @@
 			)
 		},
 		computed: {
-			auditCondition(){
-				let condition = false
-				if(this.$store.state.auth.user.appRole.name == 'SUPER_ADMIN' || this.$store.state.auth.user.appRole.name == 'ADMIN'){
-					condition = true
-				}
-				else if(this.currentUserRole == 'PROJECT_MANAGER' || this.currentUserRole
-				 == 'PROJECT_USER'){
-					condition = true
-				}
-				return condition;
-			},
-
 			managerCondition(){
 				let condition = false
-				if(this.$store.state.auth.user.appRole.name == 'SUPER_ADMIN' || this.$store.state.auth.user.appRole.name == 'ADMIN'){
+				if(this.$store.state.auth.user.appRole.overrideContractRole.authorities.find( authority => authority.name === 'INVITE_MEMBER')){
 					condition = true
-				}
-				else if(this.currentUserRole == 'PROJECT_MANAGER'){
-					condition = true
+				} else {
+					condition = false
 				}
 				return condition;
 			},
@@ -321,17 +310,22 @@
 					(project) => {
 						this.project = project;
                         this.modifyProjectForm.active = false;
+
+						this.modifyProjectForm.error = "";
+						this.modifyProjectForm.nameError = "";
+						this.modifyProjectForm.domainError = "";
+						this.modifyProjectForm.name = "";
+						this.modifyProjectForm.domain = "";
+
+						this.modifyProjectForm.success = this.$i18n.t("form.successMsg.savedChanges");
+						setTimeout(() => (
+							this.modifyProjectForm.success = ""
+						), 3000)
                     },
                     (error) => {
 						console.error(error)
 					}
 				)
-
-				this.modifyProjectForm.error = "";
-				this.modifyProjectForm.nameError = "";
-				this.modifyProjectForm.domainError = "";
-				this.modifyProjectForm.name = "";
-				this.modifyProjectForm.domain = "";
 			},
 
 			removeUser(user){

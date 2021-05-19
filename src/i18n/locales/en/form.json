@@ -2,7 +2,7 @@
 	"indications" : {
 		"help": "Mandatory fields are indicated by the symbol *.",
 		"nameConstraint": "50 characters maximum",
-		"usernameConstraint": "30 characters maximum",
+		"usernameConstraint": "Should be between 4 and 30 characters long",
 		"passwordConstraint": "Should contain a minimum of 8 characters including at least 1 uppercase character, 1 lowercase, 1 number and 1 symbol (#?!@$%^&*-.,;:_).",
 		"emailConstraint": "Input should be an e-mail adress.",
 		"urlConstraint": "(example : http://www.website.com/)"
@@ -38,8 +38,7 @@
 		},
 		"username": {
 			"existingUsername": "This username already exists.",
-			"invalidUsername": "The username should be longer than 4 characters and shorter than 30.",
-			"usernameError": "The username should be shorter than 30 characters."
+			"invalidUsername": "The username should be longer than 4 characters and shorter than 30."
 		},
 		"email": {
 			"existingEmail": "This e-mail adress has already been registered.",
