@@ -36,6 +36,11 @@
 			border-right: 1px solid $border-secondary;
 			font-weight: 600;
 			text-align: left;
+
+			&[scope="row"] {
+				min-width: 35rem;
+				white-space: normal;
+			}
 		}
 
 		td {
