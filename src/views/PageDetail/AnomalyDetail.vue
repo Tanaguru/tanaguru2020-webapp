@@ -48,20 +48,22 @@
                             <icon-base-decorative :class="xpathOpen === true ? 'hide' : 'show'"><icon-arrow-blue /></icon-base-decorative>
                         </button>
 
-						<!-- Display Xpath copying tooltip -->
-                        <button class="btn btn--clipboard" @click="showXpathTooltip = !showXpathTooltip">{{$t('resultAudit.testResult.xpathCopy')}}</button>
+						<div class="tooltip">
+							<!-- Display Xpath copying tooltip -->
+							<button class="btn btn--clipboard" @click="showXpathTooltip = !showXpathTooltip">{{$t('resultAudit.testResult.xpathCopy')}}</button>
 
-						<!-- Copy Xpath tooltip -->
-						<div class="tooltip__info" role="tooltip" v-show="showXpathTooltip">
-							<div class="tooltip-clipboard">
-								<input class="input" :id="'test-xpath-'+index" :value="anomaly.xpath">
-								<button
-									@click.stop.prevent="copyXpath"
-									class="btn btn--clipboard">
-									{{ copyXpathButtonText }}
-								</button>
+							<!-- Copy Xpath tooltip -->
+							<div class="tooltip__info" role="tooltip" v-show="showXpathTooltip">
+								<div class="tooltip-clipboard">
+									<input class="input" :id="'test-xpath-'+index" :value="anomaly.xpath">
+									<button
+										@click.stop.prevent="copyXpath"
+										class="btn btn--clipboard">
+										{{ copyXpathButtonText }}
+									</button>
+								</div>
+								<div aria-live="polite" class="screen-reader-text">{{ screenReaderInfoXpath }}</div>
 							</div>
-							<div aria-live="polite" class="screen-reader-text">{{ screenReaderInfoXpath }}</div>
 						</div>
                     </div>
 
@@ -84,20 +86,22 @@
                             <icon-base-decorative :class="cssSelectorOpen === true ? 'hide' : 'show'"><icon-arrow-blue /></icon-base-decorative>
                         </button>
 
-						<!-- Display CSS copying tooltip -->
-                        <button class="btn btn--clipboard" @click="showCssTooltip = !showCssTooltip">{{$t('resultAudit.testResult.cssCopy')}}</button>
+						<div class="tooltip">
+							<!-- Display CSS copying tooltip -->
+							<button class="btn btn--clipboard" @click="showCssTooltip = !showCssTooltip">{{$t('resultAudit.testResult.cssCopy')}}</button>
 
-						<!-- Copy CSS tooltip -->
-						<div class="tooltip__info" role="tooltip" v-show="showCssTooltip">
-							<div class="tooltip-clipboard">
-								<input class="input" :id="'test-css-'+index" :value="anomaly.cssSelector">
-								<button
-									@click.stop.prevent="copyCss"
-									class="btn btn--clipboard">
-									{{ copyCssButtonText }}
-								</button>
+							<!-- Copy CSS tooltip -->
+							<div class="tooltip__info" role="tooltip" v-show="showCssTooltip">
+								<div class="tooltip-clipboard">
+									<input class="input" :id="'test-css-'+index" :value="anomaly.cssSelector">
+									<button
+										@click.stop.prevent="copyCss"
+										class="btn btn--clipboard">
+										{{ copyCssButtonText }}
+									</button>
+								</div>
+								<div aria-live="polite" class="screen-reader-text">{{ screenReaderInfoCss }}</div>
 							</div>
-							<div aria-live="polite" class="screen-reader-text">{{ screenReaderInfoCss }}</div>
 						</div>
                     </div>
 

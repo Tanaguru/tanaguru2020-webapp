@@ -2,8 +2,8 @@
 	"indications" : {
 		"help": "Les champs obligatoires sont signalés par le symbole *.",
 		"nameConstraint": "50 caractères maximum",
-		"usernameConstraint": "Entre 4 et 30 caractères",
-		"passwordConstraint": "Doit contenir au minimum 8 caractères dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial.",
+		"usernameConstraint": "30 caractères maximum",
+		"passwordConstraint": "Doit contenir au minimum 8 caractères dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial (#?!@$%^&*-.,;:_).",
 		"emailConstraint": "La saisie doit être au format e-mail.",
 		"urlConstraint": "(exemple : http://www.website.com/)"
 	},
