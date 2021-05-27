@@ -448,7 +448,7 @@ import IconClose from '../../components/icons/IconClose'
 			background-color: $color-info;
 		}
 
-		&.title-logs__status--pending {
+		&.title-logs__status--pending &.title-logs__status--stopped{
 			background-color: $color-disabled;
 		}
 	}

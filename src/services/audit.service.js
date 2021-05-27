@@ -7,7 +7,7 @@ export default class AuditService extends Service{
 
     findById(id, sharecode, then, error){
         return this.axios({
-            url: this.controllerName + "/" + id + '/' + sharecode, 
+            url: this.controllerName + "/" + id + '/' + sharecode,
             method: 'get',
           })
           .then(resp => {
@@ -20,7 +20,7 @@ export default class AuditService extends Service{
 
     findByProjectId(id, then, error){
         return this.axios({
-            url: this.controllerName + '/by-project/' + id, 
+            url: this.controllerName + '/by-project/' + id,
             method: 'get',
           })
           .then(resp => {
@@ -34,7 +34,7 @@ export default class AuditService extends Service{
     findByProjectIdAndTypePaginated(id, type, page, size, sortBy, isAsc, then, error){
         return this.axios({
             url: this.controllerName + '/by-project-and-type-paginated/' + id + '/' + type
-            + '?&page=' + page + '&size=' + size + '&sortBy=' + sortBy + '&isAsc=' + isAsc, 
+            + '?&page=' + page + '&size=' + size + '&sortBy=' + sortBy + '&isAsc=' + isAsc,
             method: 'get',
           })
           .then(resp => {
@@ -65,6 +65,19 @@ export default class AuditService extends Service{
           .catch(err => {
               error(err);
           });
+    }
+
+    stop(id, then, error){
+        return this.axios({
+            url: this.controllerName + '/' + id + '/stop',
+            method: 'post',
+        })
+            .then(resp => {
+                then(resp.data)
+            })
+            .catch(err => {
+                error(err);
+            });
     }
 
     demo(url, then, error){

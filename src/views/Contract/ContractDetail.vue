@@ -604,7 +604,7 @@ export default {
                     this.contract.id,
                     page,
                     size,
-    
+
                     (contractUsers) => {
                         this.contractUsers = contractUsers.content;
 						contractUsers.content.forEach(contractUser => {
@@ -628,8 +628,6 @@ export default {
         }
     },
     created() {
-        console.log(this.$store.state)
-        
         this.userService.findAll(
             (users) => {
                 this.users = users
