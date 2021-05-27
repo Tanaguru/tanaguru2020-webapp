@@ -46,6 +46,12 @@
 				.actions-list {
 					flex-wrap: nowrap;
 				}
+
+				.actions-list__item {
+					.btn {
+						margin-bottom: 0;
+					}
+				}
 			}
 		}
 	}
