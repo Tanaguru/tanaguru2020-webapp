@@ -45,7 +45,8 @@
 					<td class="td-actions">
 						<ul class="actions-list">
 							<li class="actions-list__item">
-								<router-link class="link link-independent link-independent--icon"
+								<router-link v-if="authorities.includes('SHOW_AUDIT')"
+									class="link link-independent link-independent--icon"
 											 :to="'/audits/' + audit.id">
 									<icon-base-decorative>
 										<icon-arrow-blue/>
@@ -54,7 +55,7 @@
 								</router-link>
 							</li>
 							<li class="actions-list__item"
-								v-if="audit.status === 'DONE' || audit.status === 'ERROR'">
+								v-if="authorities.includes('DELETE_AUDIT') && (audit.status === 'DONE' || audit.status === 'ERROR')">
 								<button
 									class="btn btn--icon btn--nude"
 									@click="confirmAuditDeletion(audit)">
@@ -66,6 +67,7 @@
 							</li>
 							<li v-else class="actions-list__item">
 								<button
+									v-if="authorities.includes('START_AUDIT')"
 									class="btn btn--icon btn--nude"
 									@click="stopAudit(audit)">
 									<icon-base-decorative>
@@ -75,7 +77,7 @@
 								</button>
 							</li>
 							<li class="actions-list__item"
-								v-if="(hasScreenShotByAudit[audit.id] && audit.status === 'DONE') || (hasScreenShotByAudit[audit.id] && audit.status === 'ERROR')">
+								v-if="authorities.includes('DELETE_AUDIT') &&((hasScreenShotByAudit[audit.id] && audit.status === 'DONE') || (hasScreenShotByAudit[audit.id] && audit.status === 'ERROR'))">
 								<button
 									class="btn btn--icon btn--nude"
 									@click="confirmAuditScreenshotDeletion(audit)">
@@ -140,10 +142,10 @@ export default {
             auditTotal: 0,
             auditSortBy: 'id',
             deleteAuditError: "",
-            deleteScreenshotError: ""
+            deleteScreenshotError: "",
         }
     },
-    props: ['type', 'deleteCondition', 'projectId',],
+    props: ['type', 'projectId', 'authorities'],
     methods: {
         confirmAuditDeletion(audit) {
 			this.$modal
@@ -254,7 +256,6 @@ export default {
 				this.auditService.delete(
 					audit.id,
 					() => {
-						this.audits.splice(index, 1)
 						this.loadAudits(this.projectId, audit.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast)
 					},
 					(error) => {
@@ -298,7 +299,7 @@ export default {
 					}
 				}
 			);
-		}
+		},
 
 	},
 	created() {

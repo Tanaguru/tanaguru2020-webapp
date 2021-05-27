@@ -569,7 +569,7 @@ export default {
 							user.contractAppUser.user.id === this.$store.state.auth.user.id
 						)
 						if(currentUser){
-							this.currentUserRole = currentUser[0].projectRole.name
+							this.currentUserRole = currentUser.projectRole.name
 						}
 					},
 					(error) => console.error(error)

@@ -12,6 +12,7 @@
 	"signIn": "Inscription",
 	"logout": "Déconnexion",
 	"start": "Démarrer",
+	"stop": "Arrêter",
 	"search": "Chercher",
 	"auditStart": "Lancer l'audit",
 	"auditLaunch": "Lancer un audit",

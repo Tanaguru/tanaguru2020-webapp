@@ -60,7 +60,7 @@
                 <span v-else>{{ $t('entity.audit.scenario') }}</span>
             </h2>
             <div class="table-container">
-                <ArchivesTable :type="type" :projectId="projectId" :deleteCondition="deleteCondition"/>
+                <ArchivesTable :type="type" :projectId="projectId" :authorities="authorities"/>
             </div>
         </article>
     </main>
@@ -106,7 +106,8 @@ export default {
             ],
             types: ['PAGE', 'SITE', 'SCENARIO', 'UPLOAD'],
             deleteAuditError: "",
-            projectId : ""
+            projectId : "",
+			authorities: []
         }
     },
     metaInfo() {
@@ -119,19 +120,6 @@ export default {
                 }
             ]
         }
-    },
-    computed: {
-        deleteCondition() {
-            var condition = false;
-            if (this.currentUserRole == 'PROJECT_MANAGER') {
-                condition = true
-            } else if (this.$store.state.auth.user.appRole.overrideProjectRole.name == 'PROJECT_MANAGER') {
-                condition = true
-            }
-            return condition
-        },
-
-
     },
     created() {
         this.projectId = this.$route.params.id;
@@ -165,6 +153,16 @@ export default {
                         console.error(error)
                     }
                 )
+
+				this.projectService.findAuthoritiesByProjectId(
+					this.projectId,
+					(authorities) => {
+						this.authorities = authorities;
+					},
+					(error) => {
+						console.error("Unable to get authorities for project ", this.projectId);
+					}
+				)
             },
             (error) => {
                 console.error(error)
