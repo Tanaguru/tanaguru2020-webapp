@@ -7,7 +7,6 @@
 		</div>
 
 		<div class="nav__picture" v-if="$store.getters.isLoggedIn">
-
 			<router-link v-if="$store.state.auth.user.appRole.name == 'USER'" :to="'/users/'+ $store.state.auth.user.id" :aria-label="'Account settings for '+ currentUser+'\'s profile'" class="user-picture" style="background-image:url('https://i.ibb.co/f2HHwzx/collection-caracteres-bebe-dragon-dessines-main-23-2147831551-2.jpg?region=0,0,600,600')" />
 
 			<router-link v-else-if="$store.state.auth.user.appRole.name == 'ADMIN'" :to="'/users/'+ $store.state.auth.user.id" :aria-label="'Account settings for '+ currentUser+'\'s profile'" class="user-picture" style="background-image:url('https://i.ibb.co/ZW7dgkw/baby-dragon-character-collection-with-flat-design-23-2147823681-2.jpg?region=0,0,600,600')" />

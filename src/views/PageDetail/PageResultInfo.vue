@@ -92,7 +92,7 @@
 							{{reference.name}}
 						</li>
 						<li>
-							<span>{{ $t('auditDetail.synthesis.pages') }}</span> {{ totalPages }}
+							<span>{{ $t('auditDetail.synthesis.pages') }} : </span> {{ totalPages }}
 						</li>
 						<!--<li>
 							<button class="btn btn--nude btn--icon">

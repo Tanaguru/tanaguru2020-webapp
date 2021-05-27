@@ -4,13 +4,13 @@
 
 		<Tabs>
 			<Tab :name="$t('auditDetail.tabs.logs')" selected="true">
-                <div class="tabs-wrapper">
-                    <header>
-                        <h1 class="title-logs">
+				<div class="tabs-wrapper">
+					<header>
+						<h1 class="title-logs">
 							{{ audit.name }}
 							<span aria-live="polite" :class="'title-logs__status title-logs__status--' + audit.status.toLowerCase()" v-if="audit">{{ $t('auditDetail.status.' +  audit.status.toLowerCase()) }}</span>
-                        </h1>
-                    </header>
+						</h1>
+					</header>
 
 					<section class="main-info title-logs">
 						<h2>Audit parameters</h2>
@@ -31,7 +31,7 @@
 							<li v-show="parameters.maxDepth">{{$t('auditDetail.information.maxDepth')}} : {{parameters.maxDepth}}</li>
 							<li v-show="parameters.maxDoc">{{$t('auditDetail.information.maxDoc')}} : {{parameters.maxDoc}}</li>
 							<li v-show="parameters.maxDuration">{{$t('auditDetail.information.maxDuration')}} : {{parameters.maxDuration}}</li>
-							<li v-show="parameters.resolutions">{{$t('auditDetail.information.resolution')}} : {{parameters.resolutions}}</li>
+							<li v-show="parameters.resolutions">{{$t('auditDetail.information.resolution')}} : {{parameters.resolutions.split(';').join(', ')}}</li>
 						</ul>
 					</section>
 
@@ -230,6 +230,7 @@ import IconClose from '../../components/icons/IconClose'
 					this.$route.params.id,
 					this.sharecode,
 					(parameters) => {
+						console.log(parameters)
 						parameters.forEach(parameter => {
 							if(parameter.auditParameter.code == "WEBDRIVER_BROWSER") {
 								this.parameters.browser = parameter.value
@@ -447,7 +448,7 @@ import IconClose from '../../components/icons/IconClose'
 			background-color: $color-info;
 		}
 
-		&.title-logs__status--pending {
+		&.title-logs__status--pending &.title-logs__status--stopped{
 			background-color: $color-disabled;
 		}
 	}
