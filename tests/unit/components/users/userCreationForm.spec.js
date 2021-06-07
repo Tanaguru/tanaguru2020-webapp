@@ -53,6 +53,21 @@ describe('UserCreationForm', () => {
             const nameError = wrapper.find('#username-error');
             expect(nameError.exists()).toBe(true);
         })
+
+        it('should show error if contains less than 4 characters when sending form', async () => {
+            const wrapper = shallowMount(UserCreationForm, {
+                i18n,
+                localVue,
+                store: CREATE_CONTRACT_STORE,
+                stubs: ['router-link', 'router-view'],
+            })
+
+            await wrapper.find('#username').setValue('01');
+            await wrapper.find('form').trigger('submit.prevent');
+
+            const nameError = wrapper.find('#username-error');
+            expect(nameError.exists()).toBe(true);
+        })
     })
 
     describe('email input', () => {
@@ -129,7 +144,7 @@ describe('UserCreationForm', () => {
     })
 
     describe('form', () => {
-        it('shouldn\'t show error if valid and should show success message ans emit createUser event', async () => {
+        it('shouldn\'t show error if valid and should show success message and emit createUser event', async () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,

@@ -1,27 +1,26 @@
 <template>
     <main class="wrapper" id="page" role="main">
-		<Tabs @activeTab='activeTab'>
-			<Tab :name="$t('entity.contract.contracts')" selected="true" class="tabs-wrapper">
-				<adminContractList :selected="selectedTab"/>
-			</Tab>
-
-			<div v-if="this.$store.state.auth.user.appRole.name !== 'USER'">
-				<Tab :name="$t('entity.user.users')" class="tabs-wrapper">
-					<adminUserList :selected="selectedTab"/>
+			<Tabs @activeTab='activeTab'>
+				<Tab :name="$t('entity.contract.contracts')" selected="true" class="tabs-wrapper">
+					<adminContractList :selected="selectedTab"/>
 				</Tab>
+				<div v-if="this.$store.state.auth.user.appRole.name !== 'USER'">
+					<Tab :name="$t('entity.user.users')" class="tabs-wrapper">
+						<adminUserList :selected="selectedTab"/>
+					</Tab>
 
-				<Tab v-if="showReferenceTab"
-					:name="$t('entity.reference.references')" class="tabs-wrapper">
-					<reference-tab :selected="selectedTab"/>
-				</Tab>
-			</div>
-
-			<div v-if="this.$store.state.auth.user.appRole.name == 'SUPER_ADMIN'">
-				<Tab :name="$t('title.statistics')" class="tabs-wrapper">
-					<statsTab/>
-				</Tab>
-			</div>
-		</Tabs>
+					<Tab v-if="showReferenceTab"
+						:name="$t('entity.reference.references')" class="tabs-wrapper">
+						<reference-tab :selected="selectedTab"/>
+					</Tab>
+				</div>
+        
+        <div v-if="this.$store.state.auth.user.appRole.name == 'SUPER_ADMIN'">
+				  <Tab :name="$t('title.statistics')" class="tabs-wrapper">
+					  <statsTab/>
+				  </Tab>
+			  </div>
+			</Tabs>
     </main>
 </template>
 
