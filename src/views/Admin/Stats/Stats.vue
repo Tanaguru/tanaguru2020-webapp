@@ -52,7 +52,7 @@
                 <div class="form-block">
                     <div>
                         <h3> {{ $t('statistics.nbAuditByType') }} </h3>
-                        <Piechart :nbPage="stats.nbPAGEAudit" :nbSite="stats.nbSITEAudit" :nbScenario="stats.nbSCENARIOAudit" :nbFile="stats.nbUPLOADAudit"></Piechart>
+                        <Piechart :nbPage="stats.nbPageAudit" :nbSite="stats.nbSiteAudit" :nbScenario="stats.nbScenarioAudit" :nbFile="stats.nbUploadAudit"></Piechart>
                     </div>
                 </div>
             </div>
@@ -64,18 +64,6 @@
                 <div class="form-block">
                     <label class="label" for="dateStart"> {{ $t('statistics.dateForm.dateStart') }} </label>
                     <input
-                    v-if="$i18n.locale.toLowerCase() == 'en'"
-                    class="input"
-                    v-bind:class="{'has-error': dateForm.dateStartError}"
-                    type="text"
-                    name="dateStart"
-                    id="dateStart"
-                    v-model="dateForm.dateStart"
-                    :aria-describedby="dateForm.dateError ? 'date-error' : ''"
-                    required>
-
-                <input
-                    v-else
                     class="input"
                     v-bind:class="{'has-error': dateForm.dateStartError}"
                     type="text"
@@ -91,18 +79,6 @@
                 <div class="form-block">
                     <label class="label" for="dateEnd"> {{ $t('statistics.dateForm.dateEnd') }} </label>
                     <input
-                    v-if="$i18n.locale.toLowerCase() == 'en'"
-                    class="input"
-                    v-bind:class="{'has-error': dateForm.dateEndError}"
-                    type="text"
-                    name="dateEnd"
-                    id="dateEnd"
-                    v-model="dateForm.dateEnd"
-                    :aria-describedby="dateForm.dateError ? 'date-error' : ''"
-                    required>
-
-                <input
-                    v-else
                     class="input"
                     v-bind:class="{'has-error': dateForm.dateEndError}"
                     type="text"
@@ -150,6 +126,7 @@
 <script>
 
 import Piechart from "../../../components/charts/PieChart";
+import DateHelper from '../../../helper/DateHelper';
 
 export default {
   components: { Piechart },
@@ -164,10 +141,10 @@ export default {
                 meanNbErrorsPage: 0,
                 meanNbErrorsProject: 0,
                 meanNbErrorsAudit: 0,
-                nbSITEAudit: 0,
-                nbPAGEAudit: 0,
-                nbSCENARIOAudit: 0,
-                nbUPLOADAudit: 0,
+                nbSiteAudit: 0,
+                nbPageAudit: 0,
+                nbScenarioAudit: 0,
+                nbUploadAudit: 0,
                 meanNbAuditsByProject: 0,
                 meanNbUsersByProject: 0
             },
@@ -195,6 +172,7 @@ export default {
         this.loadStats();
     },
     methods: {
+        checkValidDate: DateHelper.checkValidDate,
         loadStats(){
 			this.statsService.getStats(
 				stats => {
@@ -204,18 +182,14 @@ export default {
             );
         },
         checkDate() {
-            let dateRegex = null;
-            if(this.$i18n.locale.toLowerCase() == 'en'){
-                dateRegex = /^(0[1-9]|1[012])[/](0[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$/
-            } else { dateRegex = /^(0[1-9]|[12][0-9]|3[01])[/](0[1-9]|1[012])[/](19|20)\d\d$/ }
-
-            if(dateRegex.test(this.dateForm.dateEnd) && dateRegex.test(this.dateForm.dateStart) ){
+            
+            if(this.checkValidDate(this.dateForm.dateEnd) && this.checkValidDate(this.dateForm.dateStart) ){
                 return true;
-            } else if( !dateRegex.test(this.dateForm.dateEnd) && !dateRegex.test(this.dateForm.dateStart) ) {
+            } else if( !this.checkValidDate(this.dateForm.dateEnd) && !this.checkValidDate(this.dateForm.dateStart) ) {
                 this.dateForm.dateEndError = this.$i18n.t('statistics.dateForm.invalidDateEnd')
                 this.dateForm.dateStartError = this.$i18n.t('statistics.dateForm.invalidDateStart')
                 return false;
-            } else  if( !dateRegex.test(this.dateForm.dateEnd) ){
+            } else  if( !this.checkValidDate(this.dateForm.dateEnd) ){
                 this.dateForm.dateEndError = this.$i18n.t('statistics.dateForm.invalidDateEnd')
                 return false;
             }else{
