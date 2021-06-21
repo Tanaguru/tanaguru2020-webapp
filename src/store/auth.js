@@ -50,6 +50,8 @@ export default {
             localStorage.removeItem('token')
             localStorage.setItem('status', '')
             localStorage.removeItem('authorities')
+            localStorage.removeItem('authorizationCode')
+			localStorage.removeItem('authorizationState')
         },
     },
     actions: {
