@@ -22,7 +22,7 @@ export default {
 	},
 	mounted() {
 		window.addEventListener('message', this.onMessage, false)
-		this.onChangeLocale();
+		this.onLocaleChangeUpdateIframeLocale();
 	},
 	methods: {
 		onMessage(e) {
@@ -47,7 +47,7 @@ export default {
 				}
 			}
 		},
-		onChangeLocale(){
+		onLocaleChangeUpdateIframeLocale(){
 			this.bus.$on("updateLocale", (locale) => {
 				let message = {
 					'name': 'locale-change',
