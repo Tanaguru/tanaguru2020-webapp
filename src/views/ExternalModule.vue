@@ -1,10 +1,8 @@
 <template>
 	<main class="wrapper" id="page" role="main">
-		<div v-if="checkDisplayAllowed" id="frame-container">
+		<div id="frame-container">
 			<iframe ref="iframe" :src="moduleData.url"></iframe>
 		</div>
-
-		<div v-else></div>
 	</main>
 </template>
 
@@ -24,20 +22,7 @@ export default {
 	},
 	mounted() {
 		window.addEventListener('message', this.onMessage, false)
-		this.bus.$on("updateLocale", (locale) => {
-			let message = {
-				'name': 'locale-change',
-				'locale': locale
-			}
-			if(this.$refs.iframe != null){
-				this.$refs.iframe.contentWindow.postMessage(message, '*')
-			}
-		})
-	},
-	computed: {
-		checkDisplayAllowed() {
-			return true
-		}
+		this.onChangeLocale();
 	},
 	methods: {
 		onMessage(e) {
@@ -46,7 +31,7 @@ export default {
 				switch (message.name) {
 					case 'on-module-mounted':
 						this.$refs.iframe.style.height = message.height + "px"
-						this.$refs.iframe.contentWindow.postMessage({'name': 'init-locale','locale': localStorage.getItem('locale')}, '*')
+						this.setIframeLocale(localStorage.getItem('locale'))
 						break;
 					case 'on-oauth2-auth-success':
 						this.$store.commit('auth_success', {token: message.token ,user: message.user})
@@ -62,6 +47,20 @@ export default {
 				}
 			}
 		},
+		onChangeLocale(){
+			this.bus.$on("updateLocale", (locale) => {
+				let message = {
+					'name': 'locale-change',
+					'locale': locale
+				}
+				if(this.$refs.iframe != null){
+					this.$refs.iframe.contentWindow.postMessage(message, '*')
+				}
+			})
+		},
+		setIframeLocale(locale){
+			this.$refs.iframe.contentWindow.postMessage({'name': 'init-locale','locale': locale}, '*')
+		}
 	}
 }
 </script>
