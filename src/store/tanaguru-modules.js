@@ -14,15 +14,12 @@ export default {
         loadTanaguruModules(context){
             let modulePromises = []
             for(const tanaguruModule of TANAGURU_MODULES){
-                try{
-                    let promise = axios.get(tanaguruModule + '/tanaguru-module.json')
-                        .then(value => {
-                            context.commit('onLoadModule', value.data)
-                        })
+                let promise = axios.get(tanaguruModule + '/tanaguru-module.json')
+                    .then(value => {
+                        context.commit('onLoadModule', value.data)
+                    })
+                    .catch( err => console.error("Could not load tanaguru module at " + tanaguruModule))
                     modulePromises.push(promise)
-                }catch (e) {
-                    console.error("Could not load tanaguru module at " + tanaguruModule)
-                }
             }
             return Promise.all(modulePromises)
                 .then(values => {
