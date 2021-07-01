@@ -331,7 +331,7 @@ export default {
                     this.modifyPasswordForm.confirmationError = this.$i18n.t("form.errorMsg.emptyInput")
                 }
             }
-            else if (this.checkValidPassword(this.modifyPasswordForm.password) == false) {
+            else if (!this.checkValidPassword(this.modifyPasswordForm.password)) {
                 this.modifyPasswordForm.confirmationError = this.$i18n.t("form.errorMsg.password.passwordError")
             }
             else if (this.modifyPasswordForm.password != this.modifyPasswordForm.passwordConfirm) {
