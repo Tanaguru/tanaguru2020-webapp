@@ -182,14 +182,15 @@ export default {
             );
         },
         checkDate() {
-            
-            if(this.checkValidDate(this.dateForm.dateEnd) && this.checkValidDate(this.dateForm.dateStart) ){
+            var dateEndValid = this.checkValidDate(this.dateForm.dateEnd)
+            var dateStartValid = this.checkValidDate(this.dateForm.dateStart)
+            if( dateEndValid && dateStartValid ){
                 return true;
-            } else if( !this.checkValidDate(this.dateForm.dateEnd) && !this.checkValidDate(this.dateForm.dateStart) ) {
+            } else if( !dateEndValid && !dateStartValid ) {
                 this.dateForm.dateEndError = this.$i18n.t('statistics.dateForm.invalidDateEnd')
                 this.dateForm.dateStartError = this.$i18n.t('statistics.dateForm.invalidDateStart')
                 return false;
-            } else  if( !this.checkValidDate(this.dateForm.dateEnd) ){
+            } else  if( !dateEndValid ){
                 this.dateForm.dateEndError = this.$i18n.t('statistics.dateForm.invalidDateEnd')
                 return false;
             }else{
