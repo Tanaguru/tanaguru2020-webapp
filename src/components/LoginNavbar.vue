@@ -4,7 +4,7 @@
 			<span>{{$t('action.login')}}</span>
 		</router-link>
 
-		<router-link v-for="module in offlineModule" exact :to="'/external-module/' + module.name" class="btn btn--default">
+		<router-link v-for="module in offlineModule" :key="module" exact :to="'/external-module/' + module.name" class="btn btn--default">
 			<span>{{module.name}}</span>
 		</router-link>
     </div>

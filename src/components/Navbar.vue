@@ -12,7 +12,7 @@
 			</router-link>
 		</li>
 
-		<li v-for="module in onlineModule" class="navbar__item">
+		<li v-for="module in onlineModule" :key="module" class="navbar__item">
 		<router-link  exact :to="'/external-module/' + module.name"
 					  class="link-independent link-independent--icon">
 			<span>{{module.name}}</span>
