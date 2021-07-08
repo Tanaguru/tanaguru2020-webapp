@@ -97,7 +97,7 @@ export default class UserService extends Service{
             method: 'put',
             data: user
         })
-        .then((user) => {then(user.data)})
+        .then((response) => {then(response.data.user, response.data.token)})
         .catch((err) => {error(err)});
     }
 
