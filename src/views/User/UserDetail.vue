@@ -289,11 +289,12 @@ export default {
                         this.modifyUserForm.email.toLowerCase(),
                         this.user.appRole.name,
                         this.user.enabled,
-                        (user) => {
+                        (user, token) => {
                             this.$store.state.auth.user = user;
                             this.user = user;
                             this.modifyUserForm.active = false;
                             this.modifyUserForm.successMsg = this.$i18n.t("form.successMsg.savedChanges")
+                            this.$store.commit('auth_success', {token : token, user : this.user})
                         },
                         (error) => this.modifyUserForm.error = this.$i18n.t("form.errorMsg.genericError")
                     )
