@@ -7,7 +7,8 @@ def COLOR_MAP = [
 def createDockerEnvFileContent(String propertyFileName){
     configFileProvider([configFile(fileId: propertyFileName, variable: 'configFile')]) {
          def props = readProperties file: "$configFile"
-         return "API_BASE_URL=" + props['API_BASE_URL'] + "\n"
+         return "API_BASE_URL=" + props['API_BASE_URL'] + "\n" +
+		 "TANAGURU_MODULES=" + props['TANAGURU_MODULES'] + "\n"
     }
 }
 

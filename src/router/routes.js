@@ -13,6 +13,7 @@ import Archives from "@/views/Archives/Archives";
 import ResetPassword from "@/views/ResetPassword";
 import ForgotPassword from "@/views/ForgotPassword";
 import NotFound from "@/views/Errors/NotFound";
+import ExternalModule from "@/views/ExternalModule";
 
 export default [
     {
@@ -95,6 +96,10 @@ export default [
         path: '/forgot-password',
         name: 'ForgotPassword',
         component: ForgotPassword,
+    },{
+        path: '/external-module/:name',
+        name: 'ExternalModule',
+        component: ExternalModule,
     },{
         path: "/404",
         name: 'NotFound',

@@ -34,7 +34,8 @@ Vue.prototype.$moment = Moment;
 Vue.prototype.window = window;
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false
-Vue.prototype.NAVBAR_LINKS = NAVBAR_LINKS;
+
+Vue.prototype.TANAGURU_MODULES = TANAGURU_MODULES;
 
 Vue.prototype.userService = new UserService(axios);
 Vue.prototype.contractService = new ContractService(axios);
