@@ -289,11 +289,12 @@ export default {
                         this.modifyUserForm.email.toLowerCase(),
                         this.user.appRole.name,
                         this.user.enabled,
-                        (user) => {
-                            this.$store.state.auth.user = user;
-                            this.user = user;
+                        (response) => {
+                            this.$store.state.auth.user = response.user;
+                            this.user = response.user;
                             this.modifyUserForm.active = false;
                             this.modifyUserForm.successMsg = this.$i18n.t("form.successMsg.savedChanges")
+                            this.$store.commit('auth_success', {token : response.token, user : this.user})
                         },
                         (error) => this.modifyUserForm.error = this.$i18n.t("form.errorMsg.genericError")
                     )
@@ -331,7 +332,7 @@ export default {
                     this.modifyPasswordForm.confirmationError = this.$i18n.t("form.errorMsg.emptyInput")
                 }
             }
-            else if (!this.checkValidPassword(this.modifyPasswordForm.password)) {
+            else if (!this.checkValidPassword(this.modifyPasswordForm.password) == false) {
                 this.modifyPasswordForm.confirmationError = this.$i18n.t("form.errorMsg.password.passwordError")
             }
             else if (this.modifyPasswordForm.password != this.modifyPasswordForm.passwordConfirm) {
