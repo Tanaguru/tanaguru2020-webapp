@@ -31,7 +31,9 @@ export default {
 				switch (message.name) {
 					case 'on-module-mounted':
 						this.$refs.iframe.style.height = message.height + "px"
-						this.$refs.iframe.style.width = message.width + "px"
+						if(message.width){
+							this.$refs.iframe.style.width = message.width + "px"
+						}
 						this.setIframeLocale(localStorage.getItem('locale'))
 						break;
 					case 'on-oauth2-auth-success':
