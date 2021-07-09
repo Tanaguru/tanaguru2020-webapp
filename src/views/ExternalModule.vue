@@ -1,5 +1,5 @@
 <template>
-	<main class="wrapper" id="page" role="main">
+	<main id="page" role="main">
 		<div id="frame-container">
 			<iframe ref="iframe" :src="moduleData.url"></iframe>
 		</div>
@@ -31,6 +31,7 @@ export default {
 				switch (message.name) {
 					case 'on-module-mounted':
 						this.$refs.iframe.style.height = message.height + "px"
+						this.$refs.iframe.style.width = message.width + "px"
 						this.setIframeLocale(localStorage.getItem('locale'))
 						break;
 					case 'on-oauth2-auth-success':
@@ -69,6 +70,7 @@ export default {
 
 iframe {
 	width: 100%;
+	height: 100%;
 	border: 0;
 }
 </style>
