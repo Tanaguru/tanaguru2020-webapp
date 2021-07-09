@@ -11,6 +11,7 @@
 	"selectLogLevel" : "Select the level of log",
 	"synthesis": {
 		"pages": "Number of pages audited",
+		"showSourceCode": "Show source code",
 		"guidelines": "guidelines",
 		"table": {
 			"title": "Summary of audited pages",
