@@ -94,6 +94,9 @@
 						<li>
 							<span>{{ $t('auditDetail.synthesis.pages') }} : </span> {{ totalPages }}
 						</li>
+						<li v-if="pageContent && pageContent.source">
+							<a class="btn btn--nude btn--icon" @click="showSourceCode">{{ $t('auditDetail.synthesis.showSourceCode') }} </a>
+						</li>
 						<!--<li>
 							<button class="btn btn--nude btn--icon">
 								<span>{{$t('entity.audit.parameters')}}</span>
@@ -188,7 +191,13 @@
                 shareCodeUrl.setAttribute('type', 'hidden')
                 window.getSelection().removeAllRanges()
             },
-        }
+
+			showSourceCode() {
+            	let popup = window.open()
+				popup.document.write('<pre><code id="source"></code></pre>')
+            	popup.document.getElementById('source').textContent = this.pageContent.source
+			}
+		}
     }
 
 </script>

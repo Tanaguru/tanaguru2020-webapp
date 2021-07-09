@@ -10,7 +10,8 @@
 	"logs": "Historique de l'audit",
 	"selectLogLevel" : "Sélectionner le niveau de log",
 	"synthesis": {
-		"pages": "Nombre de pages à auditer",
+		"pages": "Nombre de pages auditée(s)",
+		"showSourceCode": "Afficher le code source de la page",
 		"guidelines": "Référentiel",
 		"table": {
 			"title": "Récapitulatif des pages auditées",
