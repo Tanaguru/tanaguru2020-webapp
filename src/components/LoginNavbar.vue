@@ -18,7 +18,7 @@
 				return this.$store.getters.getOfflineModules
 			},
 			orderedModules(){
-				return this.offlineModule.sort((a, b) => { return b.number < a.number;});
+				return this.offlineModule.sort((a, b) => { return b.priorityNumber < a.priorityNumber;});
 			}
 		},
 		methods:{
