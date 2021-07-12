@@ -61,7 +61,7 @@ export default [
         name: 'AuditDetail',
         component: AuditDetail,
         meta :{
-            requireAuthentication : true
+            requireAuthentication : false
         }
     },{
         path: '/audits/:auditId/pages/:pageId/history',
