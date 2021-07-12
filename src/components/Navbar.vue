@@ -12,10 +12,10 @@
 			</router-link>
 		</li>
 
-		<li v-for="module in onlineModule" :key="module" class="navbar__item">
+		<li v-for="module in onlineModule" :key="module.name" class="navbar__item">
 		<router-link  exact :to="'/external-module/' + module.name"
 					  class="link-independent link-independent--icon">
-			<span>{{module.name}}</span>
+			<span>{{moduleName(module.i18n)}}</span>
 		</router-link>
 		</li>
 
@@ -65,6 +65,17 @@ export default {
 					if (this.$route.path !== '/')
 						this.$router.push('/')
 				})
+		},
+		moduleName(traductions){
+			var moduleName = traductions.en;
+			if(this.$i18n.locale == 'fr'){
+				moduleName = traductions.fr;
+			}else if( this.$i18n.locale == 'es'){
+				moduleName = traductions.es;
+			}else if( this.$i18n.locale == 'en'){
+				moduleName = traductions.en;
+			}
+			return moduleName;
 		}
 	},
 	computed: {
