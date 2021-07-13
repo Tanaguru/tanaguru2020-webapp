@@ -1,7 +1,7 @@
 <template>
     <div>
 		<router-link v-for="module in orderedModules" :key="module.name" exact :to="'/external-module/' + module.name" class="btn btn--default">
-			<span>{{moduleName(module.i18n)}}</span>
+			<span>{{moduleName(module)}}</span>
 		</router-link>
 
 		<router-link exact to="/login" class="btn btn--default">
@@ -11,28 +11,22 @@
 </template>
 
 <script>
-    export default {
-        name: 'loginNavbar',
-		computed: {
-			offlineModule() {
-				return this.$store.getters.getOfflineModules
-			},
-			orderedModules(){
-				return this.offlineModule.sort((a, b) => { return b.priorityNumber < a.priorityNumber;});
-			}
+import ModuleHelper from '../helper/ModuleHelper';
+export default {
+    name: 'loginNavbar',
+	computed: {
+		offlineModule() {
+			return this.$store.getters.getOfflineModules
 		},
-		methods:{
-			moduleName(traductions){
-				var moduleName = traductions.en;
-				if(this.$i18n.locale == 'fr'){
-					moduleName = traductions.fr;
-				}else if( this.$i18n.locale == 'es'){
-					moduleName = traductions.es;
-				}else if( this.$i18n.locale == 'en'){
-					moduleName = traductions.en;
-				}
-				return moduleName;
-			}
+		orderedModules(){
+			return this.offlineModule.sort((a, b) => { return b.priorityNumber < a.priorityNumber;});
+		}
+	},
+	methods:{
+		getModuleName: ModuleHelper.getModuleName,
+		moduleName(module){
+			return this.getModuleName(module);
 		}
 	}
+}
 </script>

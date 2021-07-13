@@ -15,7 +15,7 @@
 		<li v-for="module in onlineModule" :key="module.name" class="navbar__item">
 		<router-link  exact :to="'/external-module/' + module.name"
 					  class="link-independent link-independent--icon">
-			<span>{{moduleName(module.i18n)}}</span>
+			<span>{{moduleName(module)}}</span>
 		</router-link>
 		</li>
 
@@ -38,6 +38,7 @@ import IconBaseDecorative from './icons/IconBaseDecorative'
 import IconParameters from './icons/IconParameters'
 import IconLogout from './icons/IconLogout'
 import IconDashboard from './icons/IconDashboard'
+import ModuleHelper from '../helper/ModuleHelper'
 
 export default {
 	name: 'navbar',
@@ -55,6 +56,7 @@ export default {
 		IconDashboard,
 	},
 	methods: {
+		getModuleName: ModuleHelper.getModuleName,
 		updateLocale: function () {
 			this.bus.$emit("updateLocale", this.locale)
 			this.$moment.locale(this.locale)
@@ -66,16 +68,8 @@ export default {
 						this.$router.push('/')
 				})
 		},
-		moduleName(traductions){
-			var moduleName = traductions.en;
-			if(this.$i18n.locale == 'fr'){
-				moduleName = traductions.fr;
-			}else if( this.$i18n.locale == 'es'){
-				moduleName = traductions.es;
-			}else if( this.$i18n.locale == 'en'){
-				moduleName = traductions.en;
-			}
-			return moduleName;
+		moduleName(module){
+			return this.getModuleName(module)
 		}
 	},
 	computed: {

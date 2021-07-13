@@ -18,11 +18,9 @@ export default {
     },
     created(){
         if(!this.$store.state.auth.user){
-            var modules = this.$store.getters.getOfflineModules;
-            for(module of modules){
-                if(module.home == true){
-                    this.$router.push('/external-module/'+module.name)
-                }
+            var homeModule = this.$store.getters.getHomeModule;
+            if(homeModule){
+                this.$router.push('/external-module/'+homeModule.name)
             }
         }
     }
