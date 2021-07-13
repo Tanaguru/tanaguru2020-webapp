@@ -604,7 +604,7 @@ export default {
 			return ['site', 'scenario', 'upload', 'page'].includes(this.auditConfigurationForm.common.type);
 		},
 		isAuditNameValid() {
-			return this.auditConfigurationForm.common.name !== '';
+			return this.auditConfigurationForm.common.name !== '' && this.auditConfigurationForm.common.name.length < 50;
 		},
 		isSelectedReferencesValid() {
 			return this.auditConfigurationForm.common.selectedReferences.length > 0;
