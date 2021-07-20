@@ -31,6 +31,56 @@
                         <li class="details-list__item" v-if="anomaly.canBeReachedUsingKeyboardWith && anomaly.canBeReachedUsingKeyboardWith.length > 0">{{$t('resultAudit.testResult.canBeReachedUsingKeyboardWith')}} : <span>{{anomaly.canBeReachedUsingKeyboardWith}}</span></li>
                         <li class="details-list__item" v-if="anomaly.isNotExposedDueTo && anomaly.isNotExposedDueTo.length > 0">{{$t('resultAudit.testResult.isNotExposedDueTo')}} : <span>{{anomaly.isNotExposedDueTo}}</span></li>
                         <li class="details-list__item" v-if="anomaly.isNotVisibleDueTo && anomaly.isNotVisibleDueTo.length > 0">{{$t('resultAudit.testResult.isNotVisibleDueTo')}} : <span>{{anomaly.isNotVisibleDueTo}}</span></li>
+						<li class="details-list__item">
+							<p class="detail">
+								<span class="detail__label">Taille de texte : </span>
+								<span class="detail__value">14px</span>
+							</p>
+							<p class="detail">
+								<span class="detail__label">Graisse de texte : </span>
+								<span class="detail__value">400</span>
+							</p>
+							<p class="detail">
+							<!--
+								Return rgb value
+							-->
+								<span class="detail__preview">
+									<span class="detail__label">Couleur de texte : </span>
+									<span class="detail__color" style="background-color: rgb(0, 0, 0);"></span>
+									<code class="detail__value">rgb(0, 0, 0);</code>
+								</span>
+							</p>
+							<p class="detail">
+							<!--
+								Return rgb value or `null` or `image`
+							-->
+								<!-- if `null` :
+								<span class="detail__label">Fond : </span>
+								<span class="detail__value">Indéfini</span>
+								-->
+
+								<!-- if `image` :
+								<span class="detail__preview">
+									<span class="detail__label">Fond : </span>
+									<span class="detail__image">
+										<icon-base-decorative width="20" height="20" viewBox="0 0 352 352"><icon-picture /></icon-base-decorative>
+									</span>
+									<span class="detail__value">Image</span>
+								</span>
+								-->
+
+								<!-- if color : -->
+								<span class="detail__preview">
+									<span class="detail__label">Fond : </span>
+									<span class="detail__color" style="background-color: rgb(250, 0, 0);"></span>
+									<code class="detail__value">rgb(250, 0, 0);</code>
+								</span>
+							</p>
+							<p class="detail">
+								<span class="detail__label">Ratio estimé : </span>
+								<span class="detail__value">1.45:1</span>
+							</p>
+						</li>
                     </ul>
                 </div>
 
@@ -120,6 +170,7 @@
     import IconInforound from '../../components/icons/IconInforound'
     import IconNotApplicable from '../../components/icons/IconNotApplicable'
     import IconQualify from '../../components/icons/IconQualify'
+	import IconPicture from '../../components/icons/IconPicture'
 
     export default {
         name: 'AnomalyDetail',
@@ -131,6 +182,7 @@
             IconImproper,
             IconNotApplicable,
             IconQualify,
+			IconPicture,
         },
         props: ['anomaly', 'index', 'pageContent', 'hasAccessibleNameTag'],
         data(){
@@ -384,6 +436,10 @@
 		span {
 			font-weight: 600;
 		}
+
+		.detail__value {
+			font-weight: 400;
+		}
 	}
 }
 
@@ -431,5 +487,41 @@
 			padding-top: 1.6rem;
 		}
 	}
+}
+
+.detail {
+
+}
+
+.detail__preview {
+	display: flex;
+	align-items: center;
+
+	> * {
+		margin-right: 0.5rem;
+	}
+
+	svg {
+		display: block;
+	}
+}
+
+
+.detail__label {
+	font-weight: 600;
+}
+
+
+.detail__image {
+	display: inline-block;
+	width: 2rem;
+	height: 2rem;
+}
+
+.detail__color {
+	display: inline-block;
+	width: 2rem;
+	height: 2rem;
+	font-weight: 400;
 }
 </style>
