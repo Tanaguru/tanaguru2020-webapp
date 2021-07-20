@@ -75,6 +75,8 @@ pipeline {
 					unstash 'version'
 					def devDockerEnv = createDockerEnvFileContent('62d1f7d7-fe7c-43da-a752-14fe989555bb');
                     writeFile file: "./.env", text: devDockerEnv
+					def devPremiumDockerEnv = createDockerEnvFileContent('fd89a5e1-6720-4005-bbe5-a6ece32d5eaa');
+                    writeFile file: "./.env-premium", text: devPremiumDockerEnv
 					sh '''
 						WEBAPP_VERSION=$(cat version.txt)
 						docker stop tanaguru2020-webapp-dev || true
@@ -93,7 +95,7 @@ pipeline {
 						docker stop tanaguru2020-webapp-premium-dev || true
 						docker run -d --rm \
 							--name tanaguru2020-webapp-premium-dev \
-							--env-file ./.env \
+							--env-file ./.env-premium \
 							--label "traefik.enable=true" \
 							--label "traefik.frontend.redirect.entryPoint=secure" \
 							--label "traefik.http.routers.tanaguru-webapp-dev.entrypoints=secure" \
@@ -116,6 +118,8 @@ pipeline {
 					unstash 'version'
 					def devDockerEnv = createDockerEnvFileContent('9389b3f2-3191-41af-82df-f08e2996df69');
 					writeFile file: "./.env", text: devDockerEnv
+					def devPremiumDockerEnv = createDockerEnvFileContent('2263c743-9725-4f1d-92c3-76865e2a9699');
+					writeFile file: "./.env-premium", text: devPremiumDockerEnv
 					sh '''
 						WEBAPP_VERSION=$(cat version.txt)
 
@@ -140,7 +144,7 @@ pipeline {
 						docker stop tanaguru2020-webapp-premium-prod || true
 						docker run -d --rm \
 							--name tanaguru2020-webapp-premium-prod \
-							--env-file ./.env \
+							--env-file ./.env-premium \
 							--label "traefik.enable=true" \
 							--label "traefik.frontend.redirect.entryPoint=secure" \
 							--label "traefik.http.routers.tanaguru-webapp-prod.entrypoints=secure" \
