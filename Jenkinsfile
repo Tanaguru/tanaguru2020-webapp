@@ -98,9 +98,9 @@ pipeline {
 							--env-file ./.env-premium \
 							--label "traefik.enable=true" \
 							--label "traefik.frontend.redirect.entryPoint=secure" \
-							--label "traefik.http.routers.tanaguru-webapp-dev.entrypoints=secure" \
-							--label "traefik.http.routers.tanaguru-webapp-dev.rule=Host(\\`premium-dev.tanaguru.com\\`)" \
-							--label "traefik.http.routers.tanaguru-webapp-dev.tls=true" \
+							--label "traefik.http.routers.tanaguru-webapp-premium-dev.entrypoints=secure" \
+							--label "traefik.http.routers.tanaguru-webapp-premium-dev.rule=Host(\\`premium-dev.tanaguru.com\\`)" \
+							--label "traefik.http.routers.tanaguru-webapp-premium-dev.tls=true" \
 							--label "traefik.port=80" \
 							--network=web \
 							tanaguru2020-webapp:${WEBAPP_VERSION}
@@ -147,9 +147,9 @@ pipeline {
 							--env-file ./.env-premium \
 							--label "traefik.enable=true" \
 							--label "traefik.frontend.redirect.entryPoint=secure" \
-							--label "traefik.http.routers.tanaguru-webapp-prod.entrypoints=secure" \
-							--label "traefik.http.routers.tanaguru-webapp-prod.rule=Host(\\`premium-prod.tanaguru.com\\`)" \
-							--label "traefik.http.routers.tanaguru-webapp-prod.tls=true" \
+							--label "traefik.http.routers.tanaguru-webapp-premium-prod.entrypoints=secure" \
+							--label "traefik.http.routers.tanaguru-webapp-premium-prod.rule=Host(\\`premium-prod.tanaguru.com\\`)" \
+							--label "traefik.http.routers.tanaguru-webapp-premium-prod.tls=true" \
 							--label "traefik.port=80" \
 							--network=web \
 							tanaguru2020-webapp:${WEBAPP_VERSION}
