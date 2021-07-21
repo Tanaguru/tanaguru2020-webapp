@@ -42,6 +42,11 @@ export default {
             return state.modules.filter(module => {
                 return module.showOffline
             })
+        },
+        getHomeModule: (state) => {
+            return state.modules.find(module => {
+                return module.home == true;
+            })
         }
     }
 }

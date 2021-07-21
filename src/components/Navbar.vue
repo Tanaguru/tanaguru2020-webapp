@@ -12,10 +12,10 @@
 			</router-link>
 		</li>
 
-		<li v-for="module in onlineModule" :key="module" class="navbar__item">
+		<li v-for="module in onlineModule" :key="module.name" class="navbar__item">
 		<router-link  exact :to="'/external-module/' + module.name"
 					  class="link-independent link-independent--icon">
-			<span>{{module.name}}</span>
+			<span>{{moduleName(module)}}</span>
 		</router-link>
 		</li>
 
@@ -38,6 +38,7 @@ import IconBaseDecorative from './icons/IconBaseDecorative'
 import IconParameters from './icons/IconParameters'
 import IconLogout from './icons/IconLogout'
 import IconDashboard from './icons/IconDashboard'
+import ModuleHelper from '../helper/ModuleHelper'
 
 export default {
 	name: 'navbar',
@@ -55,6 +56,7 @@ export default {
 		IconDashboard,
 	},
 	methods: {
+		getModuleName: ModuleHelper.getModuleName,
 		updateLocale: function () {
 			this.bus.$emit("updateLocale", this.locale)
 			this.$moment.locale(this.locale)
@@ -65,6 +67,9 @@ export default {
 					if (this.$route.path !== '/')
 						this.$router.push('/')
 				})
+		},
+		moduleName(module){
+			return this.getModuleName(module)
 		}
 	},
 	computed: {
