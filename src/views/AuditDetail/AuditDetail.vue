@@ -13,7 +13,7 @@
 					</header>
 
 					<section class="main-info title-logs">
-						<h2>Audit parameters</h2>
+						<h2>{{ $t('auditDetail.information.parameters') }}</h2>
 						<ul>
 							<li>
 								{{ $t('auditDetail.information.type') }}
@@ -31,7 +31,7 @@
 							<li v-show="parameters.maxDepth">{{$t('auditDetail.information.maxDepth')}} : {{parameters.maxDepth}}</li>
 							<li v-show="parameters.maxDoc">{{$t('auditDetail.information.maxDoc')}} : {{parameters.maxDoc}}</li>
 							<li v-show="parameters.maxDuration">{{$t('auditDetail.information.maxDuration')}} : {{parameters.maxDuration}}</li>
-							<li v-show="parameters.resolutions">{{$t('auditDetail.information.resolution')}} : {{parameters.resolutions.split(';').join(', ')}}</li>
+							<li v-show="parameters.resolutions">{{$t('auditDetail.information.resolution')}} : {{parameters.resolutions}}</li>
 						</ul>
 					</section>
 
@@ -230,7 +230,6 @@ import IconClose from '../../components/icons/IconClose'
 					this.$route.params.id,
 					this.sharecode,
 					(parameters) => {
-						console.log(parameters)
 						parameters.forEach(parameter => {
 							if(parameter.auditParameter.code == "WEBDRIVER_BROWSER") {
 								this.parameters.browser = parameter.value
@@ -269,7 +268,11 @@ import IconClose from '../../components/icons/IconClose'
 								this.parameters.inclusionRegex = parameter.value
 							}
 							else if(parameter.auditParameter.code == "WEBDRIVER_RESOLUTIONS") {
-								this.parameters.resolutions = parameter.value
+								if(parameter.value.includes(";")) {
+									this.parameters.resolutions = parameter.value.split(';').join(', ')
+								} else {
+									this.parameters.resolutions = parameter.value
+								}
 							}
 						});
 					},

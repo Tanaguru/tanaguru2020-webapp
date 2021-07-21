@@ -11,7 +11,8 @@
 	"selectLogLevel" : "Sélectionner le niveau de log",
 	"synthesis": {
 		"pages": "Nombre de pages auditée(s)",
-		"showSourceCode": "Afficher le code source de la page",
+		"showSourceCode": "Code source de la page",
+		"openModal" : "Afficher le code source",
 		"guidelines": "Référentiel",
 		"table": {
 			"title": "Récapitulatif des pages auditées",

@@ -95,14 +95,11 @@
 							<span>{{ $t('auditDetail.synthesis.pages') }} : </span> {{ totalPages }}
 						</li>
 						<li v-if="pageContent && pageContent.source">
-							<a class="btn btn--nude btn--icon" @click="showSourceCode">{{ $t('auditDetail.synthesis.showSourceCode') }} </a>
+							<span>{{ $t('auditDetail.synthesis.showSourceCode') }} : </span> <button class="btn btn--nude btn--icon" @click="openModal">{{ $t('auditDetail.synthesis.openModal') }}</button>
 						</li>
-						<!--<li>
-							<button class="btn btn--nude btn--icon">
-								<span>{{$t('entity.audit.parameters')}}</span>
-								<icon-bas<pae-decorative><icon-arrow-blue /></icon-base-decorative>
-							</button>
-						</li>-->
+                        <vue-accessible-modal>
+                            <template v-slot:backdrop></template>
+                        </vue-accessible-modal>
 					</ul>
 					<div class="form-block">
 
@@ -129,6 +126,7 @@
     import CircularProgressChart from "../../components/charts/CircularProgressChart";
 	import backgroundImg from '../../../public/assets/images/logo-desktop.svg';
     import Pagination from '../../components/Pagination';
+    import SourceCodeModal from '../../components/SourceCodeModal.vue'
 
     export default {
         name: 'PageResultInfo',
@@ -192,11 +190,26 @@
                 window.getSelection().removeAllRanges()
             },
 
-			showSourceCode() {
-            	let popup = window.open()
-				popup.document.write('<pre><code id="source"></code></pre>')
-            	popup.document.getElementById('source').textContent = this.pageContent.source
-			}
+            openModal() {
+                const el = document.body;
+                el.classList.add('noScroll');
+                el.classList.remove('scroll');
+
+                this.$modal.show(SourceCodeModal, {
+                    props: {
+                        sourceCode : this.pageContent.source
+                    },
+                    label: "source-code-window",
+                    classes: "modal",
+                    attributes: {
+                        id: "anomaly-modal",
+                        role: "dialog",
+                        'aria-labelledby': "modalTitle",
+                        'aria-describedby': "modalDescription",
+                        tabindex: "0"
+                    }
+                });
+            }
 		}
     }
 
