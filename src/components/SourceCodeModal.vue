@@ -23,16 +23,22 @@
 </template>
 
 <script>
+import IconBaseDecorative from '../components/icons/IconBaseDecorative.vue'
+import IconClose from '../components/icons/IconClose'
 
 export default {
     name: 'SourceCodeModal',
+    components: {
+        IconBaseDecorative,
+        IconClose
+    },
     props: ['sourceCode'],
     methods: {
         closeModal() {
             const el = document.body;
             el.classList.remove('noScroll');
             el.classList.add('scroll');
-            
+
             this.$modal.close();
         }
     },
