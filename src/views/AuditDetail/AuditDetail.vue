@@ -31,7 +31,9 @@
 							<li v-show="parameters.maxDepth">{{$t('auditDetail.information.maxDepth')}} : {{parameters.maxDepth}}</li>
 							<li v-show="parameters.maxDoc">{{$t('auditDetail.information.maxDoc')}} : {{parameters.maxDoc}}</li>
 							<li v-show="parameters.maxDuration">{{$t('auditDetail.information.maxDuration')}} : {{parameters.maxDuration}}</li>
-							<li v-show="parameters.resolutions">{{$t('auditDetail.information.resolution')}} : {{parameters.resolutions.split(';').join(', ')}}</li>
+							<li v-show="parameters.resolutions!=''">{{$t('auditDetail.information.resolution')}} : {{parameters.resolutions.split(';').join(', ')}}</li>
+							<li v-show="parameters.mainReference">{{$t('auditDetail.information.reference')}} : {{parameters.mainReference}}</li>
+							<li v-show="parameters.references">{{$t('auditDetail.information.references')}} : {{parameters.references.join(', ')}}</li>
 						</ul>
 					</section>
 
@@ -198,7 +200,8 @@ import IconClose from '../../components/icons/IconClose'
 					maxDoc: null,
 					exclusionRegex: null,
 					inclusionRegex: null,
-					resolutions: null,
+					resolutions: '',
+					references: []
 				},
                 auditLogPageSize: 10,
                 auditLogTotalPage : 0,
@@ -220,6 +223,7 @@ import IconClose from '../../components/icons/IconClose'
       		this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
 			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
 			this.getParameters();
+			this.getReferences();
 		},
 		beforeDestroy () {
 			clearInterval(this.timer)
@@ -230,13 +234,9 @@ import IconClose from '../../components/icons/IconClose'
 					this.$route.params.id,
 					this.sharecode,
 					(parameters) => {
-						console.log(parameters)
 						parameters.forEach(parameter => {
 							if(parameter.auditParameter.code == "WEBDRIVER_BROWSER") {
 								this.parameters.browser = parameter.value
-							}
-							else if(parameter.auditParameter.code == "MAIN_REFERENCE") {
-								this.parameters.mainReference = parameter.value
 							}
 							else if(parameter.auditParameter.code == "WAIT_TIME") {
 								this.parameters.waitTime = parameter.value
@@ -386,6 +386,32 @@ import IconClose from '../../components/icons/IconClose'
 					this.levelsToDisplay = ['ERROR']
 				}
 				this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
+			},
+
+			getReferences(){
+				this.testHierarchyService.findAllReferenceByAudit(
+					this.$route.params.id,
+					this.sharecode,
+					(references) => {
+						for(var reference in references){
+							this.parameters.references.push(references[reference].name + '(' +references[reference].code + ')')
+						}
+					},
+					(error) => {
+						console.error(error);
+					}
+				);
+
+				this.testHierarchyService.findMainReferenceByAudit(
+					this.$route.params.id,
+					this.sharecode,
+					(reference) => {
+						this.parameters.mainReference = reference.name + '(' +reference.code + ')'
+					},
+					(error) => {
+						console.error(error);
+					}
+				);
 			}
 
 		},
