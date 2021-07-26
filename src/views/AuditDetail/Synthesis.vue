@@ -112,6 +112,13 @@
                             <th scope="col" class="rotate" v-for="(page, i) in pages" :key="i">
                                 <HeaderRow :page="page" :i="i" :currentSynthesisPage="currentSynthesisPage"/>
                             </th>
+                            <th v-if="currentSynthesisPage==totalSynthesisPageByReferenceId[selectedReference.id]-1"   scope="col" class="rotate">
+                                <div class="rotate__inner">
+                                    <span class="page">
+                                    Ensemble des pages
+                                    </span>
+                                </div>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -126,6 +133,17 @@
                                         <icon-notApplicable v-else/>
                                     </icon-base-decorative>
                                     <span class="screen-reader-text">{{$t('auditDetail.synthesis.table.btnShow', {status: criteriaResult.status})}}</span>
+                                </button>
+                                <span class="td-background"></span>
+                            </td>
+                            <td v-if="currentSynthesisPage==totalSynthesisPageByReferenceId[selectedReference.id]-1">
+                                <button class="btn btn--nude">
+                                    <icon-base-decorative>
+                                        <icon-improper v-if="globalTestResultForPages(criteriaCode) === 'failed'"/>
+                                        <icon-compliant v-else-if="globalTestResultForPages(criteriaCode) === 'passed'"/>
+                                        <icon-qualify v-else-if="globalTestResultForPages(criteriaCode) === 'cantTell'"/>
+                                        <icon-notApplicable v-else/>
+                                    </icon-base-decorative>
                                 </button>
                                 <span class="td-background"></span>
                             </td>
@@ -392,6 +410,69 @@ export default {
         moment: function (date) {
             return this.$moment(date);
         },
+
+        globalTestResultForPages(criteriaCode){
+            let nbPages = this.totalSynthesisPageByReferenceId[this.selectedReference.id]
+            var testStatus = ''
+            var untested = true
+            var inapplicable = true
+            var failed = false
+            var cantTell = false
+            var passed = false
+            for(let i=0; i < nbPages; i++){
+                var testResultPaginated = this.synthesisPageByReferenceId[this.selectedReference.id][i]
+                //if for one page the test is failed -> global test failed 
+                for( var page in testResultPaginated[criteriaCode]){
+                    if(testResultPaginated[criteriaCode][page].status === 'failed'){
+                        failed = true
+                    }
+                }
+                if(failed){
+                    testStatus = 'failed'
+                }else{
+                    //if one test is cantTell for one page -> global test cantTell 
+                    for( var page in testResultPaginated[criteriaCode]){
+                        if(testResultPaginated[criteriaCode][page].status === 'cantTell'){
+                            cantTell = true
+                        }
+                    }
+                    if(cantTell){
+                        testStatus = 'cantTell'
+                    }else{
+                        //if the test is passed for one page -> global test passed 
+                        for(var page in testResultPaginated[criteriaCode]){
+                            if(testResultPaginated[criteriaCode][page].status === 'passed'){
+                                passed = true
+                            }
+                        }
+                        if(passed){
+                            testStatus = 'passed'
+                        }else{
+                            //if the test is inapplicable for each page -> global test inapplicable 
+                            for( var page in testResultPaginated[criteriaCode]){
+                                if(testResultPaginated[criteriaCode][page].status !== 'inapplicable'){
+                                    inapplicable = false
+                                }
+                            }
+                            if(inapplicable){
+                                testStatus = 'inapplicable'
+                            }else{
+                                //if the test is untested for each page -> global test untested 
+                                for( var page in testResultPaginated[criteriaCode]){
+                                    if(testResultPaginated[criteriaCode][page].status !== 'untested'){
+                                        untested = false
+                                    }
+                                }
+                                if(untested){
+                                    testStatus = 'untested'
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return testStatus
+        }
     }
 }
 </script>
