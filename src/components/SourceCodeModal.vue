@@ -13,11 +13,7 @@
         </header>
 
         <main class="modal-body" id="modalDescription">
-            <pre id="sourcecode">
-                <code id="source">
-                    {{ sourceCode }}
-                </code>
-            </pre>
+                <highlight-code lang="xml">{{ sourceCode }}</highlight-code>
         </main>
     </div>
 </template>

@@ -21,7 +21,7 @@
             <div class="result-details__extracts">
                 <div class="details-extract" v-if="anomaly">
                     <p class="extract-code__line details-extract__title">{{$t('resultAudit.testResult.outer')}} :</p>
-                    <prism language="html" class="extract-code__frame">{{outer}}</prism>
+                    <prism language="xml" class="extract-code__frame">{{outer}}</prism>
                 </div>
 
                 <div class="details-extract">

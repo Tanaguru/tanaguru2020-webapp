@@ -8,7 +8,7 @@
 
 		<Tabs @activeTab='activeTab'>
 			<Tab :name="$t('project.infos')" class="tabs-wrapper">
-				<article v-if="!modifyProjectForm.active">
+				<div v-if="!modifyProjectForm.active">
 					<h2 class="project__title-2">{{ $t('project.infos') }}</h2>
 					<ul class="infos-list">
 						<li>
@@ -31,7 +31,7 @@
 									(currentUserRole &&
 									currentUserRole.authorities.some((elem) => elem.name === 'MODIFY_PROJECT'))"
 								class="btn btn--default"
-								@click="() => modifyProjectForm.active = true">
+								@click="toggleModifyProjectForm()">
 								{{ $t('action.modify') }}
 							</button>
 						</li>
@@ -55,15 +55,62 @@
 						</li>
 					</ul>
 					<p v-if="modifyProjectForm.success" aria-live="polite">{{ modifyProjectForm.success }}</p>
-				</article>
-				<article v-else>
-					<modify-project-form :project="project" @updateProject="onProjectUpdate"/>
-				</article>
+				</div>
+				<div v-else>
+					<form @submit.prevent="modifyProject">
+						<div class="form-row">
+							<div class="form-column">
+								<div class="form-block">
+									<label class="label" for="name1">{{ $t('entity.project.name') }} * :</label>
+									<input
+										class="input"
+										type="text"
+										name="name"
+										id="name1"
+										v-model="modifyProjectForm.name"
+										:aria-describedby="nameDescribedBy"
+										required>
+									<p class="info-text" id="name-constraint">{{ $t('form.indications.nameConstraint') }}</p>
+									<p v-if="modifyProjectForm.nameError" class="info-error" id="name-error">
+										{{ modifyProjectForm.nameError }}</p>
+								</div>
+							</div>
+
+							<div class="form-column">
+								<div class="form-block">
+									<label class="label" for="domain">{{ $t('entity.project.domain') }} * :</label>
+									<input
+										class="input"
+										type="text"
+										name="domain"
+										id="domain"
+										v-model="modifyProjectForm.domain"
+										:aria-describedby="domainDescribedBy"
+										required>
+									<p class="info-text" id="domain-constraint">{{ $t('form.indications.urlConstraint') }}</p>
+									<p v-if="modifyProjectForm.domainError" class="info-error" id="domain-error">
+										{{ modifyProjectForm.domainError }}</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-row">
+							<div class="form-column">
+								<div class="form-block">
+									<button class="btn btn--default" type="submit">{{ $t('action.modify') }}</button>
+									<p v-if="modifyProjectForm.error" class="info-error">{{ modifyProjectForm.error }}</p>
+
+									<button id="cancel-button" class="btn btn--default" type="button" @click="toggleBackToInfo">{{ $t('action.cancel') }}</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
 			</Tab>
 
 			<!-- USERS BY Project -->
 			<Tab :name="$t('project.users')" class="tabs-wrapper">
-				<article v-show="managerCondition">
+				<div v-show="managerCondition">
 					<h2 class="project__title-2">{{ $t('project.users') }}</h2>
 					<p>{{ $t('form.indications.help') }}</p>
 					<form @submit.prevent="addUser" class="form-users" novalidate>
@@ -90,7 +137,7 @@
 
 						<button class="btn btn--default" type="submit">{{ $t('action.addUser') }}</button>
 					</form>
-				</article>
+				</div>
 
 				<ProjectUserTable
 					:users="projectUsers"
@@ -117,12 +164,10 @@ import IconArrowBlue from '../../components/icons/IconArrowBlue';
 import IconDelete from '../../components/icons/IconDelete';
 import IconLaunch from '../../components/icons/IconLaunch';
 import IconVersion from '../../components/icons/IconVersion';
-import ModifyProjectForm from "@/views/Project/ModifyProjectForm";
 
 export default {
 	name: 'projectDetail',
 	components: {
-		ModifyProjectForm,
 		Tabs,
 		Tab,
 		Breadcrumbs,
@@ -157,10 +202,14 @@ export default {
 			],
 			selectedTab: null,
 			modifyProjectForm: {
-				active: false,
-				success: ""
-
-			}
+                active: false,
+                name: "",
+				domain: "",
+                error: "",
+                nameError: "",
+				domainError: "",
+                successMsg:""
+            },
 		}
 	},
 	metaInfo() {
@@ -260,6 +309,55 @@ export default {
 	methods: {
 		activeTab(value) {
 			this.selectedTab = value
+		},
+
+		toggleModifyProjectForm(){
+            this.modifyProjectForm.name = this.project.name;
+            this.modifyProjectForm.domain = this.project.domain;
+            this.modifyProjectForm.active = !this.modifyProjectForm.active;
+        },
+
+		toggleBackToInfo(){
+            this.modifyProjectForm.active = !this.modifyProjectForm.active;
+		},
+
+		modifyProject() {
+			if (this.modifyProjectForm.name.length === 0) {
+				this.modifyProjectForm.nameError = this.$i18n.t("form.errorMsg.emptyInput");
+			} else if (this.modifyProjectForm.name.length > 50) {
+				this.modifyProjectForm.nameError = this.$i18n.t("form.errorMsg.others.nameError")
+			}
+
+			if (this.contract.restrictDomain) {
+				if (!this.checkValidDomain(this.modifyProjectForm.domain)) {
+					this.modifyProjectForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
+				} else {
+					this.modifyProjectForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
+				}
+			}
+
+			this.projectService.modifyById(
+				this.project.id,
+				this.modifyProjectForm.name,
+				this.modifyProjectForm.domain,
+				this.contract.id,
+				(project) => {
+					this.project = project;
+					this.modifyProjectForm.error = "";
+					this.modifyProjectForm.nameError = "";
+					this.modifyProjectForm.domainError = "";
+					this.modifyProjectForm.name = "";
+					this.modifyProjectForm.domain = "";
+
+
+					setTimeout(() => (
+						this.modifyProjectForm.success = ""
+					), 3000)
+				},
+				(error) => {
+					console.error(error)
+				}
+			)
 		},
 
 		onProjectUpdate(project) {
@@ -389,6 +487,10 @@ export default {
 			}
 		}
 	}
+}
+
+#cancel-button {
+	margin-left: 2rem;
 }
 
 .form-users {

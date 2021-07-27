@@ -12,7 +12,7 @@
         <div class="wrapper" id="page" role="main">
             <Tabs @activeTab='activeTab'>
                 <Tab :name="$t('contract.infos')" class="tabs-wrapper">
-                    <article>
+                    <div>
                         <h2 class="contract__title-2">
                             {{$t('contract.infos')}}
                         </h2>
@@ -88,16 +88,16 @@
                                 <button class="btn btn--default" type="submit">{{$t('action.modify')}}</button>
                                 <p v-if="modifyContractForm.error" class="info-error">{{modifyContractForm.error}}</p>
 
-                                <button class="btn btn--default" type="button" @click="toggleModifyContractForm()">Cancel</button>
+                                <button id="cancel-button" class="btn btn--default" type="button" @click="toggleModifyContractForm()">{{ $t('action.cancel') }}</button>
                             </form>
                         </div>
-                    </article>
+                    </div>
                 </Tab>
 
                 <!-- USERS BY CONTRACT -->
                 <div v-show="currentContractUser || this.$store.state.auth.user.appRole.name !== 'USER'">
                     <Tab :name="$t('contract.users')" class="tabs-wrapper">
-                        <article v-show="addingCondition && isStillValid">
+                        <div v-show="addingCondition && isStillValid">
                             <h2 class="contract__title-2">{{$t('contract.users')}}</h2>
                             <p>{{$t('form.indications.help')}}</p>
                             <form @submit.prevent="addUser" class="form-users" novalidate>
@@ -118,9 +118,9 @@
                                 <button class="btn btn--default btn-add" type="submit">{{$t('action.addUser')}}</button>
                                 <p v-if="userAdditionForm.successMsg" class="info-success" aria-live="polite">{{ userAdditionForm.successMsg }}</p>
                             </form>
-                        </article>
+                        </div>
 
-                        <article>
+                        <div>
                             <ContractUserTable
                                 :contract-users="contractUsers"
                                 @delete-user="deleteUser"
@@ -135,12 +135,12 @@
                                     :total-pages="contractUsersTotalPage"
                                     @changePage="(page) => {loadContractUsersPaginated(page, contractUsersPageSize)}"
                                 />
-                        </article>
+                        </div>
                     </Tab>
 
                     <!-- PROJECTS BY CONTRACT -->
                     <Tab :name="$t('contract.projects')" class="tabs-wrapper">
-                        <article v-show="addingCondition && isStillValid">
+                        <div v-show="addingCondition && isStillValid">
                             <h2 class="contract__title-2">{{$t('contract.createProject')}}</h2>
                             <p>{{$t('form.indications.help')}}</p>
                             <form @submit.prevent="createProject" novalidate>
@@ -188,9 +188,9 @@
                                 <p v-if="projectCreateForm.error" class="info-error">{{projectCreateForm.error}}</p>
                                 <p class="info-success" v-show="projectCreateForm.successMsg">{{ projectCreateForm.successMsg }}</p>
                             </form>
-                        </article>
+                        </div>
 
-                        <article v-if="projects_page && projects_page.content.length > 0">
+                        <div v-if="projects_page && projects_page.content.length > 0">
                             <h2 class="contract__title-2" id="table-projects">{{$t('contract.projectsList')}}</h2>
 
                             <ContractProjectTable
@@ -198,11 +198,11 @@
                                 :authorityByProjectId="authorityByProjectId"
                                 @delete-project="deleteProject"/>
 							<pagination :current-page="projects_page.number" :total-pages="projects_page.totalPages" @changePage="loadProjects"/>
-                        </article>
-                        <article v-else>
+                        </div>
+                        <div v-else>
                             <p v-if=" $moment(contract.dateEnd).isAfter(new Date())">{{$t('contract.noProjectYet')}}</p>
                             <p v-else>{{$t('contract.hadNoProject')}}</p>
-                        </article>
+                        </div>
                     </Tab>
                 </div>
             </Tabs>
@@ -678,4 +678,9 @@ export default {
 		max-width: 35rem;
 	}
 }
+
+#cancel-button {
+	margin-left: 2rem;
+}
+
 </style>
