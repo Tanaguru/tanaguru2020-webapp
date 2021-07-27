@@ -31,54 +31,58 @@
                         <li class="details-list__item" v-if="anomaly.canBeReachedUsingKeyboardWith && anomaly.canBeReachedUsingKeyboardWith.length > 0">{{$t('resultAudit.testResult.canBeReachedUsingKeyboardWith')}} : <span>{{anomaly.canBeReachedUsingKeyboardWith}}</span></li>
                         <li class="details-list__item" v-if="anomaly.isNotExposedDueTo && anomaly.isNotExposedDueTo.length > 0">{{$t('resultAudit.testResult.isNotExposedDueTo')}} : <span>{{anomaly.isNotExposedDueTo}}</span></li>
                         <li class="details-list__item" v-if="anomaly.isNotVisibleDueTo && anomaly.isNotVisibleDueTo.length > 0">{{$t('resultAudit.testResult.isNotVisibleDueTo')}} : <span>{{anomaly.isNotVisibleDueTo}}</span></li>
+						
+						<!-- CONTRASTS --> 
+						<!-- v-if="hasContrastTag"  -->
 						<li class="details-list__item">
 							<p class="detail">
-								<span class="detail__label">Taille de texte : </span>
-								<span class="detail__value">14px</span>
+								<span class="detail__label">{{ $t('resultAudit.testResult.fontSize') }}</span>
+								<span class="detail__value">{{ contrast.fontSize }}</span>
 							</p>
 							<p class="detail">
-								<span class="detail__label">Graisse de texte : </span>
-								<span class="detail__value">400</span>
+								<span class="detail__label">{{ $t('resultAudit.testResult.fontWeight') }}</span>
+								<span class="detail__value">{{ contrast.fontWeight }}</span>
 							</p>
 							<p class="detail">
 							<!--
 								Return rgb value
 							-->
 								<span class="detail__preview">
-									<span class="detail__label">Couleur de texte : </span>
-									<span class="detail__color" style="background-color: rgb(0, 0, 0);"></span>
-									<code class="detail__value">rgb(0, 0, 0);</code>
+									<span class="detail__label">{{ $t('resultAudit.testResult.textColor') }}</span>
+									<span class="detail__color" :style="`background-color: `+ contrast.textColor"></span>
+									<code class="detail__value">{{ contrast.textColor }}</code>
 								</span>
 							</p>
 							<p class="detail">
 							<!--
 								Return rgb value or `null` or `image`
 							-->
-								<!-- if `null` :
-								<span class="detail__label">Fond : </span>
-								<span class="detail__value">Indéfini</span>
-								-->
+								<!-- if color : -->
+								<span v-if="contrast.bgColor && !contrast.bgImage" class="detail__preview">
+									<span class="detail__label">{{ $t('resultAudit.testResult.background') }}</span>
+									<span class="detail__color" :style="`background-color: ` + contrast.bgColor"></span>
+									<code class="detail__value">{{ contrast.bgColor }}</code>
+								</span>
 
-								<!-- if `image` :
-								<span class="detail__preview">
-									<span class="detail__label">Fond : </span>
+								<!-- if `image` : -->
+								<span v-else-if="contrast.bgImage && !contrast.bgColor" class="detail__preview">
+									<span class="detail__label">{{ $t('resultAudit.testResult.background') }}</span>
 									<span class="detail__image">
 										<icon-base-decorative width="20" height="20" viewBox="0 0 352 352"><icon-picture /></icon-base-decorative>
 									</span>
-									<span class="detail__value">Image</span>
+									<span class="detail__value">{{ $t('resultAudit.testResult.image') }}</span>
 								</span>
-								-->
 
-								<!-- if color : -->
-								<span class="detail__preview">
-									<span class="detail__label">Fond : </span>
-									<span class="detail__color" style="background-color: rgb(250, 0, 0);"></span>
-									<code class="detail__value">rgb(250, 0, 0);</code>
+								<!-- if `null` : -->
+								<span v-else>
+									<span class="detail__label">{{ $t('resultAudit.testResult.background') }}</span>
+									<span class="detail__value">{{ $t('resultAudit.testResult.undefined') }}</span>
 								</span>
 							</p>
+
 							<p class="detail">
-								<span class="detail__label">Ratio estimé : </span>
-								<span class="detail__value">1.45:1</span>
+								<span class="detail__label">{{ $t('resultAudit.testResult.ratio') }}</span>
+								<span class="detail__value">{{ contrast.ratio }}</span>
 							</p>
 						</li>
                     </ul>
@@ -184,7 +188,7 @@
             IconQualify,
 			IconPicture,
         },
-        props: ['anomaly', 'index', 'pageContent', 'hasAccessibleNameTag'],
+        props: ['anomaly', 'index', 'pageContent', 'hasAccessibleNameTag', 'hasContrastTag'],
         data(){
             return{
                 xpathOpen: false,
@@ -199,6 +203,16 @@
 				showXpathTooltip: false,
                 copyXpathButtonText: this.$i18n.t("resultAudit.copyXpath.copy"),
 				screenReaderInfoXpath: '',
+
+				// Contrasts
+				contrast : {
+					fontSize: '12px',
+					fontWeight: '500',
+					textColor: 'rgb(250, 0, 0);',
+					bgColor: '',
+					bgImage: true,
+					ratio: '1.45:1'
+				}
             }
         },
 		computed: {
@@ -487,10 +501,6 @@
 			padding-top: 1.6rem;
 		}
 	}
-}
-
-.detail {
-
 }
 
 .detail__preview {
