@@ -19,6 +19,7 @@ import ElementResultService from "../services/elementResult.service";
 import TanaguruTestService from "../services/tanaguruTest.service";
 import StatusResultService from "../services/statusResult.service";
 import ConfigService from "../services/config.service";
+import StatsService from "../services/stats.service";
 import 'prismjs'
 import 'prismjs/themes/prism.css'
 import 'prismjs/components/prism-scss.min'
@@ -29,11 +30,13 @@ Vue.use(VueMeta)
 Vue.component('v-icon', Icon)
 Vue.component('prism', Prism)
 
-Vue.prototype.$moment = Moment
+Vue.prototype.bus = new Vue();
+Vue.prototype.$moment = Moment;
 Vue.prototype.window = window;
 Vue.prototype.$http = axios;
 Vue.config.productionTip = false
-Vue.prototype.NAVBAR_LINKS = NAVBAR_LINKS;
+
+Vue.prototype.TANAGURU_MODULES = TANAGURU_MODULES;
 
 Vue.prototype.userService = new UserService(axios);
 Vue.prototype.contractService = new ContractService(axios);
@@ -52,11 +55,11 @@ Vue.prototype.elementResultService = new ElementResultService(axios);
 Vue.prototype.tanaguruTestService = new TanaguruTestService(axios);
 Vue.prototype.statusResultService = new StatusResultService(axios);
 Vue.prototype.configService = new ConfigService(axios);
+Vue.prototype.statsService = new StatsService(axios);
 
 const token = localStorage.getItem('token')
 if (token) {
     Vue.prototype.$http.defaults.headers.common['Authorization'] = 'Bearer ' + token
 }
 
-export const bus = new Vue()
 export default Vue

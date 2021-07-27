@@ -2,5 +2,6 @@
 	"infos": "Informations du projet",
 	"users": "Utilisateurs du projet",
 	"legendUsers": "Tableau des utilisateurs du projet",
-	"selectUser": "Sélectionnez un utilisateur"
+	"selectUser": "Sélectionnez un utilisateur",
+	"infoSearch": "La liste ci-dessous contient tous les projets de l'utilisateur. Utilisez la barre de recherche pour commencer à taper le nom du rpojet que vous recherchez et filtrer les projets qui ne correspondent pas"
 }

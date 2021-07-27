@@ -12,8 +12,10 @@
 	"signIn": "Inscription",
 	"logout": "Déconnexion",
 	"start": "Démarrer",
+	"stop": "Arrêter",
 	"search": "Chercher",
 	"auditStart": "Lancer l'audit",
+	"auditLaunch": "Lancer un audit",
 	"auditNewStart": "Lancer un nouvel audit",
 	"goTop": "Revenir <br /> en haut de page",
 	"archives": "Accéder aux archives",
@@ -29,5 +31,6 @@
 	"backToPageList": "Retour à la liste des pages",
 	"confirm": "Confirmer",
 	"cancel": "Annuler",
-	"sortAudits": "Plus récent au plus ancien"
+	"sortAudits": "Plus récent au plus ancien",
+	"sortLogs": "Plus ancien au plus récent"
 }

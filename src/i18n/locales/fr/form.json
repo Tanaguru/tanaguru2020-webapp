@@ -3,12 +3,12 @@
 		"help": "Les champs obligatoires sont signalés par le symbole *.",
 		"nameConstraint": "50 caractères maximum",
 		"usernameConstraint": "30 caractères maximum",
-		"passwordConstraint": "Doit contenir au minimum 8 caractères dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial.",
+		"passwordConstraint": "Doit contenir au minimum 8 caractères dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial (#?!@$%^&*-.,;:_).",
 		"emailConstraint": "La saisie doit être au format e-mail.",
 		"urlConstraint": "(exemple : http://www.website.com/)"
 	},
 	"successMsg": {
-		"savedChange": "Modification(s) enregistrée(s).",
+		"savedChanges": "Modification(s) enregistrée(s).",
 		"projectCreation": "Le project a été créé.",
 		"contractCreation": "Le contrat a été créé.",
 		"userCreation": "L'utilisateur a été créé.",
@@ -23,7 +23,7 @@
 		"user": {
 			"notAMember": "Cet utilisateur ne peut être ajouté au projet",
 			"limitReached": "Cet utilisateur a attein sa limite de contrats",
-			"notFound": "Cet utilisateur n'existe pas",
+			"notFound": "Cet utilisateur n'existe pas.",
 			"permissionDenied": "Vous n'avez pas les authorisations requises",
 			"promoteSelf": "Vous ne pouvez vous promouvoir vous-même",
 			"notAllowed": "Votre rôle dans ce projet ne vous autorise pas à promouvoir un utilisateur",
@@ -38,8 +38,7 @@
 		},
 		"username": {
 			"existingUsername": "Ce nom d'utilisateur n'est pas disponible",
-			"invalidUsername": "Le nom d'utilisateur doit contenir plus de 4 charactères et moins de 30.",
-			"usernameError": "Le nom d'utilisateur doit contenir moins de 30 caractères."
+			"invalidUsername": "Le nom d'utilisateur doit contenir plus de 4 charactères et moins de 30."
 		},
 		"email": {
 			"existingEmail": "Cette adresse e-mail est déjà enregistrée.",
@@ -53,7 +52,8 @@
 		},
 		"project": {
 			"notFound": "Ce projet n'existe pas.",
-			"invalidDomain": "Le domaine n'est pas valide."
+			"invalidDomain": "Le domaine n'est pas valide.",
+			"nameMinSize": "Le nom doit être supérieur à 2 caractères."
 		},
 		"others": {
 			"nameError": "Le nom doit être inférieur à 50 caractères.",

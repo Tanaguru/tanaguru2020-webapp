@@ -117,14 +117,18 @@
 		"name": "Nom",
 		"file": "Fichier",
 		"selectScenario": "Sélectionner un scénario",
-		"noScenario": "Aucun scenario trouvé"
+		"noScenario": "Aucun scenario trouvé",
+		"use": "Sélectionner",
+		"actions": "Action"
 	},
 	"basicAuth": {
 		"basicAuth": "Accès sécurisé",
-		"login": "Identifiant",
-		"password": "Mot de passe",
-		"explanation": "Indiquez les informations de connexion sécurisée aux pages de l'audit. Si la page de connexion est inclue dans les pages à tester (renseignées en section 2), laisser le champ 'URL' vide.",
-		"urlError": "L'URL doit faire partie du domaine spécifié et ne pas être cité dans les pages à tester.",
+		"active": "Activer basic authentication",
+		"login": "Identifiant basic auth",
+		"password": "Mot de passe basic auth",
+		"url": "Url basic auth",
+		"explanation": "Indiquez les informations de connexion sécurisée aux pages de l'audit.",
+		"urlError": "L'URL doit être valide et renseignée.",
 		"loginError": "L'identifiant doit contenir plus de 3 caractères.",
 		"passwordError": "Le mot de passe doit contenir plus de 5 caractères."
 	},
@@ -147,7 +151,8 @@
 			"invalidResourceError": "Le fichier choisi est invalide",
 			"emptyScenarioId": "Veuillez choisir un scenario.",
 			"fileNameError": "Veuillez donner un nom à votre fichier",
-			"seedsError": "Veuillez entrer une URL. Vous ne pouvez pas auditer un site différent de celui associé au projet. ",
+			"seedsError": "Vous ne pouvez pas auditer un site différent de celui associé au projet. ",
+			"emptySeeds": "Vous devez ajouter une URL.",
 			"emptyUrlError": "Le premier emplacement doit être rempli. ",
 			"emptyUrlsError": "Vous devez ajouter au moins une URL. ",
 			"scenarioSuccess": "Le scénario a bien été ajouté. ",

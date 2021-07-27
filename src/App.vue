@@ -10,7 +10,6 @@
 
 <script>
 import SessionPopup from "./components/SessionPopup";
-import {bus} from './vue';
 import TngHeader from "@/components/Header";
 import TngFooter from "@/components/Footer";
 
@@ -18,18 +17,25 @@ export default {
 	components: {
 		TngFooter,
 		TngHeader,
-		SessionPopup,
-		bus
+		SessionPopup
 	},
 	data() {
 		return {
-			bus: bus,
 			sessionTimer: null,
 			sessionDuration: 3600000,
 			currentDate: new Date(),
 		}
 	},
 	created() {
+		let _locale = localStorage.getItem("locale") || "en"
+		this.$moment.locale(_locale)
+		this.$i18n.locale = _locale
+
+		this.bus.$on("updateLocale", (locale) => {
+			this.$i18n.locale = locale;
+			this.$moment.locale(this.locale)
+			localStorage.setItem("locale", locale);
+		})
 		this.$store.dispatch('getServerVersion');
 		this.configService.getSessionDuration(
 			(sessionDuration) => {

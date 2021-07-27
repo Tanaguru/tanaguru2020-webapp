@@ -9,7 +9,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="contract of contracts.slice().reverse()" :key="contract.id">
+				<tr v-for="contract of contracts" :key="contract.id">
 					<th scope="row">{{contract.name}}</th>
 					<td>{{ moment(contract.dateEnd).format('LL') }}</td>
 					<td class="td-actions">
@@ -39,10 +39,9 @@ export default {
     props: [ 'contracts' ],
     methods: {
         moment: function (date) {
-            this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
 		},
-		
+
 		activeTab(){
 			this.$store.state.activeTab.name = 'information'
 		}

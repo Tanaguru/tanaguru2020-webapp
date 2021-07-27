@@ -6,19 +6,20 @@
 
         <div class="layout-content__main">
             <div class="input-name form-block">
-                <label class="label" for="url">URL 
+                <label class="label" for="basic-auth-url">{{ $t('audit.basicAuth.url') }}
                     <span v-if="isValid"
                           class="screen-reader-text">{{ $t('audit.form.indications.help.checked') }}</span>
                     <span v-else class="screen-reader-text">{{ $t('audit.form.indications.help.empty') }}</span>
                 </label>
                 <input class="input" :class="[{'has-error':urlError && !isValid}]"
                        type="text"
-                       name="url"
-                       id="url"
+                       name="basic-auth-url"
+                       id="basic-auth-url"
                        v-model="url"
                        @input="onUrlInput"
                        @focus="hideError"
                        @blur="showError"
+					   autocomplete="chrome-off"
                        :aria-describedby="urlError ? 'info-error' : ''"/>
 
                 <p v-if="!isValid && urlError" role="alert" class="info-error" id="url-error">
@@ -63,7 +64,7 @@ export default {
             this.urlError = false
         }
     },
-    
+
 }
 </script>
 

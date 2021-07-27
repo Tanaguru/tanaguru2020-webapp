@@ -50,8 +50,7 @@
 
                     <div class="form-row">
                         <div class="form-column">
-                            <div class="form-block"
-                                 v-show="isCurrentUser == false && $store.state.auth.user.appRole.name != 'USER'">
+                            <div class="form-block" id="select-approle" v-if="!isCurrentUser && $store.state.auth.authorities['PROMOTE_USER']">
                                 <label class="label" for="status-select">{{ $t('entity.user.role.role') }} *</label>
                                 <div class="select">
                                     <select name="status-select" id="status-select" v-model="modifyUserForm.appRole">
@@ -72,6 +71,12 @@
                                            v-model="modifyUserForm.enabled">
                                     <label class="checkbox__label" for="enabled">{{ $t('entity.user.enabled') }}</label>
                                 </div>
+
+                                <div class="checkbox" v-if="$store.state.auth.authorities['MODIFY_USER']">
+                                    <input class="checkbox__input" type="checkbox" name="accountNonLocked" id="accountNonLocked"
+                                           v-model="modifyUserForm.accountNonLocked">
+                                    <label class="checkbox__label" for="accountNonLocked">{{ $t('entity.user.blocked') }}</label>
+                                </div>
                             </fieldset>
                         </div>
                     </div>
@@ -83,13 +88,15 @@
 
             <div v-else>
                 <ul class="infos-list">
-                    <li><span class="infos-list__exergue">{{ $t('entity.user.username') }}</span> : {{ user.username }}
+                    <li id="username"><span class="infos-list__exergue">{{ $t('entity.user.username') }}</span> : {{ user.username }}
                     </li>
-                    <li><span class="infos-list__exergue">{{ $t('entity.user.email') }}</span> : {{ user.email }}</li>
+                    <li id="email" v-if="$store.state.auth.user.appRole.name != 'USER' || isCurrentUser"><span class="infos-list__exergue">{{ $t('entity.user.email') }}</span> : {{ user.email }}</li>
                     <li><span class="infos-list__exergue">{{ $t('entity.user.role.role') }}</span> :
                         {{ user.appRole.name.charAt(0) + user.appRole.name.slice(1).toLowerCase().replace(/_/g, ' ') }}
                     </li>
-                    <li><span class="infos-list__exergue">{{ $t('entity.user.enabled') }}</span> : {{ user.enabled }}
+                    <li id="enabled"><span class="infos-list__exergue">{{ $t('entity.user.enabled') }}</span> : {{ user.enabled }}
+                    </li>
+                    <li id="blocked" v-if="$store.state.auth.user.appRole.name != 'USER' || isCurrentUser"><span class="infos-list__exergue">{{ $t('entity.user.blocked') }}</span> : {{ !user.accountNonLocked }}
                     </li>
                 </ul>
 
@@ -153,14 +160,29 @@
                 </button>
             </div>
         </article>
-
-        <article id="user-contracts">
+        <article id="user-contracts" v-if="$store.state.auth.user.appRole.name != 'USER' || isCurrentUser">
             <h2 class="user__title-2">{{ $t('user.contracts') }}</h2>
-            <ProfileContractTable v-if="contracts.length > 0" :contracts="contracts"/>
+            
+            <div v-if="contracts.length > 0">
+
+                <profile-contract-table 
+                    :contracts="contracts" 
+                    :current-page="contractCurrentPage"
+                    :total-pages="contractTotalPage"
+                    :element-by-page="contractPageSize"
+                    :total-elements="contractTotal">
+                </profile-contract-table>
+
+                <pagination
+                    :current-page="contractCurrentPage"
+                    :total-pages="contractTotalPage"
+                    @changePage="(page) => {loadContracts(page, contractPageSize)}"
+                />
+            </div>
             <p v-else-if="$route.params.id == $store.state.auth.user.id">{{ $t('user.noContract') }}</p>
             <p v-else>{{ $t('user.adminNoContract') }}</p>
-
         </article>
+        
 
         <BackToTop/>
 
@@ -175,6 +197,7 @@ import ProfileContractTable from './ProfileContractTable';
 import BackToTop from '../../components/BackToTop';
 import EmailHelper from '../../helper/emailHelper'
 import PasswordHelper from '../../helper/PasswordHelper'
+import Pagination from '../../components/Pagination';
 
 export default {
     name: 'userDetail',
@@ -185,7 +208,8 @@ export default {
         Breadcrumbs,
         BackToTop,
         EmailHelper,
-        PasswordHelper
+        PasswordHelper,
+        Pagination
     },
     data() {
         return {
@@ -204,6 +228,7 @@ export default {
                 email: "",
                 appRole: "",
                 enabled: false,
+                accountNonLocked: true,
                 emailError: "",
                 usernameError: "",
                 successMsg: ""
@@ -217,6 +242,10 @@ export default {
                 confirmationError: "",
                 successMsg: ""
             },
+            contractPageSize: 5,
+            contractTotalPage : 0,
+            contractCurrentPage: 0,
+            contractTotal: 0
         }
     },
     metaInfo() {
@@ -236,6 +265,7 @@ export default {
             this.modifyUserForm.email = this.user.email;
             this.modifyUserForm.appRole = this.user.appRole.name;
             this.modifyUserForm.enabled = this.user.enabled;
+            this.modifyUserForm.accountNonLocked = !this.user.accountNonLocked;
             this.modifyUserForm.active = true;
         },
         checkValidEmail: EmailHelper.checkValidEmail,
@@ -256,14 +286,15 @@ export default {
                 if (this.isCurrentUser) {
                     this.userService.modifyMe(
                         this.modifyUserForm.username,
-                        this.modifyUserForm.email,
+                        this.modifyUserForm.email.toLowerCase(),
                         this.user.appRole.name,
                         this.user.enabled,
-                        (user) => {
+                        (user, token) => {
                             this.$store.state.auth.user = user;
                             this.user = user;
                             this.modifyUserForm.active = false;
                             this.modifyUserForm.successMsg = this.$i18n.t("form.successMsg.savedChanges")
+                            this.$store.commit('auth_success', {token : token, user : this.user})
                         },
                         (error) => this.modifyUserForm.error = this.$i18n.t("form.errorMsg.genericError")
                     )
@@ -271,13 +302,14 @@ export default {
                     this.userService.modifyUser(
                         this.user.id,
                         this.modifyUserForm.username,
-                        this.modifyUserForm.email,
+                        this.modifyUserForm.email.toLowerCase(),
                         this.modifyUserForm.appRole,
                         this.modifyUserForm.enabled,
+                        !this.modifyUserForm.accountNonLocked,
                         (user) => {
                             this.user = user;
                             this.modifyUserForm.active = false;
-                            this.modifyUserForm.successMsg = this.$i18n.t("form.successMsg.savedChangesChange")
+                            this.modifyUserForm.successMsg = this.$i18n.t("form.successMsg.savedChanges")
                         },
                         (error) => this.modifyUserForm.error = this.$i18n.t("form.errorMsg.genericError")
                     )
@@ -300,7 +332,7 @@ export default {
                     this.modifyPasswordForm.confirmationError = this.$i18n.t("form.errorMsg.emptyInput")
                 }
             }
-            else if (!this.checkValidPassword(this.modifyPasswordForm.password) == false) {
+            else if (!this.checkValidPassword(this.modifyPasswordForm.password)) {
                 this.modifyPasswordForm.confirmationError = this.$i18n.t("form.errorMsg.password.passwordError")
             }
             else if (this.modifyPasswordForm.password != this.modifyPasswordForm.passwordConfirm) {
@@ -319,6 +351,20 @@ export default {
                     (error) => this.modifyPasswordForm.error = this.$i18n.t("form.errorMsg.genericError")
                 )
             }
+        },
+        loadContracts(page, size){
+            this.contractService.findByUserId(
+                this.$route.params.id,
+                page,
+                size,
+                (contracts) => {
+                    this.contractCurrentPage = page;
+                    this.contracts = contracts.content;
+                    this.contractTotalPage = contracts.totalPages;
+                    this.contractTotal = contracts.totalElements;
+                },
+                (error) => console.error(error)
+            )
         }
     },
     created() {
@@ -345,11 +391,7 @@ export default {
                     }
                 )
 
-                this.contractService.findByUserId(
-                    this.$route.params.id,
-                    (contracts) => this.contracts = contracts,
-                    (error) => console.error(error)
-                )
+                this.loadContracts(this.contractCurrentPage, this.contractPageSize);
             }
         } else {
             this.$router.replace('/');

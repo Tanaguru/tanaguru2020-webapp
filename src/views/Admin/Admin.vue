@@ -1,21 +1,26 @@
 <template>
     <main class="wrapper" id="page" role="main">
-		<Tabs @activeTab='activeTab'>
-			<Tab :name="$t('entity.contract.contracts')" selected="true" class="tabs-wrapper">
-				<adminContractList :users="users" :selected="selectedTab"/>
-			</Tab>
-
-			<div v-if="this.$store.state.auth.user.appRole.name !== 'USER'">
-				<Tab :name="$t('entity.user.users')" class="tabs-wrapper">
-					<adminUserList :users="users"  @create-user="createUser" :selected="selectedTab"/>
+			<Tabs @activeTab='activeTab'>
+				<Tab :name="$t('entity.contract.contracts')" selected="true" class="tabs-wrapper">
+					<adminContractList :selected="selectedTab"/>
 				</Tab>
+				<div v-if="this.$store.state.auth.user.appRole.name !== 'USER'">
+					<Tab :name="$t('entity.user.users')" class="tabs-wrapper">
+						<adminUserList :selected="selectedTab"/>
+					</Tab>
 
-				<Tab v-if="showReferenceTab"
-					:name="$t('entity.reference.references')" class="tabs-wrapper">
-					<reference-tab :selected="selectedTab"/>
-				</Tab>
-			</div>
-		</Tabs>
+					<Tab v-if="showReferenceTab"
+						:name="$t('entity.reference.references')" class="tabs-wrapper">
+						<reference-tab :selected="selectedTab"/>
+					</Tab>
+				</div>
+        
+        <div v-if="this.$store.state.auth.user.appRole.name == 'SUPER_ADMIN'">
+				  <Tab :name="$t('title.statistics')" class="tabs-wrapper">
+					  <statsTab/>
+				  </Tab>
+			  </div>
+			</Tabs>
     </main>
 </template>
 
@@ -25,6 +30,7 @@ import Tabs from '../../components/Tabs';
 import adminUserList from './User/UserTab';
 import adminContractList from './Contract/ContractTab';
 import ReferenceTab from "@/views/Admin/Reference/ReferenceTab";
+import statsTab from "./Stats/Stats";
 
 export default {
     name: 'Admin',
@@ -33,11 +39,11 @@ export default {
         Tab,
         Tabs,
         adminUserList,
-        adminContractList
+		adminContractList,
+		statsTab
 	},
 	data(){
 		return {
-			users: [],
 			selectedTab: null
 		}
 	},
@@ -53,20 +59,9 @@ export default {
 		}
 	},
 	methods:{
-		createUser(user){
-			this.users.push(user)
-		},
 		activeTab(value){
 			this.selectedTab = value
-		}
-	},
-	created(){
-		this.userService.findAll(
-			users => {
-				this.users = users
-			},
-			err => console.error(err)
-		);
+		},
 	},
 
 	computed : {

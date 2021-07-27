@@ -51,11 +51,10 @@
 		</div>
 
 		<div class="audit-infos">
-			<div class="audit-infos__stats" v-show="displayMode != 'anomaly'">
-				<div class="audit-stats">
+			<div class="audit-infos__stats">
+				<div class="audit-stats" v-if="displayMode != 'anomaly'">
 					<div class="audit-stats__chart">
 						<CircularProgressChart
-                            v-show="displayMode != 'anomaly'"
 							:percentage="percentage"
 							:shadowOne="'chart-shadow1-' + audit.id"
 							:shadowTwo="'chart-shadow2-' + audit.id"
@@ -64,27 +63,18 @@
 					<p class="audit-stats__recap audit-stats-recap">
 						<span class="audit-stats-recap__number">{{nbAnomaly}}</span>
 						<span class="audit-stats-recap__unit">{{$t('entity.generic.anomalies')}}</span>
-						<!--<span class="audit-stats-recap__total">{{nbElementTested}} {{$t('resultAudit.elmtTested')}}</span>-->
                     </p>
-					<!--<hr role="presentation" class="separator" />
-					<p class="audit-stats__history audit-stats-history">
-						<span class="audit-stats-history__date">{{$t('resultAudit.date')}} 5 mars 2020 :</span>
-						<span class="audit-stats-history__number">-25 {{$t('entity.generic.anomalies')}}</span>
-						<span class="audit-stats-history__link">
-							<router-link :to="'/audits/' + audit.id + '/pages/' + page.id + '/history'" class="link-independent link-independent--icon">
-								<icon-base-decorative width="16" height="16"><icon-arrow-blue /></icon-base-decorative>
-								<span>{{$t('action.history')}}</span>
-							</router-link>
-						</span>
-					</p>
-					-->
+				</div>
+                <div class="audit-stats" v-else>
+					<p class="audit-stats__recap audit-stats-recap-no-chart">
+						<span class="audit-stats-recap__number">{{nbAnomaly}}</span>
+						<span class="audit-stats-recap__unit">{{$t('entity.generic.anomalies')}}</span>
+                    </p>
 				</div>
 			</div>
 
 			<div class="audit-infos__inner">
 				<div class="audit-caps" v-if="pageContent.screenshot" :style="`background-image:url(data:image/png;base64,` + pageContent.screenshot + `)`">
-				</div>
-				<div class="audit-caps" :style="defaultImg" v-else >
 				</div>
 
 				<div class="audit-list">
@@ -101,9 +91,12 @@
 							<span>{{$t('entity.audit.repository')}} : </span>
 							{{reference.name}}
 						</li>
-						<!--<li>
-							<span>Nombre de pages auditées :</span> {{ pages.length}}
-						</li>-->
+						<li>
+							<span>{{ $t('auditDetail.synthesis.pages') }} : </span> {{ totalPages }}
+						</li>
+						<li v-if="pageContent && pageContent.source">
+							<a class="btn btn--nude btn--icon" @click="showSourceCode">{{ $t('auditDetail.synthesis.showSourceCode') }} </a>
+						</li>
 						<!--<li>
 							<button class="btn btn--nude btn--icon">
 								<span>{{$t('entity.audit.parameters')}}</span>
@@ -112,11 +105,7 @@
 						</li>-->
 					</ul>
 					<div class="form-block">
-						<pagination
-							:current-page="page"
-							:total-pages="pageTotalPage"
-							@changePage="(page) => {loadPages(page, auditPagePageSize)}"
-						/>
+
 					</div>
                     <router-link class="btn btn--nude btn--icon" :to="'/audits/' + audit.id">
                         <icon-base-decorative>
@@ -131,7 +120,6 @@
 </template>
 
 <script>
-	import { bus } from '../../vue'
     import IconBaseDecorative from "../../components/icons/IconBaseDecorative";
     import IconArrowBlue from "../../components/icons/IconArrowBlue";
     import IconExport from "../../components/icons/IconExport";
@@ -162,47 +150,22 @@
 				screenReaderInfo: '',
 				selectedPage: '',
 				value: "Select a page",
-				defaultImg: { backgroundImage: `url(${require('../../../public/assets/images/logo-desktop.svg')})` }
             }
         },
-        props: ['audit', 'displayMode', 'page', 'pages', 'auditParameters', 'percentage', 'nbAnomaly', 'nbElementTested', 'pageContent', 'reference' ],
+        props: ['audit', 'displayMode', 'page', 'totalPages', 'percentage', 'nbAnomaly', 'nbElementTested', 'pageContent', 'reference' ],
         computed: {
             shareCodeUrl(){
                 return location.origin + '/#/audits/' + this.audit.id + '/pages/' + this.page.id + '/' + this.audit.shareCode
 			},
-			/*otherPages(){
-				let otherPages = this.pages.filter(page =>
-					page.id != this.page.id
-				)
-				return auditPages;
-				return otherPages
-			}*/
         },
 
         methods: {
             moment: function (date) {
-                this.$moment.locale(this.$i18n.locale)
                 return this.$moment(date);
             },
 
-            loadPages(page, size){
-                this.pageService.findByAuditId(
-                    this.audit.id,
-                    this.audit.sharecode,
-                    page,
-                    size,
-                    (auditPagePage) =>{
-                        /*this.pages = auditPagePage.content;
-                        this.pageCurrentPage = page;
-                        this.pageTotalPage = auditPagePage.totalPages;
-                        this.pageTotal = auditPagePage.totalElements;*/
-                        console.log(auditPagePage)
-                    }
-                )
-            },
-
             triggerPrint() {
-                bus.$emit("allShown", true);
+                this.bus.$emit("allShown", true);
                 setTimeout(() => (
                     window.print()
                 ), 50)
@@ -228,10 +191,13 @@
                 shareCodeUrl.setAttribute('type', 'hidden')
                 window.getSelection().removeAllRanges()
             },
-        },
-        created() {
-            this.loadPages(this.page.id, )
-        }
+
+			showSourceCode() {
+            	let popup = window.open()
+				popup.document.write('<pre><code id="source"></code></pre>')
+            	popup.document.getElementById('source').textContent = this.pageContent.source
+			}
+		}
     }
 
 </script>
@@ -392,6 +358,33 @@
     @media #{$media-md-viewport} {
         padding: calc(21.7rem / 2 + 3.2rem) 0 2rem; // 21.7rem is CircularProgressChart height
     }
+
+    .audit-stats-recap__number,
+    .audit-stats-recap__unit,
+    .audit-stats-recap__total {
+        display: block;
+    }
+
+    .audit-stats-recap__number {
+        font-size: 3rem;
+        font-weight: 600;
+        line-height: 1;
+        @media #{$media-md-viewport} {
+            font-size: 4rem;
+        }
+    }
+
+    .audit-stats-recap__unit {
+        font-size: 1.8rem;
+        @media #{$media-md-viewport} {
+            font-size: 2.4rem;
+        }
+    }
+}
+
+.audit-stats-recap-no-chart {
+    padding: 8rem;
+    text-align: center;
 
     .audit-stats-recap__number,
     .audit-stats-recap__unit,

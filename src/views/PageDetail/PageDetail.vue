@@ -25,11 +25,10 @@
                 :audit="audit"
                 :page="page"
                 :page-content="pageContent"
-                :pages="pages"
+                :totalPages="totalPages"
                 :reference="reference"
                 :percentage="percentageSuccess"
                 :nb-anomaly="nbAnomaly"
-                :audit-parameters="parameters"
                 :nb-element-tested="nbElementTested"
                 :sharecode="sharecode"
             />
@@ -123,6 +122,7 @@
                 page: null,
                 pageContent: null,
                 pages : [],
+                totalPages: null,
                 parameters: [],
 
                 references: [],
@@ -174,13 +174,19 @@
                             }
                         );
 
-                        /*this.pageService.findByAuditId(
+                        this.pageService.findByAuditId(
                             audit.id,
-                            this.shareCode,
+                            audit.shareCode,
+                            this.$route.params.pageId,
+                            1,
                             (pages) => {
-                                this.pages = pages
+                                this.pages = pages;
+                                this.totalPages= pages.totalPages
+                            },
+                            (error) => {
+                                this.errorMsg = "There was an issue retrieving the data. Please try again later or verify if you are allowed to access it (" + error + ")."
                             }
-                        )*/
+                        )
                     },
                     (error) => {
                         console.error(error);

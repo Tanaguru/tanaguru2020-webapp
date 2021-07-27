@@ -6,7 +6,7 @@
 
 		<section>
 			<h2 class="admin-references__title-2">{{ $t('references.referencesList') }}</h2>
-			<div class="table-container" v-if="references.length > 0">
+			<div class="table-container" v-if="references_page && references_page.content.length > 0">
 				<table class="table table--default table-references">
 					<caption class="screen-reader-text">{{ $t('references.legendReferences') }}</caption>
 
@@ -17,7 +17,7 @@
 					</tr>
 					</thead>
 					<tbody>
-					<tr v-for="reference of notDeletedReferences" :key="reference.id">
+					<tr v-for="reference of references_page.content" :key="reference.id">
 						<td class="td-title">{{ reference.name }} ({{ reference.code }})</td>
 						<td class="td-actions">
 							<button
@@ -34,14 +34,20 @@
 					</tr>
 					</tbody>
 				</table>
+
+				<pagination
+					:current-page="references_page.number"
+					:total-pages="references_page.totalPages"
+					@changePage="(page) => {loadReferences(page, referencesPageSize)}"
+				/>
+
 			</div>
 			<p v-else>{{ $t('references.noReference') }}</p>
 		</section>
 
 		<section v-if="$store.state.auth.authorities['CREATE_REFERENCE']">
 			<h2>{{ $t('references.referenceCreateForm') }}</h2>
-			<tanaguru-test-import :existing-references="references"
-								  @addReference="onAddReference"></tanaguru-test-import>
+			<tanaguru-test-import @addReference="onAddReference"></tanaguru-test-import>
 		</section>
 	</article>
 </template>
@@ -50,49 +56,49 @@
 import TanaguruTestImport from "./TanaguruTestImport.vue";
 import IconArrowBlue from "@/components/icons/IconArrowBlue";
 import IconBaseDecorative from "@/components/icons/IconBaseDecorative";
+import Pagination from "../../../components/Pagination";
 
 export default {
 	name: 'referenceTab',
-	components: {TanaguruTestImport, IconBaseDecorative, IconArrowBlue},
+	components: {TanaguruTestImport, IconBaseDecorative, IconArrowBlue, Pagination},
 	data() {
 		return {
-			references: []
+			references_page: null,
+			referencesPageSize: 5
 		}
 	},
 	props: [ 'selected'],
 	created() {
-		this.testHierarchyService.findAllReferences(
-			(references) => {
-				this.references = references;
-			},
-			(error) => {
-				console.error(error)
-			}
-		)
+		this.loadReferences(0, this.referencesPageSize)
 	},
 	methods: {
 		onAddReference(reference) {
-			this.references.push(reference);
+			this.loadReferences(this.references_page.number, this.referencesPageSize);
 		},
 
 		removeReference(reference) {
 			this.testHierarchyService.deleteReference(reference.id,
 				() => {
-					reference.deleted = true;
+					this.loadReferences(0, this.referencesPageSize);
 				},
 				(error => {
 					console.error(error)
 				})
 			)
+		},
+		loadReferences(page, size){
+			this.testHierarchyService.findAllReferences(
+				page,
+				size,
+				(references_page) => {
+					this.references_page = references_page
+				},
+				(error) => {
+					console.error(error)
+				}
+			)
 		}
 	},
-	computed: {
-		notDeletedReferences() {
-			return this.references.filter(reference => {
-				return !reference.deleted
-			})
-		}
-	}
 }
 
 </script>

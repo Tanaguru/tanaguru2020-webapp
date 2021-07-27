@@ -25,7 +25,9 @@
 		"newPassword": "New password",
 		"passwordConfirm": "Password confirmation",
 		"enabled": "Enabled",
+		"createContract": "Create a contract",
 		"status": "Status",
+		"blocked": "Blocked",
 		"selectStatus": "Select status",
 		"emailError": "Email adress cannot be empty."
 	},

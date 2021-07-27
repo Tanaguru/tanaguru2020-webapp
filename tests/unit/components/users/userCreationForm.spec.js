@@ -1,9 +1,25 @@
 import {shallowMount} from '@vue/test-utils'
 import tanaguruLocalVueHelper from "../../../helper/localVueHelper";
 import i18n from "@/i18n";
+import Vuex from "vuex";
 import UserCreationForm from "../../../../src/components/users/UserCreationForm"
 
 const localVue = tanaguruLocalVueHelper.getTanaguruLocalVue()
+
+const CREATE_CONTRACT_STORE = new Vuex.Store({
+    state : {
+        auth : {
+            authorities : {
+                CREATE_CONTRACT: true
+            },
+            user : {
+                appRole: {
+                    name: 'TEST'
+                }
+            }
+        }
+    }
+})
 
 describe('UserCreationForm', () => {
     describe('name input', () => {
@@ -11,6 +27,7 @@ describe('UserCreationForm', () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,
+                store: CREATE_CONTRACT_STORE,
                 stubs: ['router-link', 'router-view']
 
             })
@@ -26,10 +43,26 @@ describe('UserCreationForm', () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,
+                store: CREATE_CONTRACT_STORE,
                 stubs: ['router-link', 'router-view'],
             })
 
             await wrapper.find('#username').setValue('0123456789012345678901234567890');
+            await wrapper.find('form').trigger('submit.prevent');
+
+            const nameError = wrapper.find('#username-error');
+            expect(nameError.exists()).toBe(true);
+        })
+
+        it('should show error if contains less than 4 characters when sending form', async () => {
+            const wrapper = shallowMount(UserCreationForm, {
+                i18n,
+                localVue,
+                store: CREATE_CONTRACT_STORE,
+                stubs: ['router-link', 'router-view'],
+            })
+
+            await wrapper.find('#username').setValue('01');
             await wrapper.find('form').trigger('submit.prevent');
 
             const nameError = wrapper.find('#username-error');
@@ -42,6 +75,7 @@ describe('UserCreationForm', () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,
+                store: CREATE_CONTRACT_STORE,
                 stubs: ['router-link', 'router-view'],
             })
 
@@ -57,6 +91,7 @@ describe('UserCreationForm', () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,
+                store: CREATE_CONTRACT_STORE,
                 stubs: ['router-link', 'router-view'],
             })
 
@@ -74,6 +109,7 @@ describe('UserCreationForm', () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,
+                store: CREATE_CONTRACT_STORE,
                 stubs: ['router-link', 'router-view'],
             })
 
@@ -108,10 +144,11 @@ describe('UserCreationForm', () => {
     })
 
     describe('form', () => {
-        it('shouldn\'t show error if valid and should show success message ans emit createUser event', async () => {
+        it('shouldn\'t show error if valid and should show success message and emit createUser event', async () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,
+                store: CREATE_CONTRACT_STORE,
                 stubs: ['router-link', 'router-view'],
                 propsData: {
                     users: [
@@ -120,7 +157,7 @@ describe('UserCreationForm', () => {
                 },
                 mocks: {
                     userService : {
-                        create(name, email, password, appRole, enabled, then, error) {
+                        create(name, email, password, appRole, enabled, createContract, then, error) {
                             then({
                                 // user
                             })
@@ -154,6 +191,7 @@ describe('UserCreationForm', () => {
             const wrapper = shallowMount(UserCreationForm, {
                 i18n,
                 localVue,
+                store: CREATE_CONTRACT_STORE,
                 stubs: ['router-link', 'router-view'],
                 propsData: {
                     users: [
@@ -162,7 +200,7 @@ describe('UserCreationForm', () => {
                 },
                 mocks: {
                     userService : {
-                        create(name, email, password, appRole, enabled, then, error) {
+                        create(name, email, password, appRole, enabled, createContract, then, error) {
                             error({
                                 response: {
                                     data: {

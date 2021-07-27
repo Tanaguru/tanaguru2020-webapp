@@ -85,9 +85,9 @@ describe('ContractCreationForm', () => {
                 },
                 mocks: {
                     contractService : {
-                        create(name, date, ownerId, then, error) {
+                        create(name, date, ownerId, restrictDomain, then, error) {
                             then({
-                                // contract
+                                //contract
                             })
                         }
                     }
@@ -95,7 +95,7 @@ describe('ContractCreationForm', () => {
             })
 
             await wrapper.find('#owner-select').setValue(0);
-            await wrapper.find('#dateEnd').setValue('2020-12-15');
+            await wrapper.find('#dateEnd').setValue('04/30/2020');
             await wrapper.find('#name').setValue('test');
             await wrapper.find('form').trigger('submit.prevent');
 
@@ -103,9 +103,9 @@ describe('ContractCreationForm', () => {
             const dateError = wrapper.find('#date-error');
             const ownerError = wrapper.find('#owner-error');
 
-            expect(nameError.exists()).toBe(false);
-            expect(dateError.exists()).toBe(false);
-            expect(ownerError.exists()).toBe(false);
+            expect(nameError.isVisible()).toBe(false);
+            expect(dateError.isVisible()).toBe(false);
+            expect(ownerError.isVisible()).toBe(false);
 
             expect(wrapper.find('#form-error').exists()).toBe(false);
             expect(wrapper.find('#form-success').exists()).toBe(true);
@@ -124,9 +124,13 @@ describe('ContractCreationForm', () => {
                 },
                 mocks: {
                     contractService : {
-                        create(name, date, ownerId, then, error) {
+                        create(name, date, ownerId, restrictDomain, then, error) {
                             error({
-                                // error
+                                response: {
+                                    data : {
+                                        error :"USER_NOT_FOUND"
+                                    }
+                                }   
                             })
                         }
                     }
@@ -134,7 +138,7 @@ describe('ContractCreationForm', () => {
             })
 
             await wrapper.find('#owner-select').setValue(0);
-            await wrapper.find('#dateEnd').setValue('2020-12-15');
+            await wrapper.find('#dateEnd').setValue('04/30/2020');
             await wrapper.find('#name').setValue('test');
             await wrapper.find('form').trigger('submit.prevent');
 
@@ -142,9 +146,9 @@ describe('ContractCreationForm', () => {
             const dateError = wrapper.find('#date-error');
             const ownerError = wrapper.find('#owner-error');
 
-            expect(nameError.exists()).toBe(false);
-            expect(dateError.exists()).toBe(false);
-            expect(ownerError.exists()).toBe(false);
+            expect(nameError.isVisible()).toBe(false);
+            expect(dateError.isVisible()).toBe(false);
+            expect(ownerError.isVisible()).toBe(false);
 
             expect(wrapper.find('#form-error').exists()).toBe(true);
             expect(wrapper.find('#form-success').exists()).toBe(false);

@@ -17,7 +17,7 @@ export default class UserService extends Service{
           .catch(err => {error(err)})
     }
 
-    create(username, email, password, appRole, enabled, then, error){
+    create(username, email, password, appRole, enabled, createContract, then, error){
         const user = {
             'username' : username,
             'email' : email,
@@ -27,7 +27,7 @@ export default class UserService extends Service{
         };
 
         this.axios({
-            url: this.controllerName + "/",
+            url: this.controllerName + "/" + "?create-contract=" + createContract,
             method: 'post',
             data: user
         })
@@ -55,6 +55,7 @@ export default class UserService extends Service{
         email,
         appRole,
         enabled,
+        accountNonLocked,
         then,
         error
     ){
@@ -63,7 +64,8 @@ export default class UserService extends Service{
             'username' : username,
             'email' : email,
             'appRole' : appRole,
-            'enabled' : enabled
+            'enabled' : enabled,
+            'accountNonLocked' : accountNonLocked
         };
 
         return this.axios({
@@ -95,7 +97,7 @@ export default class UserService extends Service{
             method: 'put',
             data: user
         })
-        .then((user) => {then(user.data)})
+        .then((response) => {then(response.data.user, response.data.token)})
         .catch((err) => {error(err)});
     }
 
@@ -141,9 +143,39 @@ export default class UserService extends Service{
     }
 
 
+    findAllByContractPaginated(id, page, size, then, error){
+        this.axios({
+            url: this.controllerName + '/by-contract-paginated/' + id + '?page=' + page + '&size=' + size,
+            method: 'get',
+          })
+          .then(resp => {
+            then(resp.data)
+          })
+          .catch(err => {
+              error(err);
+          });
+    }
+
     findAllByContract(id, then, error){
         this.axios({
             url: this.controllerName + '/by-contract/' + id,
+            method: 'get',
+          })
+          .then(resp => {
+            then(resp.data)
+          })
+          .catch(err => {
+              error(err);
+          });
+    }
+
+    findAllPaginated(page, size, sortBy, isAsc, usernameOrEmail, then, error){
+        this.axios({
+            url: this.controllerName + '/paginated' + '?page=' + page
+            + '&size=' + size
+            + '&sortBy=' + sortBy
+            + '&isAsc=' + isAsc
+            + '&usernameOrEmail=' + usernameOrEmail,
             method: 'get',
           })
           .then(resp => {

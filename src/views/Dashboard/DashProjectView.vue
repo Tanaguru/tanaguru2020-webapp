@@ -40,7 +40,7 @@
 					<li class="actions-list__item" v-show="auditLaunchCondition && validContract">
 						<router-link :to="'/projects/'+project.id+'/audit'" class='btn btn--icon btn--nude'>
 							<icon-base-decorative><icon-launch /></icon-base-decorative>
-							<span>{{$t('action.auditStart')}}</span>
+							<span>{{$t('action.auditLaunch')}}</span>
 						</router-link>
 					</li>
 					<li class="actions-list__item">
@@ -66,7 +66,7 @@
 					<li><span class="infos-list__exergue">{{$t('dashboard.project.url')}}</span> {{ project.domain }}</li>
 					<li>
 						<span class="infos-list__exergue">{{$t('dashboard.project.repository')}} </span>
-						<span v-for="name in repositoriesNames" :key="name">{{ name }}</span>
+						<span v-for="(name, i) in repositoriesNames" :key="i">{{ name }}<span v-if="i+1 != repositoriesNames.length">, </span></span>
 					</li>
 					<li><span class="infos-list__exergue">{{$t('dashboard.project.date')}}</span> {{ moment(project.contract.dateEnd).format('LL') }}</li>
 				</ul>
@@ -116,7 +116,7 @@
 
 					<router-link :to="'/projects/'+project.id+'/audit'" class='btn btn--icon btn--default'>
 						<icon-base-decorative><icon-launch /></icon-base-decorative>
-						<span>{{$t('action.auditStart')}}</span>
+						<span>{{$t('action.auditLaunch')}}</span>
 					</router-link>
 				</div>
 
@@ -301,7 +301,7 @@
 						<li class="actions-list__item" v-if="auditLaunchCondition && validContract">
 							<router-link :to="'/projects/'+project.id+'/audit'" class='link-independent link-independent--icon'>
 								<icon-base-decorative><icon-launch /></icon-base-decorative>
-								<span>{{$t('action.auditStart')}}</span>
+								<span>{{$t('action.auditLaunch')}}</span>
 							</router-link>
 						</li>
 
@@ -385,16 +385,49 @@ export default {
 			repositories: [],
 		}
 	},
+	created() {
+		this.auditService.findLastByProject(
+			this.project.id,
+			(audit) => {
+				this.lastAudit = audit;
+				if(audit){
+
+					this.pageContentService.findFirstByAuditId(
+						audit.id,
+						audit.shareCode,
+						(pageContent) => {
+							this.lastAuditFirstPageContent = pageContent;
+						},
+						(error) => {
+							console.error(error);
+						},
+					);
+
+					this.testHierarchyService.findAllReferenceByAudit(
+						audit.id,
+						audit.shareCode,
+						(references) => {
+							this.repositories = references;
+						}
+					)
+					this.getAuditResult(audit);
+				}
+			},
+			(error) => {
+				console.error(error)
+			}
+		);
+	},
 	computed: {
 		auditLaunchCondition(){
 			let condition = false;
-			
+
 			if(this.$store.state.auth.user.appRole.overrideProjectRole.name === 'PROJECT_MANAGER' || this.$store.state.auth.user.appRole.overrideProjectRole.name === 'PROJECT_USER'){
 				condition = true
 			}
 			else if(this.currentUserRole === "PROJECT_MANAGER" || this.currentUserRole === "PROJECT_USER" ){
 				condition = true
-			}			
+			}
 			return condition
 		},
 
@@ -416,7 +449,6 @@ export default {
 	},
 	methods: {
 		moment: function (date) {
-            this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
 		},
 
@@ -472,112 +504,82 @@ export default {
 		},
 		toggleProject() {
 			this.projectOpen = !this.projectOpen;
-			if(this.projectOpen && this.lastAudit && !this.lastAuditFirstPageContent){
-				this.pageContentService.findFirstByAuditId(
-						this.lastAudit.id,
-						undefined,
-						(pageContent) => {
-							this.lastAuditFirstPageContent = pageContent;
-						},
-						(error) => {
-							console.error(error);
-						},
+			if(this.projectOpen && this.lastAudit){
+				this.auditService.findLastByProjectAndType(
+					this.project.id,
+					'PAGE',
+					(audit) => {
+						this.lastPageAudit = audit;
+						if(audit){
+							this.getAuditResult(audit);
+						}
+					},
+					(error) => {
+						console.error(error)
+					}
 				);
+
+				this.auditService.findLastByProjectAndType(
+					this.project.id,
+					'SITE',
+					(audit) => {
+						this.lastSiteAudit = audit;
+						if(audit){
+							this.getAuditResult(audit);
+						}
+					},
+					(error) => {
+						console.error(error)
+					}
+				);
+
+				this.auditService.findLastByProjectAndType(
+					this.project.id,
+					'UPLOAD',
+					(audit) => {
+						this.lastUploadAudit = audit;
+						if(audit){
+							this.getAuditResult(audit);
+						}
+					},
+					(error) => {
+						console.error(error)
+					}
+				);
+
+				this.auditService.findLastByProjectAndType(
+					this.project.id,
+					'SCENARIO',
+					(audit) => {
+						this.lastScenarioAudit = audit;
+						if(audit){
+							this.getAuditResult(audit);
+						}
+					},
+					(error) => {
+						console.error(error)
+					}
+				);
+
+				this.userService.findAllByProject(
+					this.project.id,
+					(users) => {
+						this.users = users
+						let currentUser = this.users.find(user =>
+							user.contractAppUser.user.id === this.$store.state.auth.user.id
+						)
+						if(currentUser){
+							this.currentUserRole = currentUser.projectRole.name
+						}
+					},
+					(error) => console.error(error)
+				)
 			}
 		},
 
 		activeTab(){
 			this.$store.state.activeTab.name = 'information'
 		}
-	},
-	created(){
-		this.auditService.findLastByProject(
-			this.project.id,
-			(audit) => {
-				this.lastAudit = audit;
-				if(audit){
-                    this.testHierarchyService.findAllReferenceByAudit(
-                        audit.id,
-                        audit.shareCode,
-                        (references) => {
-                            this.repositories = references;
-                        }
-                    )
-					this.getAuditResult(audit);
-				}
-			},
-		(error) => {
-				console.error(error)
-			}
-		);
-
-		this.auditService.findLastByProjectAndType(
-				this.project.id,
-				'PAGE',
-				(audit) => {
-					this.lastPageAudit = audit;
-					if(audit){
-						this.getAuditResult(audit);
-					}
-				},
-				(error) => {
-					console.error(error)
-				}
-		);
-
-		this.auditService.findLastByProjectAndType(
-				this.project.id,
-				'SITE',
-				(audit) => {
-					this.lastSiteAudit = audit;
-					if(audit){
-						this.getAuditResult(audit);
-					}
-				},
-				(error) => {
-					console.error(error)
-				}
-		);
-
-		this.auditService.findLastByProjectAndType(
-				this.project.id,
-				'UPLOAD',
-				(audit) => {
-					this.lastUploadAudit = audit;
-					if(audit){
-						this.getAuditResult(audit);
-					}
-				},
-				(error) => {
-					console.error(error)
-				}
-		);
-
-		this.auditService.findLastByProjectAndType(
-				this.project.id,
-				'SCENARIO',
-				(audit) => {
-					this.lastScenarioAudit = audit;
-					if(audit){
-						this.getAuditResult(audit);
-					}
-				},
-				(error) => {
-					console.error(error)
-				}
-		);
-
-		this.userService.findAllByProject(
-			this.project.id,
-			(users) => {
-				this.users = users
-				let currentUser = this.users.filter(user =>
-					user.contractAppUser.user.id === this.$store.state.auth.user.id
-				)
-				this.currentUserRole = currentUser[0].projectRole.name
-			},
-			(error) => console.error(error)
-		)
 	}
 }
 </script>

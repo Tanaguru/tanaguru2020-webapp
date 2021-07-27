@@ -1,26 +1,32 @@
 <template>
     <div>
-        <template v-for="navbarLink in showableNavbarLinks">
-            <router-link exact v-if="navbarLink.isInternal" :to="navbarLink.url" class="btn btn--default">
-                <span>{{navbarLink.i18n && navbarLink.i18n[$i18n.locale] ? navbarLink.i18n[$i18n.locale] : $t(navbarLink.name)}}</span>
-            </router-link>
-            <a v-else :href="navbarLink.url" class="btn btn--default">
-                <span>{{navbarLink.i18n && navbarLink.i18n[$i18n.locale] ? navbarLink.i18n[$i18n.locale] : $t(navbarLink.name)}}</span>
-            </a>
+		<router-link v-for="module in orderedModules" :key="module.name" exact :to="'/external-module/' + module.name" class="btn btn--default">
+			<span>{{moduleName(module)}}</span>
+		</router-link>
 
-        </template>
+		<router-link exact to="/login" class="btn btn--default">
+			<span>{{$t('action.login')}}</span>
+		</router-link>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'loginNavbar',
-        computed: {
-            showableNavbarLinks() {
-                return this.NAVBAR_LINKS.filter((navbarLink) =>{
-                    return navbarLink.showOffline;
-                })
-            }
-        }
-    }
+import ModuleHelper from '../helper/ModuleHelper';
+export default {
+    name: 'loginNavbar',
+	computed: {
+		offlineModule() {
+			return this.$store.getters.getOfflineModules
+		},
+		orderedModules(){
+			return this.offlineModule.sort((a, b) => { return b.priorityNumber < a.priorityNumber;});
+		}
+	},
+	methods:{
+		getModuleName: ModuleHelper.getModuleName,
+		moduleName(module){
+			return this.getModuleName(module);
+		}
+	}
+}
 </script>

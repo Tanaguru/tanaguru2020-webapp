@@ -62,9 +62,9 @@
                 <table class="table table--default table-files">
                     <thead>
                     <tr>
-                        <th scope="col">Use</th>
+                        <th scope="col">{{$t('audit.scenario.use')}}</th>
                         <th scope="col">{{$t('audit.scenario.name')}}</th>
-                        <th scope="col">Action</th>
+                        <th scope="col">{{$t('audit.scenario.actions')}}</th>
                     </tr>
                     </thead>
                     <tbody>

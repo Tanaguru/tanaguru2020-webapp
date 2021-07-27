@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div v-if="auditsByType.length > 0">
+        <p v-show="this.errorMsg">{{ errorMsg }}</p>
+        <div v-if="this.audits.length > 0">
             <button
                 type="button"
                 :class="firstToLast ? 'btn btn--default-inverse btn--icon' : 'btn btn--default btn--icon'"
@@ -12,72 +13,92 @@
                     <icon-close/>
                 </icon-base-decorative>
 
-                <icon-base-decorative v-else>
-                    <icon-checked/>
-                </icon-base-decorative>
-            </button>
-            <table class="table table--default">
-                <caption class="screen-reader-text">{{ $t('archives.legendUpload') }}</caption>
-                <thead>
-                <tr>
-                    <th scope="col">
-                        {{ $t('entity.audit.name') }}
-                    </th>
-                    <th scope="col">
-                        {{ $t('entity.audit.status') }}
-                    </th>
-                    <th scope="col">
-                        {{ $t('entity.audit.nbPage') }}
-                    </th>
-                    <th scope="col">
-                        {{ $t('entity.audit.dateEnd') }}
-                    </th>
-                    <th scope="col">{{ $t('entity.generic.actions') }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="audit of auditOrder" :key="audit.id" v-if="audit.type === type && totalPagesByAudit[audit.id] && totalPagesByAudit[audit.id] > 0">
-                    <th scope="row">{{ audit.name }}</th>
-                    <td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
-                    <td>{{ totalPagesByAudit[audit.id] }}</td>
-                    <td>{{ audit.dateEnd ? moment(audit.dateEnd).format('LL') : '' }}</td>
-                    <td class="td-actions">
-                        <ul class="actions-list">
-                            <li class="actions-list__item">
-                                <router-link class="link link-independent link-independent--icon" :to="'/audits/' + audit.id">
-                                    <icon-base-decorative>
-                                        <icon-arrow-blue/>
-                                    </icon-base-decorative>
-                                    <span>{{ $t('action.show') }}</span>
-                                </router-link>
-                            </li>
-                            <li class="actions-list__item"
-                                v-if="audit.status === 'DONE' || audit.status === 'ERROR'">
-                                <button
-                                    class="btn btn--icon btn--nude"
-                                    @click="confirmAuditDeletion(audit)">
-                                    <icon-base-decorative>
-                                        <icon-delete/>
-                                    </icon-base-decorative>
-                                    <span>{{ $t('action.delete') }}</span>
-                                </button>
-                            </li>
-                            <li class="actions-list__item"
-                                v-if="(hasScreenShotByAudit[audit.id] && audit.status === 'DONE') || (hasScreenShotByAudit[audit.id] && audit.status === 'ERROR')">
-                                <button
-                                    class="btn btn--icon btn--nude"
-                                    @click="confirmAuditScreenshotDeletion(audit)">
-                                    <icon-base-decorative>
-                                        <icon-delete/>
-                                    </icon-base-decorative>
-                                    <span>{{ $t('action.deleteScreenshot') }}</span>
-                                </button>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+				<icon-base-decorative v-else>
+					<icon-checked/>
+				</icon-base-decorative>
+			</button>
+			<table class="table table--default">
+				<caption class="screen-reader-text">{{ $t('archives.legendUpload') }}</caption>
+				<thead>
+				<tr>
+					<th scope="col">
+						{{ $t('entity.audit.name') }}
+					</th>
+					<th scope="col">
+						{{ $t('entity.audit.status') }}
+					</th>
+					<th scope="col">
+						{{ $t('entity.audit.nbPage') }}
+					</th>
+					<th scope="col">
+						{{ $t('entity.audit.dateEnd') }}
+					</th>
+					<th scope="col">{{ $t('entity.generic.actions') }}</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr v-for="audit of this.audits" :key="audit.id">
+					<th scope="row">{{ audit.name }}</th>
+					<td>{{ $t('auditDetail.status.' + audit.status.toLowerCase()) }}</td>
+					<td>{{ totalPagesByAudit[audit.id] }}</td>
+					<td>{{ audit.dateEnd ? moment(audit.dateEnd).format('LL') : '' }}</td>
+					<td class="td-actions">
+						<ul class="actions-list">
+							<li class="actions-list__item">
+								<router-link v-if="authorities.includes('SHOW_AUDIT')"
+									class="link link-independent link-independent--icon"
+											 :to="'/audits/' + audit.id">
+									<icon-base-decorative>
+										<icon-arrow-blue/>
+									</icon-base-decorative>
+									<span>{{ $t('action.show') }}</span>
+								</router-link>
+							</li>
+							<li class="actions-list__item"
+								v-if="authorities.includes('DELETE_AUDIT') && (audit.status === 'DONE' || audit.status === 'ERROR')">
+								<button
+									class="btn btn--icon btn--nude"
+									@click="confirmAuditDeletion(audit)">
+									<icon-base-decorative>
+										<icon-delete/>
+									</icon-base-decorative>
+									<span>{{ $t('action.delete') }}</span>
+								</button>
+							</li>
+							<li v-else class="actions-list__item">
+								<button
+									v-if="authorities.includes('START_AUDIT')"
+									class="btn btn--icon btn--nude"
+									@click="stopAudit(audit)">
+									<icon-base-decorative>
+										<icon-close/>
+									</icon-base-decorative>
+									<span>{{ $t('action.stop') }}</span>
+								</button>
+							</li>
+							<li class="actions-list__item"
+								v-if="authorities.includes('DELETE_AUDIT') &&((hasScreenShotByAudit[audit.id] && audit.status === 'DONE') || (hasScreenShotByAudit[audit.id] && audit.status === 'ERROR'))">
+								<button
+									class="btn btn--icon btn--nude"
+									@click="confirmAuditScreenshotDeletion(audit)">
+									<icon-base-decorative>
+										<icon-delete/>
+									</icon-base-decorative>
+									<span>{{ $t('action.deleteScreenshot') }}</span>
+								</button>
+							</li>
+						</ul>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+
+            <pagination
+				:current-page="auditCurrentPage"
+				:total-pages="auditTotalPage"
+				@changePage="(page) => {loadAudits(this.projectId,this.type,page,this.auditPageSize,this.auditSortBy,this.firstToLast)}"
+			/>
+
         </div>
         <div v-else>
             <p>{{ $t('archives.noAudit') }}</p>
@@ -95,6 +116,7 @@ import IconDelete from '../../components/icons/IconDelete'
 import IconChecked from '../../components/icons/IconChecked'
 import IconClose from '../../components/icons/IconClose'
 import DeletionModal from '../../components/DeleteModal'
+import Pagination from "../../components/Pagination";
 
 export default {
     name: 'ArchivesTable',
@@ -104,16 +126,26 @@ export default {
         IconDelete,
         IconChecked,
         IconClose,
-        DeletionModal
+        DeletionModal,
+        Pagination
     },
     data() {
         return {
+            audits: [],
             totalPagesByAudit: {},
             hasScreenShotByAudit: [],
-            firstToLast: false
+            firstToLast: false,
+            errorMsg: '',
+            auditPageSize: 5,
+            auditTotalPage : 0,
+            auditCurrentPage: 0,
+            auditTotal: 0,
+            auditSortBy: 'id',
+            deleteAuditError: "",
+            deleteScreenshotError: "",
         }
     },
-    props: ['audits', 'type', 'deleteCondition'],
+    props: ['type', 'projectId', 'authorities'],
     methods: {
         confirmAuditDeletion(audit) {
 			this.$modal
@@ -127,13 +159,13 @@ export default {
 				}
 			})
 			.then(() => {
-                this.$emit('delete-audit', audit)
+                this.deleteAudit(audit)
 			    this.$modal.close()
 			})
 			.catch(() => {
                 this.$modal.close()
 			})
-			.finally(() => {this.$modal.close})
+            .finally(() => {this.$modal.close})
         },
 
         confirmAuditScreenshotDeletion(audit) {
@@ -148,7 +180,7 @@ export default {
 				}
 			})
 			.then(() => {
-                this.$emit('delete-screenshot', audit)
+                this.deleteScreenshot(audit)
 			    this.$modal.close()
 			})
 			.catch(() => {
@@ -161,59 +193,118 @@ export default {
             if(this.firstToLast == true) {
                 this.firstToLast = false
             } else { this.firstToLast = true }
+            this.loadAudits(this.projectId, this.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast);
         },
 
         moment: function (date) {
-            this.$moment.locale(this.$i18n.locale)
             return this.$moment(date);
         },
-    },
-    created() {
-        for (let i = 0; i < this.audits.length; i++) {
-            this.pageService.findByAuditId(
-                this.audits[i].id,
-                this.audits[i].shareCode,
-                0,
-                1,
-                (pagePage) => {
-                    this.$set(this.totalPagesByAudit, this.audits[i].id, pagePage.totalPages)
-                },
-                (error) => {
-                    console.error(error)
-                }
-            )
 
-            this.auditService.hasScreenshotsById(
-                this.audits[i].id,
-                this.audits[i].shareCode,
-                (hasScreenshot) => {
-                    this.$set(this.hasScreenShotByAudit, this.audits[i].id, hasScreenshot)
+        loadAudits(projectId, type, page, size, sortBy, isAsc){
+            this.auditService.findByProjectIdAndTypePaginated(
+                projectId,
+                type,
+                page,
+                size,
+                sortBy,
+                isAsc,
+                (audits) => {
+                    this.audits = audits.content;
+                    this.auditCurrentPage = page;
+                    this.auditTotalPage = audits.totalPages;
+                    this.auditTotal = audits.totalElements;
+                    this.loadAuditNumberOfPageAndScreenshot();
                 },
-                (error) => {
-                    console.error(error)
-                }
-            )
-        }
-    },
-    computed: {
-        auditsByType() {
-            let auditsOfType = [];
-            this.audits.forEach(audit => {
-                if(audit.type === this.type){
-                    auditsOfType.push(audit)
-                }
-            });
+                err => console.error(err)
+            );
+        },
 
-            return auditsOfType;
+		loadAuditNumberOfPageAndScreenshot() {
+			for (let i = 0; i < this.audits.length; i++) {
+				this.pageService.findByAuditIdSorted(
+					this.audits[i].id,
+					this.audits[i].shareCode,
+					this.auditCurrentPage,
+					this.auditPageSize,
+					this.auditSortBy,
+					this.firstToLast,
+					(pagePage) => {
+						this.$set(this.totalPagesByAudit, this.audits[i].id, pagePage.totalElements);
+					},
+					(error) => {
+						this.errorMsg = "There was an issue retrieving the data. Please try again later or verify if you are allowed to access it (" + error + ")."
+					}
+				)
+
+                this.auditService.hasScreenshotsById(
+                    this.audits[i].id,
+                    this.audits[i].shareCode,
+                    (hasScreenshot) => {
+                        this.$set(this.hasScreenShotByAudit, this.audits[i].id, hasScreenshot)
+                    },
+                    (error) => {
+                        console.error(error)
+                    }
+                )
+            }
         },
-        auditOrder() {
-            let auditOrder = this.auditsByType;
-            if(this.firstToLast == true){
-                auditOrder = this.auditsByType
-            } else { auditOrder = this.auditsByType.slice().reverse()}
-            return auditOrder;
-        },
-    }
+
+		deleteAudit(audit) {
+			var index = this.audits.indexOf(audit);
+
+			if (index > -1) {
+				this.auditService.delete(
+					audit.id,
+					() => {
+						this.loadAudits(this.projectId, audit.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast)
+					},
+					(error) => {
+						if (error.response.data.error == "AUDIT_NOT_FOUND") {
+							this.deleteAuditError = this.$i18n.t("form.errorMsg.audit.notFound")
+						} else if (error.response.status == "403") {
+							this.deleteAuditError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+						} else {
+							this.deleteAuditError = this.$i18n.t("form.errorMsg.genericError");
+						}
+					}
+				)
+			}
+		},
+
+		stopAudit(audit) {
+			this.auditService.stop(
+				audit.id,
+				() => {
+        			audit.status = "DONE";
+				},
+				(error) => {
+					console.error(error);
+				}
+			)
+		},
+
+		deleteScreenshot(audit) {
+			this.pageContentService.deleteScreenshotByAudit(
+				audit.id,
+				() => {
+					this.loadAudits(this.projectId, audit.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast)
+				},
+				(error) => {
+					if (error.response.data.error == "AUDIT_NOT_FOUND") {
+						this.deleteScreenshotError = this.$i18n.t("form.errorMsg.audit.notFound")
+					} else if (error.response.status == "403") {
+						this.deleteScreenshotError = this.$i18n.t("form.errorMsg.user.permissionDenied")
+					} else {
+						this.deleteScreenshotError = this.$i18n.t("form.errorMsg.genericError");
+					}
+				}
+			);
+		},
+
+	},
+	created() {
+		this.loadAudits(this.projectId, this.type, this.auditCurrentPage, this.auditPageSize, this.auditSortBy, this.firstToLast);
+	}
 }
 </script>
 

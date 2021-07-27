@@ -12,7 +12,13 @@ export default class TanaguruRouter extends VueRouter{
         this.store = store
 
         super.beforeEach((to, from, next) => {
-            this.goToIfAuthorisation(to, next);
+            if(!this.store.state.tanaguruModules.loaded){
+                this.store.dispatch('loadTanaguruModules').then(() => {
+                    this.goToIfAuthorisation(to, next);
+                })
+            }else{
+                this.goToIfAuthorisation(to, next);
+            }
         })
 
         axios.interceptors.response.use(

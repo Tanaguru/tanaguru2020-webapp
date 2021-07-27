@@ -1,0 +1,32 @@
+{
+    "nbUsers": "Number of users",
+    "nbProjects": "Number of projects",
+    "nbAudits": "Number of audits",
+    "nbContracts": "Number of contracts",
+    "nbErrorMeanByPage": "Average number of errors per page",
+    "nbErrorMeanByAudit": "Average number of errors per audit",
+    "nbErrorMeanByProject": "Average number of errors per project",
+    "nbAuditMeanByProject": "Average number of audits per project",
+    "nbUsersMeanByProject": "Average number of users per project",
+    "nbAuditByType": "Number of audits performed by type",
+    "nbResourcesByPeriod": "Number of resources audited per period",
+    "dateForm": {
+        "dateStart": "Start date (format mm/dd/yyyy)",
+        "dateEnd": "End date (format mm/dd/yyyy)",
+        "invalidDateStart": "This isn't the expected date format.",
+        "invalidDateEnd": "This isn't the expected date format."
+    },
+    "nbPages": "Number of page audits",
+    "nbSites": "Number of site audits",
+    "nbFiles": "Number of file audits",
+    "nbScenarios": "Number of scenario audits",
+    "page": "Page",
+    "site": "Site",
+    "scenario": "Scenario",
+    "file": "File",
+    "from": "From",
+    "to": "to",
+    "keyFigures": "Key figures",
+    "legendTab": "Table of key figures",
+    "legendTabPeriod": "Table of the number of resources audited per period"
+}

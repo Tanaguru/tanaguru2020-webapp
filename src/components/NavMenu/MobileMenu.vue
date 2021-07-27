@@ -31,6 +31,15 @@
 			</div>
 
 			<Navbar :menuType="menuType" v-if="$store.getters.isLoggedIn"/>
+
+			<ul v-else class="navbar list-unstyled">
+				<li v-for="module in orderedOfflineModules" :key="module.name" class="navbar__item">
+					<router-link  exact :to="'/external-module/' + module.name"
+								class="link-independent link-independent--icon">
+						<span>{{moduleName(module)}}</span>
+					</router-link>
+				</li>
+			</ul>
 		</div>
 
 		<div class="nav__bottom" :class="burgerOpen ? 'secondary-menu is-active' : 'secondary-menu'" >
@@ -64,6 +73,7 @@
 
 <script>
 import Navbar from '../Navbar';
+import ModuleHelper from '../../helper/ModuleHelper';
 
   export default {
     name: 'MobileMenu',
@@ -74,20 +84,20 @@ import Navbar from '../Navbar';
       return{
 		burgerOpen: false,
 		menuType: "mobile",
-		locale : "en"
+		locale : this.$i18n.locale
       }
     },
 	props: [ 'currentUser' ],
-	methods: {
-		toggleBodyClass(addRemoveClass, noScroll) {
-			const el = document.body;
-
-			if (addRemoveClass === 'addClass') {
-			el.classList.add('noScroll');
-			} else {
-			el.classList.remove('noScroll');
-			}
+	computed: {
+		offlineModule() {
+			return this.$store.getters.getOfflineModules
 		},
+		orderedOfflineModules(){
+			return this.offlineModule.sort((a, b) => { return b.priorityNumber < a.priorityNumber;});
+		}
+	},
+	methods: {
+		getModuleName: ModuleHelper.getModuleName,
 		toggleMenu() {
 			const el = document.body;
 			if(this.burgerOpen === true){
@@ -106,8 +116,7 @@ import Navbar from '../Navbar';
 			}
 		},
         updateLocale : function(){
-            this.$i18n.locale = this.locale;
-			this.$moment.locale(this.locale)
+           this.bus.$emit("updateLocale", this.locale);
         },
         logout : function(event){
 			this.toggleMenu()
@@ -120,6 +129,9 @@ import Navbar from '../Navbar';
 		login : function(event){
 			this.toggleMenu()
 			this.$router.push('/login')
+		},
+		moduleName(module){
+			return this.getModuleName(module);
 		}
 	},
   }

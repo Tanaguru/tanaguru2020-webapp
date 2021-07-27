@@ -7,7 +7,7 @@ export default class ContractService extends Service{
 
     findMine(then, error){
         return this.axios({
-            url: this.controllerName + '/me', 
+            url: this.controllerName + '/me',
             method: 'get',
           })
           .then(resp => {
@@ -20,7 +20,7 @@ export default class ContractService extends Service{
 
     findOwned(then, error){
         return this.axios({
-            url: this.controllerName + '/owned', 
+            url: this.controllerName + '/owned',
             method: 'get',
           })
           .then(resp => {
@@ -33,7 +33,7 @@ export default class ContractService extends Service{
 
     findMemberOf(then, error){
         return this.axios({
-            url: this.controllerName + '/member-of', 
+            url: this.controllerName + '/member-of',
             method: 'get',
           })
           .then(resp => {
@@ -44,9 +44,9 @@ export default class ContractService extends Service{
         });
     }
 
-    findByUserId(id, then, error){
+    findByUserId(id, page, size, then, error){
         return this.axios({
-            url: this.controllerName + '/by-user/' + id, 
+            url: this.controllerName + '/by-user/' + id +'?page=' + page + '&size=' + size,
             method: 'get',
           })
           .then(resp => {
@@ -67,7 +67,7 @@ export default class ContractService extends Service{
         };
 
         return this.axios({
-            url: this.controllerName + "/", 
+            url: this.controllerName + "/",
             method: 'post',
             data: contract
         })
@@ -84,7 +84,7 @@ export default class ContractService extends Service{
         };
 
         return this.axios({
-            url: this.controllerName + "/" + id, 
+            url: this.controllerName + "/" + id,
             method: 'put',
             data: contract
         })
@@ -127,5 +127,18 @@ export default class ContractService extends Service{
         })
         .then(resp => {then(resp.data)})
         .catch(err => {error(err);});
+    }
+
+    findAll(page, size, filter, then, error){
+        return this.axios({
+            url: this.controllerName + '/' + '?page=' + page + '&size=' + size + '&name=' + filter,
+            method: 'get',
+          })
+          .then(resp => {
+            then(resp.data)
+          })
+          .catch(err => {
+              error(err);
+          });
     }
 }

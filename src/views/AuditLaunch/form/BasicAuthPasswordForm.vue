@@ -6,19 +6,20 @@
 
         <div class="layout-content__main">
             <div class="input-name form-block">
-                <label class="label" for="password">{{ $t('audit.basicAuth.password') }}
+                <label class="label" for="basic-auth-password">{{ $t('audit.basicAuth.password') }}
                     <span v-if="isValid"
                           class="screen-reader-text">{{ $t('audit.form.indications.help.checked') }}</span>
                     <span v-else class="screen-reader-text">{{ $t('audit.form.indications.help.empty') }}</span>
                 </label>
                 <input class="input" :class="[{'has-error':passwordError && !isValid}]"
-                       type="text"
-                       name="password"
-                       id="password"
+                       type="password"
+                       name="basic-auth-password"
+                       id="basic-auth-password"
                        v-model="password"
                        @input="onPasswordInput"
                        @focus="hideError"
                        @blur="showError"
+					   autocomplete="off"
                        :aria-describedby="passwordError ? 'info-error' : ''"/>
 
                 <p v-if="!isValid && passwordError" role="alert" class="info-error" id="password-error">
@@ -63,7 +64,7 @@ export default {
             this.passwordError = false
         }
     },
-    
+
 }
 </script>
 

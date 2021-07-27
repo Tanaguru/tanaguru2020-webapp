@@ -50,6 +50,9 @@ export default {
             localStorage.removeItem('token')
             localStorage.setItem('status', '')
             localStorage.removeItem('authorities')
+            localStorage.removeItem('authorizationCode')
+            localStorage.removeItem('authorizationState')
+            localStorage.removeItem('method')
         },
     },
     actions: {
@@ -93,15 +96,25 @@ export default {
         },
 
         refreshToken({commit, state}){
-            axios({
-                url: '/authentication/refresh-token',
-                method: 'GET' })
+            var method = localStorage.getItem('method')
+            if(method != null && method == 'oauth2'){
+                axios({
+                    url: '/authentication/oauth2/refresh-token',
+                    method: 'GET' })
+                .then(resp => {
+                    commit('auth_success', {token : resp.data.jwttoken, user : state.user})
+                })
+            }else{
+                axios({
+                    url: '/authentication/refresh-token',
+                    method: 'GET' })
                 .then(resp => {
                     const token = resp.data.jwttoken
                     const user = state.user
                     commit('auth_success', {token, user})
                     resolve(resp)
                 })
+            }
         }
     },
     getters : {
