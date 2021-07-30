@@ -70,4 +70,17 @@ export default class TestHierarchyResultService extends Service{
             error(err)
         })
     }
+
+    getGlobalTestResultForPages(auditId, referenceId, sharecode,then, error){
+        return this.axios({
+            url: this.controllerName + "/global-test-result-by-audit-and-test-hierarchy/" + auditId + "/" + referenceId + "/" + sharecode,
+            method: 'get',
+        })
+        .then(resp => {
+            then(resp.data)
+        })
+        .catch(err => {
+            error(err)
+        })
+    }
 }

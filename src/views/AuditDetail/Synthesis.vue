@@ -109,21 +109,32 @@
                     <thead>
                         <tr>
                             <td class="no-border"></td>
-                            <th scope="col" class="rotate" v-for="(page, i) in pages" :key="i">
-                                <HeaderRow :page="page" :i="i" :currentSynthesisPage="currentSynthesisPage"/>
-                            </th>
-                            <th v-if="currentSynthesisPage==totalSynthesisPageByReferenceId[selectedReference.id]-1"   scope="col" class="rotate">
+                            <th scope="col" class="rotate">
                                 <div class="rotate__inner">
                                     <span class="page">
-                                    Ensemble des pages
+                                    {{$t('auditDetail.synthesis.allPages')}}
                                     </span>
                                 </div>
+                            </th>
+                            <th scope="col" class="rotate" v-for="(page, i) in pages" :key="i">
+                                <HeaderRow :page="page" :i="i" :currentSynthesisPage="currentSynthesisPage"/>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(criteriaResultByPage, criteriaCode) in currentSynthesis" :key="criteriaCode">
                             <th scope="row" class="row-header">Test {{ criteriaCode }}</th>
+                            <td>
+                                <button class="btn btn--nude" @click="openGlobalTestModal(audit, criteriaResultByPage[Object.keys(criteriaResultByPage)[0]]['testHierarchy'], globalTestResultForPages[criteriaCode])">
+                                    <icon-base-decorative>
+                                        <icon-improper v-if="globalTestResultForPages[criteriaCode] === 'failed'"/>
+                                        <icon-compliant v-else-if="globalTestResultForPages[criteriaCode] === 'passed'"/>
+                                        <icon-qualify v-else-if="globalTestResultForPages[criteriaCode] === 'cantTell'"/>
+                                        <icon-notApplicable v-else/>
+                                    </icon-base-decorative>
+                                </button>
+                                <span class="td-background"></span>
+                            </td>
                             <td v-for="(criteriaResult, pageId, indexPage) in criteriaResultByPage" :key="pageId">
                                 <button class="btn btn--nude" @click="openModal(audit, pageById[pageId], criteriaResult, indexPage)">
                                     <icon-base-decorative>
@@ -133,17 +144,6 @@
                                         <icon-notApplicable v-else/>
                                     </icon-base-decorative>
                                     <span class="screen-reader-text">{{$t('auditDetail.synthesis.table.btnShow', {status: criteriaResult.status})}}</span>
-                                </button>
-                                <span class="td-background"></span>
-                            </td>
-                            <td v-if="currentSynthesisPage==totalSynthesisPageByReferenceId[selectedReference.id]-1">
-                                <button class="btn btn--nude">
-                                    <icon-base-decorative>
-                                        <icon-improper v-if="globalTestResultForPages(criteriaCode) === 'failed'"/>
-                                        <icon-compliant v-else-if="globalTestResultForPages(criteriaCode) === 'passed'"/>
-                                        <icon-qualify v-else-if="globalTestResultForPages(criteriaCode) === 'cantTell'"/>
-                                        <icon-notApplicable v-else/>
-                                    </icon-base-decorative>
                                 </button>
                                 <span class="td-background"></span>
                             </td>
@@ -178,7 +178,8 @@ import AnomalyModal from './AnomalyModal';
 import CircularProgressChart from '../../components/charts/CircularProgressChart';
 import PageResultOverview from "../PageDetail/PageResultOverview";
 import Pagination from "../../components/Pagination";
-import HeaderRow from "./HeaderRow.vue"
+import HeaderRow from "./HeaderRow.vue";
+import AnomalyGlobalTestModal from './AnomalyGlobalTestModal';
 
 export default {
     name: 'Synthesis',
@@ -194,7 +195,8 @@ export default {
         AnomalyModal,
         CircularProgressChart,
         PageResultOverview,
-        HeaderRow
+        HeaderRow,
+        AnomalyGlobalTestModal
     },
     props: ['audit', 'totalPages'],
     data() {
@@ -212,7 +214,8 @@ export default {
 
             synthesisPageByReferenceId: {},
             currentSynthesisPage: 0,
-            totalSynthesisPageByReferenceId: {}
+            totalSynthesisPageByReferenceId: {},
+            globalTestResultForPages: {}
         }
     },
     created() {
@@ -339,6 +342,25 @@ export default {
             });
         },
 
+        openGlobalTestModal(audit, testHierarchy, status) {
+            this.$modal.show(AnomalyGlobalTestModal, {
+                props: {
+                    audit: audit,
+                    testHierarchy: testHierarchy,
+                    status: status   
+                },
+                label: "synthesis-window",
+                classes: "modal",
+                attributes: {
+                    id: "anomaly-modal",
+                    role: "dialog",
+                    'aria-labelledby': "modalTitle",
+                    'aria-describedby': "modalDescription",
+                    tabindex: "0"
+                }
+            });
+        },
+
         onSelectReference() {
             this.currentSynthesisPage = 0;
             if (!this.synthesisPageByReferenceId[this.selectedReference.id]) {
@@ -362,6 +384,18 @@ export default {
                     },
                 )
             }
+
+            this.testHierarchyResultService.getGlobalTestResultForPages(
+                this.audit.id,
+                this.selectedReference.id,
+                this.audit.sharecode,
+                (testResultForPages) => {
+                    this.globalTestResultForPages = testResultForPages;
+                },
+                (error) => {
+                    console.error(error);
+                },
+            );
         },
 
         changePage(page) {
@@ -409,69 +443,6 @@ export default {
 
         moment: function (date) {
             return this.$moment(date);
-        },
-
-        globalTestResultForPages(criteriaCode){
-            let nbPages = this.totalSynthesisPageByReferenceId[this.selectedReference.id]
-            var testStatus = ''
-            var untested = true
-            var inapplicable = true
-            var failed = false
-            var cantTell = false
-            var passed = false
-            for(let i=0; i < nbPages; i++){
-                var testResultPaginated = this.synthesisPageByReferenceId[this.selectedReference.id][i]
-                //if for one page the test is failed -> global test failed 
-                for( var page in testResultPaginated[criteriaCode]){
-                    if(testResultPaginated[criteriaCode][page].status === 'failed'){
-                        failed = true
-                    }
-                }
-                if(failed){
-                    testStatus = 'failed'
-                }else{
-                    //if one test is cantTell for one page -> global test cantTell 
-                    for( var page in testResultPaginated[criteriaCode]){
-                        if(testResultPaginated[criteriaCode][page].status === 'cantTell'){
-                            cantTell = true
-                        }
-                    }
-                    if(cantTell){
-                        testStatus = 'cantTell'
-                    }else{
-                        //if the test is passed for one page -> global test passed 
-                        for(var page in testResultPaginated[criteriaCode]){
-                            if(testResultPaginated[criteriaCode][page].status === 'passed'){
-                                passed = true
-                            }
-                        }
-                        if(passed){
-                            testStatus = 'passed'
-                        }else{
-                            //if the test is inapplicable for each page -> global test inapplicable 
-                            for( var page in testResultPaginated[criteriaCode]){
-                                if(testResultPaginated[criteriaCode][page].status !== 'inapplicable'){
-                                    inapplicable = false
-                                }
-                            }
-                            if(inapplicable){
-                                testStatus = 'inapplicable'
-                            }else{
-                                //if the test is untested for each page -> global test untested 
-                                for( var page in testResultPaginated[criteriaCode]){
-                                    if(testResultPaginated[criteriaCode][page].status !== 'untested'){
-                                        untested = false
-                                    }
-                                }
-                                if(untested){
-                                    testStatus = 'untested'
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            return testStatus
         }
     }
 }
@@ -664,7 +635,7 @@ export default {
     // Variables
     $angle: 45;
     $height: 160;
-    $width: 80;
+    $width: 74;
 
     .table-tests {
         width: auto;
@@ -756,9 +727,9 @@ export default {
         display: inline-block;
         position: absolute;
         bottom: calc(#{$width * .1rem} * #{$cos} + 2px);
-        left: -45px; // Because it looked good, but there is probably a mathematical link here as well
+        left: -50px; // Because it looked good, but there is probably a mathematical link here as well
         width: calc(#{$height * .1rem} / #{$cos} - #{$width * .1rem} * #{$cos});
-        transform: skew($angle * 1deg, 0deg) rotate(315deg);
+        transform: skew($angle * 1deg, 0deg) rotate(315deg);    
         text-align: left;
         white-space: nowrap;
 
