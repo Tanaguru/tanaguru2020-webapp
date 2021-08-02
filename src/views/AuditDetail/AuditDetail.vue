@@ -99,7 +99,7 @@
 										:class="firstToLast ? 'btn btn--default-inverse btn--icon' : 'btn btn--default btn--icon'"
 										@click="reverseLogsOrder()"
 										aria-pressed="true">
-										{{ $t('action.sortLogs') }}
+										{{ $t('action.sortAuditsOrLogs') }}
 										<icon-base-decorative v-if="firstToLast">
 											<icon-close/>
 										</icon-base-decorative>
@@ -123,7 +123,7 @@
 						<pagination
 							:current-page="auditLogCurrentPage"
 							:total-pages="auditLogTotalPage"
-							@changePage="(page) => {loadAuditLogs(page, auditLogPageSize, !firstToLast, this.levelsToDisplay)}"
+							@changePage="(page) => {loadAuditLogs(page, auditLogPageSize, firstToLast, this.levelsToDisplay)}"
 						/>
 
 					</section>
@@ -221,7 +221,7 @@ import IconClose from '../../components/icons/IconClose'
 			this.refreshPages();
 			this.timer = setInterval(this.refreshPages, 3000);
       		this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
-			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
+			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
 			this.getParameters();
 			this.getReferences();
 		},
@@ -304,7 +304,7 @@ import IconClose from '../../components/icons/IconClose'
 					}
 				);
         		this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
-        		this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
+        		this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
 			},
 
             loadPages(page, size, name){
@@ -365,7 +365,7 @@ import IconClose from '../../components/icons/IconClose'
 				if(this.firstToLast == true) {
 					this.firstToLast = false
 				} else { this.firstToLast = true }
-				this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
+				this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
 			},
 
 			getLogLevels(){
@@ -385,7 +385,7 @@ import IconClose from '../../components/icons/IconClose'
 				}else if(event.target.value === 'ERROR'){
 					this.levelsToDisplay = ['ERROR']
 				}
-				this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
+				this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
 			},
 
 			getReferences(){
