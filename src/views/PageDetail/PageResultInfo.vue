@@ -95,7 +95,9 @@
 							<span>{{ $t('auditDetail.synthesis.pages') }} : </span> {{ totalPages }}
 						</li>
 						<li v-if="pageContent && pageContent.source">
-							<span>{{ $t('auditDetail.synthesis.showSourceCode') }} : </span> <button class="btn btn--nude btn--icon" @click="openModal">{{ $t('auditDetail.synthesis.openModal') }}</button>
+							<span>{{ $t('auditDetail.synthesis.showSourceCode') }} : </span> 
+                            <!--<button class="btn btn--nude btn--icon" @click="showSourceCode">{{ $t('auditDetail.synthesis.openModal') }}</button>-->
+                            <router-link target="_blank" class="link-simple" :to="'/audits/' + audit.id + '/sourceCode/pages/' + page.id + (audit.sharecode ? '/' + audit.sharecode : '')">open in new tab</router-link>
 						</li>
                         <vue-accessible-modal>
                             <template v-slot:backdrop></template>
@@ -126,7 +128,6 @@
     import CircularProgressChart from "../../components/charts/CircularProgressChart";
 	import backgroundImg from '../../../public/assets/images/logo-desktop.svg';
     import Pagination from '../../components/Pagination';
-    import SourceCodeModal from '../../components/SourceCodeModal.vue'
 
     export default {
         name: 'PageResultInfo',
@@ -190,7 +191,7 @@
                 window.getSelection().removeAllRanges()
             },
 
-            openModal() {
+            /*openModal() {
                 const el = document.body;
                 el.classList.add('noScroll');
                 el.classList.remove('scroll');
@@ -209,7 +210,7 @@
                         tabindex: "0"
                     }
                 });
-            }
+            }*/
 		}
     }
 

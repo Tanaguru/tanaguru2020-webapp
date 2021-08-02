@@ -12,7 +12,7 @@
 	"synthesis": {
 		"pages": "Nombre de pages auditée(s)",
 		"showSourceCode": "Code source de la page",
-		"openModal" : "Afficher le code source",
+		"openSourceCode" : "Ouvrir dans un nouvel onglet",
 		"guidelines": "Référentiel",
 		"table": {
 			"title": "Récapitulatif des pages auditées",

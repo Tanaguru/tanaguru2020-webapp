@@ -12,7 +12,7 @@
 	"synthesis": {
 		"pages": "Number of pages audited",
 		"showSourceCode": "Source code",
-		"openModal": "Open window",
+		"openSourceCode": "Open in a new tab",
 		"guidelines": "guidelines",
 		"table": {
 			"title": "Summary of audited pages",
