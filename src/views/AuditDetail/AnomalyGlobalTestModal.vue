@@ -39,25 +39,15 @@
 
 <script>
 import IconBaseDecorative from '../../components/icons/IconBaseDecorative'
-import IconBaseInformative from '../../components/icons/IconBaseInformative'
 import IconArrowBlue from '../../components/icons/IconArrowBlue'
 import IconClose from '../../components/icons/IconClose'
-import IconCompliant from '../../components/icons/IconCompliant'
-import IconImproper from '../../components/icons/IconImproper'
-import IconNotApplicable from '../../components/icons/IconNotApplicable'
-import IconQualify from '../../components/icons/IconQualify'
 
 export default {
     name: 'AnomalyModal',
     components: {
         IconBaseDecorative,
-        IconBaseInformative,
         IconArrowBlue,
-        IconClose,
-        IconCompliant,
-        IconImproper,
-        IconNotApplicable,
-        IconQualify
+        IconClose    
     },
     props: ['audit','testHierarchy','status'],
     methods: {
@@ -88,66 +78,6 @@ export default {
 .links {
     .link-independent:not(:last-child) {
         margin-right: 1.6rem;
-    }
-}
-
-.list-anomaly {
-    margin: 3.2rem 0 0;
-    padding: 0;
-    font-family: $font-stack-secondary;
-    font-size: $medium-font-size;
-    list-style: none;
-
-    .list-anomaly__item {
-        margin-bottom: 2.4rem;
-    }
-}
-
-.error-nbr {
-    display: inline-block;
-    position: relative;
-    margin-right: 1.6rem;
-    width: 5rem;
-    height: 5rem;
-    border-width: 2px;
-    border-style: solid;
-    border-radius: 50%;
-    background-color: $bg-primary;
-    font-family: $font-stack-secondary;
-    font-size: $medium-font-size;
-    font-weight: 600;
-    line-height: 5rem; // disable sass-lint
-    text-align: center;
-
-    svg {
-        position: absolute;
-        right: -.3rem;
-        bottom: -.6rem;
-    }
-
-    &.error-nbr--failed {
-        border-color: $color-improper;
-        color: $color-improper;
-    }
-
-    &.error-nbr--passed {
-        border-color: $color-compliant;
-        color: $color-compliant;
-    }
-
-    &.error-nbr--inapplicable {
-        border-color: $color-not-applicable;
-        color: $color-not-applicable;
-    }
-
-    &.error-nbr--cantTell {
-        border-color: $color-qualify;
-        color: $color-qualify;
-    }
-
-    &.error-nbr--untested {
-        border-color: $color-untested;
-        color: $color-untested;
     }
 }
 
@@ -207,8 +137,4 @@ export default {
     display: inline;
 }
 
-.test-description {
-    width: 80%;
-    margin: auto;
-}
 </style>
