@@ -73,7 +73,7 @@ export default class TestHierarchyResultService extends Service{
 
     getGlobalTestResultForPages(auditId, referenceId, sharecode,then, error){
         return this.axios({
-            url: this.controllerName + "/global-test-result-by-audit-and-test-hierarchy/" + auditId + "/" + referenceId + "/" + sharecode,
+            url: this.controllerName + "/global-test-status-by-audit-and-test-hierarchy/" + auditId + "/" + referenceId + "/" + sharecode,
             method: 'get',
         })
         .then(resp => {
