@@ -23,7 +23,8 @@
 			"rule": "Allez à la règle concernée",
 			"seeDetails": "Voir le résultat détaillé de la page"
 		},
-		"loading": "Données en cours de récupération..."
+		"loading": "Données en cours de récupération...",
+		"allPages": "Ensemble des pages"
 	},
 	"status": {
 		"done": "Terminé",
