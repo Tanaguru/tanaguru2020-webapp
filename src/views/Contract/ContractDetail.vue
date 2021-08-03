@@ -30,6 +30,7 @@
                                 @click="toggleModifyContractForm()">
                                 {{$t('action.modify')}}
                             </button>
+                            <p class="info-success" role="alert">{{ modifyContractForm.successMsg }}</p>
                         </div>
 
                         <div v-else>
@@ -431,7 +432,11 @@ export default {
                         }
                     }
                 );
-                this.modifyContractForm.successMsg = this.$i18n.t('form.successMsg.savedChangesChanges')
+
+                this.modifyContractForm.successMsg = this.$i18n.t('form.successMsg.savedChanges')
+                setTimeout(() => (
+					this.modifyContractForm.successMsg = ""
+				), 3000)
             }
         },
         createProject: function(){

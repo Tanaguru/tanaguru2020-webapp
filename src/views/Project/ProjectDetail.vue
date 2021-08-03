@@ -54,7 +54,9 @@
 							</router-link>
 						</li>
 					</ul>
-					<p v-if="modifyProjectForm.success" aria-live="polite">{{ modifyProjectForm.success }}</p>
+
+					<p v-if="modifyProjectForm.successMsg" class="info-success" aria-live="polite">{{ modifyProjectForm.successMsg }}</p>
+
 				</div>
 				<div v-else>
 					<form @submit.prevent="modifyProject">
@@ -77,7 +79,7 @@
 							</div>
 
 							<div class="form-column">
-								<div class="form-block">
+								<div class="form-block" v-if="!project.contract.restrictDomain">
 									<label class="label" for="domain">{{ $t('entity.project.domain') }} * :</label>
 									<input
 										class="input"
@@ -164,6 +166,7 @@ import IconArrowBlue from '../../components/icons/IconArrowBlue';
 import IconDelete from '../../components/icons/IconDelete';
 import IconLaunch from '../../components/icons/IconLaunch';
 import IconVersion from '../../components/icons/IconVersion';
+import DomainHelper from '../../helper/DomainHelper';
 
 export default {
 	name: 'projectDetail',
@@ -178,6 +181,7 @@ export default {
 		IconDelete,
 		IconLaunch,
 		IconVersion,
+		DomainHelper
 	},
 	data() {
 		return {
@@ -210,6 +214,7 @@ export default {
 				domainError: "",
                 successMsg:""
             },
+			error: false
 		}
 	},
 	metaInfo() {
@@ -307,9 +312,11 @@ export default {
 		},
 	},
 	methods: {
+		
 		activeTab(value) {
 			this.selectedTab = value
 		},
+        checkValidDomain: DomainHelper.checkValidDomain,
 
 		toggleModifyProjectForm(){
             this.modifyProjectForm.name = this.project.name;
@@ -324,40 +331,45 @@ export default {
 		modifyProject() {
 			if (this.modifyProjectForm.name.length === 0) {
 				this.modifyProjectForm.nameError = this.$i18n.t("form.errorMsg.emptyInput");
+				this.error = true;
 			} else if (this.modifyProjectForm.name.length > 50) {
 				this.modifyProjectForm.nameError = this.$i18n.t("form.errorMsg.others.nameError")
+				this.error = true;
 			}
 
-			if (this.contract.restrictDomain) {
+			if (!this.project.contract.restrictDomain) {
 				if (!this.checkValidDomain(this.modifyProjectForm.domain)) {
 					this.modifyProjectForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
-				} else {
-					this.modifyProjectForm.domainError = this.$i18n.t("form.errorMsg.others.urlError")
+					this.error = true;
 				}
 			}
 
-			this.projectService.modifyById(
-				this.project.id,
-				this.modifyProjectForm.name,
-				this.modifyProjectForm.domain,
-				this.contract.id,
-				(project) => {
-					this.project = project;
-					this.modifyProjectForm.error = "";
-					this.modifyProjectForm.nameError = "";
-					this.modifyProjectForm.domainError = "";
-					this.modifyProjectForm.name = "";
-					this.modifyProjectForm.domain = "";
+			if(this.error === false) {
+				this.projectService.modifyById(
+					this.project.id,
+					this.modifyProjectForm.name,
+					this.modifyProjectForm.domain,
+					this.contract.id,
+					(project) => {
+						this.project = project;
+						this.modifyProjectForm.error = "";
+						this.modifyProjectForm.nameError = "";
+						this.modifyProjectForm.domainError = "";
+						this.modifyProjectForm.name = "";
+						this.modifyProjectForm.domain = "";
 
+						this.modifyProjectForm.active = false;
+					},
+					(error) => {
+						console.error(error)
+					}
+				);
 
-					setTimeout(() => (
-						this.modifyProjectForm.success = ""
-					), 3000)
-				},
-				(error) => {
-					console.error(error)
-				}
-			)
+				this.modifyProjectForm.successMsg = this.$i18n.t('form.successMsg.savedChanges')
+				setTimeout(() => (
+					this.modifyProjectForm.successMsg = ""
+				), 3000)
+			}
 		},
 
 		onProjectUpdate(project) {
@@ -433,7 +445,7 @@ export default {
 						this.projectUsers.push(user)
 						this.userAdditionForm.successMsg = this.$i18n.t("form.successMsg.userProjectAddition")
 					},
-					(error) => {
+					(err) => {
 						if (err.response.data.error == "PROJECT_NOT_FOUND") {
 							this.userAdditionForm.error = this.$i18n.t("form.errorMsg.project.notFound")
 						} else if (err.response.data.error == "USER_NOT_FOUND") {
