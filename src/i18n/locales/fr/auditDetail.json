@@ -50,5 +50,7 @@
 		"basicPswd": "Mot de passe d'accès sécurisé",
 		"inclusion": "Inclusion des urls contenant",
 		"exclusion": "Exclusion des urls contenant"
-	}
+	},
+	"linkToAudit": "Lien vers l'audit",
+	"pageAudited": "Page auditée"
 }

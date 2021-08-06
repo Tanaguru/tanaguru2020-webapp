@@ -57,5 +57,18 @@ export default class PageService extends Service{
         .catch(err => {
             error(err);
         });
-  }
+    }
+
+    pageByAudit(auditId, shareCode, then, error){
+      return this.axios({
+          url: this.controllerName + '/by-audit/'+ auditId + '/' + shareCode,
+          method: 'get'
+      })
+      .then(resp => {
+          then(resp.data)
+      })
+      .catch(err => {
+          error(err);
+      });
+    }
 }
