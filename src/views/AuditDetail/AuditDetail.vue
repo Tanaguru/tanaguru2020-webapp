@@ -85,8 +85,8 @@
 							<div class="form-column">
 								<div class="form-block">
 									<div class="select">
-										<select id="level-select"  name="level-select" @change="levelChange($event)" required>
-											<option value="" disabled>{{$t('auditDetail.selectLogLevel')}}</option>
+										<select id="level-select" name="level-select" @change="levelChange($event)" aria-labelledby="selectLogsLevel" required>
+											<option id="selectLogsLevel" value="" disabled>{{$t('auditDetail.selectLogLevel')}}</option>
 											<option v-for="level of levels" :key="level" :value="level">{{level}}</option>
 										</select>
 									</div>
