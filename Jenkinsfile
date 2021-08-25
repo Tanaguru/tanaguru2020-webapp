@@ -117,9 +117,9 @@ pipeline {
 				script{
 					unstash 'version'
 					def prodDockerEnv = createDockerEnvFileContent('9389b3f2-3191-41af-82df-f08e2996df69');
-					writeFile file: "./.env", text: devDockerEnv
+					writeFile file: "./.env", text: prodDockerEnv
 					def prodPremiumDockerEnv = createDockerEnvFileContent('2263c743-9725-4f1d-92c3-76865e2a9699');
-					writeFile file: "./.env-premium", text: devPremiumDockerEnv
+					writeFile file: "./.env-premium", text: prodPremiumDockerEnv
 					sh '''
 						WEBAPP_VERSION=$(cat version.txt)
 
@@ -140,7 +140,7 @@ pipeline {
 							--network=web \
 							tanaguru2020-webapp:${WEBAPP_VERSION}
 
-						sh "echo $prodPremiumDockerEnv > .env"
+						sh "echo $prodPremiumDockerEnv > .env-premium"
 						docker stop tanaguru2020-webapp-premium-prod || true
 						docker run -d --rm \
 							--name tanaguru2020-webapp-premium-prod \
