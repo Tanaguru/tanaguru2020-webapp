@@ -116,14 +116,14 @@ pipeline {
             steps {
 				script{
 					unstash 'version'
-					def devDockerEnv = createDockerEnvFileContent('9389b3f2-3191-41af-82df-f08e2996df69');
+					def prodDockerEnv = createDockerEnvFileContent('9389b3f2-3191-41af-82df-f08e2996df69');
 					writeFile file: "./.env", text: devDockerEnv
-					def devPremiumDockerEnv = createDockerEnvFileContent('2263c743-9725-4f1d-92c3-76865e2a9699');
+					def prodPremiumDockerEnv = createDockerEnvFileContent('2263c743-9725-4f1d-92c3-76865e2a9699');
 					writeFile file: "./.env-premium", text: devPremiumDockerEnv
 					sh '''
 						WEBAPP_VERSION=$(cat version.txt)
 
-						echo API_BASE_URL=https://prodapi.tanaguru.com > .env
+						sh "echo $prodDockerEnv > .env"
 
 						docker stop tanaguru2020-webapp-prod || true
 						docker image prune -f
@@ -139,8 +139,8 @@ pipeline {
 							--label "traefik.port=80" \
 							--network=web \
 							tanaguru2020-webapp:${WEBAPP_VERSION}
-						
-						echo API_BASE_URL=https://premiumapi-prod.tanaguru.com > .env
+
+						sh "echo $prodPremiumDockerEnv > .env"
 						docker stop tanaguru2020-webapp-premium-prod || true
 						docker run -d --rm \
 							--name tanaguru2020-webapp-premium-prod \
@@ -148,7 +148,7 @@ pipeline {
 							--label "traefik.enable=true" \
 							--label "traefik.frontend.redirect.entryPoint=secure" \
 							--label "traefik.http.routers.tanaguru-webapp-premium-prod.entrypoints=secure" \
-							--label "traefik.http.routers.tanaguru-webapp-premium-prod.rule=Host(\\`premium-prod.tanaguru.com\\`)" \
+							--label "traefik.http.routers.tanaguru-webapp-premium-prod.rule=Host(\\`my.tanaguru.com\\`)" \
 							--label "traefik.http.routers.tanaguru-webapp-premium-prod.tls=true" \
 							--label "traefik.port=80" \
 							--network=web \
