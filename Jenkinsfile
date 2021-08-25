@@ -123,8 +123,6 @@ pipeline {
 					sh '''
 						WEBAPP_VERSION=$(cat version.txt)
 
-						sh "echo $prodDockerEnv > .env"
-
 						docker stop tanaguru2020-webapp-prod || true
 						docker image prune -f
 
@@ -140,7 +138,6 @@ pipeline {
 							--network=web \
 							tanaguru2020-webapp:${WEBAPP_VERSION}
 
-						sh "echo $prodPremiumDockerEnv > .env-premium"
 						docker stop tanaguru2020-webapp-premium-prod || true
 						docker run -d --rm \
 							--name tanaguru2020-webapp-premium-prod \
