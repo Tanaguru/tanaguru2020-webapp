@@ -31,7 +31,9 @@
 							<li v-show="parameters.maxDepth">{{$t('auditDetail.information.maxDepth')}} : {{parameters.maxDepth}}</li>
 							<li v-show="parameters.maxDoc">{{$t('auditDetail.information.maxDoc')}} : {{parameters.maxDoc}}</li>
 							<li v-show="parameters.maxDuration">{{$t('auditDetail.information.maxDuration')}} : {{parameters.maxDuration}}</li>
-							<li v-show="parameters.resolutions">{{$t('auditDetail.information.resolution')}} : {{parameters.resolutions}}</li>
+							<li v-show="parameters.resolutions!=''">{{$t('auditDetail.information.resolution')}} : {{parameters.resolutions}}</li>
+							<li v-show="parameters.mainReference">{{$t('auditDetail.information.reference')}} : {{parameters.mainReference}}</li>
+							<li v-show="parameters.references">{{$t('auditDetail.information.references')}} : {{parameters.references.join(', ')}}</li>
 						</ul>
 					</section>
 
