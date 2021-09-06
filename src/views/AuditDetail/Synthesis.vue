@@ -323,6 +323,10 @@ export default {
     },
     methods: {
         openModal(audit, page, criteriaResult, i) {
+            const el = document.body;
+			el.classList.add('noScroll');
+			el.classList.remove('scroll');
+			
             this.$modal.show(AnomalyModal, {
                 props: {
                     audit: audit,

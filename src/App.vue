@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<tng-header></tng-header>
-		<router-view :key="$route.fullPath"></router-view>
+		<router-view></router-view>
 		<tng-footer></tng-footer>
 
 		<session-popup v-if="isSessionPopupVisible"/>
