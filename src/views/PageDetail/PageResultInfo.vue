@@ -189,28 +189,7 @@
                 /* unselect the range */
                 shareCodeUrl.setAttribute('type', 'hidden')
                 window.getSelection().removeAllRanges()
-            },
-
-            /*openModal() {
-                const el = document.body;
-                el.classList.add('noScroll');
-                el.classList.remove('scroll');
-
-                this.$modal.show(SourceCodeModal, {
-                    props: {
-                        sourceCode : this.pageContent.source
-                    },
-                    label: "source-code-window",
-                    classes: "modal",
-                    attributes: {
-                        id: "anomaly-modal",
-                        role: "dialog",
-                        'aria-labelledby': "modalTitle",
-                        'aria-describedby': "modalDescription",
-                        tabindex: "0"
-                    }
-                });
-            }*/
+            }
 		}
     }
 
