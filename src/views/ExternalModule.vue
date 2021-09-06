@@ -30,11 +30,10 @@ export default {
 			if(this.$refs.iframe != undefined){
 				switch (message.name) {
 					case 'on-module-mounted':
-						this.$refs.iframe.style.height = message.height + "px"
-						if(message.width){
-							this.$refs.iframe.style.width = message.width + "px"
-						}
 						this.setIframeLocale(localStorage.getItem('locale'))
+						break;
+					case 'on-resize':
+						this.$refs.iframe.style.height = message.height + "px";
 						break;
 					case 'on-oauth2-auth-success':
 						this.$store.commit('auth_success', {token: message.token ,user: message.user})
@@ -72,7 +71,6 @@ export default {
 
 iframe {
 	width: 100%;
-	height: 100%;
 	border: 0;
 }
 </style>

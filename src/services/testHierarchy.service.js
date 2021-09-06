@@ -45,6 +45,19 @@ export default class TestHierarchyService extends Service{
             });
     }
 
+    findMainReferenceByAudit(id, sharecode, then, error){
+        return this.axios({
+            url: this.controllerName  + "/main-reference-by-audit/" + id + '/' + sharecode,
+            method: 'get',
+        })
+        .then(resp => {
+            then(resp.data)
+        })
+        .catch(err => {
+            error(err);
+        });
+    }
+
     findAllReferencesNotDeleted(then, error){
         return this.axios({
             url: this.controllerName  + "/references-not-deleted",

@@ -85,8 +85,8 @@
 							<div class="form-column">
 								<div class="form-block">
 									<div class="select">
-										<select id="level-select"  name="level-select" @change="levelChange($event)" required>
-											<option value="" disabled>{{$t('auditDetail.selectLogLevel')}}</option>
+										<select id="level-select" name="level-select" @change="levelChange($event)" aria-labelledby="selectLogsLevel" required>
+											<option id="selectLogsLevel" value="" disabled>{{$t('auditDetail.selectLogLevel')}}</option>
 											<option v-for="level of levels" :key="level" :value="level">{{level}}</option>
 										</select>
 									</div>
@@ -99,7 +99,7 @@
 										:class="firstToLast ? 'btn btn--default-inverse btn--icon' : 'btn btn--default btn--icon'"
 										@click="reverseLogsOrder()"
 										aria-pressed="true">
-										{{ $t('action.sortLogs') }}
+										{{ $t('action.sortAuditsOrLogs') }}
 										<icon-base-decorative v-if="firstToLast">
 											<icon-close/>
 										</icon-base-decorative>
@@ -123,7 +123,7 @@
 						<pagination
 							:current-page="auditLogCurrentPage"
 							:total-pages="auditLogTotalPage"
-							@changePage="(page) => {loadAuditLogs(page, auditLogPageSize, !firstToLast, this.levelsToDisplay)}"
+							@changePage="(page) => {loadAuditLogs(page, auditLogPageSize, firstToLast, this.levelsToDisplay)}"
 						/>
 
 					</section>
@@ -200,7 +200,8 @@ import IconClose from '../../components/icons/IconClose'
 					maxDoc: null,
 					exclusionRegex: null,
 					inclusionRegex: null,
-					resolutions: null,
+					resolutions: '',
+					references: []
 				},
                 auditLogPageSize: 10,
                 auditLogTotalPage : 0,
@@ -220,8 +221,9 @@ import IconClose from '../../components/icons/IconClose'
 			this.refreshPages();
 			this.timer = setInterval(this.refreshPages, 3000);
       		this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
-			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
+			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
 			this.getParameters();
+			this.getReferences();
 		},
 		beforeDestroy () {
 			clearInterval(this.timer)
@@ -235,9 +237,6 @@ import IconClose from '../../components/icons/IconClose'
 						parameters.forEach(parameter => {
 							if(parameter.auditParameter.code == "WEBDRIVER_BROWSER") {
 								this.parameters.browser = parameter.value
-							}
-							else if(parameter.auditParameter.code == "MAIN_REFERENCE") {
-								this.parameters.mainReference = parameter.value
 							}
 							else if(parameter.auditParameter.code == "WAIT_TIME") {
 								this.parameters.waitTime = parameter.value
@@ -309,7 +308,7 @@ import IconClose from '../../components/icons/IconClose'
 					}
 				);
         		this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
-        		this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
+        		this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
 			},
 
             loadPages(page, size, name){
@@ -370,7 +369,7 @@ import IconClose from '../../components/icons/IconClose'
 				if(this.firstToLast == true) {
 					this.firstToLast = false
 				} else { this.firstToLast = true }
-				this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
+				this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
 			},
 
 			getLogLevels(){
@@ -390,7 +389,33 @@ import IconClose from '../../components/icons/IconClose'
 				}else if(event.target.value === 'ERROR'){
 					this.levelsToDisplay = ['ERROR']
 				}
-				this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, !this.firstToLast, this.levelsToDisplay);
+				this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
+			},
+
+			getReferences(){
+				this.testHierarchyService.findAllReferenceByAudit(
+					this.$route.params.id,
+					this.sharecode,
+					(references) => {
+						for(var reference in references){
+							this.parameters.references.push(references[reference].name + '(' +references[reference].code + ')')
+						}
+					},
+					(error) => {
+						console.error(error);
+					}
+				);
+
+				this.testHierarchyService.findMainReferenceByAudit(
+					this.$route.params.id,
+					this.sharecode,
+					(reference) => {
+						this.parameters.mainReference = reference.name + '(' +reference.code + ')'
+					},
+					(error) => {
+						console.error(error);
+					}
+				);
 			}
 
 		},

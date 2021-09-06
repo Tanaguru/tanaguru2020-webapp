@@ -24,7 +24,8 @@
 			"rule": "Go to relevant rule page",
 			"seeDetails": "See detailed results for this page"
 		},
-		"loading": "Fetching data..."
+		"loading": "Fetching data...",
+		"allPages": "All the pages"
 	},
 	"status": {
 		"done": "Done",
@@ -36,7 +37,8 @@
 		"parameters": "Audit parameters",
 		"status": "Status : ",
 		"browser": "Browser used to perform the audit : ",
-		"reference": "Main guidelines : ",
+		"reference": "Main guideline",
+		"references": "Guideline(s) used",
 		"type": "Audit type : ",
 		"waitTime": "Wait time",
 		"resolution": "Screen resolution",

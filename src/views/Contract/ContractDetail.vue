@@ -446,6 +446,8 @@ export default {
 				this.projectCreateForm.nameError = this.$i18n.t("form.errorMsg.emptyInput");
 			} else if(this.projectCreateForm.name.length > 50){
                 this.projectCreateForm.nameError = this.$i18n.t("form.errorMsg.others.nameError")
+            } else if(this.projectCreateForm.name.length < 3){
+               this.projectCreateForm.nameError = this.$i18n.t("form.errorMsg.project.nameMinSize")
             }
 
             if(this.contract.restrictDomain) {
@@ -462,7 +464,7 @@ export default {
                 }
             }
 
-            if(this.projectCreateForm.name && this.projectCreateForm.name.length < 51 && (this.checkValidDomain(this.projectCreateForm.domain) || (!this.restrictDomain && !this.projectCreateForm.domain))) {
+            if(this.projectCreateForm.name && this.projectCreateForm.name.length < 51  && this.projectCreateForm.name.length > 2 && (this.checkValidDomain(this.projectCreateForm.domain) || (!this.restrictDomain && !this.projectCreateForm.domain))) {
                 this.projectService.create(
                     this.projectCreateForm.name,
                     this.projectCreateForm.domain.trim(),

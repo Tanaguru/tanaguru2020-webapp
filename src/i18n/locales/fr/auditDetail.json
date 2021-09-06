@@ -24,7 +24,8 @@
 			"rule": "Allez à la règle concernée",
 			"seeDetails": "Voir le résultat détaillé de la page"
 		},
-		"loading": "Données en cours de récupération..."
+		"loading": "Données en cours de récupération...",
+		"allPages": "Ensemble des pages"
 	},
 	"status": {
 		"done": "Terminé",
@@ -36,7 +37,8 @@
 		"parameters": "Paramètres de l'audit",
 		"status": "Status : ",
 		"browser": "Navigateur utilisé pour l'audit : ",
-		"reference": "Référentiel principal : ",
+		"reference": "Référentiel principal",
+		"references": "Référentiel(s) utilisé(s)",
 		"type": "Type d'audit : ",
 		"waitTime": "Temps d'attente",
 		"resolution": "Résolution d'écran",
