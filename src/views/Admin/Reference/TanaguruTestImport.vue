@@ -113,7 +113,8 @@ export default {
 				testHierarchyMax: 0,
 				testHierarchyAssignCount: 0,
 				testHierarchyAssignMax: 0
-			}
+			},
+			webextVersion: ""
 		}
 	},
 	props: ['selected'],
@@ -144,10 +145,11 @@ export default {
 
 			try {
 				let parsedContent = JSON.parse(content);
-				if (parsedContent instanceof Array) {
+				this.webextVersion = parsedContent[0]["webextVersion"]
+				if (parsedContent[1] instanceof Array) {
 
 					let isError = false;
-					for (const test of parsedContent) {
+					for (const test of parsedContent[1]) {
 						//check test validity
 						if (!test.name || !test.ressources) {
 							this.testInputError = this.$t('references.form.invalidTestFile');
@@ -174,7 +176,7 @@ export default {
 						this.testsByRuleByReferenceCode = {};
 						this.testInputError = this.$t('references.form.invalidTestFile');
 					} else {
-						this.tests = parsedContent;
+						this.tests = parsedContent[1];
 					}
 				} else {
 					this.tests = [];
