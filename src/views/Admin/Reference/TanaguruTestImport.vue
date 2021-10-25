@@ -287,7 +287,7 @@ export default {
 					this.creationOutput.testHierarchyCount += 1;
 					this.assignTestHierarchyTests(persistedTestHierarchy, baseReferenceCode, persistedTestByTestName);
 					if (!reference) {
-						this.$emit('addReference', persistedTestHierarchy)
+						this.$emit('addReference', persistedTestHierarchy, this.webextVersion)
 					}
 					for (const child of testHierarchy.children) {
 						this.createTestHierarchyRec(persistedTestHierarchy, reference ? reference : persistedTestHierarchy, baseReferenceCode, child, persistedTestByTestName);
