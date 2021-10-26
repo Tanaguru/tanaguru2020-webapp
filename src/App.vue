@@ -37,6 +37,7 @@ export default {
 			localStorage.setItem("locale", locale);
 		})
 		this.$store.dispatch('getServerVersion');
+		this.$store.dispatch('getWebextVersion');
 		this.configService.getSessionDuration(
 			(sessionDuration) => {
 				this.sessionDuration = sessionDuration * 1000
