@@ -77,11 +77,11 @@
         <div class="wrapper">
             <page-result-overview
                 v-if="auditReferenceResult"
-                :nb-failed="auditReferenceResult.nbF"
-                :nb-cant-tell="auditReferenceResult.nbCT"
-                :nb-untested="auditReferenceResult.nbU"
-                :nb-passed="auditReferenceResult.nbP"
-                :nb-inapplicable="auditReferenceResult.nbI"
+                :nb-failed="numberOfTestsResult.nbF"
+                :nb-cant-tell="numberOfTestsResult.nbCT"
+                :nb-untested="numberOfTestsResult.nbU"
+                :nb-passed="numberOfTestsResult.nbP"
+                :nb-inapplicable="numberOfTestsResult.nbI"
                 :anomaly-per-theme-labels="anomalyPerThemeLabels"
                 :anomaly-per-theme-data="anomalyPerThemeData"
             />
@@ -320,6 +320,32 @@ export default {
             }
             return result;
         },
+
+        numberOfTestsResult(){
+            let result = {
+                'nbF': 0,
+                'nbP': 0,
+                'nbI': 0,
+                'nbU': 0,
+                'nbCT': 0
+            };
+            for(var key in this.globalTestResultForPages){
+                if (key.match(/[0-9]+\.[0-9]+\.[0-9]+/g)){
+                    if(this.globalTestResultForPages[key] == 'failed'){
+                        result.nbF += 1
+                    } else if(this.globalTestResultForPages[key] == 'cantTell'){
+                        result.nbCT += 1
+                    } else if(this.globalTestResultForPages[key] == 'untested'){
+                        result.nbU += 1
+                    } else if(this.globalTestResultForPages[key] == 'passed'){
+                        result.nbP += 1
+                    } else if(this.globalTestResultForPages[key] == 'inapplicable'){
+                        result.nbI +=1
+                    }
+                }
+            }
+            return result;
+        }
     },
     methods: {
         openModal(audit, page, criteriaResult, i) {
