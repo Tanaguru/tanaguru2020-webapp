@@ -34,6 +34,44 @@
                 </a>
             </div>
         </section>
+        <ul class="list-anomaly">
+            <li class="list-anomaly__item" v-if="status == 'failed'">
+                <span class="status status--failed">{{$t('entity.audit.result.failed')}} {{$t('entity.test.onPage')}} :</span>
+                <p class="test-description" v-for="(page, i) in pageConcerned" :key="i">
+                    <router-link class="link-independent link-independent--icon"
+                        :to="'/audits/' + audit.id + '/pages/' + page.id">
+                        <icon-base-decorative>
+                            <icon-arrow-blue/>
+                         </icon-base-decorative>
+                        <span>Page n°{{pages.indexOf(page)+1}} - {{page.name}}</span>
+                    </router-link>
+                </p>
+            </li>
+            <li class="list-anomaly__item" v-if="status == 'cantTell'">
+                <span class="status status--cantTell">{{$t('entity.audit.result.cantTell')}} {{$t('entity.test.onPage')}} :</span>
+                <p class="test-description" v-for="(page, i) in pageConcerned" :key="i">
+                    <router-link class="link-independent link-independent--icon"
+                        :to="'/audits/' + audit.id + '/pages/' + page.id">
+                        <icon-base-decorative>
+                            <icon-arrow-blue/>
+                         </icon-base-decorative>
+                        <span>Page n°{{pages.indexOf(page)+1}} - {{page.name}}</span>
+                    </router-link>
+                </p>
+            </li>
+            <li class="list-anomaly__item" v-if="status == 'inapplicable'">
+                <span class="status status--inapplicable">{{$t('entity.audit.result.inapplicable')}} {{$t('entity.test.onPage')}} :</span>
+                <p class="test-description" v-for="(page, i) in pageConcerned" :key="i">
+                    <router-link class="link-independent link-independent--icon"
+                        :to="'/audits/' + audit.id + '/pages/' + page.id">
+                        <icon-base-decorative>
+                            <icon-arrow-blue/>
+                         </icon-base-decorative>
+                        <span>Page n°{{pages.indexOf(page)+1}} - {{page.name}}</span>
+                    </router-link>
+                </p>
+            </li>
+        </ul>
     </div>
 </template>
 
@@ -49,7 +87,7 @@ export default {
         IconArrowBlue,
         IconClose    
     },
-    props: ['audit','testHierarchy','status'],
+    props: ['audit','testHierarchy','status', 'pageConcerned', 'pages'],
     methods: {
         closeModal() {
             this.$modal.close();
@@ -78,6 +116,66 @@ export default {
 .links {
     .link-independent:not(:last-child) {
         margin-right: 1.6rem;
+    }
+}
+
+.list-anomaly {
+    margin: 3.2rem 0 0;
+    padding: 0;
+    font-family: $font-stack-secondary;
+    font-size: $medium-font-size;
+    list-style: none;
+
+    .list-anomaly__item {
+        margin-bottom: 2.4rem;
+    }
+}
+
+.error-nbr {
+    display: inline-block;
+    position: relative;
+    margin-right: 1.6rem;
+    width: 5rem;
+    height: 5rem;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 50%;
+    background-color: $bg-primary;
+    font-family: $font-stack-secondary;
+    font-size: $medium-font-size;
+    font-weight: 600;
+    line-height: 5rem; // disable sass-lint
+    text-align: center;
+
+    svg {
+        position: absolute;
+        right: -.3rem;
+        bottom: -.6rem;
+    }
+
+    &.error-nbr--failed {
+        border-color: $color-improper;
+        color: $color-improper;
+    }
+
+    &.error-nbr--passed {
+        border-color: $color-compliant;
+        color: $color-compliant;
+    }
+
+    &.error-nbr--inapplicable {
+        border-color: $color-not-applicable;
+        color: $color-not-applicable;
+    }
+
+    &.error-nbr--cantTell {
+        border-color: $color-qualify;
+        color: $color-qualify;
+    }
+
+    &.error-nbr--untested {
+        border-color: $color-untested;
+        color: $color-untested;
     }
 }
 
@@ -137,4 +235,8 @@ export default {
     display: inline;
 }
 
+.test-description {
+    width: 80%;
+    margin: auto;
+}
 </style>
