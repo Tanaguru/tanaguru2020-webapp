@@ -9,6 +9,7 @@
 				<p v-if="error" class="info-error" id="login-error" aria-live="polite">{{error}}</p>
 				<div class="form-block">
 					<label class="label" for="username">{{$t('login.labelId')}}</label>
+					<p class="info-text">{{$t('login.caseSensitive')}}</p>
 					<input
 					class="input"
 					v-bind:class="{'has-error':error}"

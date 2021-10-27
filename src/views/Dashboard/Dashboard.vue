@@ -4,6 +4,7 @@
 			<div class="dashboard-header__inner">
 				<div class="dashboard-header__title">
 					<h1>{{ $t('page.dashboard') }}</h1>
+					<!--<ul class="actions-list" v-if="user.account == 'professional'">-->
 					<ul class="actions-list">
 						<li class="actions-list__item">
 							<a class="link link-independent link-independent--icon" href="#my-projects">
@@ -22,6 +23,7 @@
 						</li>
 					</ul>
 				</div>
+				<!--<div class="dashboard-header__actions" v-if="user.account == 'professional'">-->
 				<div class="dashboard-header__actions">
 					<ul class="actions-list">
 						<li class="actions-list__item" v-if="contracts.length > 0 && contracts[0]">
@@ -50,7 +52,8 @@
 
 		<!-- PRIVATE PROJECTS -->
 		<article class="dashboard-section">
-			<div class="form-block form-block--half">
+			<!--<div class="form-block form-block--half" v-if="user.account == 'professional'">-->
+			<div class="form-block form-block--half" v-if="userProjects_page != null">
 				<label class="label" for="search-project">{{ $t('action.search') }} : </label>
 				<input
 					class="input"
@@ -62,8 +65,8 @@
 					autocomplete="off"
 					@input="fireAriaLive"
 				>
+				<p class='screen-reader-text' id="search-explanation">{{ $t('projects.infoSearch') }}</p>
 			</div>
-			<p class='screen-reader-text' id="search-explanation">{{ $t('projects.infoSearch') }}</p>
 
 			<h2 class="dashboard-section__title" id="my-projects">{{ $t('dashboard.title.myProjects') }}</h2>
 			<div v-if="userProjects_page && userProjects_page.content.length > 0">
@@ -78,7 +81,8 @@
 		</article>
 
 		<!-- PROJECTS SHARED BY USER -->
-		<article class="dashboard-section">
+		<!--<article class="dashboard-section" v-if="user.account == 'professional'">-->
+		<article class="dashboard-section" >
 			<h2 class="dashboard-section__title" id="my-shared-projects">
 				{{ $t('dashboard.title.mySharedProjects') }}</h2>
 			<div v-if="sharedByCurrentUser_page && sharedByCurrentUser_page.content.length > 0">
@@ -95,6 +99,7 @@
 		</article>
 
 		<!-- PROJECTS SHARED WITH USER -->
+		<!--<article class="dashboard-section" v-if="user.account == 'professional'">-->
 		<article class="dashboard-section">
 			<h2 id="shared-with-me">{{ $t('dashboard.title.sharedProjects') }}</h2>
 			<div v-if="sharedProjects_page && sharedProjects_page.content.length > 0">
@@ -191,6 +196,8 @@ export default {
 		}
 	},
 	created() {
+		console.log(this.$store.state)
+
 		this.contractService.findOwned(
 			(contracts) => {
 				this.contracts = contracts;

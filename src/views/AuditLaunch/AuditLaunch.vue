@@ -58,7 +58,8 @@
 					<audit-type-form
 						v-model="auditConfigurationForm.common.type"
 						:is-valid="isAuditTypeValid"
-						:has-been-sent="hasTryToLaunch"/>
+						:has-been-sent="hasTryToLaunch"
+						:notSandboxProject="project.allowSiteAudit"/>
 
 					<!-- Audit name -->
 					<audit-name-form

@@ -49,7 +49,7 @@
             </ul>
         </header>
 
-        <article class="article-archives" :id="type.toLowerCase() + '-audit'" v-for="type of types" :key="type">
+        <article class="article-archives" :id="type.toLowerCase() + '-audit'" v-for="type of typesByProject" :key="type">
             <h2 class="article-archives__title">
                 <icon-base-decorative width="40" height="40" viewBox="0 0 72 72">
                     <icon-audit-page/>
@@ -104,7 +104,6 @@ export default {
                     path: '/'
                 },
             ],
-            types: ['PAGE', 'SITE', 'SCENARIO', 'UPLOAD'],
             deleteAuditError: "",
             projectId : "",
 			authorities: []
@@ -119,6 +118,17 @@ export default {
                     name: 'robots', content: 'noindex'
                 }
             ]
+        }
+    },
+    computed : {
+        typesByProject() {
+            let types = [];
+            if(this.project.allowSiteAudit) {
+                types = ['PAGE', 'SITE', 'SCENARIO', 'UPLOAD']
+            } else {
+                types = ['PAGE', 'SCENARIO', 'UPLOAD']
+            }
+            return types;
         }
     },
     created() {

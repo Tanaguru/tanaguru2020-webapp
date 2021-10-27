@@ -28,13 +28,15 @@
                             class="radio-custom-label__text">{{ $t('audit.definition.radioType.newAuditPage') }}</span>
                     </label>
 
-                    <input class="radio-custom-input"
-                           id="site"
-                           type="radio"
-                           name="audit-type"
-                           value="site"
-                           v-model='type'
-                           @change="$emit('input', type)"/>
+                    <input 
+                        v-if="!notSandboxProject"
+                        class="radio-custom-input"
+                        id="site"
+                        type="radio"
+                        name="audit-type"
+                        value="site"
+                        v-model='type'
+                        @change="$emit('input', type)"/>
                     <label class="radio-custom-label" for="site">
                         <icon-base-decorative class="radio-custom-label__icon" viewBox="0 0 72 72">
                             <icon-audit-site/>
@@ -108,12 +110,15 @@ export default {
         IconAuditFile,
         IconAlert
     },
-    props: ['value', 'isValid', 'hasBeenSent'],
+    props: ['value', 'isValid', 'hasBeenSent', 'notSandboxProject'],
     data() {
         return {
             type: this.value
         }
     },
+    created(){
+        console.log(this.notSandboxProject)
+    }
 }
 
 </script>
