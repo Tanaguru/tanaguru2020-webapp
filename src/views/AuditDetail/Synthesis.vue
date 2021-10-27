@@ -109,6 +109,13 @@
                     <thead>
                         <tr>
                             <td class="no-border"></td>
+                            <th scope="col" class="rotate">
+                                <div class="rotate__inner">
+                                    <span class="page">
+                                    {{$t('auditDetail.synthesis.allPages')}}
+                                    </span>
+                                </div>
+                            </th>
                             <th scope="col" class="rotate" v-for="(page, i) in pages" :key="i">
                                 <HeaderRow :page="page" :i="i" :currentSynthesisPage="currentSynthesisPage"/>
                             </th>
@@ -117,6 +124,17 @@
                     <tbody>
                         <tr v-for="(criteriaResultByPage, criteriaCode) in currentSynthesis" :key="criteriaCode">
                             <th scope="row" class="row-header">Test {{ criteriaCode }}</th>
+                            <td>
+                                <button class="btn btn--nude" @click="openGlobalTestModal(audit, criteriaResultByPage[Object.keys(criteriaResultByPage)[0]]['testHierarchy'], globalTestResultForPages[criteriaCode])">
+                                    <icon-base-decorative>
+                                        <icon-improper v-if="globalTestResultForPages[criteriaCode] === 'failed'"/>
+                                        <icon-compliant v-else-if="globalTestResultForPages[criteriaCode] === 'passed'"/>
+                                        <icon-qualify v-else-if="globalTestResultForPages[criteriaCode] === 'cantTell'"/>
+                                        <icon-notApplicable v-else/>
+                                    </icon-base-decorative>
+                                </button>
+                                <span class="td-background"></span>
+                            </td>
                             <td v-for="(criteriaResult, pageId, indexPage) in criteriaResultByPage" :key="pageId">
                                 <button class="btn btn--nude" @click="openModal(audit, pageById[pageId], criteriaResult, indexPage)">
                                     <icon-base-decorative>
@@ -160,7 +178,8 @@ import AnomalyModal from './AnomalyModal';
 import CircularProgressChart from '../../components/charts/CircularProgressChart';
 import PageResultOverview from "../PageDetail/PageResultOverview";
 import Pagination from "../../components/Pagination";
-import HeaderRow from "./HeaderRow.vue"
+import HeaderRow from "./HeaderRow.vue";
+import AnomalyGlobalTestModal from './AnomalyGlobalTestModal';
 
 export default {
     name: 'Synthesis',
@@ -176,7 +195,8 @@ export default {
         AnomalyModal,
         CircularProgressChart,
         PageResultOverview,
-        HeaderRow
+        HeaderRow,
+        AnomalyGlobalTestModal
     },
     props: ['audit', 'totalPages'],
     data() {
@@ -194,7 +214,8 @@ export default {
 
             synthesisPageByReferenceId: {},
             currentSynthesisPage: 0,
-            totalSynthesisPageByReferenceId: {}
+            totalSynthesisPageByReferenceId: {},
+            globalTestResultForPages: {}
         }
     },
     created() {
@@ -302,12 +323,35 @@ export default {
     },
     methods: {
         openModal(audit, page, criteriaResult, i) {
+            const el = document.body;
+			el.classList.add('noScroll');
+			el.classList.remove('scroll');
+			
             this.$modal.show(AnomalyModal, {
                 props: {
                     audit: audit,
                     auditPage: page,
                     criteriaResult: criteriaResult,
                     index: i
+                },
+                label: "synthesis-window",
+                classes: "modal",
+                attributes: {
+                    id: "anomaly-modal",
+                    role: "dialog",
+                    'aria-labelledby': "modalTitle",
+                    'aria-describedby': "modalDescription",
+                    tabindex: "0"
+                }
+            });
+        },
+
+        openGlobalTestModal(audit, testHierarchy, status) {
+            this.$modal.show(AnomalyGlobalTestModal, {
+                props: {
+                    audit: audit,
+                    testHierarchy: testHierarchy,
+                    status: status   
                 },
                 label: "synthesis-window",
                 classes: "modal",
@@ -344,6 +388,18 @@ export default {
                     },
                 )
             }
+
+            this.testHierarchyResultService.getGlobalTestResultForPages(
+                this.audit.id,
+                this.selectedReference.id,
+                this.audit.sharecode,
+                (testResultForPages) => {
+                    this.globalTestResultForPages = testResultForPages;
+                },
+                (error) => {
+                    console.error(error);
+                },
+            );
         },
 
         changePage(page) {
@@ -391,7 +447,7 @@ export default {
 
         moment: function (date) {
             return this.$moment(date);
-        },
+        }
     }
 }
 </script>
@@ -583,7 +639,7 @@ export default {
     // Variables
     $angle: 45;
     $height: 160;
-    $width: 80;
+    $width: 74;
 
     .table-tests {
         width: auto;
@@ -675,9 +731,9 @@ export default {
         display: inline-block;
         position: absolute;
         bottom: calc(#{$width * .1rem} * #{$cos} + 2px);
-        left: -45px; // Because it looked good, but there is probably a mathematical link here as well
+        left: -50px; // Because it looked good, but there is probably a mathematical link here as well
         width: calc(#{$height * .1rem} / #{$cos} - #{$width * .1rem} * #{$cos});
-        transform: skew($angle * 1deg, 0deg) rotate(315deg);
+        transform: skew($angle * 1deg, 0deg) rotate(315deg);    
         text-align: left;
         white-space: nowrap;
 

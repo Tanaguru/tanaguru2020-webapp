@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<tng-header></tng-header>
-		<router-view :key="$route.fullPath"></router-view>
+		<router-view></router-view>
 		<tng-footer></tng-footer>
 
 		<session-popup v-if="isSessionPopupVisible"/>
@@ -37,6 +37,7 @@ export default {
 			localStorage.setItem("locale", locale);
 		})
 		this.$store.dispatch('getServerVersion');
+		this.$store.dispatch('getWebextVersion');
 		this.configService.getSessionDuration(
 			(sessionDuration) => {
 				this.sessionDuration = sessionDuration * 1000

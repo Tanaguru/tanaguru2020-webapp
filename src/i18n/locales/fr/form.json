@@ -52,7 +52,8 @@
 		},
 		"project": {
 			"notFound": "Ce projet n'existe pas.",
-			"invalidDomain": "Le domaine n'est pas valide."
+			"invalidDomain": "Le domaine n'est pas valide.",
+			"nameMinSize": "Le nom doit être supérieur à 2 caractères."
 		},
 		"others": {
 			"nameError": "Le nom doit être inférieur à 50 caractères.",

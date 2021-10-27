@@ -31,6 +31,15 @@
 			</div>
 
 			<Navbar :menuType="menuType" v-if="$store.getters.isLoggedIn"/>
+
+			<ul v-else class="navbar list-unstyled">
+				<li v-for="module in orderedOfflineModules" :key="module.name" class="navbar__item">
+					<router-link  exact :to="'/external-module/' + module.name"
+								class="link-independent link-independent--icon">
+						<span>{{moduleName(module)}}</span>
+					</router-link>
+				</li>
+			</ul>
 		</div>
 
 		<div class="nav__bottom" :class="burgerOpen ? 'secondary-menu is-active' : 'secondary-menu'" >
@@ -64,6 +73,7 @@
 
 <script>
 import Navbar from '../Navbar';
+import ModuleHelper from '../../helper/ModuleHelper';
 
   export default {
     name: 'MobileMenu',
@@ -78,7 +88,16 @@ import Navbar from '../Navbar';
       }
     },
 	props: [ 'currentUser' ],
+	computed: {
+		offlineModule() {
+			return this.$store.getters.getOfflineModules
+		},
+		orderedOfflineModules(){
+			return this.offlineModule.sort((a, b) => { return b.priorityNumber < a.priorityNumber;});
+		}
+	},
 	methods: {
+		getModuleName: ModuleHelper.getModuleName,
 		toggleMenu() {
 			const el = document.body;
 			if(this.burgerOpen === true){
@@ -110,6 +129,9 @@ import Navbar from '../Navbar';
 		login : function(event){
 			this.toggleMenu()
 			this.$router.push('/login')
+		},
+		moduleName(module){
+			return this.getModuleName(module);
 		}
 	},
   }

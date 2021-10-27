@@ -53,7 +53,8 @@
 		},
 		"project": {
 			"notFound": "This project does not exist.",
-			"invalidDomain": "The domain is not a valid one"
+			"invalidDomain": "The domain is not a valid one",
+			"nameMinSize": "The name should be more than 2 characters long."
 		},
 		"others": {
 			"nameError": "The name should be less than 50 characters long.",
