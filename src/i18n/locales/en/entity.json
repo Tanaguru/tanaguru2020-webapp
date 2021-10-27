@@ -78,5 +78,8 @@
 	},
 	"test": {
 		"tests": "Tests"
+	},
+	"element":{
+		"cannotLoad": "The browser failed to load the item."
 	}
 }

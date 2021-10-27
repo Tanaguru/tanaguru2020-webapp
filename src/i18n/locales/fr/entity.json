@@ -78,5 +78,8 @@
 	},
 	"test": {
 		"tests": "Tests"
+	},
+	"element":{
+		"cannotLoad": "Le navigateur n'a pas réussi a charger l'élément."
 	}
 }
