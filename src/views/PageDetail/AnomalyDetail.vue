@@ -33,15 +33,14 @@
                         <li class="details-list__item" v-if="anomaly.isNotVisibleDueTo && anomaly.isNotVisibleDueTo.length > 0">{{$t('resultAudit.testResult.isNotVisibleDueTo')}} : <span>{{anomaly.isNotVisibleDueTo}}</span></li>
 						
 						<!-- CONTRASTS --> 
-						<!-- v-if="hasContrastTag"  -->
-						<li class="details-list__item">
+						<li v-if="hasContrastTag" class="details-list__item">
 							<p class="detail">
 								<span class="detail__label">{{ $t('resultAudit.testResult.fontSize') }}</span>
-								<span class="detail__value">{{ contrast.fontSize }}</span>
+								<span class="detail__value">{{ anomaly.size }}</span>
 							</p>
 							<p class="detail">
 								<span class="detail__label">{{ $t('resultAudit.testResult.fontWeight') }}</span>
-								<span class="detail__value">{{ contrast.fontWeight }}</span>
+								<span class="detail__value">{{ anomaly.weight }}</span>
 							</p>
 							<p class="detail">
 							<!--
@@ -49,8 +48,8 @@
 							-->
 								<span class="detail__preview">
 									<span class="detail__label">{{ $t('resultAudit.testResult.textColor') }}</span>
-									<span class="detail__color" :style="`background-color: `+ contrast.textColor"></span>
-									<code class="detail__value">{{ contrast.textColor }}</code>
+									<span class="detail__color" :style="`background-color: `+ anomaly.foreground"></span>
+									<code class="detail__value">{{ anomaly.foreground }}</code>
 								</span>
 							</p>
 							<p class="detail">
@@ -58,14 +57,14 @@
 								Return rgb value or `null` or `image`
 							-->
 								<!-- if color : -->
-								<span v-if="contrast.bgColor && !contrast.bgImage" class="detail__preview">
+								<span v-if="anomaly.background" class="detail__preview">
 									<span class="detail__label">{{ $t('resultAudit.testResult.background') }}</span>
-									<span class="detail__color" :style="`background-color: ` + contrast.bgColor"></span>
-									<code class="detail__value">{{ contrast.bgColor }}</code>
+									<span class="detail__color bgColor" :style="`background-color: ` + anomaly.background"></span>
+									<code class="detail__value">{{ anomaly.background }}</code>
 								</span>
 
 								<!-- if `image` : -->
-								<span v-else-if="contrast.bgImage && !contrast.bgColor" class="detail__preview">
+								<span v-else-if="contrast.bgImage && !anomaly.background" class="detail__preview">
 									<span class="detail__label">{{ $t('resultAudit.testResult.background') }}</span>
 									<span class="detail__image">
 										<icon-base-decorative width="20" height="20" viewBox="0 0 352 352"><icon-picture /></icon-base-decorative>
@@ -81,8 +80,12 @@
 							</p>
 
 							<p class="detail">
-								<span class="detail__label">{{ $t('resultAudit.testResult.ratio') }}</span>
-								<span class="detail__value">{{ contrast.ratio }}</span>
+								<span class="detail__label">{{ $t('resultAudit.testResult.estimatedRatio') }}</span>
+								<span class="detail__value">{{ anomaly.ratio }}</span>
+							</p>
+							<p class="detail">
+								<span class="detail__label">{{ $t('resultAudit.testResult.goalRatio') }}</span>
+								<span class="detail__value">{{ anomaly.valid.target }} : {{ anomaly.valid.status }}</span>
 							</p>
 						</li>
                     </ul>
@@ -533,5 +536,6 @@
 	width: 2rem;
 	height: 2rem;
 	font-weight: 400;
+	border: 1px solid black;
 }
 </style>

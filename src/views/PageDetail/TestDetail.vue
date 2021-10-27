@@ -67,7 +67,7 @@
 				:page-content="pageContent"
 				:anomaly="anomaly"
 				:has-accessible-name-tag="hasAccessibleNameTag"
-				:has-contrast-tag="hasContrasTag"
+				:has-contrast-tag="hasContrastTag"
 				:index="i"/>
 
 			<div v-if="!lastPageLoaded && !isLoading">
@@ -154,6 +154,9 @@ export default {
 				}
 			}
 		}
+	},
+	created(){
+		//console.log(this.test)
 	},
 	computed: {
 		hasAccessibleNameTag() {

@@ -99,6 +99,7 @@
 		"image": "Image",
 		"bgColor": "Background color",
 		"undefined": "Undefined",
-		"ratio": "Estimated ratio : "
+		"estimatedRatio": "Estimated ratio : ",
+		"goalRatio": "Minimal ratio needed : "
 	}
 }
