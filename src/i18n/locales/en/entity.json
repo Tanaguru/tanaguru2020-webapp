@@ -78,6 +78,9 @@
 	},
 	"test": {
 		"tests": "Tests",
-		"onPage": "on pages"
+    "onPage": "on pages"
+	},
+	"element":{
+		"cannotLoad": "The browser failed to load the item."
 	}
 }

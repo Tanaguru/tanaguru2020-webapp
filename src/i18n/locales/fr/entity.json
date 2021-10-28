@@ -78,6 +78,9 @@
 	},
 	"test": {
 		"tests": "Tests",
-		"onPage" : "sur les pages"
+    "onPage" : "sur les pages"
+	},
+	"element":{
+		"cannotLoad": "Le navigateur n'a pas réussi a charger l'élément."
 	}
 }
