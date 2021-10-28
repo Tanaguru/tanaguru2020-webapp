@@ -125,7 +125,7 @@
                         <tr v-for="(criteriaResultByPage, criteriaCode) in currentSynthesis" :key="criteriaCode">
                             <th scope="row" class="row-header">Test {{ criteriaCode }}</th>
                             <td>
-                                <button class="btn btn--nude" @click="openGlobalTestModal(audit, criteriaResultByPage[Object.keys(criteriaResultByPage)[0]]['testHierarchy'], globalTestResultForPages[criteriaCode])">
+                                <button class="btn btn--nude" @click="openGlobalTestModal(audit, criteriaResultByPage[Object.keys(criteriaResultByPage)[0]]['testHierarchy'], globalTestResultForPages[criteriaCode], pageConcerned(criteriaCode), pages)">
                                     <icon-base-decorative>
                                         <icon-improper v-if="globalTestResultForPages[criteriaCode] === 'failed'"/>
                                         <icon-compliant v-else-if="globalTestResultForPages[criteriaCode] === 'passed'"/>
@@ -372,12 +372,14 @@ export default {
             });
         },
 
-        openGlobalTestModal(audit, testHierarchy, status) {
+        openGlobalTestModal(audit, testHierarchy, status, pageConcerned, pages) {
             this.$modal.show(AnomalyGlobalTestModal, {
                 props: {
                     audit: audit,
                     testHierarchy: testHierarchy,
-                    status: status   
+                    status: status,
+                    pageConcerned : pageConcerned,
+                    pages : pages
                 },
                 label: "synthesis-window",
                 classes: "modal",
@@ -473,6 +475,18 @@ export default {
 
         moment: function (date) {
             return this.$moment(date);
+        },
+
+        pageConcerned(code){
+            let result = []
+            let i = 0;
+            for(page in this.currentSynthesis[code]){
+                if(this.currentSynthesis[code][page].status== this.globalTestResultForPages[code]){
+                    result.push(this.pages[i])
+                }
+                i++;
+            }
+            return result;
         }
     }
 }
