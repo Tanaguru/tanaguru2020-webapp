@@ -77,7 +77,8 @@
 		"name": "Name"
 	},
 	"test": {
-		"tests": "Tests"
+		"tests": "Tests",
+    "onPage": "on pages"
 	},
 	"element":{
 		"cannotLoad": "The browser failed to load the item."

@@ -77,11 +77,11 @@
         <div class="wrapper">
             <page-result-overview
                 v-if="auditReferenceResult"
-                :nb-failed="auditReferenceResult.nbF"
-                :nb-cant-tell="auditReferenceResult.nbCT"
-                :nb-untested="auditReferenceResult.nbU"
-                :nb-passed="auditReferenceResult.nbP"
-                :nb-inapplicable="auditReferenceResult.nbI"
+                :nb-failed="numberOfTestsResult.nbF"
+                :nb-cant-tell="numberOfTestsResult.nbCT"
+                :nb-untested="numberOfTestsResult.nbU"
+                :nb-passed="numberOfTestsResult.nbP"
+                :nb-inapplicable="numberOfTestsResult.nbI"
                 :anomaly-per-theme-labels="anomalyPerThemeLabels"
                 :anomaly-per-theme-data="anomalyPerThemeData"
             />
@@ -125,7 +125,7 @@
                         <tr v-for="(criteriaResultByPage, criteriaCode) in currentSynthesis" :key="criteriaCode">
                             <th scope="row" class="row-header">Test {{ criteriaCode }}</th>
                             <td>
-                                <button class="btn btn--nude" @click="openGlobalTestModal(audit, criteriaResultByPage[Object.keys(criteriaResultByPage)[0]]['testHierarchy'], globalTestResultForPages[criteriaCode])">
+                                <button class="btn btn--nude" @click="openGlobalTestModal(audit, criteriaResultByPage[Object.keys(criteriaResultByPage)[0]]['testHierarchy'], globalTestResultForPages[criteriaCode], pageConcerned(criteriaCode), pages)">
                                     <icon-base-decorative>
                                         <icon-improper v-if="globalTestResultForPages[criteriaCode] === 'failed'"/>
                                         <icon-compliant v-else-if="globalTestResultForPages[criteriaCode] === 'passed'"/>
@@ -320,6 +320,32 @@ export default {
             }
             return result;
         },
+
+        numberOfTestsResult(){
+            let result = {
+                'nbF': 0,
+                'nbP': 0,
+                'nbI': 0,
+                'nbU': 0,
+                'nbCT': 0
+            };
+            for(var key in this.globalTestResultForPages){
+                if (key.match(/[0-9]+\.[0-9]+\.[0-9]+/g)){
+                    if(this.globalTestResultForPages[key] == 'failed'){
+                        result.nbF += 1
+                    } else if(this.globalTestResultForPages[key] == 'cantTell'){
+                        result.nbCT += 1
+                    } else if(this.globalTestResultForPages[key] == 'untested'){
+                        result.nbU += 1
+                    } else if(this.globalTestResultForPages[key] == 'passed'){
+                        result.nbP += 1
+                    } else if(this.globalTestResultForPages[key] == 'inapplicable'){
+                        result.nbI +=1
+                    }
+                }
+            }
+            return result;
+        }
     },
     methods: {
         openModal(audit, page, criteriaResult, i) {
@@ -346,12 +372,14 @@ export default {
             });
         },
 
-        openGlobalTestModal(audit, testHierarchy, status) {
+        openGlobalTestModal(audit, testHierarchy, status, pageConcerned, pages) {
             this.$modal.show(AnomalyGlobalTestModal, {
                 props: {
                     audit: audit,
                     testHierarchy: testHierarchy,
-                    status: status   
+                    status: status,
+                    pageConcerned : pageConcerned,
+                    pages : pages
                 },
                 label: "synthesis-window",
                 classes: "modal",
@@ -447,6 +475,18 @@ export default {
 
         moment: function (date) {
             return this.$moment(date);
+        },
+
+        pageConcerned(code){
+            let result = []
+            let i = 0;
+            for(page in this.currentSynthesis[code]){
+                if(this.currentSynthesis[code][page].status== this.globalTestResultForPages[code]){
+                    result.push(this.pages[i])
+                }
+                i++;
+            }
+            return result;
         }
     }
 }
