@@ -480,7 +480,7 @@ export default {
         pageConcerned(code){
             let result = []
             let i = 0;
-            for(page in this.currentSynthesis[code]){
+            for(var page in this.currentSynthesis[code]){
                 if(this.currentSynthesis[code][page].status== this.globalTestResultForPages[code]){
                     result.push(this.pages[i])
                 }
