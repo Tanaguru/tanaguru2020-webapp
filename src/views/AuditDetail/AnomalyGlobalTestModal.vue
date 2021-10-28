@@ -37,7 +37,7 @@
         <ul class="list-anomaly">
             <li class="list-anomaly__item" v-if="status == 'failed'">
                 <span class="status status--failed">{{$t('entity.audit.result.failed')}} {{$t('entity.test.onPage')}} :</span>
-                <p class="test-description" v-for="(page, i) in pageConcerned" :key="i">
+                <p class="test-description" v-for="(page, i) in pagesConcernedPaginated" :key="i">
                     <router-link class="link-independent link-independent--icon"
                         :to="'/audits/' + audit.id + '/pages/' + page.id">
                         <icon-base-decorative>
@@ -49,7 +49,7 @@
             </li>
             <li class="list-anomaly__item" v-if="status == 'cantTell'">
                 <span class="status status--cantTell">{{$t('entity.audit.result.cantTell')}} {{$t('entity.test.onPage')}} :</span>
-                <p class="test-description" v-for="(page, i) in pageConcerned" :key="i">
+                <p class="test-description" v-for="(page, i) in pagesConcernedPaginated" :key="i">
                     <router-link class="link-independent link-independent--icon"
                         :to="'/audits/' + audit.id + '/pages/' + page.id">
                         <icon-base-decorative>
@@ -61,7 +61,7 @@
             </li>
             <li class="list-anomaly__item" v-if="status == 'inapplicable'">
                 <span class="status status--inapplicable">{{$t('entity.audit.result.inapplicable')}} {{$t('entity.test.onPage')}} :</span>
-                <p class="test-description" v-for="(page, i) in pageConcerned" :key="i">
+                <p class="test-description" v-for="(page, i) in pagesConcernedPaginated" :key="i">
                     <router-link class="link-independent link-independent--icon"
                         :to="'/audits/' + audit.id + '/pages/' + page.id">
                         <icon-base-decorative>
@@ -71,6 +71,13 @@
                     </router-link>
                 </p>
             </li>
+            <li class="test-description">
+                <pagination
+                :current-page="currentPage"
+                :total-pages="totalPages"
+                @changePage="changePage"
+                />
+            </li>
         </ul>
     </div>
 </template>
@@ -79,18 +86,37 @@
 import IconBaseDecorative from '../../components/icons/IconBaseDecorative'
 import IconArrowBlue from '../../components/icons/IconArrowBlue'
 import IconClose from '../../components/icons/IconClose'
+import Pagination from "../../components/Pagination";
 
 export default {
     name: 'AnomalyModal',
     components: {
         IconBaseDecorative,
         IconArrowBlue,
-        IconClose    
+        IconClose,
+        Pagination   
     },
     props: ['audit','testHierarchy','status', 'pageConcerned', 'pages'],
+    data(){
+        return {
+            currentPage: 0,
+            totalPages: 0
+        }
+    },
+    created(){
+        this.totalPages = Math.ceil(Object.keys(this.pageConcerned).length/5)
+    },
+    computed:{
+        pagesConcernedPaginated(){
+            return this.pageConcerned.slice(this.currentPage*5,5*(this.currentPage+1));
+        }
+    },
     methods: {
         closeModal() {
             this.$modal.close();
+        },
+        changePage(page) {
+            this.currentPage = page;
         }
     },
     filters: {
@@ -120,7 +146,7 @@ export default {
 }
 
 .list-anomaly {
-    margin: 3.2rem 0 0;
+    margin: 2.4rem 0 0;
     padding: 0;
     font-family: $font-stack-secondary;
     font-size: $medium-font-size;
@@ -237,6 +263,6 @@ export default {
 
 .test-description {
     width: 80%;
-    margin: auto;
+    margin: 0;
 }
 </style>
