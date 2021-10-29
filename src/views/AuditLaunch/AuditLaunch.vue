@@ -628,7 +628,7 @@ export default {
 		//Pages
 		checkValidUrl: UrlHelper.checkValidUrl,
 		isPageUrlsValid() {
-			return this.auditConfigurationForm.page.urls.every(url => url.includes(this.project.domain.trim()))
+			return this.auditConfigurationForm.page.urls.length >0 && this.auditConfigurationForm.page.urls.every(url => url.includes(this.project.domain.trim()))
 		},
 
 		//Sites
