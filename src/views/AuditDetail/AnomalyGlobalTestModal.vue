@@ -11,9 +11,10 @@
                     {{$t('entity.audit.result.passed')}}</p>
                 <p id="status--cantTell" class="status status--cantTell" v-if="status == 'cantTell'">
                    {{$t('entity.audit.result.cantTell')}}</p>
-                <p id="status--inapplicable" class="status status--inapplicable"
-                v-if="status == 'inapplicable'">
-                    {{$t('entity.audit.result.inapplicable')}}</p>
+                <p id="status--inapplicable" class="status status--inapplicable" v-if="status == 'inapplicable'">
+                   {{$t('entity.audit.result.inapplicable')}}</p>
+                <p id="status--untested" class="status status--untested" v-if="status == 'untested'">
+                   {{$t('entity.audit.result.untested')}}</p>
             </h1>
 
             <button type="button" class="btn btn--nude btn--icon" @click="closeModal()"
@@ -255,6 +256,14 @@ export default {
 
 #status--cantTell {
     border: 2px solid $color-qualify;
+    border-radius: .5em;
+    padding: 0 .5em;
+    font-size: .5em;
+    display: inline;
+}
+
+#status--untested {
+    border: 2px solid $color-untested;
     border-radius: .5em;
     padding: 0 .5em;
     font-size: .5em;
