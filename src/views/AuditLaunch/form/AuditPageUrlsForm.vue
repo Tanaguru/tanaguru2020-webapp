@@ -156,6 +156,9 @@
                 this.hasInput = true;
                 this.inputPlainText = value.trim();
                 this.inputArray = this.inputPlainText.split(';');
+                if(this.inputPlainText.lastIndexOf(';') == this.inputPlainText.length-1){
+                    this.inputArray.pop();
+                }
                 this.$emit('input', this.inputArray);
             },
             addField() {
