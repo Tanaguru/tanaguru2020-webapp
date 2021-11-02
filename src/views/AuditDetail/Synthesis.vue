@@ -93,7 +93,7 @@
                 $t('auditDetail.synthesis.table.title')
             }}<span>{{ $t('auditDetail.synthesis.table.title-info') }}</span></h2>
 
-        <div v-if="selectedReference && totalSynthesisPageByReferenceId[selectedReference.id]">
+        <div v-if="selectedReference && totalSynthesisPageByReferenceId[selectedReference.id] && this.allResultsSynthesis">
             <div class="table-pagination">
                 <pagination
                     :current-page="currentSynthesisPage"
@@ -125,7 +125,7 @@
                         <tr v-for="(criteriaResultByPage, criteriaCode) in currentSynthesis" :key="criteriaCode">
                             <th scope="row" class="row-header">Test {{ criteriaCode }}</th>
                             <td>
-                                <button class="btn btn--nude" @click="openGlobalTestModal(audit, criteriaResultByPage[Object.keys(criteriaResultByPage)[0]]['testHierarchy'], globalTestResultForPages[criteriaCode], getPagesConcerned(criteriaCode), allPages)">
+                                <button class="btn btn--nude" @click="openGlobalTestModal(audit, criteriaResultByPage[Object.keys(criteriaResultByPage)[0]]['testHierarchy'], globalTestResultForPages[criteriaCode], allResultsSynthesis[criteriaCode], allPagesById)">
                                     <icon-base-decorative>
                                         <icon-improper v-if="globalTestResultForPages[criteriaCode] === 'failed'"/>
                                         <icon-compliant v-else-if="globalTestResultForPages[criteriaCode] === 'passed'"/>
@@ -221,7 +221,7 @@ export default {
             currentSynthesisPage: 0,
             totalSynthesisPageByReferenceId: {},
             globalTestResultForPages: {},
-            allResultsSynthesis: {},
+            allResultsSynthesis: null,
             allPagesById: {},
             numberOfTestsResult: null,
             project: null
@@ -235,21 +235,7 @@ export default {
             (references) => {
                 this.references = references;
                 this.selectedReference = references[0];
-                this.onSelectReference();
-
-                this.testHierarchyResultService.getSynthesisByAuditAndTestHierarchy(
-                    this.audit.id,
-                    this.selectedReference.id,
-                    this.sharecode,
-                    0,
-                    this.totalPages,
-                    (synthesisPage) => {
-                        this.allResultsSynthesis = synthesisPage.content;
-                    },
-                    (error) => {
-                        console.error(error)
-                    }
-                );
+                this.onSelectReference();        
             },
             (error) => {
                 console.error(error);
@@ -390,14 +376,14 @@ export default {
             });
         },
 
-        openGlobalTestModal(audit, testHierarchy, status, pageConcerned, pages) {
+        openGlobalTestModal(audit, testHierarchy, status, pagesResultsSynthesis, allPagesById) {
             this.$modal.show(AnomalyGlobalTestModal, {
                 props: {
                     audit: audit,
                     testHierarchy: testHierarchy,
                     status: status,
-                    pageConcerned : pageConcerned,
-                    pages : pages
+                    pagesResultsSynthesis : pagesResultsSynthesis,
+                    allPagesById :allPagesById
                 },
                 label: "synthesis-window",
                 classes: "modal",
@@ -412,6 +398,7 @@ export default {
         },
 
         onSelectReference() {
+            this.loadSynthesisByAuditAndTestHierarchy();
             this.currentSynthesisPage = 0;
             this.numberOfTestsResult = null;
             if (!this.synthesisPageByReferenceId[this.selectedReference.id]) {
@@ -497,18 +484,6 @@ export default {
             return this.$moment(date);
         },
 
-        getPagesConcerned(code){
-            let result = []
-            for(var pageId in this.allResultsSynthesis[code]){
-                if(this.allResultsSynthesis[code][pageId].status == this.globalTestResultForPages[code] 
-                && this.globalTestResultForPages[code] != 'passed'
-                && this.globalTestResultForPages[code] != 'untested'){
-                    result.push(this.allPagesById[pageId])
-                }
-            }
-            return result;
-        },
-
         loadAllPagesById() {
             this.pageService.findByAuditId(
                 this.audit.id,
@@ -537,7 +512,23 @@ export default {
 					console.error(error);
 				}
 		    );
-		}
+		},
+
+        loadSynthesisByAuditAndTestHierarchy(){
+            this.testHierarchyResultService.getSynthesisByAuditAndTestHierarchy(
+                this.audit.id,
+                this.selectedReference.id,
+                this.sharecode,
+                0,
+                this.totalPages,
+                (synthesisPage) => {
+                    this.allResultsSynthesis = synthesisPage.content;
+                },
+                (error) => {
+                    console.error(error)
+                }
+            );
+        }
     }
 }
 </script>
