@@ -35,8 +35,8 @@
                         <ul class="audit-list-infos">
                             <li>
                                 <span>{{ $t('entity.audit.url') }} : </span>
-                                <a :href="pages[0].url" class="link-simple audit-list-infos__domain">{{
-                                        pages[0].url
+                                <a :href="project.domain" class="link-simple audit-list-infos__domain">{{
+                                        project.domain
                                     }}</a>
                             </li>
                             <li>
@@ -68,6 +68,10 @@
         <hr role="presentation" class="separator separator--main"/>
 
         <div class="wrapper">
+            <header class="audit-overview__header">
+                <h2 class="audit-overview__title">{{$t('resultAudit.overview.title')}}</h2>
+            </header>
+
             <page-result-overview
                 v-if="this.numberOfTestsResult"
                 :nb-failed="this.numberOfTestsResult.nbF"
@@ -219,7 +223,8 @@ export default {
             globalTestResultForPages: {},
             allResultsSynthesis: {},
             allPagesById: {},
-            numberOfTestsResult: null
+            numberOfTestsResult: null,
+            project: null
         }
     },
     created() {
@@ -261,7 +266,7 @@ export default {
                 console.error(error);
             },
         );
-
+        this.getProject();
         this.loadAllPagesById();
     },
     computed: {
@@ -408,6 +413,7 @@ export default {
 
         onSelectReference() {
             this.currentSynthesisPage = 0;
+            this.numberOfTestsResult = null;
             if (!this.synthesisPageByReferenceId[this.selectedReference.id]) {
                 this.$set(this.synthesisPageByReferenceId, this.selectedReference.id, []);
             }
@@ -518,7 +524,20 @@ export default {
                 (error) => {
                     console.error(error)
                 })
-        }
+        },
+
+        getProject(){
+			this.projectService.findByAuditId(
+				this.$route.params.id,
+				this.sharecode,
+				(project) => {
+					this.project = project;
+				},
+				(error) => {
+					console.error(error);
+				}
+		    );
+		}
     }
 }
 </script>
