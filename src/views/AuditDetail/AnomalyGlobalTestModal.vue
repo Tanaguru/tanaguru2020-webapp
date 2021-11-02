@@ -44,7 +44,7 @@
                         <icon-base-decorative>
                             <icon-arrow-blue/>
                          </icon-base-decorative>
-                        <span>Page n°{{page.id-Object.keys(allPagesById)[0]+1}} - {{page.name}}- {{page.id}}</span>
+                        <span>Page n°{{page.id-Object.keys(allPagesById)[0]+1}} - {{page.name}}</span>
                     </router-link>
                 </p>
             </li>
@@ -68,7 +68,7 @@
                         <icon-base-decorative>
                             <icon-arrow-blue/>
                          </icon-base-decorative>
-                        <span>Page n°{{page.id-Object.keys(allPagesById)[0]+1}} - {{page.name}}- {{page.id}}</span>
+                        <span>Page n°{{page.id-Object.keys(allPagesById)[0]+1}} - {{page.name}}</span>
                     </router-link>
                 </p>
             </li>
