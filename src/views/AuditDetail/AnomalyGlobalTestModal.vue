@@ -93,7 +93,7 @@ import IconClose from '../../components/icons/IconClose'
 import Pagination from "../../components/Pagination";
 
 export default {
-    name: 'AnomalyGobalTestModal',
+    name: 'AnomalyGlobalTestModal',
     components: {
         IconBaseDecorative,
         IconArrowBlue,
