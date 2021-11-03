@@ -11,9 +11,10 @@
                     {{$t('entity.audit.result.passed')}}</p>
                 <p id="status--cantTell" class="status status--cantTell" v-if="status == 'cantTell'">
                    {{$t('entity.audit.result.cantTell')}}</p>
-                <p id="status--inapplicable" class="status status--inapplicable"
-                v-if="status == 'inapplicable'">
-                    {{$t('entity.audit.result.inapplicable')}}</p>
+                <p id="status--inapplicable" class="status status--inapplicable" v-if="status == 'inapplicable'">
+                   {{$t('entity.audit.result.inapplicable')}}</p>
+                <p id="status--untested" class="status status--untested" v-if="status == 'untested'">
+                   {{$t('entity.audit.result.untested')}}</p>
             </h1>
 
             <button type="button" class="btn btn--nude btn--icon" @click="closeModal()"
@@ -34,7 +35,7 @@
                 </a>
             </div>
         </section>
-        <ul class="list-anomaly">
+        <ul class="list-anomaly" v-if="pagesConcerned">
             <li class="list-anomaly__item" v-if="status == 'failed'">
                 <span class="status status--failed">{{$t('entity.audit.result.failed')}} {{$t('entity.test.onPage')}} :</span>
                 <p class="test-description" v-for="(page, i) in pagesConcernedPaginated" :key="i">
@@ -43,7 +44,7 @@
                         <icon-base-decorative>
                             <icon-arrow-blue/>
                          </icon-base-decorative>
-                        <span>Page n°{{pages.indexOf(page)+1}} - {{page.name}}</span>
+                        <span>Page n°{{page.id-Object.keys(allPagesById)[0]+1}} - {{page.name}}</span>
                     </router-link>
                 </p>
             </li>
@@ -55,7 +56,7 @@
                         <icon-base-decorative>
                             <icon-arrow-blue/>
                          </icon-base-decorative>
-                        <span>Page n°{{pages.indexOf(page)+1}} - {{page.name}}</span>
+                        <span>Page n°{{page.id-Object.keys(allPagesById)[0]+1}} - {{page.name}}</span>
                     </router-link>
                 </p>
             </li>
@@ -67,7 +68,7 @@
                         <icon-base-decorative>
                             <icon-arrow-blue/>
                          </icon-base-decorative>
-                        <span>Page n°{{pages.indexOf(page)+1}} - {{page.name}}</span>
+                        <span>Page n°{{page.id-Object.keys(allPagesById)[0]+1}} - {{page.name}}</span>
                     </router-link>
                 </p>
             </li>
@@ -79,6 +80,9 @@
                 />
             </li>
         </ul>
+        <div id="fetching-data" v-else>
+            <p aria-live="polite">{{$t('auditDetail.synthesis.loading')}}</p>
+        </div>
     </div>
 </template>
 
@@ -89,35 +93,52 @@ import IconClose from '../../components/icons/IconClose'
 import Pagination from "../../components/Pagination";
 
 export default {
-    name: 'AnomalyModal',
+    name: 'AnomalyGlobalTestModal',
     components: {
         IconBaseDecorative,
         IconArrowBlue,
         IconClose,
         Pagination   
     },
-    props: ['audit','testHierarchy','status', 'pageConcerned', 'pages'],
+    props: ['audit','testHierarchy','status', 'pagesResultsSynthesis', 'allPagesById'],
     data(){
         return {
             currentPage: 0,
-            totalPages: 0
+            totalPages: 0,
+            pagesConcerned: null
         }
     },
     created(){
-        this.totalPages = Math.ceil(Object.keys(this.pageConcerned).length/5)
+        this.getPagesConcerned();
     },
     computed:{
         pagesConcernedPaginated(){
-            return this.pageConcerned.slice(this.currentPage*5,5*(this.currentPage+1));
+            return this.pagesConcerned.slice(this.currentPage*5,5*(this.currentPage+1));
         }
     },
     methods: {
+
+        getPagesConcerned(){
+            let result = []
+            for(var pageId in this.pagesResultsSynthesis){
+                if(this.pagesResultsSynthesis[pageId].status == this.status
+                && this.status != 'passed'
+                && this.status != 'untested'){
+                    result.push(this.allPagesById[pageId])
+                }
+            }
+            this.pagesConcerned = result;
+            this.totalPages = Math.ceil(Object.keys(this.pagesConcerned).length/5)
+        },
+
         closeModal() {
             this.$modal.close();
         },
+
         changePage(page) {
             this.currentPage = page;
         }
+        
     },
     filters: {
         format: function (value) {
@@ -259,6 +280,26 @@ export default {
     padding: 0 .5em;
     font-size: .5em;
     display: inline;
+}
+
+#status--untested {
+    border: 2px solid $color-untested;
+    border-radius: .5em;
+    padding: 0 .5em;
+    font-size: .5em;
+    display: inline;
+}
+
+// Loading screen
+#fetching-data {
+    text-align: center;
+    color: $text-secondary;
+    font-family: $font-stack-secondary;
+    font-weight: bold;
+
+    img {
+        max-height: 100rem;
+    }
 }
 
 .test-description {
