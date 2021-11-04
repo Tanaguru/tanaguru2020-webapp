@@ -210,7 +210,7 @@
 				if (!value) return ''
 				value = value.replace(/ *\(#[^)]*\) */g, " ").replace(/[\[\]\`]+/g,'')
 				if(value.includes(';')){
-					value = value.replaceAll(' ;','.').replaceAll(' .','.').replaceAll('\n','\n•')
+					value = value.replaceAll(' ;','.').replaceAll(' .','.').replaceAll('\n','\n• ')
 					value = value.substring(0,value.lastIndexOf("•"))
 				}
 				return value

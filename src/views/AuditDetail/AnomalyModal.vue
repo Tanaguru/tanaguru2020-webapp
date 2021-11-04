@@ -3,7 +3,8 @@
         <header class="modal-header" id="modalTitle">
             <h1 class="modal-header__title">
                 Test {{ criteriaResult.testHierarchy.code }} -
-                {{ criteriaResult.testHierarchy.name | format }}
+                {{ criteriaResult.testHierarchy.name| nameWithoutConditions }}
+                <h3 class="modal-header__conditions" style="white-space: pre-line">{{ criteriaResult.testHierarchy.name| conditions }}</h3>
                 <span>Page {{ index + 1 }} : {{ auditPage.name }} - </span>
                 <p id="status--failed" class="status status--failed" v-if="criteriaResult.status == 'failed'">
                     {{$t('entity.audit.result.failed')}}</p>
@@ -181,10 +182,25 @@ export default {
         },
     },    
     filters: {
-        format: function (value) {
+        nameWithoutConditions: function (value) {
+			if (!value) return ''
+			value = value.replace(/ *\(#[^)]*\) */g, " ").replace(/[\[\]\`]+/g,'')
+			if(value.includes(';')){
+				value = value.substring(0,value.lastIndexOf("?")+1)
+			}
+			return value
+		},
+        conditions: function(value){
             if (!value) return ''
-            value = value.replace(/ *\(#[^)]*\) */g, " ").replace(/[\[\]]+/g,'')
-            return value
+			value = value.replace(/ *\(#[^)]*\) */g, " ").replace(/[\[\]\`]+/g,'')
+			if(value.includes(';')){
+				value = value.replaceAll(' ;','.').replaceAll(' .','.').replaceAll('\n','\n• ')
+				value = value.substring(0,value.lastIndexOf("•"))
+                value = value.substring(value.lastIndexOf('?')+1, value.length)
+			}else{
+                value = ''
+            }
+			return value
         }
     }
 }
@@ -194,10 +210,16 @@ export default {
 .modal-header__title {
     span {
         display: block;
-        margin-top: 1.6rem;
         font-size: $base-font-size;
         line-height: 1.5;
+        
     }
+}
+
+.modal-header__conditions{
+    line-height: 125%;
+    margin: 0;
+    margin-bottom: 1em;
 }
 
 .links {
