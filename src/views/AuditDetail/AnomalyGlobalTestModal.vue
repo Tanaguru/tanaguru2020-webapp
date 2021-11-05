@@ -4,7 +4,7 @@
             <h1 class="modal-header__title">
                 Test {{ testHierarchy.code }} -
                 {{ testHierarchy.name | nameWithoutConditions }}
-                <h3 class="modal-header__conditions" style="white-space: pre-line">{{ testHierarchy.name | conditions }}</h3>
+                <h2 class="modal-header__conditions" style="white-space: pre-line">{{ testHierarchy.name | conditions }}</h2>
                 <span>{{$t('auditDetail.synthesis.allPages')}}</span>
                 <p id="status--failed" class="status status--failed" v-if="status == 'failed'">
                     {{$t('entity.audit.result.failed')}}</p>
@@ -177,6 +177,7 @@ export default {
 }
 
 .modal-header__conditions{
+    @extend %h3-like;
     line-height: 125%;
     margin: 0;
     margin-bottom: 1em;
