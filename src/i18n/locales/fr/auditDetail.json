@@ -11,7 +11,8 @@
 	"selectLogLevel" : "Sélectionner le niveau de log",
 	"synthesis": {
 		"pages": "Nombre de pages auditée(s)",
-		"showSourceCode": "Afficher le code source de la page",
+		"showSourceCode": "Code source de la page",
+		"openSourceCode" : "Ouvrir dans un nouvel onglet",
 		"guidelines": "Référentiel",
 		"table": {
 			"title": "Récapitulatif des pages auditées",
@@ -23,7 +24,8 @@
 			"rule": "Allez à la règle concernée",
 			"seeDetails": "Voir le résultat détaillé de la page"
 		},
-		"loading": "Données en cours de récupération..."
+		"loading": "Données en cours de récupération...",
+		"allPages": "Ensemble des pages"
 	},
 	"status": {
 		"done": "Terminé",

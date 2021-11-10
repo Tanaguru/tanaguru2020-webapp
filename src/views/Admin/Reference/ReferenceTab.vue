@@ -72,14 +72,23 @@ export default {
 		this.loadReferences(0, this.referencesPageSize)
 	},
 	methods: {
-		onAddReference(reference) {
+		onAddReference(reference, webextVersion) {
 			this.loadReferences(this.references_page.number, this.referencesPageSize);
+			this.webextentionService.createWebextentionVersion(reference.id, webextVersion,
+				(res) => {
+					this.$store.dispatch('getWebextVersion');
+				},
+				(error) => {
+					console.error(error)
+				}
+			)
 		},
 
 		removeReference(reference) {
 			this.testHierarchyService.deleteReference(reference.id,
 				() => {
 					this.loadReferences(0, this.referencesPageSize);
+					this.$store.dispatch('getWebextVersion');
 				},
 				(error => {
 					console.error(error)

@@ -12,6 +12,6 @@
 		"maintainButtonLabel": "Extend the session duration."
 	},
 	"logoAlt": "Tanaguru - Go back to home",
-	"footerContent": "©2009-{date} Tanaguru.com - Edited by Tanaguru - Tanaguru app v{appVersion} - Tanaguru engine v{serverVersion}",
+	"footerContent": "©2009-{date} Tanaguru.com - Edited by Tanaguru - Tanaguru app v{appVersion} - Tanaguru engine v{serverVersion} - Tanaguru web extension v{webextVersion}",
 	"breadcrumbsHelp": "You are here"
 }

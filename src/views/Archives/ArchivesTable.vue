@@ -8,7 +8,7 @@
                 @click="reverseAuditOrder()"
                 aria-pressed="true"
             >
-                {{ $t('action.sortAudits') }}
+                {{ $t('action.sortAuditsOrLogs') }}
                 <icon-base-decorative v-if="firstToLast">
                     <icon-close/>
                 </icon-base-decorative>
