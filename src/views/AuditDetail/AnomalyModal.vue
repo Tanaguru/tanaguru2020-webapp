@@ -24,7 +24,7 @@
                 <span>{{ $t('action.close') }}</span>
             </button>
         </header>
-        <main class="modal-body" id="modalDescription">
+        <section class="modal-body" id="modalDescription">
             <div class="links">
                 <a class="link-independent link-independent--icon" :href="criteriaResult.testHierarchy.urls[0]">
                     <icon-base-decorative>
@@ -104,7 +104,7 @@
                     </p>
                 </li>
             </ul>
-        </main>
+        </section>
     </div>
 </template>
 
@@ -172,13 +172,9 @@ export default {
     },
     methods: {
         closeModal() {
-            const el = document.body;
-            el.classList.remove('noScroll');
-            el.classList.add('scroll');
-
             this.$modal.close();
-        },
-    },    
+        }
+    },
     filters: {
         format: function (value) {
             if (!value) return ''
@@ -186,7 +182,7 @@ export default {
             return value
         }
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>

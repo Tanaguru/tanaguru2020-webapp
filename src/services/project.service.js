@@ -142,12 +142,11 @@ export default class ProjectService extends Service{
         .catch((err) => {error(err)});
     }
 
-    modifyById(id, name, domain, contractId, then, error ){
+    modifyById(id, name, domain, then, error ){
         const project = {
             'id' : id,
             'name' : name,
-            'domain' : domain,
-            'contractId' : contractId
+            'domain' : domain
         };
 
         return this.axios({

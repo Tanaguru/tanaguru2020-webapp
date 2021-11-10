@@ -15,8 +15,6 @@ import ForgotPassword from "@/views/ForgotPassword";
 import NotFound from "@/views/Errors/NotFound";
 import ExternalModule from "@/views/ExternalModule";
 
-import SourceCodePage from "@/views/PageDetail/SourceCodePage";
-
 export default [
     {
         path: '/',
@@ -76,15 +74,7 @@ export default [
         path: '/audits/:auditId/pages/:pageId/:sharecode?',
         name: 'PageDetail',
         component: PageDetail,
-    },
-    
-    {
-        path: '/audits/:auditId/sourceCode/pages/:pageId/:sharecode?',
-        name: 'SourceCodePage',
-        component: SourceCodePage,
-    },
-    
-    {
+    },{
         path: '/administration',
         name: 'Admin',
         component: Admin,
