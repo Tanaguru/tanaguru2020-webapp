@@ -113,8 +113,7 @@ export default {
 				testHierarchyMax: 0,
 				testHierarchyAssignCount: 0,
 				testHierarchyAssignMax: 0
-			},
-			webextVersion: ""
+			}
 		}
 	},
 	props: ['selected'],
@@ -145,11 +144,10 @@ export default {
 
 			try {
 				let parsedContent = JSON.parse(content);
-				this.webextVersion = parsedContent[0]["webextVersion"]
-				if (parsedContent[1] instanceof Array) {
+				if (parsedContent instanceof Array) {
 
 					let isError = false;
-					for (const test of parsedContent[1]) {
+					for (const test of parsedContent) {
 						//check test validity
 						if (!test.name || !test.ressources) {
 							this.testInputError = this.$t('references.form.invalidTestFile');
@@ -176,7 +174,7 @@ export default {
 						this.testsByRuleByReferenceCode = {};
 						this.testInputError = this.$t('references.form.invalidTestFile');
 					} else {
-						this.tests = parsedContent[1];
+						this.tests = parsedContent;
 					}
 				} else {
 					this.tests = [];
@@ -287,7 +285,7 @@ export default {
 					this.creationOutput.testHierarchyCount += 1;
 					this.assignTestHierarchyTests(persistedTestHierarchy, baseReferenceCode, persistedTestByTestName);
 					if (!reference) {
-						this.$emit('addReference', persistedTestHierarchy, this.webextVersion)
+						this.$emit('addReference', persistedTestHierarchy)
 					}
 					for (const child of testHierarchy.children) {
 						this.createTestHierarchyRec(persistedTestHierarchy, reference ? reference : persistedTestHierarchy, baseReferenceCode, child, persistedTestByTestName);

@@ -8,51 +8,21 @@
 // Override global styles from package
 .v-modal {
 	z-index: 900;
-	overflow: auto;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-
-	.v-modal__inner {
-		position: relative;
-		display: inline-table;
-		margin: 0 auto;
-		width: 100%;
-
-		&::before {
-			content: '';
-			position: absolute;
-			background-color: #055A7F;
-			opacity: .97;
-			top: 0;
-			right: 0;
-			bottom: 0;
-			left: 0;
-		}
-	}
 
 	.v-modal__backdrop {
-		display: none;
+		background-color: #055A7F;
+		opacity: .97;
 	}
 
 	.v-modal__content {
 		max-width: 102.4rem;
 		border-radius: .8rem;
 	}
-
-	.v-modal__holder {
-		display: block;
-	}
 }
 
 // Modal styles
 .modal-content {
 	padding: 4.7rem;
-
-	pre {
-		overflow: scroll;
-	}
 }
 
 .modal-header {

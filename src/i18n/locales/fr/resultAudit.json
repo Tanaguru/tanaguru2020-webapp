@@ -91,14 +91,6 @@
 		"checkboxAnomaly": "Ne plus relever cette anomalie",
 		"hide": "Masquer",
 		"show": "Afficher",
-		"anomaly": "Anomalie n°",
-		"fontSize": "Taille du texte : ",
-		"fontWeight": "Graisse du texte : ",
-		"textColor": "Couleur du texte : ",
-		"background": "Fond",
-		"image": "Image",
-		"bgColor": "Couleur de fond",
-		"undefined": "Indéfini",
-		"ratio": "Ratio estimé : "
+		"anomaly": "Anomalie n°"
 	}
 }

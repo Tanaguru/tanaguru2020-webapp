@@ -81,11 +81,11 @@ export default {
 		}
 	},
 	metaInfo(){
-		return {
-			// if no subcomponents specify a metaInfo.title, this title will be used
-			title: this.$i18n.t("global.siteName") + ' - ' + this.$i18n.t("title.login"),
-		}
-	}
+    return {
+        // if no subcomponents specify a metaInfo.title, this title will be used
+      title: this.$i18n.t("global.siteName") + ' - ' + this.$i18n.t("title.login"),
+    }
+  }
 }
 </script>
 

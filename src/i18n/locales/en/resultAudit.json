@@ -91,15 +91,6 @@
 		"checkboxAnomaly": "No longer notice this anomaly",
 		"hide": "Masquer",
 		"show": "Afficher",
-		"anomaly": "Anomaly #",
-		"fontSize": "Font size : ",
-		"fontWeight": "Font weight : ",
-		"textColor": "Text color : ",
-		"background": "Background : ",
-		"image": "Image",
-		"bgColor": "Background color",
-		"undefined": "Undefined",
-		"estimatedRatio": "Estimated ratio : ",
-		"goalRatio": "Minimal ratio needed : "
+		"anomaly": "Anomaly #"
 	}
 }

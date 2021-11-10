@@ -95,13 +95,14 @@
 							<span>{{ $t('auditDetail.synthesis.pages') }} : </span> {{ totalPages }}
 						</li>
 						<li v-if="pageContent && pageContent.source">
-							<span>{{ $t('auditDetail.synthesis.showSourceCode') }} : </span> 
-                            <!--<button class="btn btn--nude btn--icon" @click="showSourceCode">{{ $t('auditDetail.synthesis.openModal') }}</button>-->
-                            <router-link target="_blank" class="link-simple" :to="'/audits/' + audit.id + '/sourceCode/pages/' + page.id + (audit.sharecode ? '/' + audit.sharecode : '')">open in new tab</router-link>
+							<a class="btn btn--nude btn--icon" @click="showSourceCode">{{ $t('auditDetail.synthesis.showSourceCode') }} </a>
 						</li>
-                        <vue-accessible-modal>
-                            <template v-slot:backdrop></template>
-                        </vue-accessible-modal>
+						<!--<li>
+							<button class="btn btn--nude btn--icon">
+								<span>{{$t('entity.audit.parameters')}}</span>
+								<icon-bas<pae-decorative><icon-arrow-blue /></icon-base-decorative>
+							</button>
+						</li>-->
 					</ul>
 					<div class="form-block">
 
@@ -189,7 +190,13 @@
                 /* unselect the range */
                 shareCodeUrl.setAttribute('type', 'hidden')
                 window.getSelection().removeAllRanges()
-            }
+            },
+
+			showSourceCode() {
+            	let popup = window.open()
+				popup.document.write('<pre><code id="source"></code></pre>')
+            	popup.document.getElementById('source').textContent = this.pageContent.source
+			}
 		}
     }
 
