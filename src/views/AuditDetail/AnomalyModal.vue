@@ -174,10 +174,7 @@ export default {
     },
     methods: {
         closeModal() {
-            const el = document.body;
-            el.classList.remove('noScroll');
-            el.classList.add('scroll');
-
+            document.body.style.overflow = "auto"
             this.$modal.close();
         },
     },    
