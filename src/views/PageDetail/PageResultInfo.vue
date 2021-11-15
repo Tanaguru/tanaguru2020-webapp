@@ -89,7 +89,7 @@
 						</li>
 						<li>
 							<span>{{$t('entity.audit.repository')}} : </span>
-							{{reference.name}}
+							{{reference.name}} ({{reference.code}})
 						</li>
 						<li>
 							<span>{{ $t('auditDetail.synthesis.pages') }} : </span> {{ totalPages }}

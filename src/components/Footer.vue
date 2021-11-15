@@ -11,7 +11,8 @@
 					{
 						date: new Date().getFullYear(),
 						appVersion: $store.getters.appVersion,
-						serverVersion: $store.getters.serverVersion
+						serverVersion: $store.getters.serverVersion,
+						webextVersion: $store.getters.webextVersion
 					})}}</p>
 				<ul class="footer-menu list-unstyled">
 					<li class="footer-menu__item">
