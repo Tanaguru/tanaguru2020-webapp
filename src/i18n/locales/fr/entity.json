@@ -70,6 +70,9 @@
 			"failed": "Non conforme",
 			"untested": "Non testé",
 			"cantTell": "À qualifier"
+		},
+		"element": {
+			"cannotLoad": "Le navigateur n'a pas réussi à charger l'élément"
 		}
 	},
 	"reference": {
