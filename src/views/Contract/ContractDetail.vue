@@ -653,6 +653,7 @@ export default {
                     path : '/contracts/'+ this.contract.id
                 });
                 this.loadContractUsersPaginated(this.contractUsersCurrentPage, this.contractUsersPageSize);
+                console.log(contract)
             },
             (error) => { this.$router.replace('/404') }
         );

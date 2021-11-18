@@ -490,11 +490,12 @@
                 ];
 
                 if (this.project) {
-                    breadcrumb.push({
-                        name: this.project.contract.name,
-                        path: "/contracts/" + this.project.contract.id,
-                    });
-
+                    if(this.project.contract.allowCreateProject){
+                        breadcrumb.push({
+                            name: this.project.contract.name,
+                            path: "/contracts/" + this.project.contract.id,
+                        });
+                    }
                     breadcrumb.push({
                         name: this.project.name,
                         path: "/projects/" + this.project.id,

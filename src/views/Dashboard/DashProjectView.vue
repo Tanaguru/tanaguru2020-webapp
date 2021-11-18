@@ -6,7 +6,8 @@
 					<router-link :to="'/projects/' + project.id" class="link-independent" :aria-label="project.name">{{ project.name }}</router-link>
 				</h3>
 				<ul class="actions-list desktop-flex-element">
-					<li class="actions-list__item">
+					<!-- FREE ACCOUNT MODULE -->
+					<li class="actions-list__item" v-if="!demoAccount">
 						<router-link :to="'/contracts/' + project.contract.id" v-on:click.native="activeTab()" class="link-independent">{{$t('entity.contract.contract')}} {{ project.contract.name }}</router-link>
 					</li>
 					<li class="actions-list__item">
@@ -369,7 +370,7 @@ export default {
 		CircularProgressChart,
 		TeamModal
 	},
-	props : [ 'project' ],
+	props : [ 'project', 'demoAccount' ],
 	data(){
 		return {
 			lastAuditFirstPageContent: null,

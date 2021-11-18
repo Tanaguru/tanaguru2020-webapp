@@ -6,6 +6,8 @@
 			</router-link>
 		</li>
 
+		<!-- FREE ACCOUNT MODULE -->
+		<!--<li class="navbar__item" v-if="user.account == 'professional'">-->
 		<li class="navbar__item">
 			<router-link exact to="/administration" class="link-independent link-independent--icon">
 				<span>{{ $t('title.administration') }}</span>

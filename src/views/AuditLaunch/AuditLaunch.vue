@@ -467,10 +467,12 @@ export default {
 				this.auditConfigurationForm.site.seeds.push(project.domain.trim());
 				this.project = project;
 
-				this.breadcrumbProps.push({
-					name: project.contract.name,
-					path: '/contracts/' + project.contract.id
-				});
+				if(this.project.contract.allowCreateUser){
+					this.breadcrumbProps.push({
+						name: project.contract.name,
+						path: '/contracts/' + project.contract.id
+					});
+				}
 				this.breadcrumbProps.push({
 					name: project.name,
 				});

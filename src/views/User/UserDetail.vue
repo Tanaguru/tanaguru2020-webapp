@@ -100,6 +100,7 @@
                     </li>
                 </ul>
 
+                <!-- FREE ACCOUNT MODULE -->
                 <button
                     class="btn btn--default btn-modify"
                     v-if="$store.state.auth.authorities['MODIFY_USER'] || isCurrentUser"
@@ -160,6 +161,8 @@
                 </button>
             </div>
         </article>
+
+        <!-- FREE ACCOUNT MODULE -->
         <article id="user-contracts" v-if="$store.state.auth.user.appRole.name != 'USER' || isCurrentUser">
             <h2 class="user__title-2">{{ $t('user.contracts') }}</h2>
             
@@ -377,10 +380,11 @@ export default {
                     this.$route.params.id,
                     (user) => {
                         this.user = user
-                        this.breadcrumbProps.push({
-                            name: 'Administration',
-                            path: '/administration'
-                        })
+                        // FREE USER ACCOUNT
+                            this.breadcrumbProps.push({
+                                name: 'Administration',
+                                path: '/administration'
+                            })
                         this.breadcrumbProps.push({
                             name: 'Profil de ' + this.user.username,
                             path: '/users/' + this.user.id

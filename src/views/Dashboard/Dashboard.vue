@@ -4,8 +4,8 @@
 			<div class="dashboard-header__inner">
 				<div class="dashboard-header__title">
 					<h1>{{ $t('page.dashboard') }}</h1>
-					<!--<ul class="actions-list" v-if="user.account == 'professional'">-->
-					<ul class="actions-list">
+					<!-- FREE ACCOUNT MODULE -->
+					<ul class="actions-list" v-if="!demoAccount">
 						<li class="actions-list__item">
 							<a class="link link-independent link-independent--icon" href="#my-projects">
 								<span>{{ $t('dashboard.title.myProjects') }}</span>
@@ -23,8 +23,8 @@
 						</li>
 					</ul>
 				</div>
-				<!--<div class="dashboard-header__actions" v-if="user.account == 'professional'">-->
-				<div class="dashboard-header__actions">
+				<!-- FREE ACCOUNT MODULE -->
+				<div class="dashboard-header__actions" v-if="!demoAccount">
 					<ul class="actions-list">
 						<li class="actions-list__item" v-if="contracts.length > 0 && contracts[0]">
 							<router-link :to="'/contracts/'+contracts[0].id" v-on:click.native="activeTab()"
@@ -81,13 +81,16 @@
 		</article>
 
 		<!-- PROJECTS SHARED BY USER -->
-		<!--<article class="dashboard-section" v-if="user.account == 'professional'">-->
-		<article class="dashboard-section" >
+		<!-- FREE ACCOUNT MODULE -->
+		<article class="dashboard-section" v-if="!demoAccount">
 			<h2 class="dashboard-section__title" id="my-shared-projects">
 				{{ $t('dashboard.title.mySharedProjects') }}</h2>
 			<div v-if="sharedByCurrentUser_page && sharedByCurrentUser_page.content.length > 0">
-				<DashProjectView v-for="project in sharedByCurrentUser_page.content" :project="project"
-								 :key="project.id"/>
+				<DashProjectView 
+					v-for="project in sharedByCurrentUser_page.content" 
+					:project="project"
+					:key="project.id"
+					:demoAccount="demoAccount"/>
 				<pagination :total-pages="sharedByCurrentUser_page.totalPages"
 							:current-page="sharedByCurrentUser_page.number"
 							@changePage="(page)=> getMySharedProjects(page)"/>
@@ -99,8 +102,8 @@
 		</article>
 
 		<!-- PROJECTS SHARED WITH USER -->
-		<!--<article class="dashboard-section" v-if="user.account == 'professional'">-->
-		<article class="dashboard-section">
+		<!-- FREE ACCOUNT MODULE -->
+		<article class="dashboard-section" v-if="!demoAccount">
 			<h2 id="shared-with-me">{{ $t('dashboard.title.sharedProjects') }}</h2>
 			<div v-if="sharedProjects_page && sharedProjects_page.content.length > 0">
 				<DashProjectView v-for="project in sharedProjects_page.content" :project="project"
@@ -183,6 +186,7 @@ export default {
 	},
 	data() {
 		return {
+			demoAccount: true,
 			contracts: [],
 
 			projectSearch: "",
@@ -196,11 +200,10 @@ export default {
 		}
 	},
 	created() {
-		console.log(this.$store.state)
-
 		this.contractService.findOwned(
 			(contracts) => {
 				this.contracts = contracts;
+				this.demoAccount = !contracts[0].allowCreateProject
 			},
 			(error) => {
 				console.error(error)

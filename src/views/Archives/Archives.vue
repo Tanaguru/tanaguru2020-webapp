@@ -16,7 +16,7 @@
                         <span>{{ $t('entity.audit.page') }}</span>
                     </a>
                 </li>
-                <li class="actions-list__item">
+                <li class="actions-list__item" v-if="project.allowSiteAudit">
                     <a class="link link-independent link-independent--icon" href="#site-audit">
                         <icon-base-decorative width="24" height="24" viewBox="0 0 72 72">
                             <icon-audit-site/>
@@ -138,10 +138,12 @@ export default {
             (project) => {
                 this.project = project;
                 // Breadcrumbs
-                this.breadcrumbProps.push({
-                    name: project.contract.name,
-                    path: '/contracts/' + project.contract.id
-                })
+                if(project.contract.allowCreateProject){
+                    this.breadcrumbProps.push({
+                        name: project.contract.name,
+                        path: '/contracts/' + project.contract.id
+                    })
+                }
                 this.breadcrumbProps.push({
                     name: project.name,
                     path: '/projects/' + project.id
