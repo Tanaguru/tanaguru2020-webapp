@@ -131,8 +131,9 @@ export default {
             this.pagesConcerned = result;
             this.totalPages = Math.ceil(Object.keys(this.pagesConcerned).length/5)
         },
-
+        
         closeModal() {
+            document.body.style.overflow = "auto"
             this.$modal.close();
         },
 
