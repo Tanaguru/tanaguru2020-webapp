@@ -37,11 +37,7 @@
     "chart.js": "^2.9.4",
     "node-sass": "^4.14.1",
     "postcss-loader": "^3.0.0",
-<<<<<<< HEAD
-    "prismjs": "^1.24.1",
-=======
     "prismjs": "^1.25.0",
->>>>>>> 501949005e4f140f409eefc7f871a9b5846eb723
     "sass-lint": "^1.13.1",
     "sass-lint-vue": "^0.4.0",
     "sass-loader": "^8.0.2",
