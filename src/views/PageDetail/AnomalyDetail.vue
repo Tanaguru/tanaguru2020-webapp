@@ -62,14 +62,14 @@
 								Return rgb value or `null` or `image`
 							-->
 								<!-- if color : -->
-								<span v-if="anomaly.background" class="detail__preview">
+								<span v-if="anomaly.background && anomaly.background != 'image'" class="detail__preview">
 									<span class="detail__label">{{ $t('resultAudit.testResult.background') }}</span>
 									<span class="detail__color bgColor" :style="`background-color: ` + anomaly.background"></span>
 									<code class="detail__value">{{ anomaly.background }}</code>
 								</span>
 
 								<!-- if `image` : -->
-								<span v-else-if="contrast.bgImage && !anomaly.background" class="detail__preview">
+								<span v-else-if="anomaly.background == 'image'" class="detail__preview">
 									<span class="detail__label">{{ $t('resultAudit.testResult.background') }}</span>
 									<span class="detail__image">
 										<icon-base-decorative width="20" height="20" viewBox="0 0 352 352"><icon-picture /></icon-base-decorative>
@@ -78,7 +78,7 @@
 								</span>
 
 								<!-- if `null` : -->
-								<span v-else>
+								<span v-else-if="!anomaly.background">
 									<span class="detail__label">{{ $t('resultAudit.testResult.background') }}</span>
 									<span class="detail__value">{{ $t('resultAudit.testResult.undefined') }}</span>
 								</span>
@@ -211,16 +211,6 @@
 				showXpathTooltip: false,
                 copyXpathButtonText: this.$i18n.t("resultAudit.copyXpath.copy"),
 				screenReaderInfoXpath: '',
-
-				// Contrasts
-				contrast : {
-					fontSize: '12px',
-					fontWeight: '500',
-					textColor: 'rgb(250, 0, 0);',
-					bgColor: '',
-					bgImage: true,
-					ratio: '1.45:1'
-				}
             }
         },
 		created(){

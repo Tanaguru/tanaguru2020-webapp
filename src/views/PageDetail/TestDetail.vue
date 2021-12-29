@@ -156,10 +156,6 @@ export default {
 			}
 		}
 	},
-	created(){
-		//console.log(this.test)
-		console.log(this.testResult)
-	},
 	computed: {
 		hasAccessibleNameTag() {
 			return this.test.tags.includes('accessiblename')

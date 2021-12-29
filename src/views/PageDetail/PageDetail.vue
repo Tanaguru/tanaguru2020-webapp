@@ -344,9 +344,6 @@
             this.getAuditReferences();
             this.getPage();
             this.getAuditParameters();
-            console.log('1:', this.reference)
-            console.log('2:', this.statusResultByReference)
-            console.log('3:', this.referenceResult)
         },
         computed: {
             reference(){
