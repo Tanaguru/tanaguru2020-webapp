@@ -9,6 +9,7 @@
                     <icon-base-informative icon-label="results passed" v-if="testResult.status === 'passed'"><icon-compliant/></icon-base-informative>
                     <icon-base-informative icon-label="results inapplicable"
 										   v-if="testResult.status === 'inapplicable'"><icon-not-applicable/></icon-base-informative>
+					
                 </span>
 			</div>
 
@@ -154,9 +155,6 @@ export default {
 				}
 			}
 		}
-	},
-	created(){
-		//console.log(this.test)
 	},
 	computed: {
 		hasAccessibleNameTag() {

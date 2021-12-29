@@ -70,6 +70,9 @@
 			"untested": "Not tested",
 			"cantTell": "Pre-qualify",
 			"ignored": "Anomalies ignored"
+		},
+		"element": {
+			"cannotLoad": "The browser couldn't load the element"
 		}
 	},
 	"reference": {
