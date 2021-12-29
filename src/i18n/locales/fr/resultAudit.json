@@ -95,10 +95,12 @@
 		"fontSize": "Taille du texte : ",
 		"fontWeight": "Graisse du texte : ",
 		"textColor": "Couleur du texte : ",
-		"background": "Fond",
+		"backgroundColor": "Couleur de fond : ",
 		"image": "Image",
 		"bgColor": "Couleur de fond",
 		"undefined": "Indéfini",
-		"ratio": "Ratio estimé : "
+		"ratio": "Ratio estimé : ",
+		"bold": "(gras)",
+		"normal": "(normal)"
 	}
 }
