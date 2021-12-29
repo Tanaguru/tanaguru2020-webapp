@@ -21,7 +21,10 @@
             <div class="result-details__extracts">
                 <div class="details-extract" v-if="anomaly">
                     <p class="extract-code__line details-extract__title">{{$t('resultAudit.testResult.outer')}} :</p>
-                    <prism language="xml" class="extract-code__frame">{{outer}}</prism>
+                    <prism v-if="!hasContrastTag" language="xml" class="extract-code__frame">{{outer}}</prism>
+                    <prism v-else language="xml" class="extract-code__frame">
+						{{ contrastOuter }}
+					</prism>
                 </div>
 
                 <div class="details-extract">
@@ -40,7 +43,9 @@
 							</p>
 							<p class="detail">
 								<span class="detail__label">{{ $t('resultAudit.testResult.fontWeight') }}</span>
-								<span class="detail__value">{{ anomaly.weight }}</span>
+								<span class="detail__value">{{ anomaly.weight }} </span>
+								<span class="detail__value" v-if="anomaly.weight >= 700">{{ $t('resultAudit.testResult.bold') }}</span>
+								<span class="detail__value" v-else>{{ $t('resultAudit.testResult.normal') }}</span>
 							</p>
 							<p class="detail">
 							<!--
@@ -57,14 +62,14 @@
 								Return rgb value or `null` or `image`
 							-->
 								<!-- if color : -->
-								<span v-if="anomaly.background" class="detail__preview">
+								<span v-if="anomaly.background && anomaly.background != 'image'" class="detail__preview">
 									<span class="detail__label">{{ $t('resultAudit.testResult.background') }}</span>
 									<span class="detail__color bgColor" :style="`background-color: ` + anomaly.background"></span>
 									<code class="detail__value">{{ anomaly.background }}</code>
 								</span>
 
 								<!-- if `image` : -->
-								<span v-else-if="contrast.bgImage && !anomaly.background" class="detail__preview">
+								<span v-else-if="anomaly.background == 'image'" class="detail__preview">
 									<span class="detail__label">{{ $t('resultAudit.testResult.background') }}</span>
 									<span class="detail__image">
 										<icon-base-decorative width="20" height="20" viewBox="0 0 352 352"><icon-picture /></icon-base-decorative>
@@ -73,7 +78,7 @@
 								</span>
 
 								<!-- if `null` : -->
-								<span v-else>
+								<span v-else-if="!anomaly.background">
 									<span class="detail__label">{{ $t('resultAudit.testResult.background') }}</span>
 									<span class="detail__value">{{ $t('resultAudit.testResult.undefined') }}</span>
 								</span>
@@ -127,9 +132,9 @@
                     <p :id="index + '-xpath-t-' + anomaly.status" class="details-tab__content" :hidden="!xpathOpen">{{$t('resultAudit.testResult.xpath')}} : {{anomaly.xpath}}</p>
                 </div>
 
-                <hr role="presentation" class="details-extract-separator" />
+                <hr role="presentation" v-if="!hasContrastTag" class="details-extract-separator" />
 
-                <div class="details-tab">
+                <div class="details-tab" v-if="!hasContrastTag">
                     <div class="details-tab__header">
 						<!-- Show CSS button -->
                         <button
@@ -206,18 +211,11 @@
 				showXpathTooltip: false,
                 copyXpathButtonText: this.$i18n.t("resultAudit.copyXpath.copy"),
 				screenReaderInfoXpath: '',
-
-				// Contrasts
-				contrast : {
-					fontSize: '12px',
-					fontWeight: '500',
-					textColor: 'rgb(250, 0, 0);',
-					bgColor: '',
-					bgImage: true,
-					ratio: '1.45:1'
-				}
             }
         },
+		created(){
+			console.log(this.anomaly)
+		},
 		computed: {
             outer(){
                 let result = "";
@@ -227,7 +225,11 @@
                     result = this.$t('entity.element.cannotLoad')
                 }
                 return result;
-            }
+            },
+
+			contrastOuter(){
+				return "<" + this.anomaly.tag + ">" + this.anomaly.text + "</" + this.anomaly.tag + ">"
+			}
         },
         methods: {
             toggleXpath(){
@@ -527,4 +529,5 @@
 	font-weight: 400;
 	border: 1px solid black;
 }
+
 </style>

@@ -95,11 +95,13 @@
 		"fontSize": "Font size : ",
 		"fontWeight": "Font weight : ",
 		"textColor": "Text color : ",
-		"background": "Background : ",
+		"background": "Background color : ",
 		"image": "Image",
 		"bgColor": "Background color",
 		"undefined": "Undefined",
 		"estimatedRatio": "Estimated ratio : ",
-		"goalRatio": "Minimal ratio needed : "
+		"goalRatio": "Minimal ratio needed : ",
+		"bold": "(bold)",
+		"normal": "(normal)"
 	}
 }
