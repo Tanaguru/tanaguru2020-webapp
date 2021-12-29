@@ -353,9 +353,7 @@ export default {
         },
 
         openModal(audit, page, criteriaResult, i) {
-            const el = document.body;
-			el.classList.add('noScroll');
-			el.classList.remove('scroll');
+            document.body.style.overflow = "hidden"
 			
             this.$modal.show(AnomalyModal, {
                 props: {
@@ -377,6 +375,8 @@ export default {
         },
 
         openGlobalTestModal(audit, testHierarchy, status, pagesResultsSynthesis, allPagesById) {
+            document.body.style.overflow = "hidden"
+
             this.$modal.show(AnomalyGlobalTestModal, {
                 props: {
                     audit: audit,
