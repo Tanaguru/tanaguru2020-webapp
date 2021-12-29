@@ -14,13 +14,6 @@
 			</router-link>
 		</li>
 
-		<li v-for="module in onlineModule" :key="module.name" class="navbar__item">
-		<router-link  exact :to="'/external-module/' + module.name"
-					  class="link-independent link-independent--icon">
-			<span>{{moduleName(module)}}</span>
-		</router-link>
-		</li>
-
 		<li class="navbar__item" v-if="menuType == 'desktop'">
 			<button class="btn btn--nude btn--icon" @click="logout">
 				<icon-base-decorative>
@@ -97,34 +90,19 @@ export default {
 	&__item {
 		&:not(:last-child) {
 			padding-right: .6rem;
-
-			&::after {
-				content: '';
-				display: block;
-				margin: 1.2rem 0 1.2rem -#{$wrapper-spacing};
-				width: 7.2rem;
-				height: .1rem;
-				background-color: $border-secondary;
-
-				@media #{$media-lg-viewport} {
-					display: inline-block;
-					margin: 0 0 0 .6rem;
-					vertical-align: middle;
-					height: 1.2rem;
-					width: .2rem;
-				}
-			}
 		}
 	}
 
 	.router-link-active {
-		color: $link-hover;
-		font-weight: bolder;
+		background-color: $text-secondary;
+		color: $color-white;
 
-		svg {
-			.stroke-color {
-				stroke: $link-hover;
-			}
+		.fill-color {
+			fill: $color-white;
+		}
+
+		.stroke-color {
+			stroke: $color-white;
 		}
 	}
 }
