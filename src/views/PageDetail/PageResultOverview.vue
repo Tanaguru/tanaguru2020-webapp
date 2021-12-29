@@ -1,19 +1,5 @@
 <template>
     <section class="audit-overview">
-        <header class="audit-overview__header">
-            <h2 class="audit-overview__title">{{$t('resultAudit.overview.title')}}</h2>
-            <!--
-            <ul class="actions-list">
-                <li class="actions-list__item">
-                    <button class='btn btn--icon btn--nude' aria-controls='parameter-box' :aria-expanded="showStatisticsParameter ? 'true' : 'false'" @click="showStatisticsParameter = !showStatisticsParameter" >
-                        <icon-base-decorative><icon-arrow-blue /></icon-base-decorative>
-                        <span>{{$t('resultAudit.overview.parameters')}}</span>
-                    </button>
-                </li>
-            </ul>
-            -->
-        </header>
-
         <div class="audit-overview__content overview-content">
             <div class="overview-content__tests overview-tests">
                 <PolarChart

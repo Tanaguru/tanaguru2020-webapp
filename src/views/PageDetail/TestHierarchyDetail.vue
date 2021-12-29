@@ -12,7 +12,7 @@
 				</span>
 				<div v-if="testHierarchyResult">
 					<span v-if='isFirstLevel' class="test-hierarchy-header__title">{{testHierarchy.name}}</span>
-					<span v-else class="test-hierarchy-header__title">{{testHierarchy.name | format}}</span>
+					<span v-else class="test-hierarchy-header__title" style="white-space: pre-line">{{testHierarchy.name | format}}</span>
 					<ul v-if="isFirstLevel" class="list-tests">
 						<li class="list-tests__item">
 							<icon-base-decorative width="16" height="16"><icon-compliant /></icon-base-decorative><span class="list-tests__nbr list-tests__nbr--success">{{ testHierarchyResult.nbP }}</span><span class="screen-reader-text">{{$t('entity.audit.passed')}}</span>
@@ -208,7 +208,11 @@
 		filters: {
 			format: function (value) {
 				if (!value) return ''
-				value = value.replace(/ *\(#[^)]*\) */g, " ").replace(/[\[\]]+/g,'')
+				value = value.replace(/ *\(#[^)]*\) */g, " ").replace(/[\[\]\`]+/g,'')
+				if(value.includes(';')){
+					value = value.replaceAll(' ;','.').replaceAll(' .','.').replaceAll('\n','\n• ')
+					value = value.substring(0,value.lastIndexOf("•"))
+				}
 				return value
 			}
 		}

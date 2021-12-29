@@ -219,22 +219,11 @@
 		computed: {
             outer(){
                 let result = "";
-                if(this.anomaly && this.pageContent && this.pageContent.dom){
-                    const element = this.pageContent.dom.querySelector(this.anomaly.cssSelector);
-                    if(element){
-                        let fakeElement = element.cloneNode(true);
-                        const e = document.createElement(fakeElement.tagName.toLowerCase());
-                        if (e.outerHTML.indexOf("/") !== -1) {
-                            if (fakeElement.innerHTML && fakeElement.innerHTML.length > 512) {
-                                fakeElement.innerHTML = '[...]';
-                            }
-                        }
-                        result = fakeElement.outerHTML;
-                    }else{
-                        result = this.$t('entity.audit.element.cannotLoad')
-                    }
+                if(this.anomaly.sourceCode ){
+                    result = this.anomaly.sourceCode;
+                }else{
+                    result = this.$t('entity.element.cannotLoad')
                 }
-
                 return result;
             },
 
