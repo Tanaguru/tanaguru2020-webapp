@@ -15,7 +15,7 @@
 		"contract": "Contract:",
 		"anomaly": "anomalies",
 		"url": "Domain:",
-		"date": "Validity date:",
+		"date": "Expiration date:",
 		"repository": "Repository:",
 		"anomalyPage": "Average number of anomalies per page:",
 		"anomalyAudit": "Average number of anomalies on the last audit:",

@@ -16,7 +16,7 @@
                         <span>{{ $t('entity.audit.page') }}</span>
                     </a>
                 </li>
-                <li class="actions-list__item" v-if="project.allowSiteAudit">
+                <li class="actions-list__item" v-if="project.name != 'Bac à sable'">
                     <a class="link link-independent link-independent--icon" href="#site-audit">
                         <icon-base-decorative width="24" height="24" viewBox="0 0 72 72">
                             <icon-audit-site/>
@@ -123,7 +123,7 @@ export default {
     computed : {
         typesByProject() {
             let types = [];
-            if(this.project.allowSiteAudit) {
+            if(this.project.name != "Bac à sable") {
                 types = ['PAGE', 'SITE', 'SCENARIO', 'UPLOAD']
             } else {
                 types = ['PAGE', 'SCENARIO', 'UPLOAD']
@@ -143,11 +143,12 @@ export default {
                         name: project.contract.name,
                         path: '/contracts/' + project.contract.id
                     })
+                    this.breadcrumbProps.push({
+                        name: project.name,
+                        path: '/projects/' + project.id
+                    })
                 }
-                this.breadcrumbProps.push({
-                    name: project.name,
-                    path: '/projects/' + project.id
-                })
+                
                 this.breadcrumbProps.push({
                     name: project.name + ' archives'
                 })

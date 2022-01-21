@@ -47,6 +47,6 @@ export default class TanaguruRouter extends VueRouter{
 
     checkAuthorisation(to){
         return  (!to.meta.requireAuthentication || this.store.getters.isLoggedIn) &&
-            (!to.meta.requireAuthority || this.store.state.auth.authorities[to.meta.requireAuthority]);
+            (!to.meta.requireAuthority || this.store.state.auth.authorities[to.meta.requireAuthority]) && (!to.meta.requirePaidAccount || this.store.state.auth.user.appAccountType.name != 'FREE');
     }
 }

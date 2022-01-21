@@ -435,11 +435,12 @@ import IconClose from '../../components/icons/IconClose'
 							path:
 									"/contracts/" + this.project.contract.id,
 						});
+				
+						result.push({
+							name: this.project.name,
+							path: "/projects/" + this.project.id,
+						});
 					}
-					result.push({
-						name: this.project.name,
-						path: "/projects/" + this.project.id,
-					});
 				}
 
 				if(this.audit){

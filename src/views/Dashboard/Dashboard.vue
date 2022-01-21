@@ -4,36 +4,58 @@
 			<div class="dashboard-header__inner">
 				<div class="dashboard-header__title">
 					<h1>{{ $t('page.dashboard') }}</h1>
-					<!-- FREE ACCOUNT MODULE -->
-					<ul class="actions-list" v-if="!demoAccount">
+				
+					<ul class="actions-list">
 						<li class="actions-list__item">
 							<a class="link link-independent link-independent--icon" href="#my-projects">
 								<span>{{ $t('dashboard.title.myProjects') }}</span>
 							</a>
 						</li>
-						<li class="actions-list__item">
-							<a class="link link-independent link-independent--icon" href="#my-shared-projects">
+						<li class="actions-list__item with-button">
+							<a 
+								:class="$store.state.auth.user.appAccountType.name === 'FREE' ? 'link link-independent link-independent--icon disabled' : 'link link-independent link-independent--icon'" 
+								:href="$store.state.auth.user.appAccountType.name === 'FREE' ? null : '#my-shared-projects'"
+								:aria-disabled="$store.state.auth.user.appAccountType.name === 'FREE'"
+								:role="$store.state.auth.user.appAccountType.name === 'FREE' ? 'link' : null"
+								:tabindex="$store.state.auth.user.appAccountType.name === 'FREE' ? 0 : null"
+							>
 								<span>{{ $t('dashboard.title.mySharedProjects') }}</span>
+								
 							</a>
+							<TrialTooltip spot="shared-project" v-if="$store.state.auth.user.appAccountType.name == 'FREE'" />
 						</li>
-						<li class="actions-list__item">
-							<a class="link link-independent link-independent--icon" href="#shared-with-me">
+						<li class="actions-list__item with-button">
+							<a 
+								:class="$store.state.auth.user.appAccountType.name === 'FREE' ? 'link link-independent link-independent--icon disabled' : 'link link-independent link-independent--icon'" 
+								:href="$store.state.auth.user.appAccountType.name === 'FREE' ? null : '#shared-with-me'"
+								:aria-disabled="$store.state.auth.user.appAccountType.name === 'FREE'"
+								:role="$store.state.auth.user.appAccountType.name === 'FREE' ? 'link' : null"
+								:tabindex="$store.state.auth.user.appAccountType.name === 'FREE' ? 0 : null"
+							>
 								<span>{{ $t('dashboard.title.sharedProjects') }}</span>
+								
 							</a>
+							<TrialTooltip spot="shared-by-others" v-if="$store.state.auth.user.appAccountType.name == 'FREE'" />
 						</li>
 					</ul>
 				</div>
-				<!-- FREE ACCOUNT MODULE -->
-				<div class="dashboard-header__actions" v-if="!demoAccount">
+				
+				<div class="dashboard-header__actions">
 					<ul class="actions-list">
-						<li class="actions-list__item" v-if="contracts.length > 0 && contracts[0]">
-							<router-link :to="'/contracts/'+contracts[0].id" v-on:click.native="activeTab()"
-										 class='btn btn--icon btn--nude'>
+						<li class="actions-list__item with-button" v-if="contracts.length > 0 && contracts[0]">
+							<router-link 
+								:to="'/contracts/'+contracts[0].id" 
+								v-on:click.native="activeTab()"		 
+								:class="$store.state.auth.user.appAccountType.name === 'FREE' ? 'btn btn--icon btn--nude disabled' : 'btn btn--icon btn--nude'"
+								:aria-disabled="$store.state.auth.user.appAccountType.name === 'FREE'" 
+								:event="$store.state.auth.user.appAccountType.name != 'FREE' ? 'click' : ''"
+							>
 								<icon-base-decorative width="16" height="16">
 									<icon-plus/>
 								</icon-base-decorative>
 								<span>{{ $t('dashboard.actions.new') }}</span>
 							</router-link>
+							<TrialTooltip spot="new-project" v-if="$store.state.auth.user.appAccountType.name == 'FREE'" />
 						</li>
 
 						<!--<li class="actions-list__item">
@@ -81,16 +103,14 @@
 		</article>
 
 		<!-- PROJECTS SHARED BY USER -->
-		<!-- FREE ACCOUNT MODULE -->
-		<article class="dashboard-section" v-if="!demoAccount">
+		<article :class="$store.state.auth.user.appAccountType.name === 'FREE' ? 'dashboard-section disabled' : 'dashboard-section'">
 			<h2 class="dashboard-section__title" id="my-shared-projects">
 				{{ $t('dashboard.title.mySharedProjects') }}</h2>
 			<div v-if="sharedByCurrentUser_page && sharedByCurrentUser_page.content.length > 0">
 				<DashProjectView 
 					v-for="project in sharedByCurrentUser_page.content" 
 					:project="project"
-					:key="project.id"
-					:demoAccount="demoAccount"/>
+					:key="project.id"/>
 				<pagination :total-pages="sharedByCurrentUser_page.totalPages"
 							:current-page="sharedByCurrentUser_page.number"
 							@changePage="(page)=> getMySharedProjects(page)"/>
@@ -102,8 +122,7 @@
 		</article>
 
 		<!-- PROJECTS SHARED WITH USER -->
-		<!-- FREE ACCOUNT MODULE -->
-		<article class="dashboard-section" v-if="!demoAccount">
+		<article :class="$store.state.auth.user.appAccountType.name === 'FREE' ? 'dashboard-section disabled' : 'dashboard-section'">
 			<h2 id="shared-with-me">{{ $t('dashboard.title.sharedProjects') }}</h2>
 			<div v-if="sharedProjects_page && sharedProjects_page.content.length > 0">
 				<DashProjectView v-for="project in sharedProjects_page.content" :project="project"
@@ -145,6 +164,7 @@ import IconAuditFile from '../../components/icons/IconAuditFile'
 import CircularProgressChart from "../../components/charts/CircularProgressChart.vue"
 import PolarChart from "../../components/charts/PolarChart.vue"
 import Pagination from "@/components/Pagination";
+import TrialTooltip from '../../components/TrialTooltip.vue';
 
 export default {
 	name: 'dashboard',
@@ -171,7 +191,8 @@ export default {
 		IconAuditSite,
 		IconAuditFile,
 		PolarChart,
-		CircularProgressChart
+		CircularProgressChart,
+		TrialTooltip
 	},
 	metaInfo() {
 		return {
@@ -186,7 +207,6 @@ export default {
 	},
 	data() {
 		return {
-			demoAccount: true,
 			contracts: [],
 
 			projectSearch: "",
@@ -203,7 +223,6 @@ export default {
 		this.contractService.findOwned(
 			(contracts) => {
 				this.contracts = contracts;
-				this.demoAccount = !contracts[0].allowCreateProject
 			},
 			(error) => {
 				console.error(error)
@@ -311,5 +330,35 @@ export default {
 
 .dashboard-header-credits {
 	margin: 0;
+}
+
+.actions-list__item {
+	.disabled {
+		text-decoration: none;
+		cursor: default;
+		opacity: .7;
+		&:hover {
+			text-decoration: none;
+			cursor: default;
+
+			span {
+				text-decoration: none;
+				cursor: default;
+			}
+		}
+	}
+}
+
+.disabled {
+	opacity: .7;
+}
+
+.with-button {
+	display: flex;
+	align-items: center;
+
+	div {
+		margin-left: .5rem;
+	}
 }
 </style>

@@ -7,7 +7,7 @@
 	"legendUsers": "Tableau des utilisateurs du contrat",
 	"legendProjects": "Tableau des projets associés au contrat",
 	"contracts": "contrat(s)",
-	"expired": "Terminé",
+	"expired": "Expiré",
 	"noProjectYet": "Aucun projet n'a encore été créé dans ce contrat.",
 	"hadNoProject": "Aucun projet n'avait été créé dans ce contrat"
 }

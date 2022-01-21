@@ -1,6 +1,9 @@
 <template>
 	<div id="app">
 		<tng-header></tng-header>
+		
+		<ExpiredTrial v-if="$store.getters.isLoggedIn && $store.state.auth.user.expired === true"/>
+
 		<router-view></router-view>
 		<tng-footer></tng-footer>
 
@@ -11,12 +14,14 @@
 <script>
 import SessionPopup from "./components/SessionPopup";
 import TngHeader from "@/components/Header";
+import ExpiredTrial from "@/components/ExpiredTrial"
 import TngFooter from "@/components/Footer";
 
 export default {
 	components: {
 		TngFooter,
 		TngHeader,
+		ExpiredTrial,
 		SessionPopup
 	},
 	data() {
@@ -27,6 +32,7 @@ export default {
 		}
 	},
 	created() {
+		console.log(this.$store.state)
 		let _locale = localStorage.getItem("locale") || "en"
 		this.$moment.locale(_locale)
 		this.$i18n.locale = _locale

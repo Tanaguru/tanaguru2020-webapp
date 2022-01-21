@@ -13,5 +13,8 @@
 	},
 	"logoAlt": "Tanaguru - Go back to home",
 	"footerContent": "©2009-{date} Tanaguru.com - Edited by Tanaguru - Tanaguru app v{appVersion} - Tanaguru engine v{serverVersion} - Tanaguru web extension v{webextVersion}",
-	"breadcrumbsHelp": "You are here"
+	"breadcrumbsHelp": "You are here",
+	"expiredMessage": "Your free trial has expired. You can still view your past results for some time but won't be able to launch new audits. Please contact us if you're interested in the full Tanaguru Engine experience.",
+	"trialBloc": "Why is this disabled?",
+	"trialTooltipMsg": "This feature isn't available to you."
 }

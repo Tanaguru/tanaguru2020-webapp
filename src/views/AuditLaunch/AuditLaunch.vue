@@ -59,7 +59,9 @@
 						v-model="auditConfigurationForm.common.type"
 						:is-valid="isAuditTypeValid"
 						:has-been-sent="hasTryToLaunch"
-						:notSandboxProject="project.allowSiteAudit"/>
+						:notSandbox="project.allowSiteAudit"
+						:alreadyHasOneSiteAudit="alreadyHasOneSiteAudit"
+						/>
 
 					<!-- Audit name -->
 					<audit-name-form
@@ -399,6 +401,7 @@ export default {
 			activeBrowsers: [],
 			references: [],
 			seedMustBeInDomain: true,
+			alreadyHasOneSiteAudit: false,
 			auditConfigurationForm: {
 
 				common: {
@@ -476,6 +479,15 @@ export default {
 				this.breadcrumbProps.push({
 					name: project.name,
 				});
+
+				this.auditService.findByProjectId(
+					this.$route.params.id,
+					(audits) => {
+						audits.filter(audit => {
+							this.alreadyHasOneSiteAudit = audit.type === "SITE"
+						})
+					}
+				)
 			},
 			(error) => {
 				console.error(error)

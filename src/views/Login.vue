@@ -48,7 +48,6 @@
 					</router-link>
 				</div>
 
-				<!-- FREE ACCOUNT MODULE -->
 				<div class="signup-form__footer">
 					<p>{{ $t('login.signup.intro') }}</p>
 					<button type="submit" class="btn btn--default btn--icon">

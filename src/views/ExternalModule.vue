@@ -27,6 +27,7 @@ export default {
 	methods: {
 		onMessage(e) {
 			let message = e.data;
+			console.log('msg : ', message)
 			if(this.$refs.iframe != undefined){
 				switch (message.name) {
 					case 'on-module-mounted':

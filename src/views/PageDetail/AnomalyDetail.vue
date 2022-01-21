@@ -213,9 +213,6 @@
 				screenReaderInfoXpath: '',
             }
         },
-		created(){
-			console.log(this.anomaly)
-		},
 		computed: {
             outer(){
                 let result = "";

@@ -6,12 +6,17 @@
 			</router-link>
 		</li>
 
-		<!-- FREE ACCOUNT MODULE -->
-		<!--<li class="navbar__item" v-if="user.account == 'professional'">-->
-		<li class="navbar__item">
-			<router-link exact to="/administration" class="link-independent link-independent--icon">
+		<li class="navbar__item with-button">
+			<router-link 
+				exact 
+				to="/administration" 
+				:class="$store.state.auth.user.appAccountType.name != 'FREE' ? 'link-independent link-independent--icon' : 'link-independent link-independent--icon disabled'" 
+				:aria-disabled="$store.state.auth.user.appAccountType.name === 'FREE'" 
+				:event="$store.state.auth.user.appAccountType.name != 'FREE' ? 'click' : ''"
+			>
 				<span>{{ $t('title.administration') }}</span>
 			</router-link>
+			<TrialTooltip spot="administration" v-if="$store.state.auth.user.expired" />
 		</li>
 
 		<li class="navbar__item" v-if="menuType == 'desktop'">
@@ -34,6 +39,7 @@ import IconParameters from './icons/IconParameters'
 import IconLogout from './icons/IconLogout'
 import IconDashboard from './icons/IconDashboard'
 import ModuleHelper from '../helper/ModuleHelper'
+import TrialTooltip from '../components/TrialTooltip.vue'
 
 export default {
 	name: 'navbar',
@@ -49,6 +55,7 @@ export default {
 		IconParameters,
 		IconLogout,
 		IconDashboard,
+		TrialTooltip
 	},
 	methods: {
 		getModuleName: ModuleHelper.getModuleName,
@@ -104,6 +111,15 @@ export default {
 		.stroke-color {
 			stroke: $color-white;
 		}
+	}
+}
+
+.with-button {
+	display: flex;
+	align-items: center;
+
+	div {
+		margin-left: .5rem;
 	}
 }
 </style>

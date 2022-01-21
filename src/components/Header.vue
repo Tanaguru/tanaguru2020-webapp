@@ -7,8 +7,7 @@
 		</router-link>
 
 		<DesktopMenu v-if="window.width > 992" :currentUser="currentUser"/>
-		<MobileMenu class="header-menu" v-else />
-
+		<MobileMenu class="header-menu" v-else :currentUser="currentUser" />
 	</div>
   </header>
 </template>
@@ -23,7 +22,7 @@ export default {
 	components: {
 		Banner,
 		DesktopMenu,
-		MobileMenu
+		MobileMenu,
   	},
 	data(){
 		return{

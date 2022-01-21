@@ -35,21 +35,24 @@ export default [
         name: 'UserDetail',
         component: UserDetail,
         meta :{
-            requireAuthentication : true
+            requireAuthentication : true,
+            requirePaidAccount : true
         }
     },{
         path: '/contracts/:id',
         name: 'ContractDetail',
         component: ContractDetail,
         meta :{
-            requireAuthentication : true
+            requireAuthentication : true,
+            requirePaidAccount : true
         }
     },{
         path: '/projects/:id',
         name: 'ProjectDetail',
         component: ProjectDetail,
         meta :{
-            requireAuthentication : true
+            requireAuthentication : true,
+            requirePaidAccount : true
         }
     },{
         path: '/projects/:id/audit',
@@ -89,7 +92,8 @@ export default [
         name: 'Admin',
         component: Admin,
         meta :{
-            requireAuthentication : true
+            requireAuthentication : true,
+            requirePaidAccount : true
         }
     },{
         path: '/projects/:id/archives',
