@@ -79,6 +79,22 @@ $link-border-width: 1px;
 			}
 		}
 	}
+
+	&.disabled {
+		text-decoration: none;
+		cursor: default;
+		opacity: .7;
+		
+		&:hover {
+			text-decoration: none;
+			cursor: default;
+
+			span {
+				text-decoration: none;
+				cursor: default;
+			}
+		}
+	}
 }
 
 .link-accent {

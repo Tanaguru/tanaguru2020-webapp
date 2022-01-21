@@ -90,13 +90,13 @@
                 <ul class="infos-list">
                     <li id="username"><span class="infos-list__exergue">{{ $t('entity.user.username') }}</span> : {{ user.username }}
                     </li>
-                    <li id="email" v-if="$store.state.auth.user.appRole.name != 'USER' || isCurrentUser"><span class="infos-list__exergue">{{ $t('entity.user.email') }}</span> : {{ user.email }}</li>
+                    <li id="email" v-if="$store.state.auth.user.appRole.name != 'USER'"><span class="infos-list__exergue">{{ $t('entity.user.email') }}</span> : {{ user.email }}</li>
                     <li><span class="infos-list__exergue">{{ $t('entity.user.role.role') }}</span> :
                         {{ user.appRole.name.charAt(0) + user.appRole.name.slice(1).toLowerCase().replace(/_/g, ' ') }}
                     </li>
-                    <li id="enabled"><span class="infos-list__exergue">{{ $t('entity.user.enabled') }}</span> : {{ user.enabled }}
+                    <li id="enabled" v-if="!isCurrentUser && $store.state.auth.authorities['MODIFY_USER']"><span class="infos-list__exergue">{{ $t('entity.user.enabled') }}</span> : {{ user.enabled }}
                     </li>
-                    <li id="blocked" v-if="$store.state.auth.user.appRole.name != 'USER' || isCurrentUser"><span class="infos-list__exergue">{{ $t('entity.user.blocked') }}</span> : {{ !user.accountNonLocked }}
+                    <li id="blocked" v-if="!isCurrentUser && $store.state.auth.authorities['MODIFY_USER']"><span class="infos-list__exergue">{{ $t('entity.user.blocked') }}</span> : {{ !user.accountNonLocked }}
                     </li>
                 </ul>
 
@@ -160,6 +160,7 @@
                 </button>
             </div>
         </article>
+
         <article id="user-contracts" v-if="$store.state.auth.user.appRole.name != 'USER' || isCurrentUser">
             <h2 class="user__title-2">{{ $t('user.contracts') }}</h2>
             
@@ -377,13 +378,14 @@ export default {
                     this.$route.params.id,
                     (user) => {
                         this.user = user
+                        if(this.$store.state.auth.user.appAccountType.name != 'FREE'){
+                            this.breadcrumbProps.push({
+                                name: 'Administration',
+                                path: '/administration'
+                            })
+                        }
                         this.breadcrumbProps.push({
-                            name: 'Administration',
-                            path: '/administration'
-                        })
-                        this.breadcrumbProps.push({
-                            name: 'Profil de ' + this.user.username,
-                            path: '/users/' + this.user.id
+                            name: this.isCurrentUser ? this.$i18n.t("user.myProfile") : this.user.username,
                         })
                     },
                     (err) => {

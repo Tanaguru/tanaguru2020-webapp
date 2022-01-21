@@ -2,14 +2,32 @@
 	<article class="project-item">
 		<header class="project-item-header">
 			<div>
-				<h3 class="project-title">
-					<router-link :to="'/projects/' + project.id" class="link-independent" :aria-label="project.name">{{ project.name }}</router-link>
+				<h3 class="project-title with-button">
+					<router-link 
+						:to="'/projects/' + project.id" 
+						:class="$store.state.auth.user.appAccountType.name === 'FREE' ? 'link-independent disabled' : 'link-independent'" 
+						:aria-disabled="$store.state.auth.user.appAccountType.name === 'FREE'" 
+						:event="$store.state.auth.user.appAccountType.name != 'FREE' ? 'click' : ''"
+					>
+						{{ project.name }}
+					</router-link>
+					<TrialTooltip spot="project" v-if="$store.state.auth.user.appAccountType.name == 'FREE'" />
 				</h3>
 				<ul class="actions-list desktop-flex-element">
-					<li class="actions-list__item">
-						<router-link :to="'/contracts/' + project.contract.id" v-on:click.native="activeTab()" class="link-independent">{{$t('entity.contract.contract')}} {{ project.contract.name }}</router-link>
+					<li class="actions-list__item with-button">
+						<router-link 
+							:to="'/contracts/' + project.contract.id" 
+							v-on:click.native="activeTab()" 
+							:class="$store.state.auth.user.appAccountType.name === 'FREE' ? 'link-independent disabled' : 'link-independent'" 
+							:aria-disabled="$store.state.auth.user.appAccountType.name === 'FREE'" 
+							:event="$store.state.auth.user.appAccountType.name != 'FREE' ? 'click' : ''"
+						>
+							{{$t('entity.contract.contract')}} {{ project.contract.name }}
+						</router-link>
+						<TrialTooltip spot="contract" v-if="$store.state.auth.user.appAccountType.name == 'FREE'" />
+
 					</li>
-					<li class="actions-list__item">
+					<li class="actions-list__item with-button">
 						<router-link :to="'/projects/' + project.id + '/archives'" class="link-independent link-independent--icon" :aria-label="project.name+ ': ' +$t('action.archives')">
 							<icon-base-decorative width="16" height="16"><icon-version /></icon-base-decorative>
 							<span>{{$t('dashboard.actions.archives')}}</span>
@@ -63,19 +81,29 @@
 				</div>
 
 				<ul class="project-item-list infos-list">
-					<li><span class="infos-list__exergue">{{$t('dashboard.project.url')}}</span> {{ project.domain }}</li>
 					<li>
-						<span class="infos-list__exergue">{{$t('dashboard.project.repository')}} </span>
-						<span v-for="(name, i) in repositoriesNames" :key="i">{{ name }}<span v-if="i+1 != repositoriesNames.length">, </span></span>
+						<span class="infos-list__exergue">{{$t('dashboard.project.url')}} </span> 
+						<span v-if="project.domain">{{ project.domain }}</span>
+						<span v-else> {{$t('project.noDomain')}}</span>
 					</li>
-					<li><span class="infos-list__exergue">{{$t('dashboard.project.date')}}</span> {{ moment(project.contract.dateEnd).format('LL') }}</li>
+					<li v-if="repositoriesNames.length > 0">
+						<span class="infos-list__exergue">{{$t('dashboard.project.repository')}} </span>
+						<span v-for="(name, i) in repositoriesNames" :key="i">
+							{{ name }}
+							<span v-if="i+1 != repositoriesNames.length">, </span>
+							</span>
+					</li>
+					<li>
+						<span class="infos-list__exergue">{{$t('dashboard.project.date')}}</span> 
+						{{ moment(project.contract.dateEnd).format('LL') }}
+					</li>
 				</ul>
 
 				<div class="project-item-team desktop-element">
 					<p class="team-title">{{$t('dashboard.project.team')}}</p>
 					<ul class="team-list list-unstyled">
-						<li class="team-list__item" v-for="(user, i) in users" :key="user.contractAppUser.id">
-							<router-link v-if="i < 3" :to="'/users/' + user.contractAppUser.user.id">
+						<li class="team-list__item with-button" v-for="(user, i) in users" :key="user.contractAppUser.id">
+							<router-link v-if="i < 3" :to="'/users/' + user.contractAppUser.user.id" :aria-disabled="$store.state.auth.user.appAccountType.name === 'FREE'" :event="$store.state.auth.user.appAccountType.name != 'FREE' ? 'click' : ''" :class="$store.state.auth.user.appAccountType.name != 'FREE' ? '' : 'disabled'">
 
 								<span v-if="user.contractAppUser.user.appRole.name == 'USER'" class="team-list__picture" style="background-image:url('https://i.ibb.co/f2HHwzx/collection-caracteres-bebe-dragon-dessines-main-23-2147831551-2.jpg')"></span>
 
@@ -85,6 +113,7 @@
 
 								<span class="team-list__name">{{ user.contractAppUser.user.username }}<br />{{ user.projectRole.name.charAt(0) + user.projectRole.name.slice(1).toLowerCase().replace(/_/g,' ') }}</span>
 							</router-link>
+							<trial-tooltip :spot="'teammember-' + i" v-if="$store.state.auth.user.appAccountType.name == 'FREE'" />
 						</li>
 					</ul>
 					<button type="button" v-if="users.length >= 3" class="btn btn--nude btn--icon" @click="openModal">
@@ -330,7 +359,6 @@ import IconVersion from '../../components/icons/IconVersion'
 import IconCompliant from '../../components/icons/IconCompliant'
 import IconIgnored from '../../components/icons/IconIgnored'
 import IconImproper from '../../components/icons/IconImproper'
-import IconInforound from '../../components/icons/IconInforound'
 import IconNotApplicable from '../../components/icons/IconNotApplicable'
 import IconQualify from '../../components/icons/IconQualify'
 import IconUntested from '../../components/icons/IconUntested'
@@ -341,6 +369,7 @@ import IconAuditAssisted from '../../components/icons/IconAuditAssisted'
 import IconAuditFile from '../../components/icons/IconAuditFile'
 import CircularProgressChart from "../../components/charts/CircularProgressChart.vue"
 import PolarChart from "../../components/charts/PolarChart.vue"
+import TrialTooltip from '../../components/TrialTooltip.vue'
 
 import TeamModal from './TeamModal'
 
@@ -367,7 +396,8 @@ export default {
 		IconAuditFile,
 		PolarChart,
 		CircularProgressChart,
-		TeamModal
+		TeamModal,
+		TrialTooltip
 	},
 	props : [ 'project' ],
 	data(){
@@ -386,6 +416,19 @@ export default {
 		}
 	},
 	created() {
+		this.userService.findAllByProject(
+			this.project.id,
+			(users) => {
+				this.users = users
+				let currentUser = this.users.find(user =>
+					user.contractAppUser.user.id === this.$store.state.auth.user.id
+				)
+				if(currentUser){
+					this.currentUserRole = currentUser.projectRole.name
+				}
+			},
+			(error) => console.error(error)
+		)
 		this.auditService.findLastByProject(
 			this.project.id,
 			(audit) => {
@@ -561,19 +604,6 @@ export default {
 					}
 				);
 
-				this.userService.findAllByProject(
-					this.project.id,
-					(users) => {
-						this.users = users
-						let currentUser = this.users.find(user =>
-							user.contractAppUser.user.id === this.$store.state.auth.user.id
-						)
-						if(currentUser){
-							this.currentUserRole = currentUser.projectRole.name
-						}
-					},
-					(error) => console.error(error)
-				)
 			}
 		},
 
@@ -902,4 +932,23 @@ export default {
 	}
 }
 
+.disabled {
+	text-decoration: none;
+	cursor: default;
+	opacity: .7;
+	
+	&:hover {
+		text-decoration: none;
+		cursor: default;
+	}
+}
+
+.with-button {
+	display: flex;
+	align-items: center;
+
+	div {
+		margin-left: .5rem;
+	}
+}
 </style>

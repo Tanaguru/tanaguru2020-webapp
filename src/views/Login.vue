@@ -9,6 +9,7 @@
 				<p v-if="error" class="info-error" id="login-error" aria-live="polite">{{error}}</p>
 				<div class="form-block">
 					<label class="label" for="username">{{$t('login.labelId')}}</label>
+					<p class="info-text">{{$t('login.caseSensitive')}}</p>
 					<input
 					class="input"
 					v-bind:class="{'has-error':error}"
@@ -45,6 +46,14 @@
 						<icon-base-decorative ><icon-arrow-blue /></icon-base-decorative>
 						<span>{{$t('login.password')}}</span>
 					</router-link>
+				</div>
+
+				<div class="signup-form__footer">
+					<p>{{ $t('login.signup.intro') }}</p>
+					<button type="submit" class="btn btn--default btn--icon">
+						<icon-base-decorative ><icon-logout /></icon-base-decorative>
+						<span>{{$t('action.signUp')}}</span>
+					</button>
 				</div>
 			</form>
 		</div>

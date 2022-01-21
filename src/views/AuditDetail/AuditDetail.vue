@@ -429,15 +429,18 @@ import IconClose from '../../components/icons/IconClose'
 				];
 
 				if(this.project){
-					result.push({
-						name: this.project.contract.name,
-						path:
-								"/contracts/" + this.project.contract.id,
-					});
-					result.push({
-						name: this.project.name,
-						path: "/projects/" + this.project.id,
-					});
+					if(this.project.contract.allowCreateProject){
+						result.push({
+							name: this.project.contract.name,
+							path:
+									"/contracts/" + this.project.contract.id,
+						});
+				
+						result.push({
+							name: this.project.name,
+							path: "/projects/" + this.project.id,
+						});
+					}
 				}
 
 				if(this.audit){

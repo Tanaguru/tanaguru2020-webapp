@@ -4,5 +4,6 @@
 	"noContract": "You have not been added to any contract yet.",
 	"adminNoContract": "This user has not been added to any contract yet.",
 	"results": "results",
-	"password": "Change my password"
+	"password": "Change my password",
+	"myProfile": "My profile"
 }

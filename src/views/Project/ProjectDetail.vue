@@ -5,7 +5,6 @@
 		<header class="headline headline--top project-header">
 			<h1>{{ project.name }}</h1>
 		</header>
-
 		<Tabs @activeTab='activeTab'>
 			<Tab :name="$t('project.infos')" class="tabs-wrapper">
 				<div v-if="!modifyProjectForm.active">
@@ -25,7 +24,7 @@
 					</ul>
 
 					<ul class="project-actions-list">
-						<li class="project-actions-list__item">
+						<li class="project-actions-list__item" v-if="contract.allowModifyProject">
 							<button
 								v-if="$store.state.auth.authorities['MODIFY_PROJECT'] ||
 									(currentUserRole &&
@@ -58,6 +57,7 @@
 					<p v-if="modifyProjectForm.successMsg" class="info-success" aria-live="polite">{{ modifyProjectForm.successMsg }}</p>
 
 				</div>
+
 				<div v-else>
 					<form @submit.prevent="modifyProject">
 						<div class="form-row">
@@ -114,8 +114,8 @@
 			<Tab :name="$t('project.users')" class="tabs-wrapper">
 				<div v-show="managerCondition">
 					<h2 class="project__title-2">{{ $t('project.users') }}</h2>
-					<p>{{ $t('form.indications.help') }}</p>
-					<form @submit.prevent="addUser" class="form-users" novalidate>
+					<form @submit.prevent="addUser" v-if='contract.allowModifyProject' class="form-users" novalidate>
+						<p>{{ $t('form.indications.help') }}</p>
 						<div class="form-block">
 							<label class="label" for="user-select">{{ $t('entity.user.username') }} *</label>
 							<div class="select">
@@ -237,10 +237,12 @@ export default {
 					name: 'Administration',
 					path: '/administration'
 				})
-				this.breadcrumbProps.push({
-					name: this.project.contract.name,
-					path: '/contracts/' + this.project.contract.id
-				})
+				if(this.project.contract.allowCreateProject){
+					this.breadcrumbProps.push({
+						name: this.project.contract.name,
+						path: '/contracts/' + this.project.contract.id
+					})
+				}
 				this.breadcrumbProps.push({
 					name: this.project.name,
 					path: '/projects/' + this.project.id

@@ -28,14 +28,16 @@
                             class="radio-custom-label__text">{{ $t('audit.definition.radioType.newAuditPage') }}</span>
                     </label>
 
-                    <input class="radio-custom-input"
-                           id="site"
-                           type="radio"
-                           name="audit-type"
-                           value="site"
-                           v-model='type'
-                           @change="$emit('input', type)"/>
-                    <label class="radio-custom-label" for="site">
+                    <input 
+                        :class="notSandbox ? 'radio-custom-input' : 'radio-custom-input disabled'"
+                        id="site"
+                        type="radio"
+                        name="audit-type"
+                        :value="notSandbox ? 'site' : ''"
+                        v-model='type'
+                        :aria-disabled="!notSandbox"
+                        @change="notSandbox ? $emit('input', type) : ''"/>
+                    <label :class="notSandbox ? 'radio-custom-label' : 'radio-custom-label disabled'" for="site">
                         <icon-base-decorative class="radio-custom-label__icon" viewBox="0 0 72 72">
                             <icon-audit-site/>
                         </icon-base-decorative>
@@ -108,12 +110,21 @@ export default {
         IconAuditFile,
         IconAlert
     },
-    props: ['value', 'isValid', 'hasBeenSent'],
+    props: ['value', 'isValid', 'hasBeenSent', 'notSandbox', "alreadyHasOneSiteAudit"],
     data() {
         return {
             type: this.value
         }
     },
+    computed: {
+         isTrialAndHasOneSiteAudit(){
+             let condition = false;
+             if(this.alreadyHasOneSiteAudit && this.$store.state.auth.user.appAccountType.name === 'FREE'){
+                condition = true
+             }
+             return condition;
+         }
+    }
 }
 
 </script>
@@ -145,6 +156,10 @@ export default {
 
     &:hover + .radio-custom-label {
         background-color: rgba($border-secondary, .5);
+
+        &.disabled {
+            background-color: white;
+        }
     }
 
     &:focus + .radio-custom-label {
@@ -155,11 +170,28 @@ export default {
         &::after {
             content: none;
         }
+
+        &.disabled {
+            text-decoration: none;
+            cursor: default;
+            opacity: .7;
+		
+            &:hover {
+                text-decoration: none;
+                cursor: default;
+            }
+        }
     }
 
     &:checked + .radio-custom-label {
         &::after {
             content: url("#{$img-path}checked.svg");
+        }
+
+        &.disabled {
+            &::after {
+                content: none;
+            }
         }
     }
 }

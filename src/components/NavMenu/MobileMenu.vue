@@ -20,14 +20,14 @@
 
 		<div id="main-menu" :hidden="!burgerOpen" @click="toggleMenu">
 			<div class="user-menu" v-if="$store.getters.isLoggedIn">
-				<div class="user-menu__picture" v-if="$store.getters.isLoggedIn">
-					<router-link v-if="$store.state.auth.user.appRole.name == 'USER'" :to="'/users/'+ $store.state.auth.user.id" :aria-label="'Account settings for '+ currentUser+'\'s profile'" class="user-picture" style="background-image:url('https://i.ibb.co/f2HHwzx/collection-caracteres-bebe-dragon-dessines-main-23-2147831551-2.jpg?region=0,0,600,600')" />
+				<div class="user-menu__picture">
+					<router-link v-if="$store.state.auth.user.appRole.name == 'USER'" :to="'/users/'+ $store.state.auth.user.id" :aria-label="$t('menu.account') + currentUser" :event="$store.state.auth.user.appAccountType.name != 'FREE' ? 'click' : ''" :aria-disabled="$store.state.auth.user.appAccountType.name === 'FREE'" :class="$store.state.auth.user.appAccountType.name != 'FREE' ? 'user-picture' : 'user-picture disabled'" style="background-image:url('https://i.ibb.co/f2HHwzx/collection-caracteres-bebe-dragon-dessines-main-23-2147831551-2.jpg?region=0,0,600,600')" />
 
-					<router-link v-else-if="$store.state.auth.user.appRole.name == 'ADMIN'" :to="'/users/'+ $store.state.auth.user.id" :aria-label="'Account settings for '+ currentUser+'\'s profile'" class="user-picture" style="background-image:url('https://i.ibb.co/ZW7dgkw/baby-dragon-character-collection-with-flat-design-23-2147823681-2.jpg?region=0,0,600,600')" />
+					<router-link v-else-if="$store.state.auth.user.appRole.name == 'ADMIN'" :to="'/users/'+ $store.state.auth.user.id" :aria-label="$t('menu.account') + currentUser" :event="$store.state.auth.user.appAccountType.name != 'FREE' ? 'click' : ''" :aria-disabled="$store.state.auth.user.appAccountType.name === 'FREE'" :class="$store.state.auth.user.appAccountType.name != 'FREE' ? 'user-picture' : 'user-picture disabled'" style="background-image:url('https://i.ibb.co/ZW7dgkw/baby-dragon-character-collection-with-flat-design-23-2147823681-2.jpg?region=0,0,600,600')" />
 
-					<router-link v-else :to="'/users/'+ $store.state.auth.user.id" :aria-label="'Account settings for '+ currentUser+'\'s profile'" class="user-picture" style="background-image:url('https://i.ibb.co/kGq4gxY/tanaguru-logo-dragon-10x.png?region=0,0,600,600')" />
+					<router-link v-else :to="'/users/'+ $store.state.auth.user.id" :aria-label="$t('menu.account') + currentUser" :event="$store.state.auth.user.appAccountType.name != 'FREE' ? 'click' : ''" :aria-disabled="$store.state.auth.user.appAccountType.name === 'FREE'" :class="$store.state.auth.user.appAccountType.name != 'FREE' ? 'user-picture' : 'user-picture disabled'" style="background-image:url('https://i.ibb.co/kGq4gxY/tanaguru-logo-dragon-10x.png?region=0,0,600,600')" />
 				</div>
-				<router-link :to="'/#/users/'+ $store.state.auth.user.id" class='link-independent user-menu__username' :aria-label="'Account settings for '+ currentUser+'\'s profile'">{{ $store.state.auth.user.username }}</router-link>
+				<router-link :to="'/#/users/'+ $store.state.auth.user.id" :event="$store.state.auth.user.appAccountType.name != 'FREE' ? 'click' : ''" :aria-disabled="$store.state.auth.user.appAccountType.name === 'FREE'" :class="$store.state.auth.user.appAccountType.name != 'FREE' ? 'link-independent user-menu__username' : 'link-independent user-menu__username disabled'" :aria-label="$t('menu.account') + currentUser">{{ currentUser }}</router-link>
 			</div>
 
 			<Navbar :menuType="menuType" v-if="$store.getters.isLoggedIn"/>
@@ -133,7 +133,7 @@ import ModuleHelper from '../../helper/ModuleHelper';
 		moduleName(module){
 			return this.getModuleName(module);
 		}
-	},
+	}
   }
 </script>
 
@@ -263,6 +263,30 @@ import ModuleHelper from '../../helper/ModuleHelper';
 		color: $text-primary;
 		font-size: $base-font-size;
 		font-weight: 600;
+
+		&.disabled {
+			text-decoration: none;
+			cursor: default;
+			opacity: .7;
+
+			&:hover {
+				text-decoration: none;
+				cursor: default;
+			}
+		}
+	}
+	.user-picture {
+
+		&.disabled {
+			text-decoration: none;
+			cursor: default;
+			opacity: .7;
+
+			&:hover {
+				text-decoration: none;
+				cursor: default;
+			}
+		}
 	}
 }
 

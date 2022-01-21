@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue';
 import Moment from "moment";
 import VueMeta from "vue-meta";
 import axios from "../axios";
