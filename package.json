@@ -10,7 +10,7 @@
     "version": "echo $npm_package_version"
   },
   "dependencies": {
-    "@bytegem/vue-heroicons": "^0.2.5",
+    "@bytegem/vue-heroicons": "^0.5.0",
     "axios": "^0.21.2",
     "cache-loader": "^4.1.0",
     "core-js": "^3.12.1",
