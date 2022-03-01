@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@bytegem/vue-heroicons": "^0.2.5",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "cache-loader": "^4.1.0",
     "core-js": "^3.12.1",
     "highlight.js": "^11.1.0",
