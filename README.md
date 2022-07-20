@@ -1,5 +1,8 @@
 # webapp
 ## Prerequisites
+- python 2
+- node 14
+- npm 6
 - EditorConfig plugin for your favorite code editor to avoid file indentation issues
 - If VisualStudio Code is used, load the Tanaguru2020-Webapp.code-workspace configuration file at the root of the project
 
