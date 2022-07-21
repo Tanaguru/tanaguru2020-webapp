@@ -31,5 +31,6 @@
 	"backToPageList": "Back to the page list",
 	"confirm": "Confirm",
 	"cancel": "Cancel",
-	"sortAuditsOrLogs": "Sort by most recent"
+	"sortAuditsOrLogs": "Sort by most recent",
+	"copy": "Copy"
 }

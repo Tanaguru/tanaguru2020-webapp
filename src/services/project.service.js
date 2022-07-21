@@ -158,4 +158,19 @@ export default class ProjectService extends Service{
         .then((resp) => {then(resp.data)})
         .catch((err) => {error(err)});
     }
+
+    getApiKey(projectId, userId, then, error){
+
+        return this.axios({
+            url: this.controllerName + "/api-key/" + userId + "/" + projectId,
+            method: 'get'
+        })
+        .then(resp => {
+            then(resp.data)
+        })
+        .catch(err => {
+            error(err);
+        });
+
+    }
 }
