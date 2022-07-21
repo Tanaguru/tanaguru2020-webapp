@@ -129,6 +129,7 @@ export default {
 			this.selectedProject = projectId;
 			this.screenReaderInfo = '';
 			this.copyButtonText = this.$i18n.t("action.copy");
+			let apiKey = document.querySelector('#apiKey');
 			apiKey.setAttribute('type', 'text');
 			this.userService.me(
 				(data) => {
