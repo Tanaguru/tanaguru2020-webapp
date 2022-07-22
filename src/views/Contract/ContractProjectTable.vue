@@ -46,9 +46,9 @@
 								
 								<div class="tooltip__info" role="tooltip" v-show="showApiKeyTooltip == project.id">
 									<div class="tooltip-clipboard">
-										<input class="input" id="apiKey" :value="apiKey">
+										<input class="input" :id="idApiKey(project.id)" :value="apiKey">
 										<button
-											@click.stop.prevent="copyApiKey"
+											@click.stop.prevent="copyApiKey(project.id)"
 											class="btn btn--clipboard">
 											{{ copyButtonText }}
 										</button>
@@ -125,12 +125,16 @@ export default {
 				});
 		},
 
+		idApiKey(projectId){
+			return 'apiKey_'+projectId;
+		},
+
 		openApiKeyTooltip(projectId){
 			this.selectedProject = projectId;
 			this.screenReaderInfo = '';
 			this.copyButtonText = this.$i18n.t("action.copy");
-			let apiKey = document.querySelector('#apiKey');
-			apiKey.setAttribute('type', 'text');
+			let elementApiKey = document.querySelector('#apiKey_'+projectId);
+			elementApiKey.hidden = false;
 			this.userService.me(
 				(data) => {
                     var currentUserId = data.id;
@@ -148,23 +152,24 @@ export default {
 			);
 		},
 
-		copyApiKey() {
-            let apiKey = document.querySelector('#apiKey')
-            apiKey.setAttribute('type', 'text')
-            apiKey.select()
+		copyApiKey(projectId) {
+            let elementApiKey = document.querySelector('#apiKey_'+projectId);
+            elementApiKey.hidden = false;
+            elementApiKey.select();
             try {
                 var successful = document.execCommand('copy');
-                this.copyButtonText = this.$i18n.t("resultAudit.copyLink.success")
-                this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.sucessHelp")
-                setTimeout(() => (
-                        this.selectedProject = 0
-                ), 400)
+                this.copyButtonText = this.$i18n.t("resultAudit.copyLink.success");
+                this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.sucessHelp");
+                setTimeout(() => {
+                        this.selectedProject = 0;
+						this.apiKey = '';
+				}, 400)
             } catch (err) {
-                this.copyButtonText = this.$i18n.t("resultAudit.copyLink.fail")
-                this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.failHelp")
+                this.copyButtonText = this.$i18n.t("resultAudit.copyLink.fail");
+                this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.failHelp");
             }
-            apiKey.setAttribute('type', 'hidden')
-            window.getSelection().removeAllRanges()
+            elementApiKey.hidden = true;
+            window.getSelection().removeAllRanges();
         }
     }
 }
