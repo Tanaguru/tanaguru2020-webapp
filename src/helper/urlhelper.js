@@ -5,7 +5,7 @@ const UrlHelper = {
             try {
                 let parsedUrl = new URL(url);
                 let parsedProjectUrl = new URL(projectDomain);
-                result = mustBeInDomain || parsedUrl.hostname.includes(parsedProjectUrl.hostname);
+                result = !mustBeInDomain || parsedUrl.hostname.includes(parsedProjectUrl.hostname);
             } catch (_) {
                 result = false;
             }

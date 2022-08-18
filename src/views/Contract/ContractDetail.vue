@@ -167,7 +167,7 @@
                                         <div class="form-block">
                                             <label class="label" for="domain">
                                                 {{$t('entity.project.domain')}}
-                                                <span v-if="contract.restrictDomain"> *</span>
+                                                <span> *</span>
                                             </label>
                                             <input
                                                 class="input"
@@ -177,7 +177,7 @@
                                                 :placeholder="$t('entity.project.domain')"
                                                 :aria-describedBy="domainDescribedBy"
                                                 v-model="projectCreateForm.domain"
-                                                :required="contract.restrictDomain"
+                                                :required="true"
                                             >
                                             <p class="info-text" id="domain-constraint">{{$t('form.indications.urlConstraint')}}</p>
                                             <p class="info-error" id="domain-error">{{projectCreateForm.domainError}}</p>
@@ -432,7 +432,7 @@ export default {
                         }
                     }
                 );
-
+                
                 this.modifyContractForm.successMsg = this.$i18n.t('form.successMsg.savedChanges')
                 setTimeout(() => (
 					this.modifyContractForm.successMsg = ""

@@ -88,6 +88,7 @@
 					<audit-page-urls-form
 						:is-valid="isPageUrlsValid"
 						v-model="auditConfigurationForm.page.urls"
+						:is-seed-must-be-in-domain="seedMustBeInDomain"
 						:project-domain="project.domain.trim()"/>
 				</section>
 			</div>
@@ -469,6 +470,7 @@ export default {
 				this.auditConfigurationForm.page.urls.push(project.domain.trim());
 				this.auditConfigurationForm.site.seeds.push(project.domain.trim());
 				this.project = project;
+				this.seedMustBeInDomain = project.contract.restrictDomain;
 
 				if(this.project.contract.allowCreateUser){
 					this.breadcrumbProps.push({
@@ -643,6 +645,7 @@ export default {
 		//Pages
 		checkValidUrl: UrlHelper.checkValidUrl,
 		isPageUrlsValid() {
+			if(!this.seedMustBeInDomain) return true;
 			return this.auditConfigurationForm.page.urls.length >0 && this.auditConfigurationForm.page.urls.every(url => url.includes(this.project.domain.trim()))
 		},
 
