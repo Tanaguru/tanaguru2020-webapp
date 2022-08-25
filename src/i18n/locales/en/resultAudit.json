@@ -21,7 +21,8 @@
 		"export": "Export",
 		"share": "Share",
 		"print": "Print",
-		"launch": "Relaunch audit"
+		"launch": "Relaunch audit",
+		"exportCsv": "Export (CSV)"
 	},
 	"copyLink": {
 		"copy": "Copy link",

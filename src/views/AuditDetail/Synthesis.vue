@@ -59,6 +59,12 @@
                                     </select>
                                 </div>
                             </li>
+                            <li class="actions-list__item">
+                                <button class="btn btn--icon btn--nude" @click="triggerCsvExport(selectedReference.id)">
+                                    <icon-base-decorative width="16" height="16" viewBox="0 0 16 16"><icon-export /></icon-base-decorative>
+                                    <span>{{$t('resultAudit.actions.exportCsv')}}</span>
+                                </button>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -183,6 +189,8 @@ import Pagination from "../../components/Pagination";
 import HeaderRow from "./HeaderRow.vue";
 import AnomalyGlobalTestModal from './AnomalyGlobalTestModal';
 import IconUntested from "../../components/icons/IconUntested";
+import IconExport from "../../components/icons/IconExport";
+import FileSaver from "file-saver";
 
 export default {
     name: 'Synthesis',
@@ -200,7 +208,8 @@ export default {
         PageResultOverview,
         HeaderRow,
         AnomalyGlobalTestModal,
-        IconUntested
+        IconUntested,
+        IconExport
     },
     props: ['audit', 'totalPages'],
     data() {
@@ -528,6 +537,20 @@ export default {
                     console.error(error)
                 }
             );
+        },
+
+        triggerCsvExport(referenceId){
+            this.testHierarchyResultService.exportCsvSynthesisAuditResults(
+                this.audit.id, 
+                referenceId, 
+                this.audit.sharecode,
+                (result) => {
+                    var fileName = this.audit.name + '.csv';
+                    FileSaver.saveAs(new Blob([result]), fileName);
+                },
+                (error) => {
+                    console.error(error)
+                });
         }
     }
 }
