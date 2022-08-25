@@ -83,4 +83,18 @@ export default class TestHierarchyResultService extends Service{
             error(err)
         })
     }
+
+    exportCsvSynthesisAuditResults(auditId, referenceId, sharecode, then, error){
+        return this.axios({
+            url: this.controllerName + "/csv-export/" + auditId +"/" + referenceId + "/" + sharecode,
+            method: 'get',
+            responseType: 'blob'
+          })
+          .then(resp => {
+            then(resp.data)
+          })
+          .catch(err => {
+              error(err);
+          });
+    }
 }
