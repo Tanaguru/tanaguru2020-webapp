@@ -5,7 +5,7 @@
 		"usernameConstraint": "Should be between 4 and 30 characters long",
 		"passwordConstraint": "Should contain a minimum of 8 characters including at least 1 uppercase character, 1 lowercase, 1 number and 1 symbol (#?!@$%^&*-.,;:_).",
 		"emailConstraint": "Input should be an e-mail adress.",
-		"urlConstraint": "(example : http://www.website.com/)"
+		"urlConstraint": "(example : http://www.website.com/ or http://127.0.0.1:8080/)"
 	},
 	"successMsg": {
 		"savedChanges": "Changes have been saved.",
