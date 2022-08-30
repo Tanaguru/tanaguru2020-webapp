@@ -9,6 +9,10 @@
 	"pagesNb": "page(s)",
 	"logs": "Historique de l'audit",
 	"selectLogLevel" : "Sélectionner le niveau de log",
+	"pageList": {
+		"anomaly": "anomalie",
+		"anomalies": "anomalies"
+	},
 	"synthesis": {
 		"pages": "Nombre de pages auditée(s)",
 		"showSourceCode": "Code source de la page",
