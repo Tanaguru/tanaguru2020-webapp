@@ -182,6 +182,7 @@ import IconClose from '../../components/icons/IconClose'
 				audit: null,
 				sharecode: null,
           		project: null,
+				tempPages: [],
 				pages: [],
 				auditLogs: [],
 				firstToLast: false,
@@ -215,15 +216,15 @@ import IconClose from '../../components/icons/IconClose'
 			};
 		},
 		created() {
-			this.sharecode = this.$route.params.sharecode;
+			this.sharecode = typeof this.$route.params.sharecode !== 'undefined' ? this.$route.params.sharecode : null;
 			this.getProject();
+			this.getReferences();
 			this.getLogLevels();
 			this.refreshPages();
 			this.timer = setInterval(this.refreshPages, 3000);
       		this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
 			this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
 			this.getParameters();
-			this.getReferences();
 		},
 		beforeDestroy () {
 			clearInterval(this.timer)
@@ -311,21 +312,50 @@ import IconClose from '../../components/icons/IconClose'
         		this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
 			},
 
-            loadPages(page, size, name){
-                this.pageService.findByAuditIdAndName(
+            async loadPages(page, size, name){
+                await this.pageService.findByAuditIdAndName(
 					this.$route.params.id,
 					name,
                     this.sharecode,
                     page,
                     size,
                     (auditPagePage) =>{
-                        this.pages = auditPagePage.content;
+                        this.tempPages = auditPagePage.content;
                         this.pageCurrentPage = page;
                         this.pageTotalPage = auditPagePage.totalPages;
                         this.pageTotal = auditPagePage.totalElements;
                     }
-                )
+                );
+
+				for(let i = 0; i < this.tempPages.length; i++) {
+					let status = await this.loadPagesStatusResult(this.tempPages[i]);
+					this.tempPages[i].percentage = status.percentage;
+					this.tempPages[i].nbAnomaly = status.nbAnomaly;
+				}
+
+				this.pages = this.tempPages;
             },
+
+			async loadPagesStatusResult(page) {
+				var status = {};
+
+				await this.testHierarchyResultService.findByPageAndTestHierarchy(
+					page.id,
+					this.parameters.mainReferenceId,
+					this.sharecode,
+					(results) => {
+						Object.assign(status, {
+							percentage: Math.round((results.nbP / (results.nbP + results.nbF)) * 100),
+							nbAnomaly: results.nbEF
+						});
+					},
+					(error) => {
+						console.error(error);
+					}
+				);
+				
+				return status;
+			},
 
             loadAuditLogs(page, size, asc, levelsToDisplay){
                 this.auditLogService.findByAuditIdFiltered(
@@ -410,7 +440,8 @@ import IconClose from '../../components/icons/IconClose'
 					this.$route.params.id,
 					this.sharecode,
 					(reference) => {
-						this.parameters.mainReference = reference.name + '(' +reference.code + ')'
+						this.parameters.mainReference = reference.name + '(' +reference.code + ')';
+						this.parameters.mainReferenceId = reference.id;
 					},
 					(error) => {
 						console.error(error);
