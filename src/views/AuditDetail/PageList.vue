@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div role="list" class="list-pages" v-if="audit && pages.length > 0 && pages.length === pagesResult.length">
+        <div role="list" class="list-pages" v-if="audit && pagesResult.length > 0">
             <p role="listitem" class="list-pages__item  list-pages__item-overflow" v-for="(page, i) of pagesResult" :key="page.id">
                 <span class="list-pages__number">{{minElementIndex + i}}.</span>
                 <router-link class="link-simple" :to="'/audits/' + audit.id + '/pages/' + page.id + (audit.sharecode ? '/' + audit.sharecode : '')">
@@ -25,8 +25,11 @@ export default {
             var oldId = oldVal.map(el => el.id);
             var newId = newVal.map(el => el.id);
             var pagesHasChanged = newId.filter(e => !oldId.includes(e)).length > 0;
+
             if(pagesHasChanged) {
-                this.pages.forEach(page => this.loadPagesStatusResult(page));
+                this.pages.forEach(page => {
+                    if(this.pagesResult.filter(p => p.id === page.id).length === 0) this.loadPagesStatusResult(page);
+                });
             }
         }
     },
@@ -36,11 +39,11 @@ export default {
                 page.id,
                 this.sharecode,
                 (results) => {
-                    Object.assign(page, {
+                    let newPage = Object.assign({}, page, {
                         percentage: Math.round((results.nbTP / (results.nbTP + results.nbTF)) * 100),
 					    nbAnomaly: results.nbEF
                     });
-                    this.pagesResult.push(page);
+                    this.pagesResult.push(newPage);
                 },
                 (error) => {
                     console.error(error);
