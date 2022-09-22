@@ -36,3 +36,11 @@ Improvements :
 - Audit logs can be filtered by level and sort by date
 - Remove image ine page detail and audit synthesis when no screenshot
 - Pagination of lists
+
+## 1.0.4
+- generate api key
+- csv export audit synthesis
+- view scores on pages lists
+- launch audit on multiple domains
+- accept URL in IP format
+- somes fixes
