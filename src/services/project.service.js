@@ -142,11 +142,12 @@ export default class ProjectService extends Service{
         .catch((err) => {error(err)});
     }
 
-    modifyById(id, name, domain, then, error ){
+    modifyById(id, name, domain, contractId, then, error ){
         const project = {
             'id' : id,
             'name' : name,
-            'domain' : domain
+            'domain' : domain,
+            'contractId' : contractId
         };
 
         return this.axios({
@@ -156,5 +157,20 @@ export default class ProjectService extends Service{
         })
         .then((resp) => {then(resp.data)})
         .catch((err) => {error(err)});
+    }
+
+    getApiKey(projectId, userId, then, error){
+
+        return this.axios({
+            url: this.controllerName + "/api-key/" + userId + "/" + projectId,
+            method: 'get'
+        })
+        .then(resp => {
+            then(resp.data)
+        })
+        .catch(err => {
+            error(err);
+        });
+
     }
 }

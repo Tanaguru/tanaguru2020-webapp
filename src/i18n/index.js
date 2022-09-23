@@ -30,7 +30,8 @@ const messages = {
         'title' : require('./locales/en/title.json'),
         'user' : require('./locales/en/user.json'),
         'users' : require('./locales/en/users.json'),
-        'statistics' : require('./locales/en/statistics.json')
+        'statistics' : require('./locales/en/statistics.json'),
+        'contact' : require('./locales/en/contact.json')
     },
     fr : {
         'action' : require('./locales/fr/action.json'),
@@ -58,8 +59,8 @@ const messages = {
         'title' : require('./locales/fr/title.json'),
         'user' : require('./locales/fr/user.json'),
         'users' : require('./locales/fr/users.json'),
-        'statistics' : require('./locales/fr/statistics.json')
-
+        'statistics' : require('./locales/fr/statistics.json'),
+        'contact' : require('./locales/fr/contact.json')
     }
 }
 

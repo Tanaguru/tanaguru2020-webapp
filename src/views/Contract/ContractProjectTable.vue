@@ -33,6 +33,30 @@
 									<span>{{$t('action.delete')}}</span>
 								</button>
 							</li>
+							<li class="actions-list__item">
+								<button
+									class="btn btn--icon btn--nude"
+									aria-controls= "tooltip__info"
+									:aria-expanded="showApiKeyTooltip == project.id ? 'true' : 'false'"
+									@click="openApiKeyTooltip(project.id)">
+
+									<icon-base-decorative><icon-arrow-blue /></icon-base-decorative>
+									<span>{{$t('project.apiKey')}}</span>
+								</button>
+								
+								<div class="tooltip__info" role="tooltip" v-show="showApiKeyTooltip == project.id">
+									<div class="tooltip-clipboard">
+										<input class="input" :id="idApiKey(project.id)" :value="apiKey">
+										<button
+											@click.stop.prevent="copyApiKey(project.id)"
+											class="btn btn--clipboard">
+											{{ copyButtonText }}
+										</button>
+									</div>
+									<div aria-live="polite" class="screen-reader-text">{{ screenReaderInfo }}</div>
+								</div>
+								
+							</li>
 						</ul>
 					</td>
 				</tr>
@@ -58,7 +82,21 @@ export default {
 		IconDelete,
 		DeletionModal
 	},
+	data(){
+		return{
+			apiKey: '',
+			copyButtonText: this.$i18n.t("action.copy"),
+			screenReaderInfo: '',
+			currentUser: null,
+			selectedProject: 0
+		}
+	},
     props: [ 'projects', 'authorityByProjectId' ],
+	computed:{
+		showApiKeyTooltip(){
+			return this.selectedProject;
+		}
+	},
     methods: {
         confirm(project) {
 			this.$modal
@@ -85,7 +123,54 @@ export default {
 			return this.authorityByProjectId[projectId] && this.authorityByProjectId[projectId].some(authority => {
 					return authority === needed;
 				});
-		}
+		},
+
+		idApiKey(projectId){
+			return 'apiKey_'+projectId;
+		},
+
+		openApiKeyTooltip(projectId){
+			this.selectedProject = projectId;
+			this.screenReaderInfo = '';
+			this.copyButtonText = this.$i18n.t("action.copy");
+			let elementApiKey = document.querySelector('#apiKey_'+projectId);
+			elementApiKey.hidden = false;
+			this.userService.me(
+				(data) => {
+                    var currentUserId = data.id;
+					this.projectService.getApiKey(projectId, currentUserId,
+						(data) => {
+							this.apiKey = data;
+						},
+						(error) => {
+							console.log(error)
+						});
+                },
+                (error) => {
+					console.log(error)
+				}
+			);
+		},
+
+		copyApiKey(projectId) {
+            let elementApiKey = document.querySelector('#apiKey_'+projectId);
+            elementApiKey.hidden = false;
+            elementApiKey.select();
+            try {
+                var successful = document.execCommand('copy');
+                this.copyButtonText = this.$i18n.t("resultAudit.copyLink.success");
+                this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.sucessHelp");
+                setTimeout(() => {
+                        this.selectedProject = 0;
+						this.apiKey = '';
+				}, 400)
+            } catch (err) {
+                this.copyButtonText = this.$i18n.t("resultAudit.copyLink.fail");
+                this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.failHelp");
+            }
+            elementApiKey.hidden = true;
+            window.getSelection().removeAllRanges();
+        }
     }
 }
 </script>

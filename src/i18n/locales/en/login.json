@@ -3,5 +3,9 @@
 	"labelId": "Your username",
 	"labelPassword": "Your password",
 	"password": "Forgot your password ?",
-	"incorrectLogin": "Incorrect username and/or password."
+	"incorrectLogin": "Incorrect username and/or password.",
+	"caseSensitive": "This field is case sensitive",
+	"signup": {
+		"intro": "Don't have an account? You can sign up for a 30 days free trial by following the next link."
+	}
 }

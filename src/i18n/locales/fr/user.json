@@ -4,5 +4,6 @@
 	"noContract": "Vous n'avez pas encore été ajouté à un contrat.",
 	"adminNoContract": "Cet utilisateur n'a pas encore été ajouté à un contrat.",
 	"results": "résultat(s)",
-	"password": "Changer mon mot de passe"
+	"password": "Changer mon mot de passe",
+	"myProfile": "Mon profil"
 }

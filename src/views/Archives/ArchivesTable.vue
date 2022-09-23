@@ -7,8 +7,9 @@
                 :class="firstToLast ? 'btn btn--default-inverse btn--icon' : 'btn btn--default btn--icon'"
                 @click="reverseAuditOrder()"
                 aria-pressed="true"
+				v-if="this.audits.length > 1"
             >
-                {{ $t('action.sortAudits') }}
+                {{ $t('action.sortAuditsOrLogs') }}
                 <icon-base-decorative v-if="firstToLast">
                     <icon-close/>
                 </icon-base-decorative>
@@ -54,16 +55,19 @@
 									<span>{{ $t('action.show') }}</span>
 								</router-link>
 							</li>
-							<li class="actions-list__item"
+							<li class="actions-list__item with-button"
 								v-if="authorities.includes('DELETE_AUDIT') && (audit.status === 'DONE' || audit.status === 'ERROR')">
 								<button
-									class="btn btn--icon btn--nude"
-									@click="confirmAuditDeletion(audit)">
+									:class="$store.state.auth.user.appAccountType.name != 'FREE' ? 'btn btn--icon btn--nude' : 'btn btn--icon btn--nude disabled'"
+									@click="$store.state.auth.user.appAccountType.name != 'FREE' ? confirmAuditDeletion(audit) : ''"
+									:aria-disabled="$store.state.auth.user.appAccountType.name === 'FREE'"
+								>
 									<icon-base-decorative>
 										<icon-delete/>
 									</icon-base-decorative>
 									<span>{{ $t('action.delete') }}</span>
 								</button>
+								<trial-tooltip :spot="'delete-' + audit.id" v-if="$store.state.auth.user.appAccountType.name == 'FREE'" />
 							</li>
 							<li v-else class="actions-list__item">
 								<button
@@ -117,6 +121,7 @@ import IconChecked from '../../components/icons/IconChecked'
 import IconClose from '../../components/icons/IconClose'
 import DeletionModal from '../../components/DeleteModal'
 import Pagination from "../../components/Pagination";
+import TrialTooltip from '../../components/TrialTooltip.vue'
 
 export default {
     name: 'ArchivesTable',
@@ -127,7 +132,8 @@ export default {
         IconChecked,
         IconClose,
         DeletionModal,
-        Pagination
+        Pagination,
+        TrialTooltip
     },
     data() {
         return {
@@ -308,9 +314,30 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 button {
     margin-bottom: 1rem;
+
+	&.disabled {
+		opacity: .7;
+
+		&:hover {
+			cursor: default;
+
+			span {
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+.with-button {
+	display: flex;
+	align-items: center;
+
+	div {
+		margin-left: .5rem;
+	}
 }
 </style>

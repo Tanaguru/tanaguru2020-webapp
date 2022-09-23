@@ -21,7 +21,8 @@
 		"export": "Exporter",
 		"share": "Partager",
 		"print": "Imprimer",
-		"launch": "Relancer l'audit"
+		"launch": "Relancer l'audit",
+		"exportCsv": "Exporter (CSV)"
 	},
 	"copyLink": {
 		"copy": "Copier le lien",
@@ -91,6 +92,16 @@
 		"checkboxAnomaly": "Ne plus relever cette anomalie",
 		"hide": "Masquer",
 		"show": "Afficher",
-		"anomaly": "Anomalie n°"
+		"anomaly": "Anomalie n°",
+		"fontSize": "Taille du texte : ",
+		"fontWeight": "Graisse du texte : ",
+		"textColor": "Couleur du texte : ",
+		"backgroundColor": "Couleur de fond : ",
+		"image": "Image",
+		"bgColor": "Couleur de fond",
+		"undefined": "Indéfini",
+		"ratio": "Ratio estimé : ",
+		"bold": "(gras)",
+		"normal": "(normal)"
 	}
 }

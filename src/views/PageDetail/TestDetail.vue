@@ -9,6 +9,7 @@
                     <icon-base-informative icon-label="results passed" v-if="testResult.status === 'passed'"><icon-compliant/></icon-base-informative>
                     <icon-base-informative icon-label="results inapplicable"
 										   v-if="testResult.status === 'inapplicable'"><icon-not-applicable/></icon-base-informative>
+					
                 </span>
 			</div>
 
@@ -67,6 +68,7 @@
 				:page-content="pageContent"
 				:anomaly="anomaly"
 				:has-accessible-name-tag="hasAccessibleNameTag"
+				:has-contrast-tag="hasContrastTag"
 				:index="i"/>
 
 			<div v-if="!lastPageLoaded && !isLoading">
@@ -157,6 +159,9 @@ export default {
 	computed: {
 		hasAccessibleNameTag() {
 			return this.test.tags.includes('accessiblename')
+		},
+		hasContrastTag() {
+			return this.test.tags.includes('contrast')
 		},
 		nbElementForStatus() {
 			let result = 0;

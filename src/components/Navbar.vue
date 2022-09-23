@@ -6,17 +6,17 @@
 			</router-link>
 		</li>
 
-		<li class="navbar__item">
-			<router-link exact to="/administration" class="link-independent link-independent--icon">
+		<li class="navbar__item with-button">
+			<router-link 
+				exact 
+				to="/administration" 
+				:class="$store.state.auth.user.appAccountType.name != 'FREE' ? 'link-independent link-independent--icon' : 'link-independent link-independent--icon disabled'" 
+				:aria-disabled="$store.state.auth.user.appAccountType.name === 'FREE'" 
+				:event="$store.state.auth.user.appAccountType.name != 'FREE' ? 'click' : ''"
+			>
 				<span>{{ $t('title.administration') }}</span>
 			</router-link>
-		</li>
-
-		<li v-for="module in onlineModule" :key="module.name" class="navbar__item">
-		<router-link  exact :to="'/external-module/' + module.name"
-					  class="link-independent link-independent--icon">
-			<span>{{moduleName(module)}}</span>
-		</router-link>
+			<TrialTooltip spot="administration" v-if="$store.state.auth.user.expired" />
 		</li>
 
 		<li class="navbar__item" v-if="menuType == 'desktop'">
@@ -39,6 +39,7 @@ import IconParameters from './icons/IconParameters'
 import IconLogout from './icons/IconLogout'
 import IconDashboard from './icons/IconDashboard'
 import ModuleHelper from '../helper/ModuleHelper'
+import TrialTooltip from '../components/TrialTooltip.vue'
 
 export default {
 	name: 'navbar',
@@ -54,6 +55,7 @@ export default {
 		IconParameters,
 		IconLogout,
 		IconDashboard,
+		TrialTooltip
 	},
 	methods: {
 		getModuleName: ModuleHelper.getModuleName,
@@ -95,35 +97,29 @@ export default {
 	&__item {
 		&:not(:last-child) {
 			padding-right: .6rem;
-
-			&::after {
-				content: '';
-				display: block;
-				margin: 1.2rem 0 1.2rem -#{$wrapper-spacing};
-				width: 7.2rem;
-				height: .1rem;
-				background-color: $border-secondary;
-
-				@media #{$media-lg-viewport} {
-					display: inline-block;
-					margin: 0 0 0 .6rem;
-					vertical-align: middle;
-					height: 1.2rem;
-					width: .2rem;
-				}
-			}
 		}
 	}
 
 	.router-link-active {
-		color: $link-hover;
-		font-weight: bolder;
+		background-color: $text-secondary;
+		color: $color-white;
 
-		svg {
-			.stroke-color {
-				stroke: $link-hover;
-			}
+		.fill-color {
+			fill: $color-white;
 		}
+
+		.stroke-color {
+			stroke: $color-white;
+		}
+	}
+}
+
+.with-button {
+	display: flex;
+	align-items: center;
+
+	div {
+		margin-left: .5rem;
 	}
 }
 </style>

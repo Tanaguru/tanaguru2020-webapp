@@ -58,7 +58,10 @@
 					<audit-type-form
 						v-model="auditConfigurationForm.common.type"
 						:is-valid="isAuditTypeValid"
-						:has-been-sent="hasTryToLaunch"/>
+						:has-been-sent="hasTryToLaunch"
+						:notSandbox="project.allowSiteAudit"
+						:alreadyHasOneSiteAudit="alreadyHasOneSiteAudit"
+						/>
 
 					<!-- Audit name -->
 					<audit-name-form
@@ -85,6 +88,7 @@
 					<audit-page-urls-form
 						:is-valid="isPageUrlsValid"
 						v-model="auditConfigurationForm.page.urls"
+						:is-seed-must-be-in-domain="seedMustBeInDomain"
 						:project-domain="project.domain.trim()"/>
 				</section>
 			</div>
@@ -398,6 +402,7 @@ export default {
 			activeBrowsers: [],
 			references: [],
 			seedMustBeInDomain: true,
+			alreadyHasOneSiteAudit: false,
 			auditConfigurationForm: {
 
 				common: {
@@ -465,14 +470,26 @@ export default {
 				this.auditConfigurationForm.page.urls.push(project.domain.trim());
 				this.auditConfigurationForm.site.seeds.push(project.domain.trim());
 				this.project = project;
+				this.seedMustBeInDomain = project.contract.restrictDomain;
 
-				this.breadcrumbProps.push({
-					name: project.contract.name,
-					path: '/contracts/' + project.contract.id
-				});
+				if(this.project.contract.allowCreateUser){
+					this.breadcrumbProps.push({
+						name: project.contract.name,
+						path: '/contracts/' + project.contract.id
+					});
+				}
 				this.breadcrumbProps.push({
 					name: project.name,
 				});
+
+				this.auditService.findByProjectId(
+					this.$route.params.id,
+					(audits) => {
+						audits.filter(audit => {
+							this.alreadyHasOneSiteAudit = audit.type === "SITE"
+						})
+					}
+				)
 			},
 			(error) => {
 				console.error(error)
@@ -628,7 +645,8 @@ export default {
 		//Pages
 		checkValidUrl: UrlHelper.checkValidUrl,
 		isPageUrlsValid() {
-			return this.auditConfigurationForm.page.urls.every(url => url.includes(this.project.domain.trim()))
+			if(!this.seedMustBeInDomain) return true;
+			return this.auditConfigurationForm.page.urls.length >0 && this.auditConfigurationForm.page.urls.every(url => url.includes(this.project.domain.trim()))
 		},
 
 		//Sites

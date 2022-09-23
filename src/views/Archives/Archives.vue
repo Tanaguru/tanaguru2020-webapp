@@ -16,7 +16,7 @@
                         <span>{{ $t('entity.audit.page') }}</span>
                     </a>
                 </li>
-                <li class="actions-list__item">
+                <li class="actions-list__item" v-if="project.name != 'Bac à sable'">
                     <a class="link link-independent link-independent--icon" href="#site-audit">
                         <icon-base-decorative width="24" height="24" viewBox="0 0 72 72">
                             <icon-audit-site/>
@@ -49,7 +49,7 @@
             </ul>
         </header>
 
-        <article class="article-archives" :id="type.toLowerCase() + '-audit'" v-for="type of types" :key="type">
+        <article class="article-archives" :id="type.toLowerCase() + '-audit'" v-for="type of typesByProject" :key="type">
             <h2 class="article-archives__title">
                 <icon-base-decorative width="40" height="40" viewBox="0 0 72 72">
                     <icon-audit-page/>
@@ -104,7 +104,6 @@ export default {
                     path: '/'
                 },
             ],
-            types: ['PAGE', 'SITE', 'SCENARIO', 'UPLOAD'],
             deleteAuditError: "",
             projectId : "",
 			authorities: []
@@ -121,6 +120,17 @@ export default {
             ]
         }
     },
+    computed : {
+        typesByProject() {
+            let types = [];
+            if(this.project.name != "Bac à sable") {
+                types = ['PAGE', 'SITE', 'SCENARIO', 'UPLOAD']
+            } else {
+                types = ['PAGE', 'SCENARIO', 'UPLOAD']
+            }
+            return types;
+        }
+    },
     created() {
         this.projectId = this.$route.params.id;
         this.projectService.findById(
@@ -128,14 +138,17 @@ export default {
             (project) => {
                 this.project = project;
                 // Breadcrumbs
-                this.breadcrumbProps.push({
-                    name: project.contract.name,
-                    path: '/contracts/' + project.contract.id
-                })
-                this.breadcrumbProps.push({
-                    name: project.name,
-                    path: '/projects/' + project.id
-                })
+                if(project.contract.allowCreateProject){
+                    this.breadcrumbProps.push({
+                        name: project.contract.name,
+                        path: '/contracts/' + project.contract.id
+                    })
+                    this.breadcrumbProps.push({
+                        name: project.name,
+                        path: '/projects/' + project.id
+                    })
+                }
+                
                 this.breadcrumbProps.push({
                     name: project.name + ' archives'
                 })

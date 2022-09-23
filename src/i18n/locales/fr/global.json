@@ -12,6 +12,9 @@
 		"maintainButtonLabel": "Prolonger la durée de la session."
 	},
 	"logoAlt": "Tanaguru - Retour à l'accueil",
-	"footerContent": "©2009-{date} Tanaguru.com - Propulsé par Tanaguru - Tanaguru app v{appVersion} - Tanaguru engine v{serverVersion}",
-	"breadcrumbsHelp": "Vous êtes ici"
+	"footerContent": "©2009-{date} Tanaguru.com - Propulsé par Tanaguru - Tanaguru app v{appVersion} - Tanaguru engine v{serverVersion} - Tanaguru web extension v{webextVersion}",
+	"breadcrumbsHelp": "Vous êtes ici",
+	"expiredMessage": "Votre essai gratuit est terminé. Vous pouvez encore consulter vos audits pendant quelques temps mais ne pouvez plus en lancer de nouveaux. Contactez-nous si vous êtes intéressé·e par l'expérience complète de Tanaguru Engine.",
+	"trialBloc": "Pourquoi est-ce désactivé?",
+	"trialTooltipMsg": "Vous n'avez pas accès à cette fonctionnalité."
 }

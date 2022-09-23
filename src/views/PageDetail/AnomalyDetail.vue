@@ -21,7 +21,10 @@
             <div class="result-details__extracts">
                 <div class="details-extract" v-if="anomaly">
                     <p class="extract-code__line details-extract__title">{{$t('resultAudit.testResult.outer')}} :</p>
-                    <prism language="html" class="extract-code__frame">{{outer}}</prism>
+                    <prism v-if="!hasContrastTag" language="xml" class="extract-code__frame">{{outer}}</prism>
+                    <prism v-else language="xml" class="extract-code__frame">
+						{{ contrastOuter }}
+					</prism>
                 </div>
 
                 <div class="details-extract">
@@ -31,6 +34,65 @@
                         <li class="details-list__item" v-if="anomaly.canBeReachedUsingKeyboardWith && anomaly.canBeReachedUsingKeyboardWith.length > 0">{{$t('resultAudit.testResult.canBeReachedUsingKeyboardWith')}} : <span>{{anomaly.canBeReachedUsingKeyboardWith}}</span></li>
                         <li class="details-list__item" v-if="anomaly.isNotExposedDueTo && anomaly.isNotExposedDueTo.length > 0">{{$t('resultAudit.testResult.isNotExposedDueTo')}} : <span>{{anomaly.isNotExposedDueTo}}</span></li>
                         <li class="details-list__item" v-if="anomaly.isNotVisibleDueTo && anomaly.isNotVisibleDueTo.length > 0">{{$t('resultAudit.testResult.isNotVisibleDueTo')}} : <span>{{anomaly.isNotVisibleDueTo}}</span></li>
+						
+						<!-- CONTRASTS --> 
+						<li v-if="hasContrastTag" class="details-list__item">
+							<p class="detail">
+								<span class="detail__label">{{ $t('resultAudit.testResult.fontSize') }}</span>
+								<span class="detail__value">{{ anomaly.size }}</span>
+							</p>
+							<p class="detail">
+								<span class="detail__label">{{ $t('resultAudit.testResult.fontWeight') }}</span>
+								<span class="detail__value">{{ anomaly.weight }} </span>
+								<span class="detail__value" v-if="anomaly.weight >= 700">{{ $t('resultAudit.testResult.bold') }}</span>
+								<span class="detail__value" v-else>{{ $t('resultAudit.testResult.normal') }}</span>
+							</p>
+							<p class="detail">
+							<!--
+								Return rgb value
+							-->
+								<span class="detail__preview">
+									<span class="detail__label">{{ $t('resultAudit.testResult.textColor') }}</span>
+									<span class="detail__color" :style="`background-color: `+ anomaly.foreground"></span>
+									<code class="detail__value">{{ anomaly.foreground }}</code>
+								</span>
+							</p>
+							<p class="detail">
+							<!--
+								Return rgb value or `null` or `image`
+							-->
+								<!-- if color : -->
+								<span v-if="anomaly.background && anomaly.background != 'image'" class="detail__preview">
+									<span class="detail__label">{{ $t('resultAudit.testResult.background') }}</span>
+									<span class="detail__color bgColor" :style="`background-color: ` + anomaly.background"></span>
+									<code class="detail__value">{{ anomaly.background }}</code>
+								</span>
+
+								<!-- if `image` : -->
+								<span v-else-if="anomaly.background == 'image'" class="detail__preview">
+									<span class="detail__label">{{ $t('resultAudit.testResult.background') }}</span>
+									<span class="detail__image">
+										<icon-base-decorative width="20" height="20" viewBox="0 0 352 352"><icon-picture /></icon-base-decorative>
+									</span>
+									<span class="detail__value">{{ $t('resultAudit.testResult.image') }}</span>
+								</span>
+
+								<!-- if `null` : -->
+								<span v-else-if="!anomaly.background">
+									<span class="detail__label">{{ $t('resultAudit.testResult.background') }}</span>
+									<span class="detail__value">{{ $t('resultAudit.testResult.undefined') }}</span>
+								</span>
+							</p>
+
+							<p class="detail">
+								<span class="detail__label">{{ $t('resultAudit.testResult.estimatedRatio') }}</span>
+								<span class="detail__value">{{ anomaly.ratio }}</span>
+							</p>
+							<p class="detail">
+								<span class="detail__label">{{ $t('resultAudit.testResult.goalRatio') }}</span>
+								<span class="detail__value">{{ anomaly.valid.target }} : {{ anomaly.valid.status }}</span>
+							</p>
+						</li>
                     </ul>
                 </div>
 
@@ -70,9 +132,9 @@
                     <p :id="index + '-xpath-t-' + anomaly.status" class="details-tab__content" :hidden="!xpathOpen">{{$t('resultAudit.testResult.xpath')}} : {{anomaly.xpath}}</p>
                 </div>
 
-                <hr role="presentation" class="details-extract-separator" />
+                <hr role="presentation" v-if="!hasContrastTag" class="details-extract-separator" />
 
-                <div class="details-tab">
+                <div class="details-tab" v-if="!hasContrastTag">
                     <div class="details-tab__header">
 						<!-- Show CSS button -->
                         <button
@@ -120,6 +182,7 @@
     import IconInforound from '../../components/icons/IconInforound'
     import IconNotApplicable from '../../components/icons/IconNotApplicable'
     import IconQualify from '../../components/icons/IconQualify'
+	import IconPicture from '../../components/icons/IconPicture'
 
     export default {
         name: 'AnomalyDetail',
@@ -131,8 +194,9 @@
             IconImproper,
             IconNotApplicable,
             IconQualify,
+			IconPicture,
         },
-        props: ['anomaly', 'index', 'pageContent', 'hasAccessibleNameTag'],
+        props: ['anomaly', 'index', 'pageContent', 'hasAccessibleNameTag', 'hasContrastTag'],
         data(){
             return{
                 xpathOpen: false,
@@ -152,24 +216,17 @@
 		computed: {
             outer(){
                 let result = "";
-                if(this.anomaly && this.pageContent && this.pageContent.dom){
-                    const element = this.pageContent.dom.querySelector(this.anomaly.cssSelector);
-                    if(element){
-                        let fakeElement = element.cloneNode(true);
-                        const e = document.createElement(fakeElement.tagName.toLowerCase());
-                        if (e.outerHTML.indexOf("/") !== -1) {
-                            if (fakeElement.innerHTML && fakeElement.innerHTML.length > 512) {
-                                fakeElement.innerHTML = '[...]';
-                            }
-                        }
-                        result = fakeElement.outerHTML;
-                    }else{
-                        result = this.$t('entity.element.cannotLoad')
-                    }
+                if(this.anomaly.sourceCode ){
+                    result = this.anomaly.sourceCode;
+                }else{
+                    result = this.$t('entity.element.cannotLoad')
                 }
-
                 return result;
-            }
+            },
+
+			contrastOuter(){
+				return "<" + this.anomaly.tag + ">" + this.anomaly.text + "</" + this.anomaly.tag + ">"
+			}
         },
         methods: {
             toggleXpath(){
@@ -384,6 +441,10 @@
 		span {
 			font-weight: 600;
 		}
+
+		.detail__value {
+			font-weight: 400;
+		}
 	}
 }
 
@@ -432,4 +493,38 @@
 		}
 	}
 }
+
+.detail__preview {
+	display: flex;
+	align-items: center;
+
+	> * {
+		margin-right: 0.5rem;
+	}
+
+	svg {
+		display: block;
+	}
+}
+
+
+.detail__label {
+	font-weight: 600;
+}
+
+
+.detail__image {
+	display: inline-block;
+	width: 2rem;
+	height: 2rem;
+}
+
+.detail__color {
+	display: inline-block;
+	width: 2rem;
+	height: 2rem;
+	font-weight: 400;
+	border: 1px solid black;
+}
+
 </style>

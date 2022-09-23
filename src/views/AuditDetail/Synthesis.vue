@@ -18,14 +18,7 @@
             <div class="audit-infos">
                 <div class="audit-infos__stats">
                     <div class="audit-stats">
-                        <div class="audit-stats__chart">
-                            <CircularProgressChart
-                                :percentage="percentageSuccess"
-                                :shadowOne="'chart-shadow1-' + audit.id"
-                                :shadowTwo="'chart-shadow2-' + audit.id"
-                                :gradient="'chart-gradient-' + audit.id"/>
-                        </div>
-                        <p class="audit-stats__recap audit-stats-recap" v-if="auditReferenceResult">
+                        <p class="audit-stats__recap audit-stats-recap-no-chart" v-if="auditReferenceResult">
                             <span class="audit-stats-recap__number">{{ auditReferenceResult.nbEF }}</span>
                             <span class="audit-stats-recap__unit"> {{ $t('entity.generic.anomalies') }}</span>
                         </p>
@@ -42,8 +35,8 @@
                         <ul class="audit-list-infos">
                             <li>
                                 <span>{{ $t('entity.audit.url') }} : </span>
-                                <a :href="pages[0].url" class="link-simple audit-list-infos__domain">{{
-                                        pages[0].url
+                                <a :href="project.domain" class="link-simple audit-list-infos__domain">{{
+                                        project.domain
                                     }}</a>
                             </li>
                             <li>
@@ -66,6 +59,12 @@
                                     </select>
                                 </div>
                             </li>
+                            <li class="actions-list__item">
+                                <button class="btn btn--icon btn--nude" @click="triggerCsvExport(selectedReference.id)">
+                                    <icon-base-decorative width="16" height="16" viewBox="0 0 16 16"><icon-export /></icon-base-decorative>
+                                    <span>{{$t('resultAudit.actions.exportCsv')}}</span>
+                                </button>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -75,16 +74,23 @@
         <hr role="presentation" class="separator separator--main"/>
 
         <div class="wrapper">
+            <header class="audit-overview__header">
+                <h2 class="audit-overview__title">{{$t('resultAudit.overview.title')}}</h2>
+            </header>
+
             <page-result-overview
-                v-if="auditReferenceResult"
-                :nb-failed="auditReferenceResult.nbF"
-                :nb-cant-tell="auditReferenceResult.nbCT"
-                :nb-untested="auditReferenceResult.nbU"
-                :nb-passed="auditReferenceResult.nbP"
-                :nb-inapplicable="auditReferenceResult.nbI"
+                v-if="this.numberOfTestsResult"
+                :nb-failed="this.numberOfTestsResult.nbF"
+                :nb-cant-tell="this.numberOfTestsResult.nbCT"
+                :nb-untested="this.numberOfTestsResult.nbU"
+                :nb-passed="this.numberOfTestsResult.nbP"
+                :nb-inapplicable="this.numberOfTestsResult.nbI"
                 :anomaly-per-theme-labels="anomalyPerThemeLabels"
                 :anomaly-per-theme-data="anomalyPerThemeData"
             />
+            <div id="fetching-data" v-else>
+                <p aria-live="polite">{{$t('auditDetail.synthesis.loading')}}</p>
+            </div>
         </div>
 
         <hr role="presentation" class="separator separator--main"/>
@@ -93,7 +99,7 @@
                 $t('auditDetail.synthesis.table.title')
             }}<span>{{ $t('auditDetail.synthesis.table.title-info') }}</span></h2>
 
-        <div v-if="selectedReference && totalSynthesisPageByReferenceId[selectedReference.id]">
+        <div v-if="selectedReference && totalSynthesisPageByReferenceId[selectedReference.id] && this.allResultsSynthesis">
             <div class="table-pagination">
                 <pagination
                     :current-page="currentSynthesisPage"
@@ -109,6 +115,13 @@
                     <thead>
                         <tr>
                             <td class="no-border"></td>
+                            <th scope="col" class="rotate">
+                                <div class="rotate__inner">
+                                    <span class="page">
+                                    {{$t('auditDetail.synthesis.allPages')}}
+                                    </span>
+                                </div>
+                            </th>
                             <th scope="col" class="rotate" v-for="(page, i) in pages" :key="i">
                                 <HeaderRow :page="page" :i="i" :currentSynthesisPage="currentSynthesisPage"/>
                             </th>
@@ -117,12 +130,25 @@
                     <tbody>
                         <tr v-for="(criteriaResultByPage, criteriaCode) in currentSynthesis" :key="criteriaCode">
                             <th scope="row" class="row-header">Test {{ criteriaCode }}</th>
+                            <td>
+                                <button class="btn btn--nude" @click="openGlobalTestModal(audit, criteriaResultByPage[Object.keys(criteriaResultByPage)[0]]['testHierarchy'], globalTestResultForPages[criteriaCode], allResultsSynthesis[criteriaCode], allPagesById)">
+                                    <icon-base-decorative>
+                                        <icon-improper v-if="globalTestResultForPages[criteriaCode] === 'failed'"/>
+                                        <icon-compliant v-else-if="globalTestResultForPages[criteriaCode] === 'passed'"/>
+                                        <icon-qualify v-else-if="globalTestResultForPages[criteriaCode] === 'cantTell'"/>
+                                        <icon-untested v-else-if="globalTestResultForPages[criteriaCode] === 'untested'"/>
+                                        <icon-notApplicable v-else/>
+                                    </icon-base-decorative>
+                                </button>
+                                <span class="td-background"></span>
+                            </td>
                             <td v-for="(criteriaResult, pageId, indexPage) in criteriaResultByPage" :key="pageId">
                                 <button class="btn btn--nude" @click="openModal(audit, pageById[pageId], criteriaResult, indexPage)">
                                     <icon-base-decorative>
                                         <icon-improper v-if="criteriaResult.status === 'failed'"/>
                                         <icon-compliant v-else-if="criteriaResult.status === 'passed'"/>
                                         <icon-qualify v-else-if="criteriaResult.status === 'cantTell'"/>
+                                        <icon-untested v-else-if="criteriaResult.status === 'untested'"/>
                                         <icon-notApplicable v-else/>
                                     </icon-base-decorative>
                                     <span class="screen-reader-text">{{$t('auditDetail.synthesis.table.btnShow', {status: criteriaResult.status})}}</span>
@@ -160,7 +186,11 @@ import AnomalyModal from './AnomalyModal';
 import CircularProgressChart from '../../components/charts/CircularProgressChart';
 import PageResultOverview from "../PageDetail/PageResultOverview";
 import Pagination from "../../components/Pagination";
-import HeaderRow from "./HeaderRow.vue"
+import HeaderRow from "./HeaderRow.vue";
+import AnomalyGlobalTestModal from './AnomalyGlobalTestModal';
+import IconUntested from "../../components/icons/IconUntested";
+import IconExport from "../../components/icons/IconExport";
+import FileSaver from "file-saver";
 
 export default {
     name: 'Synthesis',
@@ -176,7 +206,10 @@ export default {
         AnomalyModal,
         CircularProgressChart,
         PageResultOverview,
-        HeaderRow
+        HeaderRow,
+        AnomalyGlobalTestModal,
+        IconUntested,
+        IconExport
     },
     props: ['audit', 'totalPages'],
     data() {
@@ -188,13 +221,19 @@ export default {
             references: [],
             pages: [],
             pageById: {},
+            allPages: [],
 
             selectedReference: null,
             selectedPage: null,
 
             synthesisPageByReferenceId: {},
             currentSynthesisPage: 0,
-            totalSynthesisPageByReferenceId: {}
+            totalSynthesisPageByReferenceId: {},
+            globalTestResultForPages: {},
+            allResultsSynthesis: null,
+            allPagesById: {},
+            numberOfTestsResult: null,
+            project: null
         }
     },
     created() {
@@ -205,7 +244,7 @@ export default {
             (references) => {
                 this.references = references;
                 this.selectedReference = references[0];
-                this.onSelectReference();
+                this.onSelectReference();        
             },
             (error) => {
                 console.error(error);
@@ -222,6 +261,8 @@ export default {
                 console.error(error);
             },
         );
+        this.getProject();
+        this.loadAllPagesById();
     },
     computed: {
         auditReferenceResult() {
@@ -260,14 +301,6 @@ export default {
             return result;
         },
 
-        percentageSuccess() {
-            if (!this.auditReferenceResult) {
-                return 0;
-            } else {
-                return Math.round(this.auditReferenceResult.nbP / (this.auditReferenceResult.nbP + this.auditReferenceResult.nbF) * 100)
-            }
-        },
-
         anomalyPerThemeLabels() {
             let result = [];
             if (this.selectedReference && this.principleResultsByReference[this.selectedReference.id]) {
@@ -298,10 +331,39 @@ export default {
                 result = this.synthesisPageByReferenceId[this.selectedReference.id][this.currentSynthesisPage];
             }
             return result;
-        },
+        }
     },
     methods: {
+
+        loadNumberOfTestsResult(){
+            let result = {
+                'nbF': 0,
+                'nbP': 0,
+                'nbI': 0,
+                'nbU': 0,
+                'nbCT': 0
+            };
+            for(var key in this.globalTestResultForPages){
+                if (key.match(/[0-9]+\.[0-9]+\.[0-9]+/g)){
+                    if(this.globalTestResultForPages[key] == 'failed'){
+                        result.nbF += 1
+                    } else if(this.globalTestResultForPages[key] == 'cantTell'){
+                        result.nbCT += 1
+                    } else if(this.globalTestResultForPages[key] == 'untested'){
+                        result.nbU += 1
+                    } else if(this.globalTestResultForPages[key] == 'passed'){
+                        result.nbP += 1
+                    } else if(this.globalTestResultForPages[key] == 'inapplicable'){
+                        result.nbI +=1
+                    }
+                }
+            }
+            this.numberOfTestsResult = result;
+        },
+
         openModal(audit, page, criteriaResult, i) {
+            document.body.style.overflow = "hidden"
+			
             this.$modal.show(AnomalyModal, {
                 props: {
                     audit: audit,
@@ -321,8 +383,33 @@ export default {
             });
         },
 
+        openGlobalTestModal(audit, testHierarchy, status, pagesResultsSynthesis, allPagesById) {
+            document.body.style.overflow = "hidden"
+
+            this.$modal.show(AnomalyGlobalTestModal, {
+                props: {
+                    audit: audit,
+                    testHierarchy: testHierarchy,
+                    status: status,
+                    pagesResultsSynthesis : pagesResultsSynthesis,
+                    allPagesById :allPagesById
+                },
+                label: "synthesis-window",
+                classes: "modal",
+                attributes: {
+                    id: "anomaly-modal",
+                    role: "dialog",
+                    'aria-labelledby': "modalTitle",
+                    'aria-describedby': "modalDescription",
+                    tabindex: "0"
+                }
+            });
+        },
+
         onSelectReference() {
+            this.loadSynthesisByAuditAndTestHierarchy();
             this.currentSynthesisPage = 0;
+            this.numberOfTestsResult = null;
             if (!this.synthesisPageByReferenceId[this.selectedReference.id]) {
                 this.$set(this.synthesisPageByReferenceId, this.selectedReference.id, []);
             }
@@ -344,6 +431,19 @@ export default {
                     },
                 )
             }
+
+            this.testHierarchyResultService.getGlobalTestResultForPages(
+                this.audit.id,
+                this.selectedReference.id,
+                this.audit.sharecode,
+                (testResultForPages) => {
+                    this.globalTestResultForPages = testResultForPages;
+                    this.loadNumberOfTestsResult();
+                },
+                (error) => {
+                    console.error(error);
+                },
+            );
         },
 
         changePage(page) {
@@ -392,6 +492,66 @@ export default {
         moment: function (date) {
             return this.$moment(date);
         },
+
+        loadAllPagesById() {
+            this.pageService.findByAuditId(
+                this.audit.id,
+                this.sharecode,
+                0,
+                this.totalPages,
+                (allPages) => {
+                    this.allPages = allPages.content
+                    for(const page of allPages.content){
+                        this.$set(this.allPagesById, page.id, page);
+                    }
+                },
+                (error) => {
+                    console.error(error)
+                })
+        },
+
+        getProject(){
+			this.projectService.findByAuditId(
+				this.$route.params.id,
+				this.sharecode,
+				(project) => {
+					this.project = project;
+				},
+				(error) => {
+					console.error(error);
+				}
+		    );
+		},
+
+        loadSynthesisByAuditAndTestHierarchy(){
+            this.testHierarchyResultService.getSynthesisByAuditAndTestHierarchy(
+                this.audit.id,
+                this.selectedReference.id,
+                this.sharecode,
+                0,
+                this.totalPages,
+                (synthesisPage) => {
+                    this.allResultsSynthesis = synthesisPage.content;
+                },
+                (error) => {
+                    console.error(error)
+                }
+            );
+        },
+
+        triggerCsvExport(referenceId){
+            this.testHierarchyResultService.exportCsvSynthesisAuditResults(
+                this.audit.id, 
+                referenceId, 
+                this.audit.sharecode,
+                (result) => {
+                    var fileName = this.audit.name + '.csv';
+                    FileSaver.saveAs(new Blob([result]), fileName);
+                },
+                (error) => {
+                    console.error(error)
+                });
+        }
     }
 }
 </script>
@@ -540,6 +700,33 @@ export default {
     }
 }
 
+.audit-stats-recap-no-chart {
+    padding: 8rem;
+    text-align: center;
+
+    .audit-stats-recap__number,
+    .audit-stats-recap__unit,
+    .audit-stats-recap__total {
+        display: block;
+    }
+
+    .audit-stats-recap__number {
+        font-size: 3rem;
+        font-weight: 600;
+        line-height: 1;
+        @media #{$media-md-viewport} {
+            font-size: 4rem;
+        }
+    }
+
+    .audit-stats-recap__unit {
+        font-size: 1.8rem;
+        @media #{$media-md-viewport} {
+            font-size: 2.4rem;
+        }
+    }
+}
+
 // Loading screen
 #fetching-data {
     text-align: center;
@@ -583,7 +770,7 @@ export default {
     // Variables
     $angle: 45;
     $height: 160;
-    $width: 80;
+    $width: 74;
 
     .table-tests {
         width: auto;
@@ -675,9 +862,9 @@ export default {
         display: inline-block;
         position: absolute;
         bottom: calc(#{$width * .1rem} * #{$cos} + 2px);
-        left: -45px; // Because it looked good, but there is probably a mathematical link here as well
+        left: -50px; // Because it looked good, but there is probably a mathematical link here as well
         width: calc(#{$height * .1rem} / #{$cos} - #{$width * .1rem} * #{$cos});
-        transform: skew($angle * 1deg, 0deg) rotate(315deg);
+        transform: skew($angle * 1deg, 0deg) rotate(315deg);    
         text-align: left;
         white-space: nowrap;
 

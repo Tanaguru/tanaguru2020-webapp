@@ -3,7 +3,8 @@
         <header class="modal-header" id="modalTitle">
             <h1 class="modal-header__title">
                 Test {{ criteriaResult.testHierarchy.code }} -
-                {{ criteriaResult.testHierarchy.name | format }}
+                {{ criteriaResult.testHierarchy.name| nameWithoutConditions }}
+                <h2 class="modal-header__conditions" style="white-space: pre-line">{{ criteriaResult.testHierarchy.name| conditions }}</h2>
                 <span>Page {{ index + 1 }} : {{ auditPage.name }} - </span>
                 <p id="status--failed" class="status status--failed" v-if="criteriaResult.status == 'failed'">
                     {{$t('entity.audit.result.failed')}}</p>
@@ -11,9 +12,10 @@
                     {{$t('entity.audit.result.passed')}}</p>
                 <p id="status--cantTell" class="status status--cantTell" v-if="criteriaResult.status == 'cantTell'">
                    {{$t('entity.audit.result.cantTell')}}</p>
-                <p id="status--inapplicable" class="status status--inapplicable"
-                v-if="criteriaResult.status == 'inapplicable'">
+                <p id="status--inapplicable" class="status status--inapplicable" v-if="criteriaResult.status == 'inapplicable'">
                     {{$t('entity.audit.result.inapplicable')}}</p>
+                <p id="status--untested" class="status status--untested" v-if="criteriaResult.status == 'untested'">
+                   {{$t('entity.audit.result.untested')}}</p>
             </h1>
 
             <button type="button" class="btn btn--nude btn--icon" @click="closeModal()"
@@ -24,7 +26,7 @@
                 <span>{{ $t('action.close') }}</span>
             </button>
         </header>
-        <section class="modal-body" id="modalDescription">
+        <main class="modal-body" id="modalDescription">
             <div class="links">
                 <a class="link-independent link-independent--icon" :href="criteriaResult.testHierarchy.urls[0]">
                     <icon-base-decorative>
@@ -104,7 +106,7 @@
                     </p>
                 </li>
             </ul>
-        </section>
+        </main>
     </div>
 </template>
 
@@ -172,27 +174,50 @@ export default {
     },
     methods: {
         closeModal() {
+            document.body.style.overflow = "auto"
             this.$modal.close();
-        }
-    },
+        },
+    },    
     filters: {
-        format: function (value) {
+        nameWithoutConditions: function (value) {
+			if (!value) return ''
+			value = value.replace(/ *\(#[^)]*\) */g, " ").replace(/[\[\]\`]+/g,'')
+			if(value.includes(';')){
+				value = value.substring(0,value.lastIndexOf("?")+1)
+			}
+			return value
+		},
+        conditions: function(value){
             if (!value) return ''
-            value = value.replace(/ *\(#[^)]*\) */g, " ").replace(/[\[\]]+/g,'')
-            return value
+			value = value.replace(/ *\(#[^)]*\) */g, " ").replace(/[\[\]\`]+/g,'')
+			if(value.includes(';')){
+				value = value.replaceAll(' ;','.').replaceAll(' .','.').replaceAll('\n','\n• ')
+				value = value.substring(0,value.lastIndexOf("•"))
+                value = value.substring(value.lastIndexOf('?')+1, value.length)
+			}else{
+                value = ''
+            }
+			return value
         }
     }
-};
+}
 </script>
 
 <style lang="scss" scoped>
 .modal-header__title {
     span {
         display: block;
-        margin-top: 1.6rem;
         font-size: $base-font-size;
         line-height: 1.5;
     }
+}
+
+.modal-header__conditions{
+    @extend %h3-like;
+    line-height: 125%;
+    margin: 0;
+    margin-bottom: 1em;
+  
 }
 
 .links {
@@ -311,6 +336,14 @@ export default {
 
 #status--cantTell {
     border: 2px solid $color-qualify;
+    border-radius: .5em;
+    padding: 0 .5em;
+    font-size: .5em;
+    display: inline;
+}
+
+#status--untested {
+    border: 2px solid $color-untested;
     border-radius: .5em;
     padding: 0 .5em;
     font-size: .5em;

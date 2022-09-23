@@ -21,7 +21,8 @@
 		"export": "Export",
 		"share": "Share",
 		"print": "Print",
-		"launch": "Relaunch audit"
+		"launch": "Relaunch audit",
+		"exportCsv": "Export (CSV)"
 	},
 	"copyLink": {
 		"copy": "Copy link",
@@ -91,6 +92,17 @@
 		"checkboxAnomaly": "No longer notice this anomaly",
 		"hide": "Masquer",
 		"show": "Afficher",
-		"anomaly": "Anomaly #"
+		"anomaly": "Anomaly #",
+		"fontSize": "Font size : ",
+		"fontWeight": "Font weight : ",
+		"textColor": "Text color : ",
+		"background": "Background color : ",
+		"image": "Image",
+		"bgColor": "Background color",
+		"undefined": "Undefined",
+		"estimatedRatio": "Estimated ratio : ",
+		"goalRatio": "Minimal ratio needed : ",
+		"bold": "(bold)",
+		"normal": "(normal)"
 	}
 }

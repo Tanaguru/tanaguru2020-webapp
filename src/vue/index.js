@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue from 'vue';
 import Moment from "moment";
 import VueMeta from "vue-meta";
 import axios from "../axios";
@@ -20,6 +20,7 @@ import TanaguruTestService from "../services/tanaguruTest.service";
 import StatusResultService from "../services/statusResult.service";
 import ConfigService from "../services/config.service";
 import StatsService from "../services/stats.service";
+import WebextentionService from "../services/webextention.service";
 import 'prismjs'
 import 'prismjs/themes/prism.css'
 import 'prismjs/components/prism-scss.min'
@@ -56,6 +57,7 @@ Vue.prototype.tanaguruTestService = new TanaguruTestService(axios);
 Vue.prototype.statusResultService = new StatusResultService(axios);
 Vue.prototype.configService = new ConfigService(axios);
 Vue.prototype.statsService = new StatsService(axios);
+Vue.prototype.webextentionService = new WebextentionService(axios);
 
 const token = localStorage.getItem('token')
 if (token) {

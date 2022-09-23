@@ -1,7 +1,7 @@
 <template>
 	<main id="page" role="main">
 		<div id="frame-container">
-			<iframe ref="iframe" :src="moduleData.url"></iframe>
+			<iframe ref="iframe" :title="moduleData.name" :src="moduleData.url"></iframe>
 		</div>
 	</main>
 </template>
@@ -27,6 +27,7 @@ export default {
 	methods: {
 		onMessage(e) {
 			let message = e.data;
+			console.log('msg : ', message)
 			if(this.$refs.iframe != undefined){
 				switch (message.name) {
 					case 'on-module-mounted':

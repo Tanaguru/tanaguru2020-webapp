@@ -9,9 +9,14 @@
 	"pagesNb": "page(s)",
 	"logs": "Audit logs",
 	"selectLogLevel" : "Select the level of log",
+	"pageList": {
+		"anomaly": "anomaly",
+		"anomalies": "anomalies"
+	},
 	"synthesis": {
 		"pages": "Number of pages audited",
-		"showSourceCode": "Show source code",
+		"showSourceCode": "Source code",
+		"openSourceCode": "Open in a new tab",
 		"guidelines": "guidelines",
 		"table": {
 			"title": "Summary of audited pages",
@@ -23,7 +28,8 @@
 			"rule": "Go to relevant rule page",
 			"seeDetails": "See detailed results for this page"
 		},
-		"loading": "Fetching data..."
+		"loading": "Fetching data...",
+		"allPages": "All the pages"
 	},
 	"status": {
 		"done": "Done",

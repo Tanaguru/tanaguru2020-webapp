@@ -9,7 +9,7 @@
 	"create": "Create",
 	"modify": "Modify",
 	"login": "Login",
-	"signIn": "Sign in",
+	"signUp": "Sign up",
 	"logout": "Logout",
 	"start": "Start",
 	"stop": "Stop",
@@ -31,6 +31,6 @@
 	"backToPageList": "Back to the page list",
 	"confirm": "Confirm",
 	"cancel": "Cancel",
-	"sortAudits": "Sort by most recent",
-	"sortLogs": "Sort by ascending date"
+	"sortAuditsOrLogs": "Sort by most recent",
+	"copy": "Copy"
 }

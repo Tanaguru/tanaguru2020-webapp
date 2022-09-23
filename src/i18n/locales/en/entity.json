@@ -70,6 +70,9 @@
 			"untested": "Not tested",
 			"cantTell": "Pre-qualify",
 			"ignored": "Anomalies ignored"
+		},
+		"element": {
+			"cannotLoad": "The browser couldn't load the element"
 		}
 	},
 	"reference": {
@@ -77,6 +80,10 @@
 		"name": "Name"
 	},
 	"test": {
-		"tests": "Tests"
+		"tests": "Tests",
+    "onPage": "on pages"
+	},
+	"element":{
+		"cannotLoad": "The browser failed to load the item."
 	}
 }
