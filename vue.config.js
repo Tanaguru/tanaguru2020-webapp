@@ -10,8 +10,12 @@ module.exports = {
             })
     },
     devServer: {
-        //proxy: 'http://178.33.132.243:9002',
-        //proxy: 'http://localhost:9002'
+        proxy: 'http://localhost:9002',
+        open: process.platform === 'darwin',
+        host: '0.0.0.0',
+        port: 8080,
+        https: true,
+        hotOnly: false,
     },
     css: {
       loaderOptions: {

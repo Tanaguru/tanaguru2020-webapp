@@ -28,12 +28,13 @@ export default {
 		return {
 			sessionTimer: null,
 			sessionDuration: 3600000,
-			currentDate: new Date(),
+			currentDate: new Date()
 		}
 	},
 	created() {
 		console.log(this.$store.state)
-		let _locale = localStorage.getItem("locale") || "en"
+		let browserLocale = navigator.language == "fr" ? "fr" : "en";
+		let _locale = localStorage.getItem("locale") || browserLocale;
 		this.$moment.locale(_locale)
 		this.$i18n.locale = _locale
 
