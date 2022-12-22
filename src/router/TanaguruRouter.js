@@ -12,6 +12,7 @@ export default class TanaguruRouter extends VueRouter{
         this.store = store
 
         super.beforeEach((to, from, next) => {
+            document.body.style.overflow = "auto"
             if(!this.store.state.tanaguruModules.loaded){
                 this.store.dispatch('loadTanaguruModules').then(() => {
                     this.goToIfAuthorisation(to, next);

@@ -14,7 +14,7 @@
 						serverVersion: $store.getters.serverVersion,
 						webextVersion: $store.getters.webextVersion
 					})}}</p>
-				<ul class="footer-menu list-unstyled">
+				<!-- <ul class="footer-menu list-unstyled">
 					<li class="footer-menu__item">
 						<a href="#" class="link-simple">{{$t('page.legals')}}</a>
 					</li>
@@ -30,7 +30,7 @@
 					<li class="footer-menu__item">
 						<a href="#" class="link-simple">{{$t('page.sitemap')}}</a>
 					</li>
-				</ul>
+				</ul> -->
 			</div>
 		</div>
 	</footer>

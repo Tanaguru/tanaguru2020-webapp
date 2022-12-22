@@ -47,14 +47,6 @@
 						<span>{{$t('login.password')}}</span>
 					</router-link>
 				</div>
-
-				<div class="signup-form__footer">
-					<p>{{ $t('login.signup.intro') }}</p>
-					<button type="submit" class="btn btn--default btn--icon">
-						<icon-base-decorative ><icon-logout /></icon-base-decorative>
-						<span>{{$t('action.signUp')}}</span>
-					</button>
-				</div>
 			</form>
 		</div>
  	</main>
