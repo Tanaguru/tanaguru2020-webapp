@@ -22,7 +22,7 @@
 					</div>
 				</div>
 				<div class="params__help">
-					<a :href="HELP_LINK" class="link-independent link-independent--icon">
+					<a :href="getHelpLink" class="link-independent link-independent--icon">
 						<icon-base-decorative><icon-help-blue /></icon-base-decorative>
 						<span>{{$t('global.help')}}</span>
 					</a>
@@ -52,6 +52,11 @@ export default {
 	methods: {
 		updateLocale : function(){
 			this.bus.$emit("updateLocale", this.locale);
+		}
+	},
+	computed: {
+		getHelpLink() {
+			return HELP_LINK;
 		}
 	}
 }

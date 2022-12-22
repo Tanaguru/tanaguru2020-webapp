@@ -33,7 +33,7 @@ export default {
 	},
 	created() {
 		console.log(this.$store.state)
-		let browserLocale = navigator.language == "fr" ? "fr" : "en";
+		let browserLocale = navigator.language.includes("fr") ? "fr" : "en";
 		let _locale = localStorage.getItem("locale") || browserLocale;
 		this.$moment.locale(_locale)
 		this.$i18n.locale = _locale
