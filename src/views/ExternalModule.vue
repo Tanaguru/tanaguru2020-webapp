@@ -62,6 +62,7 @@ export default {
 			})
 		},
 		setIframeLocale(locale){
+			locale = locale ? locale : this.$i18n.locale;
 			this.$refs.iframe.contentWindow.postMessage({'name': 'init-locale','locale': locale}, '*')
 		}
 	}
