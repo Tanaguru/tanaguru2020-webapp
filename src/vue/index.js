@@ -21,10 +21,10 @@ import StatusResultService from "../services/statusResult.service";
 import ConfigService from "../services/config.service";
 import StatsService from "../services/stats.service";
 import WebextentionService from "../services/webextention.service";
-import 'prismjs'
-import 'prismjs/themes/prism.css'
-import 'prismjs/components/prism-scss.min'
-import Prism from 'vue-prism-component'
+import 'prismjs';
+import 'prismjs/themes/prism.css';
+import 'prismjs/components/prism-scss.min';
+import Prism from 'vue-prism-component';
 import Icon from "vue-awesome/components/Icon";
 
 Vue.use(VueMeta)
@@ -35,7 +35,7 @@ Vue.prototype.bus = new Vue();
 Vue.prototype.$moment = Moment;
 Vue.prototype.window = window;
 Vue.prototype.$http = axios;
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 Vue.prototype.TANAGURU_MODULES = TANAGURU_MODULES;
 

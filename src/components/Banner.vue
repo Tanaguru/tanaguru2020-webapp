@@ -22,7 +22,7 @@
 					</div>
 				</div>
 				<div class="params__help">
-					<a href='https://www.notion.so/tanaguru/Tanaguru-2020-Documentation-7e5cb26b3a384a89a49808e7226b9d5c' class="link-independent link-independent--icon">
+					<a :href="getHelpLink" class="link-independent link-independent--icon">
 						<icon-base-decorative><icon-help-blue /></icon-base-decorative>
 						<span>{{$t('global.help')}}</span>
 					</a>
@@ -37,24 +37,29 @@ import IconBaseDecorative from './icons/IconBaseDecorative'
 import IconHelpBlue from './icons/IconHelpBlue'
 import IconArrowBlue from './icons/IconArrowBlue'
 
-  export default {
-      name: 'banner',
-      data(){
-        return{
-          locale : this.$i18n.locale
-        }
-      },
-      methods: {
-        updateLocale : function(){
-			this.bus.$emit("updateLocale", this.locale);
-        },
-      },
-	  components: {
-    	IconBaseDecorative,
+export default {
+	name: 'banner',
+	components: {
+		IconBaseDecorative,
 		IconHelpBlue,
 		IconArrowBlue
-  	}
-  }
+	},
+	data(){
+		return{
+			locale : this.$i18n.locale
+		}
+	},
+	methods: {
+		updateLocale : function(){
+			this.bus.$emit("updateLocale", this.locale);
+		}
+	},
+	computed: {
+		getHelpLink() {
+			return HELP_LINK;
+		}
+	}
+}
 </script>
 
 <style lang="scss" scoped>

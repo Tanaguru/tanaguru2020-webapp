@@ -7,6 +7,11 @@ import i18n from './i18n'
 
 import VueAccessibleModal from "vue-accessible-modal";
 
+// optional options
+const options = {
+    transition: 'fade',
+}
+
 Vue.use(VueAccessibleModal, options)
 
 import VueHighlightJS from "vue-highlight.js";
@@ -14,11 +19,6 @@ import 'vue-highlight.js/lib/allLanguages'
 import "highlight.js/styles/a11y-light.css";
 
 Vue.use(VueHighlightJS);
-
-// optional options
-const options = {
-    transition: 'fade',
-}
 
 new Vue({
     router,
