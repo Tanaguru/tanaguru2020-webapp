@@ -44,3 +44,8 @@ Improvements :
 - launch audit on multiple domains
 - accept URL in IP format
 - somes fixes
+
+## 1.0.6
+- fix scrolling on many pages
+- configurable help link
+- auto set locale
