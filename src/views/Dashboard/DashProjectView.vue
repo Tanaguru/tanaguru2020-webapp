@@ -47,7 +47,8 @@
 					<p class="project-stats__error"><span class="project-stats__exergue">{{lastAudit.statusResult.nbEF}}</span>{{$t('dashboard.project.anomaly')}}</p>
 					<div class="project-stats__chart">
 						<CircularProgressChart
-							:percentage="Math.round(lastAudit.statusResult.nbTP / (lastAudit.statusResult.nbTF + lastAudit.statusResult.nbTP) * 100)"
+							v-if="lastAudit.numberOfTestsResult"
+							:percentage="Math.round(lastAudit.numberOfTestsResult.nbP / (lastAudit.numberOfTestsResult.nbF + lastAudit.numberOfTestsResult.nbP) * 100)"
 							:shadowOne="'desktopChart-shadow1-' + project.id"
 							:shadowTwo="'desktopChart-shadow2-' + project.id"
 							:gradient="'desktopChart-gradient-' + project.id" />
@@ -127,11 +128,11 @@
 				</div>
 
 				<div class="project-stats mobile-element" v-if="lastAudit && lastAudit.statusResult">
-					<p class="project-stats__error"><span class="project-stats__exergue">962</span>{{$t('dashboard.project.anomaly')}}</p>
+					<p class="project-stats__error"><span class="project-stats__exergue">{{lastAudit.statusResult.nbEF}}</span>{{$t('dashboard.project.anomaly')}}</p>
 					<div class="project-stats__chart">
 						<CircularProgressChart
-								v-if="lastAudit && lastAudit.statusResult"
-							:percentage="Math.round(lastAudit.statusResult.nbTP/ (lastAudit.statusResult.nbTF + lastAudit.statusResult.nbTP) * 100)"
+								v-if="lastAudit.numberOfTestsResult"
+							:percentage="Math.round(lastAudit.numberOfTestsResult.nbP/ (lastAudit.numberOfTestsResult.nbF + lastAudit.numberOfTestsResult.nbP) * 100)"
 							:shadowOne="'mobileChart-shadow1-' + project.id"
 							:shadowTwo="'mobileChart-shadow2-' + project.id"
 							:gradient="'mobileChart-gradient-' + project.id" />
@@ -164,12 +165,12 @@
 							<h4 class="audit-preview__title">{{$t('entity.audit.page')}}</h4>
 						</div>
 
-						<PolarChart class="audit-preview__chart" v-if="lastPageAudit.statusResult"
-						:nb-passed="lastPageAudit.statusResult.nbTP"
-						:nb-failed="lastPageAudit.statusResult.nbTF"
+						<PolarChart class="audit-preview__chart" v-if="lastPageAudit.numberOfTestsResult"
+						:nb-passed="lastPageAudit.numberOfTestsResult.nbP"
+						:nb-failed="lastPageAudit.numberOfTestsResult.nbF"
 						:nb-untested="0"
-						:nb-inapplicable="lastPageAudit.statusResult.nbTI"
-						:nb-cant-tell="lastPageAudit.statusResult.nbTCT"
+						:nb-inapplicable="lastPageAudit.numberOfTestsResult.nbI"
+						:nb-cant-tell="lastPageAudit.numberOfTestsResult.nbCT"
 						:chart-id="'pagePolar-id' + project.id"/>
 
 						<router-link :to="'/audits/' + lastPageAudit.id" class="link-independent link-independent--icon">
@@ -196,12 +197,12 @@
 							<h4 class="audit-preview__title">{{$t('entity.audit.site')}}</h4>
 						</div>
 
-						<PolarChart class="audit-preview__chart" v-if="lastSiteAudit.statusResult"
-						:nb-passed="lastSiteAudit.statusResult.nbTP"
-						:nb-failed="lastSiteAudit.statusResult.nbTF"
+						<PolarChart class="audit-preview__chart" v-if="lastSiteAudit.numberOfTestsResult"
+						:nb-passed="lastSiteAudit.numberOfTestsResult.nbP"
+						:nb-failed="lastSiteAudit.numberOfTestsResult.nbF"
 						:nb-untested="0"
-						:nb-inapplicable="lastSiteAudit.statusResult.nbTI"
-						:nb-cant-tell="lastSiteAudit.statusResult.nbTCT"
+						:nb-inapplicable="lastSiteAudit.numberOfTestsResult.nbI"
+						:nb-cant-tell="lastSiteAudit.numberOfTestsResult.nbCT"
 						:chart-id="'sitePolar-id' + project.id" />
 
 						<router-link :to="'/audits/' + lastSiteAudit.id" class="link-independent link-independent--icon">
@@ -228,12 +229,12 @@
 							<h4 class="audit-preview__title">{{$t('entity.audit.scenario')}}</h4>
 						</div>
 
-						<PolarChart class="audit-preview__chart" v-if="lastScenarioAudit.statusResult"
-						:nb-passed="lastScenarioAudit.statusResult.nbTP"
-						:nb-failed="lastScenarioAudit.statusResult.nbTF"
+						<PolarChart class="audit-preview__chart" v-if="lastScenarioAudit.numberOfTestsResult"
+						:nb-passed="lastScenarioAudit.numberOfTestsResult.nbP"
+						:nb-failed="lastScenarioAudit.numberOfTestsResult.nbF"
 						:nb-untested="0"
-						:nb-inapplicable="lastScenarioAudit.statusResult.nbTI"
-						:nb-cant-tell="lastScenarioAudit.statusResult.nbTCT"
+						:nb-inapplicable="lastScenarioAudit.numberOfTestsResult.nbI"
+						:nb-cant-tell="lastScenarioAudit.numberOfTestsResult.nbCT"
 						:chart-id="'scenarioPolar-id' + project.id"/>
 
 						<router-link :to="'/audits/' + lastScenarioAudit.id" class="link-independent link-independent--icon">
@@ -260,12 +261,12 @@
 							<h4 class="audit-preview__title">{{$t('entity.audit.upload')}}</h4>
 						</div>
 
-						<PolarChart class="audit-preview__chart" v-if="lastUploadAudit.statusResult"
-						:nb-passed="lastUploadAudit.statusResult.nbTP"
-						:nb-failed="lastUploadAudit.statusResult.nbTF"
+						<PolarChart class="audit-preview__chart" v-if="lastUploadAudit.numberOfTestsResult"
+						:nb-passed="lastUploadAudit.numberOfTestsResult.nbP"
+						:nb-failed="lastUploadAudit.numberOfTestsResult.nbF"
 						:nb-untested="0"
-						:nb-inapplicable="lastUploadAudit.statusResult.nbTI"
-						:nb-cant-tell="lastUploadAudit.statusResult.nbTCT"
+						:nb-inapplicable="lastUploadAudit.numberOfTestsResult.nbI"
+						:nb-cant-tell="lastUploadAudit.numberOfTestsResult.nbCT"
 						:chart-id="'filePolar-id' + project.id"/>
 
 						<router-link :to="'/audits/' + lastUploadAudit.id" class="link-independent link-independent--icon">
@@ -403,7 +404,6 @@ export default {
 	data(){
 		return {
 			lastAuditFirstPageContent: null,
-
 			lastAudit: null,
 			lastPageAudit: null,
 			lastSiteAudit: null,
@@ -453,7 +453,8 @@ export default {
 							this.repositories = references;
 						}
 					)
-					this.getAuditResult(audit);
+
+					this.loadNumberOfTestsResult(audit);
 				}
 			},
 			(error) => {
@@ -491,6 +492,54 @@ export default {
 		}
 	},
 	methods: {
+		loadNumberOfTestsResult(audit) {
+			this.testHierarchyService.findMainReferenceByAudit(
+				audit.id,
+				audit.shareCode,
+				(reference) => {
+					this.testHierarchyResultService.getGlobalTestResultForPages(
+						audit.id,
+						reference.id,
+						audit.sharecode,
+						(testResultForPages) => {
+							let result = {
+								'nbF': 0,
+								'nbP': 0,
+								'nbI': 0,
+								'nbU': 0,
+								'nbCT': 0
+							};
+
+							for(var key in testResultForPages) {
+								if (key.match(/[0-9]+\.[0-9]+\.[0-9]+/g)){
+									switch(testResultForPages[key]) {
+										case "failed":
+											result.nbF++;
+											break;
+										case "cantTell":
+											result.nbCT++;
+											break;
+										case "passed":
+											result.nbP++;
+											break;
+										case "inapplicable":
+											result.nbI++;
+											break;
+										default:
+									}
+								}
+							}
+							audit.numberOfTestsResult = result;
+							this.getAuditResult(audit);
+						},
+						(error) => {
+							console.error(error);
+						},
+					);
+				}
+			)
+        },
+
 		moment: function (date) {
             return this.$moment(date);
 		},
@@ -512,7 +561,7 @@ export default {
 			});
 		},
 
-		getAuditResult(audit){
+		getAuditResult(audit) {
 			this.statusResultService.findMainStatusResultByAudit(
 					audit.id,
 					undefined,
@@ -545,6 +594,7 @@ export default {
 					}
 			)
 		},
+
 		toggleProject() {
 			this.projectOpen = !this.projectOpen;
 			if(this.projectOpen && this.lastAudit){
@@ -554,7 +604,7 @@ export default {
 					(audit) => {
 						this.lastPageAudit = audit;
 						if(audit){
-							this.getAuditResult(audit);
+							this.loadNumberOfTestsResult(audit);
 						}
 					},
 					(error) => {
@@ -568,7 +618,7 @@ export default {
 					(audit) => {
 						this.lastSiteAudit = audit;
 						if(audit){
-							this.getAuditResult(audit);
+							this.loadNumberOfTestsResult(audit);
 						}
 					},
 					(error) => {
@@ -582,7 +632,7 @@ export default {
 					(audit) => {
 						this.lastUploadAudit = audit;
 						if(audit){
-							this.getAuditResult(audit);
+							this.loadNumberOfTestsResult(audit);
 						}
 					},
 					(error) => {
@@ -596,7 +646,7 @@ export default {
 					(audit) => {
 						this.lastScenarioAudit = audit;
 						if(audit){
-							this.getAuditResult(audit);
+							this.loadNumberOfTestsResult(audit);
 						}
 					},
 					(error) => {
@@ -607,7 +657,7 @@ export default {
 			}
 		},
 
-		activeTab(){
+		activeTab() {
 			this.$store.state.activeTab.name = 'information'
 		}
 	}
