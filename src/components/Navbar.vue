@@ -20,12 +20,12 @@
 		</li>
 
 		<li class="navbar__item" v-if="menuType == 'desktop'">
-			<button class="btn btn--nude btn--icon" @click="logout">
+			<router-link to="logout" class="link-independent link-independent--icon">
 				<icon-base-decorative>
 					<icon-logout/>
 				</icon-base-decorative>
 				<span>{{ $t('action.logout') }}</span>
-			</button>
+			</router-link>
 		</li>
 	</ul>
 
@@ -62,13 +62,6 @@ export default {
 		updateLocale: function () {
 			this.bus.$emit("updateLocale", this.locale)
 			this.$moment.locale(this.locale)
-		},
-		logout: function (event) {
-			this.$store.dispatch('logout')
-				.then(() => {
-					if (this.$route.path !== '/')
-						this.$router.push('/')
-				})
 		},
 		moduleName(module){
 			return this.getModuleName(module)

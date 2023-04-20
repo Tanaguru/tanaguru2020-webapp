@@ -1,6 +1,7 @@
 {
 	"home": "Home",
 	"login": "Connection",
+	"logout": "Deconnection",
 	"dashboard": "Dashboard",
 	"auditConfiguration": "Audit configuration",
 	"contractDetail": "Contract details",
