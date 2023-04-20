@@ -49,3 +49,6 @@ Improvements :
 - fix scrolling on many pages
 - configurable help link
 - auto set locale
+
+## 1.0.7
+- add logout url

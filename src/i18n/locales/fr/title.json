@@ -1,6 +1,7 @@
 {
 	"home": "Accueil",
 	"login": "Connexion",
+	"logout": "Déconnexion",
 	"dashboard": "Tableau de bord",
 	"auditConfiguration": "Configuration de l'audit",
 	"contractDetail": "Détails du contrat",
