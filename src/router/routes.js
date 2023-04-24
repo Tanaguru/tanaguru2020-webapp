@@ -30,7 +30,10 @@ export default [
     },{
         path: '/logout',
         name: 'Logout',
-        component: Logout
+        component: Logout,
+        meta :{
+            requireAuthentication : true
+        }
     },{
         path: '/forbidden',
         name: 'Forbidden',

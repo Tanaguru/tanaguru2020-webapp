@@ -20,7 +20,7 @@
 		</li>
 
 		<li class="navbar__item" v-if="menuType == 'desktop'">
-			<router-link to="logout" class="link-independent link-independent--icon">
+			<router-link to="/logout" class="link-independent link-independent--icon">
 				<icon-base-decorative>
 					<icon-logout/>
 				</icon-base-decorative>

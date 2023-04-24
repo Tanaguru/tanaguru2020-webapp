@@ -31,9 +31,10 @@ export default class TanaguruRouter extends VueRouter{
                     this.store.dispatch('logout')
                         .then(r => router.push('/'));
                 } else if (err.response.status === 403) {
-                    this.push('/forbidden')
+                    // this.push('/forbidden')
                 }
-                return Promise.reject(err)
+
+                return Promise.reject(err.message);
             }
         );
     }
@@ -45,6 +46,7 @@ export default class TanaguruRouter extends VueRouter{
             next({name: 'Forbidden'});
         }
     }
+    
 
     checkAuthorisation(to){
         return  (!to.meta.requireAuthentication || this.store.getters.isLoggedIn) &&

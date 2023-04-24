@@ -1,3 +1,4 @@
+<template></template>
 <script>
 export default {
 	name: 'logout',
@@ -8,11 +9,7 @@ export default {
 		}
 	},
 	created() {
-		this.$store.dispatch('logout')
-			.then(() => {
-				if (this.$route.path !== '/')
-					this.$router.push('/')
-			})
+		this.$store.dispatch('logout').then(() => this.$router.push('/'))
 	}
 }
 </script>
