@@ -71,6 +71,9 @@
 				:has-contrast-tag="hasContrastTag"
 				:index="i"/>
 
+			<div id="fetching-data" class="result-loading" v-if="isLoading">
+				<p aria-live="polite">{{$t('auditDetail.synthesis.loading')}}</p>
+			</div>
 			<div v-if="!lastPageLoaded && !isLoading">
 				<button class="btn btn--default btn-load" type="button" @click="loadMoreElementResults">
 					{{ $t('action.loadMore') }}
@@ -135,7 +138,7 @@ export default {
 		toggleContent(showContent) {
 			this.ruleOpen = showContent;
 			if (this.ruleOpen) {
-
+				
 				if (!this.test.rules) {
 					this.testHierarchyService.findAllByTestAndReference(
 						this.test.id,
@@ -328,6 +331,14 @@ export default {
 			margin-left: $left-column-desktop;
 			border-top: 2px dashed $border-secondary;
 			content: "";
+		}
+	}
+
+	.result-loading {
+		margin-left: $left-column-mobile;
+
+		@media #{$media-md-viewport} {
+			margin-left: $left-column-desktop;
 		}
 	}
 }
