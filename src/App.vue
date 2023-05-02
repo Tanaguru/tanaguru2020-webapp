@@ -73,7 +73,7 @@ export default {
 		refreshCurrentDate() {
 			this.currentDate = new Date();
 			if (this.isSessionTimedOut) {
-				this.$router.push('/logout')
+				this.$store.dispatch('logout')
 			}
 		}
 	},

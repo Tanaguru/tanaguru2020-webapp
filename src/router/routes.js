@@ -1,6 +1,5 @@
 import Home from "@/views/Home";
 import Login from "@/views/Login";
-import Logout from "@/views/Logout";
 import Forbidden from "@/views/Errors/Forbidden";
 import UserDetail from "@/views/User/UserDetail";
 import ContractDetail from "@/views/Contract/ContractDetail";
@@ -27,10 +26,6 @@ export default [
         path: '/login',
         name: 'Login',
         component: Login
-    },{
-        path: '/logout',
-        name: 'Logout',
-        component: Logout
     },{
         path: '/forbidden',
         name: 'Forbidden',

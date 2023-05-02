@@ -52,3 +52,7 @@ Improvements :
 
 ## 1.0.7
 - add logout url
+
+## 1.0.8
+- remove logout url
+- add loader on TestDetail view

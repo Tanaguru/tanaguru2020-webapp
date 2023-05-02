@@ -91,6 +91,7 @@ export default {
         logout({commit}){
             return new Promise((resolve, reject) => {
                 commit('logout')
+                axios({url: '/authentication/logout', method: 'GET'})
                 resolve()
             })
         },

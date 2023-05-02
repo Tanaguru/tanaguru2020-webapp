@@ -120,7 +120,11 @@ import ModuleHelper from '../../helper/ModuleHelper';
         },
         logout : function(event){
 			this.toggleMenu()
-			this.$router.push('/logout')
+			this.$store.dispatch('logout')
+			.then(() => {
+				if (this.$route.path !== '/')
+					this.$router.push('/')
+			})
 		},
 		login : function(event){
 			this.toggleMenu()
