@@ -451,64 +451,77 @@ export default {
 		}
 	},
 	created() {
-		this.testHierarchyService.findAllReferencesNotDeleted(
-			(references) => {
-				this.references = references;
-				if (references.length > 0) {
-					this.auditConfigurationForm.common.selectedReferences.push(references[0]);
-				}
-			},
-			(error) => {
-				console.error(error);
-			}
-		);
-		this.projectService.findById(
+		this.projectService.getCurrentUserAuthorities(
 			this.$route.params.id,
-			(project) => {
-				let currentDate = new Date();
-				this.auditConfigurationForm.common.name = project.name + ' ' + this.$moment().format("DD-MM-YYYY HH:mm");
-				this.auditConfigurationForm.page.urls.push(project.domain.trim());
-				this.auditConfigurationForm.site.seeds.push(project.domain.trim());
-				this.project = project;
-				this.seedMustBeInDomain = project.contract.restrictDomain;
+			(authorities) => {		
+				if(authorities.includes("START_AUDIT")) {
+					this.testHierarchyService.findAllReferencesNotDeleted(
+						(references) => {
+							this.references = references;
+							if (references.length > 0) {
+								this.auditConfigurationForm.common.selectedReferences.push(references[0]);
+							}
+						},
+						(error) => {
+							console.error(error);
+						}
+					);
+					
+					this.projectService.findById(
+						this.$route.params.id,
+						(project) => {
+							let currentDate = new Date();
+							this.auditConfigurationForm.common.name = project.name + ' ' + this.$moment().format("DD-MM-YYYY HH:mm");
+							this.auditConfigurationForm.page.urls.push(project.domain.trim());
+							this.auditConfigurationForm.site.seeds.push(project.domain.trim());
+							this.project = project;
+							this.seedMustBeInDomain = project.contract.restrictDomain;
 
-				if(this.project.contract.allowCreateUser){
-					this.breadcrumbProps.push({
-						name: project.contract.name,
-						path: '/contracts/' + project.contract.id
-					});
+							if(this.project.contract.allowCreateUser){
+								this.breadcrumbProps.push({
+									name: project.contract.name,
+									path: '/contracts/' + project.contract.id
+								});
+							}
+							this.breadcrumbProps.push({
+								name: project.name,
+							});
+
+							this.auditService.findByProjectId(
+								this.$route.params.id,
+								(audits) => {
+									audits.filter(audit => {
+										this.alreadyHasOneSiteAudit = audit.type === "SITE"
+									})
+								}
+							)
+						},
+						(error) => {
+							console.error(error)
+						}
+					);
+
+					this.configService.getActiveBrowsers(
+						(activeBrowsers) => {
+							this.activeBrowsers = activeBrowsers
+							if (this.activeBrowsers.length > 0) {
+								this.auditConfigurationForm.common.browser = activeBrowsers.includes('firefox') ?
+									'firefox' :
+									this.activeBrowsers[0];
+							}
+						},
+						(error) => {
+							console.error(error)
+						}
+					);
+				} else {
+					this.$router.replace('/forbidden');
 				}
-				this.breadcrumbProps.push({
-					name: project.name,
-				});
-
-				this.auditService.findByProjectId(
-					this.$route.params.id,
-					(audits) => {
-						audits.filter(audit => {
-							this.alreadyHasOneSiteAudit = audit.type === "SITE"
-						})
-					}
-				)
 			},
 			(error) => {
-				console.error(error)
+				console.log(error);
 			}
-		);
-
-		this.configService.getActiveBrowsers(
-			(activeBrowsers) => {
-				this.activeBrowsers = activeBrowsers
-				if (this.activeBrowsers.length > 0) {
-					this.auditConfigurationForm.common.browser = activeBrowsers.includes('firefox') ?
-						'firefox' :
-						this.activeBrowsers[0];
-				}
-			},
-			(error) => {
-				console.error(error)
-			}
-		);
+		)
 	},
 	methods: {
 		startAudit: function () {
