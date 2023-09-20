@@ -55,5 +55,7 @@
 		"basicPswd": "Basic authentification password",
 		"inclusion": "Inclusion of pages containing",
 		"exclusion": "Exclusion of pages containing"
-	}
+	},
+	"linkToAudit": "Link to audit",
+	"pageAudited": "Audited page"
 }

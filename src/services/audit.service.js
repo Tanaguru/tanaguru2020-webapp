@@ -134,4 +134,17 @@ export default class AuditService extends Service{
             error(err);
         })
     }
+
+    getAllPublic(page, size, sortBy, then, error){
+        return this.axios({
+            url: this.controllerName + '/public' + '?page=' + page + '&size=' + size + '&sortBy=' + sortBy,
+            method: 'get'
+        })
+        .then(resp => {
+            then(resp.data)
+        })
+        .catch(err => {
+            error(err);
+        });
+    }
 }
