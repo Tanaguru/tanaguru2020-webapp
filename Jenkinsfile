@@ -19,7 +19,9 @@ pipeline {
 
 		stage('Test') {
             agent {
-                docker 'node'
+                docker {
+		          image 'node:14'
+		        }
             }
             steps {
 				sh 'npm i'
@@ -29,7 +31,9 @@ pipeline {
 
         stage('Build') {
             agent {
-                docker 'node'
+                docker {
+		          image 'node:14'
+		        }
             }
             steps {
 				sh 'npm i'
