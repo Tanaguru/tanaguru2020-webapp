@@ -635,28 +635,40 @@ export default {
         }
     },
     created() {
-        this.userService.findAll(
-            (users) => {
-                this.users = users
-            }
-        )
-        this.contractService.findById(
-            this.$route.params.id,
-            (contract) => {
-                this.contract = contract
-                this.breadcrumbProps.push({
-                    name : 'Administration',
-                    path : '/administration'
-                });
-                this.breadcrumbProps.push({
-                    name : this.contract.name,
-                    path : '/contracts/'+ this.contract.id
-                });
-                this.loadContractUsersPaginated(this.contractUsersCurrentPage, this.contractUsersPageSize);
-            },
-            (error) => { this.$router.replace('/404') }
-        );
-        this.loadProjects(0, 10)
+        this.contractService.getCurrentUserAuthorities(
+			this.$route.params.id,
+			(authorities) => {			
+				if(authorities.includes("SHOW_CONTRACT")) {
+                    this.userService.findAll(
+                        (users) => {
+                            this.users = users
+                        }
+                    )
+                    this.contractService.findById(
+                        this.$route.params.id,
+                        (contract) => {
+                            this.contract = contract
+                            this.breadcrumbProps.push({
+                                name : 'Administration',
+                                path : '/administration'
+                            });
+                            this.breadcrumbProps.push({
+                                name : this.contract.name,
+                                path : '/contracts/'+ this.contract.id
+                            });
+                            this.loadContractUsersPaginated(this.contractUsersCurrentPage, this.contractUsersPageSize);
+                        },
+                        (error) => { this.$router.replace('/404') }
+                    );
+                    this.loadProjects(0, 10)
+                } else {
+					this.$router.replace('/forbidden');
+				}
+			},
+			(error) => {
+				console.log(error);
+			}
+		)
     },
 }
 </script>

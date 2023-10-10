@@ -5,6 +5,19 @@ export default class ProjectService extends Service{
         super('projects', axios)
     }
 
+    getCurrentUserAuthorities(id, then, error) {
+        return this.axios({
+            url: this.controllerName + '/' + id + '/authorities',
+            method: 'get',
+          })
+          .then(resp => {
+            then(resp.data)
+          })
+          .catch(err => {
+              error(err);
+          });
+    }
+
     create(name, domain, contractId, then, error){
         const project = {
             'name' : name,

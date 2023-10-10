@@ -1,5 +1,5 @@
 <template>
-    <main role="main" class="wrapper" v-if="project" id="page">
+    <main role="main" class="wrapper" v-if="project.id" id="page">
         <Breadcrumbs :breadcrumbsItems='breadcrumbProps'></Breadcrumbs>
 
         <header class="headline header-archives">
@@ -133,64 +133,77 @@ export default {
     },
     created() {
         this.projectId = this.$route.params.id;
-        this.projectService.findById(
-            this.$route.params.id,
-            (project) => {
-                this.project = project;
-                // Breadcrumbs
-                if(project.contract.allowCreateProject){
-                    this.breadcrumbProps.push({
-                        name: project.contract.name,
-                        path: '/contracts/' + project.contract.id
-                    })
-                    this.breadcrumbProps.push({
-                        name: project.name,
-                        path: '/projects/' + project.id
-                    })
+
+        this.projectService.getCurrentUserAuthorities(
+			this.$route.params.id,
+			(authorities) => {		
+				if(authorities.includes("SHOW_AUDIT")) {
+                    this.projectService.findById(
+                        this.$route.params.id,
+                        (project) => {
+                            this.project = project;
+                            // Breadcrumbs
+                            if(project.contract.allowCreateProject){
+                                this.breadcrumbProps.push({
+                                    name: project.contract.name,
+                                    path: '/contracts/' + project.contract.id
+                                })
+                                this.breadcrumbProps.push({
+                                    name: project.name,
+                                    path: '/projects/' + project.id
+                                })
+                            }
+                            
+                            this.breadcrumbProps.push({
+                                name: project.name + ' archives'
+                            })
+
+                            // Find current user role
+                            this.userService.findAllByProject(
+                                this.project.id,
+                                (users) => {
+                                    let currentUser = users.filter(user =>
+                                        user.contractAppUser.user.id == this.$store.state.auth.user.id
+                                    )
+                                    this.currentUserRole = currentUser[0].projectRole.name
+                                },
+                                (error) => {
+                                    console.error(error)
+                                }
+                            )
+
+                            this.projectService.findAuthoritiesByProjectId(
+                                this.projectId,
+                                (authorities) => {
+                                    this.authorities = authorities;
+                                },
+                                (error) => {
+                                    console.error("Unable to get authorities for project ", this.projectId);
+                                }
+                            )
+                        },
+                        (error) => {
+                            console.error(error)
+                        }
+                    );
+
+                    this.auditService.findByProjectId(
+                        this.$route.params.id,
+                        (audits) => {
+                            this.audits = audits
+                        },
+                        (error) => {
+                            console.error(error)
+                        }
+                    );
+                } else {
+                    this.$router.replace('/forbidden');
                 }
-                
-                this.breadcrumbProps.push({
-                    name: project.name + ' archives'
-                })
-
-                // Find current user role
-                this.userService.findAllByProject(
-                    this.project.id,
-                    (users) => {
-                        let currentUser = users.filter(user =>
-                            user.contractAppUser.user.id == this.$store.state.auth.user.id
-                        )
-                        this.currentUserRole = currentUser[0].projectRole.name
-                    },
-                    (error) => {
-                        console.error(error)
-                    }
-                )
-
-				this.projectService.findAuthoritiesByProjectId(
-					this.projectId,
-					(authorities) => {
-						this.authorities = authorities;
-					},
-					(error) => {
-						console.error("Unable to get authorities for project ", this.projectId);
-					}
-				)
             },
-            (error) => {
-                console.error(error)
-            }
-        );
-
-        this.auditService.findByProjectId(
-            this.$route.params.id,
-            (audits) => {
-                this.audits = audits
-            },
-            (error) => {
-                console.error(error)
-            }
-        );
+			(error) => {
+				console.log(error);
+			}
+		)
     }
 }
 </script>

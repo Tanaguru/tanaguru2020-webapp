@@ -30,8 +30,9 @@ export default class TanaguruRouter extends VueRouter{
                 if (err.response.status === 401) {
                     this.store.dispatch('logout')
                         .then(r => router.push('/'));
-                } else if (err.response.status === 403) {
-                    // this.push('/forbidden')
+                } 
+                else if (err.response.status === 403) {
+                    router.push('/forbidden', () => {})
                 }
 
                 return Promise.reject(err.message);
@@ -49,7 +50,10 @@ export default class TanaguruRouter extends VueRouter{
     
 
     checkAuthorisation(to){
-        return  (!to.meta.requireAuthentication || this.store.getters.isLoggedIn) &&
-            (!to.meta.requireAuthority || this.store.state.auth.authorities[to.meta.requireAuthority]) && (!to.meta.requirePaidAccount || this.store.state.auth.user.appAccountType.name != 'FREE');
+        let auth = (!to.meta.requireAuthentication || this.store.getters.isLoggedIn);
+        let app_authority = (!to.meta.requireAuthority || this.store.state.auth.authorities[to.meta.requireAuthority]);
+        let account_type = (!to.meta.requirePaidAccount || this.store.state.auth.user.appAccountType.name != 'FREE');
+
+        return auth && app_authority && account_type;
     }
 }
