@@ -218,26 +218,36 @@ import IconClose from '../../components/icons/IconClose'
 		created() {
 			this.sharecode = typeof this.$route.params.sharecode !== 'undefined' ? this.$route.params.sharecode : null;
 
-			this.projectService.getCurrentUserAuthorities(
+			this.projectService.findByAuditId(
 				this.$route.params.id,
-				(authorities) => {				
-					if(authorities.includes("SHOW_AUDIT")) {
-						this.getProject();
-						this.getReferences();
-						this.getLogLevels();
-						this.refreshPages();
-						this.timer = setInterval(this.refreshPages, 3000);
-						this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
-						this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
-						this.getParameters();
-					} else {
-						this.$router.replace('/forbidden');
-					}
+				this.sharecode,
+				(project) => {
+					this.project = project;
+
+					this.projectService.getCurrentUserAuthorities(
+						this.project.id,
+						(authorities) => {				
+							if(authorities.includes("SHOW_AUDIT")) {
+								this.getReferences();
+								this.getLogLevels();
+								this.refreshPages();
+								this.timer = setInterval(this.refreshPages, 3000);
+								this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
+								this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
+								this.getParameters();
+							} else {
+								this.$router.replace('/forbidden');
+							}
+						},
+						(error) => {
+							console.log(error);
+						}
+					)
 				},
 				(error) => {
-					console.log(error);
+					console.error(error);
 				}
-			)
+			);
 		},
 		beforeDestroy () {
 			clearInterval(this.timer)
@@ -295,19 +305,6 @@ import IconClose from '../../components/icons/IconClose'
 						console.error(error)
 					}
 				)
-			},
-
-			getProject(){
-				this.projectService.findByAuditId(
-					this.$route.params.id,
-					this.sharecode,
-					(project) => {
-						this.project = project;
-					},
-					(error) => {
-						console.error(error);
-					}
-				);
 			},
 
 			getAudit(){

@@ -23,6 +23,52 @@ const projectService = {
                 name: 'testCotnract'
             }
         })
+    },
+    getCurrentUserAuthorities(id, then, error) {
+        then([
+            "SHOW_PROJECT",
+            "MODIFY_PROJECT",
+            "DELETE_PROJECT",
+            "INVITE_MEMBER",
+            "REMOVE_MEMBER",
+            "PROMOTE_MEMBER",
+            "SHOW_AUDIT",
+            "START_AUDIT",
+            "DELETE_AUDIT",
+            "ADD_RESOURCE",
+            "DELETE_RESOURCE",
+            "ADD_SCENARIO",
+            "SHOW_SCENARIO",
+            "DELETE_SCENARIO",
+            "SHOW_PROJECT",
+            "MODIFY_PROJECT",
+            "DELETE_PROJECT",
+            "INVITE_MEMBER",
+            "REMOVE_MEMBER",
+            "PROMOTE_MEMBER",
+            "SHOW_AUDIT",
+            "START_AUDIT",
+            "DELETE_AUDIT",
+            "ADD_RESOURCE",
+            "DELETE_RESOURCE",
+            "ADD_SCENARIO",
+            "SHOW_SCENARIO",
+            "DELETE_SCENARIO",
+            "SHOW_PROJECT",
+            "MODIFY_PROJECT",
+            "DELETE_PROJECT",
+            "INVITE_MEMBER",
+            "REMOVE_MEMBER",
+            "PROMOTE_MEMBER",
+            "SHOW_AUDIT",
+            "START_AUDIT",
+            "DELETE_AUDIT",
+            "ADD_RESOURCE",
+            "DELETE_RESOURCE",
+            "ADD_SCENARIO",
+            "SHOW_SCENARIO",
+            "DELETE_SCENARIO"
+          ])
     }
 }
 
