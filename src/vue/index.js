@@ -3,6 +3,7 @@ import Moment from "moment";
 import VueMeta from "vue-meta";
 import axios from "../axios";
 import UserService from "../services/user.service";
+import AuthenticationService from "../services/authentication.service";
 import ContractService from "../services/contract.service";
 import ProjectService from "../services/project.service";
 import AuditService from "../services/audit.service";
@@ -40,6 +41,7 @@ Vue.config.productionTip = false;
 Vue.prototype.TANAGURU_MODULES = TANAGURU_MODULES;
 
 Vue.prototype.userService = new UserService(axios);
+Vue.prototype.authenticationService = new AuthenticationService(axios);
 Vue.prototype.contractService = new ContractService(axios);
 Vue.prototype.projectService = new ProjectService(axios);
 Vue.prototype.auditService = new AuditService(axios);
