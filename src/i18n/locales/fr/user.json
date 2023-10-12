@@ -5,5 +5,8 @@
 	"adminNoContract": "Cet utilisateur n'a pas encore été ajouté à un contrat.",
 	"results": "résultat(s)",
 	"password": "Changer mon mot de passe",
-	"myProfile": "Mon profil"
+	"myProfile": "Mon profil",
+	"userToken": "Token utilisateur",
+	"myToken": "Mon token utilisateur",
+	"tokenDesc": "Ce token te permet de t'authentifier sur l'API."
 }

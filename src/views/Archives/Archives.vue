@@ -25,7 +25,7 @@
                     </a>
                 </li>
                 <li class="actions-list__item">
-                    <a class="link link-independent link-independent--icon" href="#file-audit">
+                    <a class="link link-independent link-independent--icon" href="#upload-audit">
                         <icon-base-decorative width="24" height="24" viewBox="0 0 72 72">
                             <icon-audit-file/>
                         </icon-base-decorative>
