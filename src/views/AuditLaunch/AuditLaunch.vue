@@ -459,7 +459,8 @@ export default {
 						(references) => {
 							this.references = references;
 							if (references.length > 0) {
-								this.auditConfigurationForm.common.selectedReferences.push(references[0]);
+								let default_ref = references.filter(ref => ref.isDefault);
+								this.auditConfigurationForm.common.selectedReferences.push(0 < default_ref.length ? default_ref[0] : references[0]);
 							}
 						},
 						(error) => {
