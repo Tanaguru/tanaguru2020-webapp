@@ -32,5 +32,6 @@
 	"confirm": "Confirmer",
 	"cancel": "Annuler",
 	"sortAuditsOrLogs": "Plus récent au plus ancien",
-	"copy": "Copier"
+	"copy": "Copier",
+	"defaultReference": "référentiel par défaut"
 }

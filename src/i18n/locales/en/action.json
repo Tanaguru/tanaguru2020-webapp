@@ -32,5 +32,6 @@
 	"confirm": "Confirm",
 	"cancel": "Cancel",
 	"sortAuditsOrLogs": "Sort by most recent",
-	"copy": "Copy"
+	"copy": "Copy",
+	"defaultReference": "default reference"
 }
