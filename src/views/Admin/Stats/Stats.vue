@@ -26,23 +26,23 @@
                             </tr>
                             <tr>
                                 <th scope="row"> {{ $t('statistics.nbErrorMeanByPage') }} </th>
-                                <td>{{ stats.meanNbErrorsPage.toFixed(1) }}</td>
+                                <td>{{ stats.meanNbErrorsPage ? stats.meanNbErrorsPage.toFixed(1) : 0 }}</td>
                             </tr>
                             <tr>
                                 <th scope="row"> {{ $t('statistics.nbErrorMeanByAudit') }} </th>
-                                <td>{{ stats.meanNbErrorsAudit.toFixed(1) }}</td>
+                                <td>{{ stats.meanNbErrorsAudit ? stats.meanNbErrorsAudit.toFixed(1) : 0 }}</td>
                             </tr>
                             <tr>
                                 <th scope="row"> {{ $t('statistics.nbErrorMeanByProject') }} </th>
-                                <td>{{ stats.meanNbErrorsProject.toFixed(1) }}</td>
+                                <td>{{ stats.meanNbErrorsProject ? stats.meanNbErrorsProject.toFixed(1) : 0 }}</td>
                             </tr>
                             <tr>
                                 <th scope="row"> {{ $t('statistics.nbAuditMeanByProject') }} </th>
-                                <td> {{ stats.meanNbAuditsByProject.toFixed(1) }} </td>
+                                <td> {{ stats.meanNbAuditsByProject ? stats.meanNbAuditsByProject.toFixed(1) : 0 }} </td>
                             </tr>
                             <tr>
                                 <th scope="row"> {{ $t('statistics.nbUsersMeanByProject') }} </th>
-                                <td> {{ stats.meanNbUsersByProject.toFixed(1) }} </td>
+                                <td> {{ stats.meanNbUsersByProject ? stats.meanNbUsersByProject.toFixed(1) : 0 }} </td>
                             </tr>                  
                         </tbody>
                     </table>
