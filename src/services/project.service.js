@@ -18,6 +18,32 @@ export default class ProjectService extends Service{
           });
     }
 
+    getCurrentUserMailSubscription(projectId, then, error) {
+        return this.axios({
+            url: this.controllerName + '/' + projectId + '/my-mail-subscription',
+            method: 'get',
+        })
+        .then(resp => {
+            then(resp.data)
+        })
+        .catch(err => {
+            error(err);
+        });
+    }
+
+    setCurrentUserMailSubscription(projectId, mailEnabled, then, error) {
+        return this.axios({
+            url: this.controllerName + '/' + projectId + '/my-mail-subscription/' + mailEnabled,
+            method: 'put',
+        })
+        .then(resp => {
+            then(resp.data)
+        })
+        .catch(err => {
+            error(err);
+        });
+    }
+
     create(name, domain, contractId, then, error){
         const project = {
             'name' : name,

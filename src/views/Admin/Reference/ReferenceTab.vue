@@ -21,7 +21,7 @@
 							<td class="td-title">{{ reference.name }} ({{ reference.code }})</td>
 							<td class="td-actions">
 								<ul class="actions-list">
-									<li class="actions-list__item">
+									<li class="actions-list__item checkbox">
 										<input :id="reference.code" type="checkbox" :checked="reference.isDefault" :disabled="!$store.state.auth.authorities['CREATE_REFERENCE']" class="checkbox__input" @change="setReferenceAsDefault(reference)">
 										<label :for="reference.code" class="checkbox__label">{{ $t('action.defaultReference') }}</label>
 									</li>
