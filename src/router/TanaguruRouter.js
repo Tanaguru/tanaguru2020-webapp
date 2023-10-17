@@ -41,10 +41,14 @@ export default class TanaguruRouter extends VueRouter{
     }
 
     goToIfAuthorisation(to, next){
-        if(this.checkAuthorisation(to)){
-            next();
-        }else{
-            next({name: 'Forbidden'});
+        if(to.meta.requireAuthentication && !this.store.getters.isLoggedIn) {
+            next({ name: 'Login', query: { from: to.path } });
+        } else {
+            if(this.checkAuthorisation(to)){
+                next();
+            }else{
+                next({name: 'Forbidden'});
+            }
         }
     }
     
