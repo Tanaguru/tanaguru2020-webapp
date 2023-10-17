@@ -31,6 +31,13 @@ export default {
 			currentDate: new Date()
 		}
 	},
+	metaInfo() {
+		return {
+			htmlAttrs: {
+				lang: this.$i18n.locale
+			}
+		}
+	},
 	created() {
 		console.log(this.$store.state)
 		let browserLocale = navigator.language.includes("fr") ? "fr" : "en";
