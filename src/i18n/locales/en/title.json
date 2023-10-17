@@ -15,5 +15,6 @@
 	"auditSummary": "Audit synthesis",
 	"notFound": "Page not found !",
 	"forbidden": "Unauthorized page !",
-	"statistics": "Statistics"
+	"statistics": "Statistics",
+	"unsubscribe": "Email unsubscribe"
 }
