@@ -1,0 +1,10 @@
+{
+    "title": "Se désabonner aux e-mails de fin d'audit d'un projet.",
+    "really": "Vous voulez vraiment vous désabonner aux e-mails de fin d'audit du projet",
+    "already": "Vous êtes déjà désabonné aux e-mails du projet",
+    "projectNotFound": "Projet non trouvé.",
+    "success": "Votre demande de désabonnement a bien été prise en compte.",
+    "error": "Nous n'avons pas pu traiter votre demande de désabonnement. Si le problème persiste veuillez contacter un administrateur.",
+    "accept": "Oui, je me désabonne",
+    "decline": "Non, je retourne à l'accueil"
+}

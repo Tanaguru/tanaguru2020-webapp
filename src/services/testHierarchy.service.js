@@ -163,4 +163,17 @@ export default class TestHierarchyService extends Service{
             error(err);
         });
     }
+
+    setReferenceAsDefault(referenceId, then, error) {
+        return this.axios({
+            url: this.controllerName + "/set-as-default/" + referenceId,
+            method: 'put',
+        })
+        .then(resp => {
+            then()
+        })
+        .catch(err => {
+            error(err);
+        });
+    }
 }

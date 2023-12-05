@@ -4,6 +4,7 @@ import Forbidden from "@/views/Errors/Forbidden";
 import UserDetail from "@/views/User/UserDetail";
 import ContractDetail from "@/views/Contract/ContractDetail";
 import ProjectDetail from "@/views/Project/ProjectDetail";
+import ProjectUnsubscribe from "@/views/Project/ProjectUnsubscribe";
 import AuditLaunch from "@/views/AuditLaunch/AuditLaunch";
 import AuditDetail from "@/views/AuditDetail/AuditDetail";
 import AuditHistory from "@/views/AuditHistory";
@@ -50,6 +51,14 @@ export default [
         path: '/projects/:id',
         name: 'ProjectDetail',
         component: ProjectDetail,
+        meta :{
+            requireAuthentication : true,
+            requirePaidAccount : true
+        }
+    },{
+        path: '/projects/:id/unsubscribe',
+        name: 'ProjectUnsubscribe',
+        component: ProjectUnsubscribe,
         meta :{
             requireAuthentication : true,
             requirePaidAccount : true

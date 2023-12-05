@@ -34,7 +34,7 @@
 								{{ $t('action.modify') }}
 							</button>
 						</li>
-						<li class="project-actions-list__item" v-if="!validContract">
+						<li class="project-actions-list__item" v-if="!validContract && canStartAudit">
 							<router-link class="btn btn--default btn--icon" :to="'/projects/' + project.id + '/audit'">
 								<icon-base-decorative width="16" height="16" viewBox="0 0 20 20">
 									<icon-launch/>
@@ -214,6 +214,7 @@ export default {
 				domainError: "",
                 successMsg:""
             },
+			canStartAudit: false,
 			error: false
 		}
 	},
@@ -229,54 +230,68 @@ export default {
 		}
 	},
 	created() {
-		this.projectService.findById(
+		this.projectService.getCurrentUserAuthorities(
 			this.$route.params.id,
-			(project) => {
-				this.project = project
-				this.breadcrumbProps.push({
-					name: 'Administration',
-					path: '/administration'
-				})
-				if(this.project.contract.allowCreateProject){
-					this.breadcrumbProps.push({
-						name: this.project.contract.name,
-						path: '/contracts/' + this.project.contract.id
-					})
+			(authorities) => {		
+				if(authorities.includes("SHOW_PROJECT")) {
+					if(authorities.includes("START_AUDIT")) this.canStartAudit = true;
+
+					this.projectService.findById(
+						this.$route.params.id,
+						(project) => {
+							this.project = project
+							this.breadcrumbProps.push({
+								name: 'Administration',
+								path: '/administration'
+							})
+							if(this.project.contract.allowCreateProject){
+								this.breadcrumbProps.push({
+									name: this.project.contract.name,
+									path: '/contracts/' + this.project.contract.id
+								})
+							}
+							this.breadcrumbProps.push({
+								name: this.project.name,
+								path: '/projects/' + this.project.id
+							})
+
+							this.userService.findAllByProject(
+								this.project.id,
+								(users) => {
+									this.projectUsers = users
+									let currentUser = this.projectUsers.filter(user =>
+										user.contractAppUser.user.id == this.$store.state.auth.user.id
+									)
+									this.currentUserRole = currentUser[0].projectRole
+								},
+								(error) => {
+									'error'
+								}
+							)
+
+							this.contract = this.project.contract
+							this.validContract = this.$moment(this.contract.dateEnd).isBefore(new Date())
+
+							this.userService.findAllByContract(
+								this.contract.id,
+								(users) => {
+									this.contractUsers = users
+								},
+								(error) => {
+									'error'
+								}
+							)
+						},
+						(error) => {
+							console.log(error);
+						}
+					)
+				} else {
+					this.$router.replace('/forbidden');
 				}
-				this.breadcrumbProps.push({
-					name: this.project.name,
-					path: '/projects/' + this.project.id
-				})
-
-				this.userService.findAllByProject(
-					this.project.id,
-					(users) => {
-						this.projectUsers = users
-						let currentUser = this.projectUsers.filter(user =>
-							user.contractAppUser.user.id == this.$store.state.auth.user.id
-						)
-						this.currentUserRole = currentUser[0].projectRole
-					},
-					(error) => {
-						'error'
-					}
-				)
-
-				this.contract = this.project.contract
-				this.validContract = this.$moment(this.contract.dateEnd).isBefore(new Date())
-
-				this.userService.findAllByContract(
-					this.contract.id,
-					(users) => {
-						this.contractUsers = users
-					},
-					(error) => {
-						'error'
-					}
-				)
 			},
 			(error) => {
-				this.$router.replace('/404')
+				console.log(error);
 			}
 		)
 	},

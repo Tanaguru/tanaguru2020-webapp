@@ -11,35 +11,37 @@
 					<caption class="screen-reader-text">{{ $t('references.legendReferences') }}</caption>
 
 					<thead>
-					<tr>
-						<th scope="col">{{ $t('entity.reference.name') }}</th>
-						<th scope="col">{{ $t('entity.generic.actions') }}</th>
-					</tr>
+						<tr>
+							<th scope="col">{{ $t('entity.reference.name') }}</th>
+							<th scope="col">{{ $t('entity.generic.actions') }}</th>
+						</tr>
 					</thead>
 					<tbody>
-					<tr v-for="reference of references_page.content" :key="reference.id">
-						<td class="td-title">{{ reference.name }} ({{ reference.code }})</td>
-						<td class="td-actions">
-							<button
-								v-if="$store.state.auth.authorities['DELETE_REFERENCE']"
-								type="button"
-								class="btn btn--icon btn--nude"
-								@click="removeReference(reference)">
-								<icon-base-decorative>
-									<icon-delete/>
-								</icon-base-decorative>
-								<span>{{ $t('action.delete') }}</span>
-							</button>
-						</td>
-					</tr>
+						<tr v-for="reference of references_page.content" :key="reference.id">
+							<td class="td-title">{{ reference.name }} ({{ reference.code }})</td>
+							<td class="td-actions">
+								<ul class="actions-list">
+									<li class="actions-list__item checkbox">
+										<input :id="reference.code" type="checkbox" :checked="reference.isDefault" :disabled="!$store.state.auth.authorities['CREATE_REFERENCE']" class="checkbox__input" @change="setReferenceAsDefault(reference)">
+										<label :for="reference.code" class="checkbox__label">{{ $t('action.defaultReference') }}</label>
+									</li>
+									<li class="actions-list__item" v-if="$store.state.auth.authorities['DELETE_REFERENCE']">
+										<button type="button"
+											class="btn btn--icon btn--nude" @click="removeReference(reference)">
+											<icon-base-decorative>
+												<icon-delete />
+											</icon-base-decorative>
+											<span>{{ $t('action.delete') }}</span>
+										</button>
+									</li>
+								</ul>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 
-				<pagination
-					:current-page="references_page.number"
-					:total-pages="references_page.totalPages"
-					@changePage="(page) => {loadReferences(page, referencesPageSize)}"
-				/>
+				<pagination :current-page="references_page.number" :total-pages="references_page.totalPages"
+					@changePage="(page) => { loadReferences(page, referencesPageSize) }" />
 
 			</div>
 			<p v-else>{{ $t('references.noReference') }}</p>
@@ -60,14 +62,14 @@ import Pagination from "../../../components/Pagination";
 
 export default {
 	name: 'referenceTab',
-	components: {TanaguruTestImport, IconBaseDecorative, IconArrowBlue, Pagination},
+	components: { TanaguruTestImport, IconBaseDecorative, IconArrowBlue, Pagination },
 	data() {
 		return {
 			references_page: null,
 			referencesPageSize: 5
 		}
 	},
-	props: [ 'selected'],
+	props: ['selected'],
 	created() {
 		this.loadReferences(0, this.referencesPageSize)
 	},
@@ -95,7 +97,18 @@ export default {
 				})
 			)
 		},
-		loadReferences(page, size){
+		setReferenceAsDefault(reference) {
+			this.testHierarchyService.setReferenceAsDefault(reference.id,
+				() => {
+					this.loadReferences(0, this.referencesPageSize);
+					this.$store.dispatch('getWebextVersion');
+				},
+				(error => {
+					console.error(error)
+				})
+			)
+		},
+		loadReferences(page, size) {
 			this.testHierarchyService.findAllReferences(
 				page,
 				size,
@@ -112,6 +125,4 @@ export default {
 
 </script>
 
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

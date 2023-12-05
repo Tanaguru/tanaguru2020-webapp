@@ -5,5 +5,6 @@
 	"selectUser": "Select user",
 	"infoSearch": "The list underneath contains all existing projects owned by the user. Use the search bar to start typing the name of the project you are looking for and filter projects that doesn't match",
 	"noDomain": "No defined domain",
-	"apiKey": "Api Key"
+	"apiKey": "Api Key",
+	"mailSubscription": "receive audit completion emails"
 }

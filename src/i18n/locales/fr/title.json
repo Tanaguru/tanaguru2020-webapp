@@ -15,5 +15,6 @@
 	"auditSummary": "Synthèse de l'audit",
 	"notFound": "Page non trouvée !",
 	"forbidden": "Page non autorisée !",
-	"statistics": "Statistiques"
+	"statistics": "Statistiques",
+	"unsubscribe": "Désabonnement e-mails"
 }

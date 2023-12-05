@@ -56,3 +56,8 @@ Improvements :
 ## 1.0.8
 - remove logout url
 - add loader on TestDetail view
+
+## 2.0.0
+- users can generate a user token
+- define the default reference in administration
+- users can subscribe/unsubscribe to project emails

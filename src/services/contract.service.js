@@ -5,6 +5,19 @@ export default class ContractService extends Service{
         super('contracts', axios)
     }
 
+    getCurrentUserAuthorities(id, then, error) {
+        return this.axios({
+            url: this.controllerName + '/' + id + '/authorities',
+            method: 'get',
+          })
+          .then(resp => {
+            then(resp.data)
+          })
+          .catch(err => {
+              error(err);
+          });
+    }
+
     findMine(then, error){
         return this.axios({
             url: this.controllerName + '/me',

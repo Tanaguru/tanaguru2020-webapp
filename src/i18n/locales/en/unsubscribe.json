@@ -1,0 +1,10 @@
+{
+    "title": "Unsubscribe from project audit completion e-mails.",
+    "really": "Do you really want to unsubscribe from project audit emails",
+    "already": "Vous êtes déjà désabonné aux e-mails du projet",
+    "projectNotFound": "Project not found.",
+    "success": "Your unsubscription request has been processed.",
+    "error": "We were unable to process your unsubscribe request. If the problem persists, please contact an administrator.",
+    "accept": "Yes, I unsubscribe",
+    "decline": "No, I'm going back to home"
+}

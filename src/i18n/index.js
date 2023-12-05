@@ -31,7 +31,8 @@ const messages = {
         'user' : require('./locales/en/user.json'),
         'users' : require('./locales/en/users.json'),
         'statistics' : require('./locales/en/statistics.json'),
-        'contact' : require('./locales/en/contact.json')
+        'contact' : require('./locales/en/contact.json'),
+        'unsubscribe' : require('./locales/en/unsubscribe.json')
     },
     fr : {
         'action' : require('./locales/fr/action.json'),
@@ -60,7 +61,8 @@ const messages = {
         'user' : require('./locales/fr/user.json'),
         'users' : require('./locales/fr/users.json'),
         'statistics' : require('./locales/fr/statistics.json'),
-        'contact' : require('./locales/fr/contact.json')
+        'contact' : require('./locales/fr/contact.json'),
+        'unsubscribe' : require('./locales/fr/unsubscribe.json')
     }
 }
 

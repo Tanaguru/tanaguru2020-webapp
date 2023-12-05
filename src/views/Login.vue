@@ -77,7 +77,7 @@ export default {
 			let username = this.username
 			let password = this.password
 			this.$store.dispatch('login', {username, password})
-			.then(() => this.$router.push('/'))
+			.then(() => this.$router.push(this.$route.query.from || '/'))
 			.catch(err => this.error = this.$i18n.t("login.incorrectLogin"))
 		}
 	},

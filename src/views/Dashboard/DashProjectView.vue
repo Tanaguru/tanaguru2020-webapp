@@ -98,6 +98,10 @@
 						<span class="infos-list__exergue">{{$t('dashboard.project.date')}}</span> 
 						{{ moment(project.contract.dateEnd).format('LL') }}
 					</li>
+					<li class="checkbox">
+						<input class="checkbox__input" type="checkbox" :id="'mail_subscription_' + project.id" :checked="mailSubscription" @change="setMailSubscription()">
+						<label class="checkbox__label" :for="'mail_subscription_' + project.id">{{$t('project.mailSubscription')}}</label>
+					</li>
 				</ul>
 
 				<div class="project-item-team desktop-element">
@@ -411,6 +415,7 @@ export default {
 			lastUploadAudit: null,
 			users: [],
 			currentUserRole: null,
+			mailSubscription: null,
 			projectOpen: false,
 			repositories: [],
 		}
@@ -424,7 +429,8 @@ export default {
 					user.contractAppUser.user.id === this.$store.state.auth.user.id
 				)
 				if(currentUser){
-					this.currentUserRole = currentUser.projectRole.name
+					this.currentUserRole = currentUser.projectRole.name;
+					this.getMailSubscription();
 				}
 			},
 			(error) => console.error(error)
@@ -659,6 +665,27 @@ export default {
 
 		activeTab() {
 			this.$store.state.activeTab.name = 'information'
+		},
+
+		getMailSubscription() {
+			this.projectService.getCurrentUserMailSubscription(
+				this.project.id,
+				(resp) => this.mailSubscription = resp,
+				(error) => console.error(error)
+			)
+		},
+
+		setMailSubscription() {
+			let mailEnabled = false == this.mailSubscription;
+
+			this.projectService.setCurrentUserMailSubscription(
+				this.project.id,
+				mailEnabled,
+				(resp) => {
+					this.mailSubscription = mailEnabled
+				},
+				(error) => console.error(error)
+			)
 		}
 	}
 }
