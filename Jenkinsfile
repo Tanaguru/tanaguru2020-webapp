@@ -84,7 +84,8 @@ pipeline {
                     writeFile file: "./.env-premium", text: devPremiumDockerEnv
 					sh '''
 						WEBAPP_VERSION=$(cat version.txt)
-						docker stop tanaguru2020-webapp-dev || true
+						docker rename tanaguru2020-webapp-dev tanaguru2020-webapp-dev-old || true
+						docker stop tanaguru2020-webapp-dev-old || true
 						docker image prune -f
 						docker run -d --rm \
 							--name tanaguru2020-webapp-dev \
@@ -97,7 +98,8 @@ pipeline {
 							--label "traefik.port=80" \
 							--network=web \
 							tanaguru2020-webapp:${WEBAPP_VERSION}
-						docker stop tanaguru2020-webapp-premium-dev || true
+						docker rename tanaguru2020-webapp-premium-dev tanaguru2020-webapp-premium-dev-old || true
+						docker stop tanaguru2020-webapp-premium-dev-old || true
 						docker run -d --rm \
 							--name tanaguru2020-webapp-premium-dev \
 							--env-file ./.env-premium \
@@ -128,7 +130,8 @@ pipeline {
 					sh '''
 						WEBAPP_VERSION=$(cat version.txt)
 
-						docker stop tanaguru2020-webapp-prod || true
+						docker rename tanaguru2020-webapp-prod tanaguru2020-webapp-prod-old || true
+						docker stop tanaguru2020-webapp-prod-old || true
 						docker image prune -f
 
 						docker run -d --rm \
@@ -143,7 +146,8 @@ pipeline {
 							--network=web \
 							tanaguru2020-webapp:${WEBAPP_VERSION}
 
-						docker stop tanaguru2020-webapp-premium-prod || true
+						docker rename tanaguru2020-webapp-premium-prod tanaguru2020-webapp-premium-prod-old || true
+						docker stop tanaguru2020-webapp-premium-prod-old || true
 						docker run -d --rm \
 							--name tanaguru2020-webapp-premium-prod \
 							--env-file ./.env-premium \
