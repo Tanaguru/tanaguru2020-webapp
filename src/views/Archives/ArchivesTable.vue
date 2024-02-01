@@ -69,10 +69,9 @@
 								</button>
 								<trial-tooltip :spot="'delete-' + audit.id" v-if="$store.state.auth.user.appAccountType.name == 'FREE'" />
 							</li>
-							<li v-else class="actions-list__item">
-								<button
-									v-if="authorities.includes('START_AUDIT')"
-									class="btn btn--icon btn--nude"
+							<li class="actions-list__item"
+								v-if="authorities.includes('START_AUDIT') && (audit.status === 'PENDING' || audit.status === 'RUNNING')">
+								<button class="btn btn--icon btn--nude"
 									@click="stopAudit(audit)">
 									<icon-base-decorative>
 										<icon-close/>
