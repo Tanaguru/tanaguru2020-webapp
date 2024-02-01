@@ -36,7 +36,7 @@
 							<li class="actions-list__item">
 								<button
 									class="btn btn--icon btn--nude"
-									aria-controls= "tooltip__info"
+									:aria-controls="'tooltip__info_' + project.id"
 									:aria-expanded="showApiKeyTooltip == project.id ? 'true' : 'false'"
 									@click="openApiKeyTooltip(project.id)">
 
@@ -44,9 +44,9 @@
 									<span>{{$t('project.apiKey')}}</span>
 								</button>
 								
-								<div class="tooltip__info" role="tooltip" v-show="showApiKeyTooltip == project.id">
+								<div :id="'tooltip__info_' + project.id" role="tooltip" v-show="showApiKeyTooltip == project.id">
 									<div class="tooltip-clipboard">
-										<input class="input" :id="idApiKey(project.id)" :value="apiKey">
+										<input readonly class="input" :id="idApiKey(project.id)" :value="apiKey">
 										<button
 											@click.stop.prevent="copyApiKey(project.id)"
 											class="btn btn--clipboard">
@@ -156,8 +156,9 @@ export default {
             let elementApiKey = document.querySelector('#apiKey_'+projectId);
             elementApiKey.hidden = false;
             elementApiKey.select();
+			
             try {
-                var successful = document.execCommand('copy');
+				navigator.clipboard.writeText(elementApiKey.value);
                 this.copyButtonText = this.$i18n.t("resultAudit.copyLink.success");
                 this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.sucessHelp");
                 setTimeout(() => {
@@ -169,7 +170,7 @@ export default {
                 this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.failHelp");
             }
             elementApiKey.hidden = true;
-            window.getSelection().removeAllRanges();
+			elementApiKey.closest('li').firstElementChild.focus();
         }
     }
 }

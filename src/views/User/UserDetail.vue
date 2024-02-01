@@ -258,18 +258,27 @@
       <div class="form-row">
         <div class="form-column">
           <div id="user-token-container" class="form-block">
-            <label for="user-token" class="label">{{ $t("user.userToken") }}</label>
+            <button
+              class="btn btn--icon btn--nude"
+              aria-controls="tooltip__token"
+              :aria-expanded="showTokenTooltip"
+              @click="openTokenTooltip()">
 
-            <textarea
-              readonly
-              class="input"
-              id="user-token"
-              :value="userToken"
-            ></textarea>
-
-            <button @click.stop.prevent="copyToken()" class="btn btn--clipboard">
-              {{ copyButtonText }}
+              <icon-base-decorative><icon-arrow-blue /></icon-base-decorative>
+              <span>{{$t('project.apiKey')}}</span>
             </button>
+            
+            <div id="tooltip__token" role="tooltip" v-show="showTokenTooltip">
+              <div class="tooltip-clipboard">
+                <input readonly class="input" id="user_token" :value="userToken">
+                <button
+                  @click.stop.prevent="copyToken()"
+                  class="btn btn--clipboard">
+                  {{ copyButtonText }}
+                </button>
+              </div>
+              <div aria-live="polite" class="screen-reader-text">{{ screenReaderInfo }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -345,6 +354,8 @@ export default {
       ],
       user: null,
       isCurrentUser: false,
+      showTokenTooltip: false,
+      screenReaderInfo: '',
       contracts: [],
       modifyUserForm: {
         active: false,
@@ -515,16 +526,37 @@ export default {
         (error) => console.error(error)
       );
     },
+    openTokenTooltip(){
+      this.showTokenTooltip = !this.showTokenTooltip;
+      this.screenReaderInfo = '';
+      this.copyButtonText = this.$i18n.t("action.copy");
+      let elementToken = document.getElementById("tooltip__token");
+      elementToken.hidden = false;
+      this.generateToken();			
+		},
     copyToken() {
-      let inputToken = document.getElementById("user-token");
-
+      let elementToken = document.getElementById("user_token");
+      elementToken.hidden = false;
+      elementToken.select();
+			
       try {
-        navigator.clipboard.writeText(inputToken.value);
+				navigator.clipboard.writeText(elementToken.value);
         this.copyButtonText = this.$i18n.t("resultAudit.copyLink.success");
+        this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.sucessHelp");
+
+        setTimeout(() => {
+          this.showTokenTooltip = !this.showTokenTooltip;
+          this.userToken = '';
+        }, 400)
       } catch (err) {
         this.copyButtonText = this.$i18n.t("resultAudit.copyLink.fail");
+        this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.failHelp");
       }
+
+      elementToken.hidden = true;
+			elementToken.closest('#user-token-container').firstElementChild.focus();
     },
+
     loadContracts(page, size) {
       this.contractService.findByUserId(
         this.$route.params.id,
@@ -567,17 +599,12 @@ export default {
           }
         );
 
-        this.generateToken();
         this.loadContracts(this.contractCurrentPage, this.contractPageSize);
       }
     } else {
       this.$router.replace("/");
     }
-  },
-  updated() {
-    let inputUserToken = document.getElementById("user-token");
-    inputUserToken.style.height = inputUserToken.scrollHeight + "px";
-  },
+  }
 };
 </script>
 
