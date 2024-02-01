@@ -28,5 +28,12 @@
     "to": "Au",
     "keyFigures": "Chiffres clés",
     "legendTab": "Tableau des chiffres clés",
-    "legendTabPeriod": "Tableau des nombres de ressources audités par période"
+    "legendTabPeriod": "Tableau des nombres de ressources audités par période",
+    "bugDescription": "Suite à un bug au sein de l'API, des audits liés à des projets supprimés (avant la version 2.0.1) sont toujours stockés dans la base de données.",
+    "bugWarningVersion": "Cette fonctionnalité permettant de nettoyer la base de données ne sera disponible que dans la version actuelle de Tanaguru Engine (2.0.1).",
+    "bugWarningDuration": "Selon la quantité d'audits à supprimer, le nettoyage de la base de données peut prendre un certain temps. Cependant le nettoyage s'effectue en tâche de fond de façon asynchrone.",
+    "auditsIncorrectlyDeleted": "Nombre d'audits mal supprimés",
+    "dbClean": "nettoyer la base de donées",
+    "purging": "Le nettoyage de la base de données est en cours...",
+    "purged": "Le nettoyage de la base de donnée est terminé."
 }
