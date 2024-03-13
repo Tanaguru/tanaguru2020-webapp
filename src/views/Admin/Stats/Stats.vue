@@ -1,6 +1,47 @@
 <template>
     <div>
-        <h1> {{ $t('title.statistics') }} </h1>
+        <h1>{{ $t('title.statistics') }}</h1>
+
+        <div class="temporary-feature" :class="'topurge' != purgeStatus ? ' '+purgeStatus : ''" v-if="'useless' != purgeStatus && 0 != nbAuditsToRemove && false">
+            <h3>
+                <button class='btn btn--icon btn--nude btn--tab' aria-controls='bug-details' :aria-expanded="bugOpen ? 'true' : 'false'" @click="toggleBug" >
+                    <span>Alerte Tanaguru Engine</span>
+                    <icon-base-decorative :class="bugOpen ? 'hide' : 'show'"><icon-arrow-blue /></icon-base-decorative>
+                    <span class="screen-reader-text" v-if="bugOpen">{{$t('action.hide')}}</span>
+                    <span class="screen-reader-text" v-else>{{$t('action.show')}}</span>
+                </button>
+            </h3>
+
+            <div id="bug-details" v-show="bugOpen">
+                <p>{{ $t('statistics.bugDescription') }}</p>
+
+                <div v-if="'topurge' == purgeStatus">
+                    <ul class="temporary-feature-warnings">
+                        <li>
+                            <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
+                                <icon-alert/>
+                            </icon-base-decorative>
+                            <strong>{{ $t('statistics.bugWarningVersion') }}</strong>
+                        </li>
+                        <li>
+                            <icon-base-decorative width="16" height="16" viewBox="0 0 16 16">
+                                <icon-alert/>
+                            </icon-base-decorative>
+                            <strong>{{ $t('statistics.bugWarningDuration') }}</strong>                    
+                        </li>
+                    </ul>
+
+                    <p class="temporary-feature-action">
+                        <span>{{ $t('statistics.auditsIncorrectlyDeleted') }} : {{ nbAuditsToRemove }}</span>                
+                        <button class="btn btn--default" @click.once="purgeAudits">{{ $t('statistics.dbClean') }}</button>
+                    </p>
+                </div>
+                
+                <p v-else-if="'purging' == purgeStatus" role="status"><strong>{{ $t('statistics.purging') }} {{ nbAuditsRemoved }} / {{ totalAuditsToRemove }}</strong></p>
+                <p v-else role="status"><strong>{{ $t('statistics.purged') }}</strong></p>
+            </div>
+        </div>
+
         <div class="form-row">
 			<div class="form-column">
                 <div class="form-block">
@@ -58,7 +99,7 @@
             </div>
         </div>
         
-        <h3> {{ $t('statistics.nbResourcesByPeriod') }} </h3>
+        <h3>{{ $t('statistics.nbResourcesByPeriod') }}</h3>
         <div class="form-row">
             <div class="form-column">
                 <div class="form-block">
@@ -96,30 +137,29 @@
         <p v-if="dateForm.successMsg" id="form-success" class="info-success">{{ dateForm.successMsg }}</p>
 
         <div class="table-container" v-if="auditedOverPeriod.dateStart">
-                <h4> {{ $t('statistics.from') }} {{ auditedOverPeriod.dateStart }} {{ $t('statistics.to') }} {{ auditedOverPeriod.dateEnd }} </h4>
-				<table class="table table--default table-references" id="table-stats-period">
-					<caption class="screen-reader-text">{{ $t('statistics.legendTabPeriod') }}</caption>
-					<thead>
-					<tr>
-						<th scope="col"> {{ $t('statistics.nbPages') }} </th>
-						<th scope="col"> {{ $t('statistics.nbSites') }} </th>
-                        <th scope="col"> {{ $t('statistics.nbScenarios') }} </th>
-						<th scope="col"> {{ $t('statistics.nbFiles') }} </th>
-                        <th scope="col"> {{ $t('statistics.nbErrorMeanByPage') }} </th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr>
-						<td class="td-title"> {{ auditedOverPeriod.nbPages }} </td>
-                        <td class="td-title"> {{ auditedOverPeriod.nbSites }} </td>
-                        <td class="td-title"> {{ auditedOverPeriod.nbScenarios }} </td>
-                        <td class="td-title"> {{ auditedOverPeriod.nbFiles }} </td>
-                        <td class="td-title"> {{ auditedOverPeriod.averagePageError.toFixed(1) }} </td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
-
+            <h4> {{ $t('statistics.from') }} {{ auditedOverPeriod.dateStart }} {{ $t('statistics.to') }} {{ auditedOverPeriod.dateEnd }} </h4>
+            <table class="table table--default table-references" id="table-stats-period">
+                <caption class="screen-reader-text">{{ $t('statistics.legendTabPeriod') }}</caption>
+                <thead>
+                <tr>
+                    <th scope="col"> {{ $t('statistics.nbPages') }} </th>
+                    <th scope="col"> {{ $t('statistics.nbSites') }} </th>
+                    <th scope="col"> {{ $t('statistics.nbScenarios') }} </th>
+                    <th scope="col"> {{ $t('statistics.nbFiles') }} </th>
+                    <th scope="col"> {{ $t('statistics.nbErrorMeanByPage') }} </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="td-title"> {{ auditedOverPeriod.nbPages }} </td>
+                    <td class="td-title"> {{ auditedOverPeriod.nbSites }} </td>
+                    <td class="td-title"> {{ auditedOverPeriod.nbScenarios }} </td>
+                    <td class="td-title"> {{ auditedOverPeriod.nbFiles }} </td>
+                    <td class="td-title"> {{ auditedOverPeriod.averagePageError.toFixed(1) }} </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
@@ -127,9 +167,12 @@
 
 import Piechart from "../../../components/charts/PieChart";
 import DateHelper from '../../../helper/DateHelper';
+import IconBaseDecorative from '../../../components/icons/IconBaseDecorative';
+import IconAlert from '../../../components/icons/IconAlert';
+import IconArrowBlue from '../../../components/icons/IconArrowBlue'
 
 export default {
-  components: { Piechart },
+  components: { Piechart, IconBaseDecorative, IconAlert, IconArrowBlue },
 	name: 'statsTab',
 	data() {
 		return {
@@ -165,11 +208,18 @@ export default {
                 nbScenarios: 0,
                 nbFiles: 0,
                 averagePageError: 0
-            }
+            },
+            nbAuditsToRemove: -1,
+            nbAuditsRemoved: -1,
+            totalAuditsToRemove: -1,
+            purgeStatus: false,
+            bugOpen: true,
         }
 	},
 	created() {
         this.loadStats();
+        this.loadPurgeDatas();
+        
     },
     methods: {
         checkValidDate: DateHelper.checkValidDate,
@@ -179,6 +229,36 @@ export default {
                     this.stats = stats;
                 },
 				err => console.error(err)
+            );
+        },
+        loadPurgeDatas() {
+            this.auditService.getNumberOfAuditsIncorrectlyDeleted(
+                count => {
+                    this.nbAuditsToRemove = count
+                },
+                err => console.error(err)
+            );
+            this.auditService.getTotalAuditsToBePurged(
+                total => {
+                    this.totalAuditsToRemove = total
+                },
+                err => console.error(err)
+            );
+            this.auditService.getAuditsPurgeStatus(
+                status => {
+                    this.purgeStatus = status
+                },
+                err => console.error(err)
+            );
+
+            this.nbAuditsRemoved = this.totalAuditsToRemove - this.nbAuditsToRemove;
+        },
+        purgeAudits() {
+            this.auditService.cleanAudits(
+                resp => {
+                    this.loadPurgeDatas();
+                },
+                err => console.error(err)
             );
         },
         checkDate() {
@@ -267,7 +347,42 @@ export default {
                 this.dateForm.dateEnd = "";
 
             }
+        },
+        toggleBug() {
+			this.bugOpen = !this.bugOpen;
         }
     }
 }
 </script>
+
+<style lang="scss" scoped>
+    .temporary-feature {
+        margin-bottom: 4.8rem;
+        padding: 1.6rem;
+        border-radius: .8rem;
+        background-color: rgba($color-warning, .1);
+        border: 1px solid $color-warning-dark;
+
+        &.purged {
+            background-color: rgba($color-good, .1);
+            border: 1px solid $color-good-dark;
+        }
+
+        &.purging {
+            background-color: rgba($color-info, .1);
+            border: 1px solid $color-info-dark;
+        }
+
+        &-warnings {
+            svg {
+                margin-right: 0.5rem;
+            }
+        }
+
+        &-action {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+    }
+</style>

@@ -134,4 +134,52 @@ export default class AuditService extends Service{
             error(err);
         })
     }
+
+    getNumberOfAuditsIncorrectlyDeleted(then, error) {
+        return this.axios({
+            url: this.controllerName + '/count-incorrectly-deleted' 
+        })
+        .then(resp => {
+            then(resp.data);
+        })
+        .catch(err => {
+            error(err);
+        })
+    }
+
+    getTotalAuditsToBePurged(then, error) {
+        return this.axios({
+            url: this.controllerName + '/total-purge' 
+        })
+        .then(resp => {
+            then(resp.data);
+        })
+        .catch(err => {
+            error(err);
+        })
+    }
+
+    getAuditsPurgeStatus(then, error) {
+        return this.axios({
+            url: this.controllerName + '/status-purge' 
+        })
+        .then(resp => {
+            then(resp.data);
+        })
+        .catch(err => {
+            error(err);
+        })
+    }
+
+    cleanAudits(then, error) {
+        return this.axios({
+            url: this.controllerName + '/clean' 
+        })
+        .then(resp => {
+            then(resp.data);
+        })
+        .catch(err => {
+            error(err);
+        })
+    }
 }
