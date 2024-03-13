@@ -2,7 +2,7 @@
     <div>
         <h1>{{ $t('title.statistics') }}</h1>
 
-        <div class="temporary-feature" :class="'topurge' != purgeStatus ? ' '+purgeStatus : ''" v-if="'useless' != purgeStatus && 0 != nbAuditsToRemove">
+        <div class="temporary-feature" :class="'topurge' != purgeStatus ? ' '+purgeStatus : ''" v-if="'useless' != purgeStatus && 0 != nbAuditsToRemove && false">
             <h3>
                 <button class='btn btn--icon btn--nude btn--tab' aria-controls='bug-details' :aria-expanded="bugOpen ? 'true' : 'false'" @click="toggleBug" >
                     <span>Alerte Tanaguru Engine</span>
