@@ -257,27 +257,57 @@
 
       <div class="form-row">
         <div class="form-column">
-          <div id="user-token-container" class="form-block">
+          <div id="user-token-container" class="form-block" tabindex="-1">
+            <p aria-live="polite">
+              <span v-if="tokenExpiration" class="user-token-expiration">
+                <span>token: ******</span>
+                <span>{{ $t("user.tokenExpiration") + " " + tokenExpiration }}</span>
+              </span>
+            </p>
+
+            <div class="form-block">
+              <label class="label" for="token-validity">{{
+                $t("user.tokenExpirationLabel")
+              }}</label>
+
+              <div class="select">
+                <select
+                  id="token-validity"
+                  v-model="tokenValidity"
+                  name="token-validity"
+                  required
+                >
+                  <option value="day" selected>{{ $t("global.today") }}</option>
+                  <option value="month">{{ "30 " + $t("global.days") }}</option>
+                </select>
+              </div>
+            </div>
+
             <button
-              class="btn btn--icon btn--nude"
+              class="btn btn--icon btn--default"
               aria-controls="tooltip__token"
               :aria-expanded="showTokenTooltip"
-              @click="openTokenTooltip()">
+              @click="openTokenTooltip()"
+            >
+              <icon-base-decorative>
+                <icon-arrow-blue v-if="tokenExpiration" />
+                <icon-plus v-else />
+              </icon-base-decorative>
 
-              <icon-base-decorative><icon-arrow-blue /></icon-base-decorative>
-              <span>{{$t('project.apiKey')}}</span>
+              <span v-if="tokenExpiration">{{ $t("user.tokenRenew") }}</span>
+              <span v-else>{{ $t("user.tokenGenerate") }}</span>
             </button>
-            
+
             <div id="tooltip__token" role="tooltip" v-show="showTokenTooltip">
               <div class="tooltip-clipboard">
-                <input readonly class="input" id="user_token" :value="userToken">
-                <button
-                  @click.stop.prevent="copyToken()"
-                  class="btn btn--clipboard">
+                <input readonly class="input" id="user_token" :value="userToken" />
+                <button @click.stop.prevent="copyToken()" class="btn btn--clipboard">
                   {{ copyButtonText }}
                 </button>
               </div>
-              <div aria-live="polite" class="screen-reader-text">{{ screenReaderInfo }}</div>
+              <div aria-live="polite" class="screen-reader-text">
+                {{ screenReaderInfo }}
+              </div>
             </div>
           </div>
         </div>
@@ -325,6 +355,7 @@
 <script>
 import IconBaseDecorative from "../../components//icons/IconBaseDecorative";
 import IconArrowBlue from "../../components//icons/IconArrowBlue";
+import IconPlus from "../../components/icons/IconPlus";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import ProfileContractTable from "./ProfileContractTable";
 import BackToTop from "../../components/BackToTop";
@@ -337,6 +368,7 @@ export default {
   components: {
     IconBaseDecorative,
     IconArrowBlue,
+    IconPlus,
     ProfileContractTable,
     Breadcrumbs,
     BackToTop,
@@ -354,8 +386,8 @@ export default {
       ],
       user: null,
       isCurrentUser: false,
-      showTokenTooltip: false,
-      screenReaderInfo: '',
+      tokenTooltipDisplayed: false,
+      screenReaderInfo: "",
       contracts: [],
       modifyUserForm: {
         active: false,
@@ -382,6 +414,8 @@ export default {
       contractCurrentPage: 0,
       contractTotal: 0,
       userToken: null,
+      tokenExpiration: null,
+      tokenValidity: "day",
       copyButtonText: this.$i18n.t("action.copy"),
     };
   },
@@ -396,6 +430,11 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    showTokenTooltip() {
+      return this.tokenTooltipDisplayed;
+    },
   },
   methods: {
     showModifyUserForm() {
@@ -469,7 +508,6 @@ export default {
         }
       }
     },
-
     showModifyPasswordForm() {
       this.modifyPasswordForm.password = "";
       this.modifyPasswordForm.passwordConfirm = "";
@@ -519,44 +557,60 @@ export default {
       }
     },
     generateToken() {
-      this.authenticationService.refreshToken(
+	  const now = Date.now();
+	  let date = "month" === this.tokenValidity ? new Date(now + 2592000000) : new Date(now + 86400000);
+
+	  this.tokenExpiration = null;
+	  this.userToken = null;
+
+      this.userService.generateToken(
+        this.user.id,
+        [date.getFullYear(), date.getMonth() + 1, date.getDate()].join("-"),
         (data) => {
-          this.userToken = data.jwttoken;
+          this.userToken = data;
+          this.getTokenExpiration();
         },
         (error) => console.error(error)
       );
     },
-    openTokenTooltip(){
-      this.showTokenTooltip = !this.showTokenTooltip;
-      this.screenReaderInfo = '';
+    getTokenExpiration() {
+      this.userService.getTokenExpiration(
+        this.user.id,
+        (data) => {
+          let date = new Date(data);
+          this.tokenExpiration = date.toLocaleDateString(this.$i18n.locale);
+        },
+        (error) => console.error(error)
+      );
+    },
+    openTokenTooltip() {
+      this.tokenTooltipDisplayed = !this.tokenTooltipDisplayed;
+      this.screenReaderInfo = "";
       this.copyButtonText = this.$i18n.t("action.copy");
       let elementToken = document.getElementById("tooltip__token");
       elementToken.hidden = false;
-      this.generateToken();			
-		},
+      this.generateToken();
+    },
     copyToken() {
       let elementToken = document.getElementById("user_token");
-      elementToken.hidden = false;
       elementToken.select();
-			
+
       try {
-				navigator.clipboard.writeText(elementToken.value);
+        navigator.clipboard.writeText(elementToken.value);
         this.copyButtonText = this.$i18n.t("resultAudit.copyLink.success");
         this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.sucessHelp");
 
         setTimeout(() => {
-          this.showTokenTooltip = !this.showTokenTooltip;
-          this.userToken = '';
-        }, 400)
+          this.tokenTooltipDisplayed = !this.tokenTooltipDisplayed;
+          this.userToken = "";
+        }, 400);
       } catch (err) {
         this.copyButtonText = this.$i18n.t("resultAudit.copyLink.fail");
         this.screenReaderInfo = this.$i18n.t("resultAudit.copyLink.failHelp");
       }
 
-      elementToken.hidden = true;
-			elementToken.closest('#user-token-container').firstElementChild.focus();
+      elementToken.closest("#user-token-container").focus();
     },
-
     loadContracts(page, size) {
       this.contractService.findByUserId(
         this.$route.params.id,
@@ -582,17 +636,21 @@ export default {
           this.$route.params.id,
           (user) => {
             this.user = user;
+
             if (this.$store.state.auth.user.appAccountType.name != "FREE") {
               this.breadcrumbProps.push({
                 name: "Administration",
                 path: "/administration",
               });
             }
+
             this.breadcrumbProps.push({
               name: this.isCurrentUser
                 ? this.$i18n.t("user.myProfile")
                 : this.user.username,
             });
+
+            this.getTokenExpiration();
           },
           (err) => {
             this.$router.replace("/404");
@@ -604,7 +662,7 @@ export default {
     } else {
       this.$router.replace("/");
     }
-  }
+  },
 };
 </script>
 
@@ -632,5 +690,9 @@ export default {
   resize: none;
   overflow: hidden;
   min-height: 50px;
+}
+
+.user-token-expiration span:first-child() {
+	margin-right: 1rem;
 }
 </style>

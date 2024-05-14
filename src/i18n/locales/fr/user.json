@@ -8,5 +8,9 @@
 	"myProfile": "Mon profil",
 	"userToken": "Token utilisateur",
 	"myToken": "Mon token utilisateur",
-	"tokenDesc": "Ce token te permet de t'authentifier sur l'API."
+	"tokenDesc": "Ce token te permet de t'authentifier sur l'API.",
+	"tokenGenerate": "Générer mon token",
+	"tokenRenew": "Renouveler mon token",
+	"tokenExpiration": "expire le",
+	"tokenExpirationLabel": "validité du token"
 }

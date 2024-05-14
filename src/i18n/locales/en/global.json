@@ -16,5 +16,7 @@
 	"breadcrumbsHelp": "You are here",
 	"expiredMessage": "Your free trial has expired. You can still view your past results for some time but won't be able to launch new audits. Please contact us if you're interested in the full Tanaguru Engine experience.",
 	"trialBloc": "Why is this disabled?",
-	"trialTooltipMsg": "This feature isn't available to you."
+	"trialTooltipMsg": "This feature isn't available to you.",
+	"days": "days",
+	"today": "today"
 }
