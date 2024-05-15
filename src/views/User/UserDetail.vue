@@ -40,7 +40,9 @@
 
             <div class="form-column">
               <div class="form-block">
-                <label class="label" for="email">{{ $t("entity.user.email") }} *</label>
+                <label class="label" for="email"
+                  >{{ $t("entity.user.email") }} *</label
+                >
                 <input
                   class="input"
                   v-bind:class="{
@@ -64,7 +66,10 @@
               <div
                 class="form-block"
                 id="select-approle"
-                v-if="!isCurrentUser && $store.state.auth.authorities['PROMOTE_USER']"
+                v-if="
+                  !isCurrentUser &&
+                  $store.state.auth.authorities['PROMOTE_USER']
+                "
               >
                 <label class="label" for="status-select"
                   >{{ $t("entity.user.role.role") }} *</label
@@ -78,8 +83,12 @@
                     <option value="SUPER_ADMIN">
                       {{ $t("entity.user.role.superAdmin") }}
                     </option>
-                    <option value="ADMIN">{{ $t("entity.user.role.admin") }}</option>
-                    <option value="USER">{{ $t("entity.user.role.user") }}</option>
+                    <option value="ADMIN">
+                      {{ $t("entity.user.role.admin") }}
+                    </option>
+                    <option value="USER">
+                      {{ $t("entity.user.role.user") }}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -89,13 +98,17 @@
               <fieldset
                 class="checkbox-wrapper"
                 v-show="
-                  isCurrentUser == false && $store.state.auth.user.appRole.name != 'USER'
+                  isCurrentUser == false &&
+                  $store.state.auth.user.appRole.name != 'USER'
                 "
               >
                 <legend class="checkbox-wrapper__legend">
                   {{ $t("entity.user.status") }} *
                 </legend>
-                <div class="checkbox" v-if="$store.state.auth.authorities['MODIFY_USER']">
+                <div
+                  class="checkbox"
+                  v-if="$store.state.auth.authorities['MODIFY_USER']"
+                >
                   <input
                     class="checkbox__input"
                     type="checkbox"
@@ -108,7 +121,10 @@
                   }}</label>
                 </div>
 
-                <div class="checkbox" v-if="$store.state.auth.authorities['MODIFY_USER']">
+                <div
+                  class="checkbox"
+                  v-if="$store.state.auth.authorities['MODIFY_USER']"
+                >
                   <input
                     class="checkbox__input"
                     type="checkbox"
@@ -136,17 +152,23 @@
       <div v-else>
         <ul class="infos-list">
           <li id="username">
-            <span class="infos-list__exergue">{{ $t("entity.user.username") }}</span>
+            <span class="infos-list__exergue">{{
+              $t("entity.user.username")
+            }}</span>
             :
             {{ user.username }}
           </li>
           <li id="email" v-if="$store.state.auth.user.appRole.name != 'USER'">
-            <span class="infos-list__exergue">{{ $t("entity.user.email") }}</span>
+            <span class="infos-list__exergue">{{
+              $t("entity.user.email")
+            }}</span>
             :
             {{ user.email }}
           </li>
           <li>
-            <span class="infos-list__exergue">{{ $t("entity.user.role.role") }}</span>
+            <span class="infos-list__exergue">{{
+              $t("entity.user.role.role")
+            }}</span>
             :
             {{
               user.appRole.name.charAt(0) +
@@ -155,17 +177,25 @@
           </li>
           <li
             id="enabled"
-            v-if="!isCurrentUser && $store.state.auth.authorities['MODIFY_USER']"
+            v-if="
+              !isCurrentUser && $store.state.auth.authorities['MODIFY_USER']
+            "
           >
-            <span class="infos-list__exergue">{{ $t("entity.user.enabled") }}</span>
+            <span class="infos-list__exergue">{{
+              $t("entity.user.enabled")
+            }}</span>
             :
             {{ user.enabled }}
           </li>
           <li
             id="blocked"
-            v-if="!isCurrentUser && $store.state.auth.authorities['MODIFY_USER']"
+            v-if="
+              !isCurrentUser && $store.state.auth.authorities['MODIFY_USER']
+            "
           >
-            <span class="infos-list__exergue">{{ $t("entity.user.blocked") }}</span>
+            <span class="infos-list__exergue">{{
+              $t("entity.user.blocked")
+            }}</span>
             :
             {{ !user.accountNonLocked }}
           </li>
@@ -243,7 +273,10 @@
       </div>
 
       <div v-else>
-        <button class="btn btn--default btn-modify" @click="showModifyPasswordForm()">
+        <button
+          class="btn btn--default btn-modify"
+          @click="showModifyPasswordForm()"
+        >
           {{ $t("action.modify") }}
         </button>
       </div>
@@ -255,61 +288,71 @@
 
       <p>{{ $t("user.tokenDesc") }}</p>
 
-      <div class="form-row">
-        <div class="form-column">
-          <div id="user-token-container" class="form-block" tabindex="-1">
-            <p aria-live="polite">
-              <span v-if="tokenExpiration" class="user-token-expiration">
-                <span>token: ******</span>
-                <span>{{ $t("user.tokenExpiration") + " " + tokenExpiration }}</span>
-              </span>
-            </p>
+      <div>
+        <div id="user-token-container" class="form-block" tabindex="-1">
+          <p aria-live="polite">
+            <span v-if="tokenValidity.expiration" class="user-token-expiration">
+              <span>token: ******</span>
+              <span>{{
+                $t("user.tokenExpiration") + " " + tokenValidity.expiration
+              }}</span>
+            </span>
+          </p>
 
-            <div class="form-block">
-              <label class="label" for="token-validity">{{
-                $t("user.tokenExpirationLabel")
-              }}</label>
+          <fieldset>
+            <legend>Générer un nouveau token</legend>
 
-              <div class="select">
-                <select
-                  id="token-validity"
-                  v-model="tokenValidity"
-                  name="token-validity"
-                  required
-                >
-                  <option value="day" selected>{{ $t("global.today") }}</option>
-                  <option value="month">{{ "30 " + $t("global.days") }}</option>
-                </select>
-              </div>
-            </div>
+			<div class="form-row form-token">
+				<div class="form-column">
+					<div class="form-block">
+						<label class="label" for="token-validity">
+						{{ $t("user.tokenExpirationLabel") }}
+						</label>
 
-            <button
-              class="btn btn--icon btn--default"
-              aria-controls="tooltip__token"
-              :aria-expanded="showTokenTooltip"
-              @click="openTokenTooltip()"
-            >
-              <icon-base-decorative>
-                <icon-arrow-blue v-if="tokenExpiration" />
-                <icon-plus v-else />
-              </icon-base-decorative>
+						<input v-bind:class="{ 'has-error': tokenValidity.error }" class="input" type="text" name="token-validity" id="token-validity" v-model="tokenValidity.computedExpiration" :aria-describedby="tokenValidity.error ? 'token-error' : ''" required>
 
-              <span v-if="tokenExpiration">{{ $t("user.tokenRenew") }}</span>
-              <span v-else>{{ $t("user.tokenGenerate") }}</span>
-            </button>
+						<p v-show="tokenValidity.error" id="token-error" class="info-error">
+							{{ tokenValidity.error }}
+						</p>
+					</div>
+				</div>
 
-            <div id="tooltip__token" role="tooltip" v-show="showTokenTooltip">
-              <div class="tooltip-clipboard">
-                <input readonly class="input" id="user_token" :value="userToken" />
-                <button @click.stop.prevent="copyToken()" class="btn btn--clipboard">
-                  {{ copyButtonText }}
-                </button>
-              </div>
-              <div aria-live="polite" class="screen-reader-text">
-                {{ screenReaderInfo }}
-              </div>
-            </div>
-          </div>
+				<div class="form-column">
+					<div class="form-block">
+						<button
+						class="btn btn--icon btn--default"
+						id="tokenGenerate"
+						aria-controls="tooltip__token"
+						:aria-expanded="showTokenTooltip"
+						@click="openTokenTooltip()"
+						>
+						<icon-base-decorative>
+							<icon-arrow-blue v-if="tokenValidity.expiration" />
+							<icon-plus v-else />
+						</icon-base-decorative>
+
+						<span v-if="tokenValidity.expiration">{{
+							$t("user.tokenRenew")
+						}}</span>
+
+						<span v-else>{{ $t("user.tokenGenerate") }}</span>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div v-show="showTokenTooltip" id="tooltip__token" role="tooltip" aria-labelledby="tokenGenerate" class="form-row">
+				<div class="tooltip-clipboard">
+					<input readonly class="input" id="user_token" :value="userToken"/>
+
+					<button @click.stop.prevent="copyToken()" class="btn btn--clipboard">
+						{{ copyButtonText }}
+					</button>
+				</div>
+
+				<div aria-live="polite" class="screen-reader-text">{{ screenReaderInfo }}</div>
+			</div>
+          </fieldset>
         </div>
       </div>
     </article>
@@ -414,15 +457,19 @@ export default {
       contractCurrentPage: 0,
       contractTotal: 0,
       userToken: null,
-      tokenExpiration: null,
-      tokenValidity: "day",
+      tokenValidity: {
+        expiration: null,
+        error: null,
+		computedExpiration: null
+      },
       copyButtonText: this.$i18n.t("action.copy"),
     };
   },
   metaInfo() {
     return {
       // if no subcomponents specify a metaInfo.title, this title will be used
-      title: this.$i18n.t("global.siteName") + " - " + this.$i18n.t("title.profile"),
+      title:
+        this.$i18n.t("global.siteName") + " - " + this.$i18n.t("title.profile"),
       meta: [
         {
           name: "robots",
@@ -461,7 +508,9 @@ export default {
       if (!this.modifyUserForm.email) {
         this.modifyUserForm.emailError = this.$i18n.t("entity.user.emailError");
       } else if (!this.checkValidEmail(this.modifyUserForm.email)) {
-        this.modifyUserForm.emailError = this.$i18n.t("form.errorMsg.email.notEmail");
+        this.modifyUserForm.emailError = this.$i18n.t(
+          "form.errorMsg.email.notEmail"
+        );
       }
 
       if (
@@ -482,10 +531,15 @@ export default {
               this.modifyUserForm.successMsg = this.$i18n.t(
                 "form.successMsg.savedChanges"
               );
-              this.$store.commit("auth_success", { token: token, user: this.user });
+              this.$store.commit("auth_success", {
+                token: token,
+                user: this.user,
+              });
             },
             (error) =>
-              (this.modifyUserForm.error = this.$i18n.t("form.errorMsg.genericError"))
+              (this.modifyUserForm.error = this.$i18n.t(
+                "form.errorMsg.genericError"
+              ))
           );
         } else {
           this.userService.modifyUser(
@@ -503,7 +557,9 @@ export default {
               );
             },
             (error) =>
-              (this.modifyUserForm.error = this.$i18n.t("form.errorMsg.genericError"))
+              (this.modifyUserForm.error = this.$i18n.t(
+                "form.errorMsg.genericError"
+              ))
           );
         }
       }
@@ -534,7 +590,8 @@ export default {
           "form.errorMsg.password.passwordError"
         );
       } else if (
-        this.modifyPasswordForm.password != this.modifyPasswordForm.passwordConfirm
+        this.modifyPasswordForm.password !=
+        this.modifyPasswordForm.passwordConfirm
       ) {
         this.modifyPasswordForm.error = this.$i18n.t(
           "form.errorMsg.password.incorrectConfirmation"
@@ -552,36 +609,57 @@ export default {
             );
           },
           (error) =>
-            (this.modifyPasswordForm.error = this.$i18n.t("form.errorMsg.genericError"))
+            (this.modifyPasswordForm.error = this.$i18n.t(
+              "form.errorMsg.genericError"
+            ))
         );
       }
     },
     generateToken() {
-	  const now = Date.now();
-	  let date = "month" === this.tokenValidity ? new Date(now + 2592000000) : new Date(now + 86400000);
+		this.userToken = null;
+		const now = Date.now();
 
-	  this.tokenExpiration = null;
-	  this.userToken = null;
+		try {
+			const targetDate = this.tokenValidity.computedExpiration.split("/");
+			const year = targetDate[2];
+			const month = "fr" === this.$i18n.locale ? targetDate[1] : targetDate[0];
+			const day = "fr" === this.$i18n.locale ? targetDate[0] : targetDate[1];
+			const expiration = new Date(month + "/" + day + "/" + year + " 02:00:00");
 
-      this.userService.generateToken(
-        this.user.id,
-        [date.getFullYear(), date.getMonth() + 1, date.getDate()].join("-"),
-        (data) => {
-          this.userToken = data;
-          this.getTokenExpiration();
-        },
-        (error) => console.error(error)
-      );
+			if(isNaN(expiration)) {
+				this.tokenValidity.error = this.$i18n.t("user.tokenExpirationErrorFormat");
+			} else if(expiration < now) {
+				this.tokenValidity.error = this.$i18n.t("user.tokenExpirationErrorPeriod");
+			} else {
+				this.userService.generateToken(
+					this.user.id,
+					expiration.toJSON(),
+					(data) => {
+						this.tokenValidity.error = null;
+						this.userToken = data;
+						this.getTokenExpiration();
+					},
+					(error) => {
+						console.error(error);
+						this.tokenValidity.error = this.$i18n.t("user.tokenExpirationError");
+					}
+				);
+			}
+		} catch(err) {
+			console.error(err);
+			this.tokenValidity.error = this.$i18n.t("user.tokenExpirationErrorFormat");
+		}
     },
     getTokenExpiration() {
-      this.userService.getTokenExpiration(
-        this.user.id,
-        (data) => {
-          let date = new Date(data);
-          this.tokenExpiration = date.toLocaleDateString(this.$i18n.locale);
-        },
-        (error) => console.error(error)
-      );
+		this.tokenValidity.expiration = null;
+		this.userService.getTokenExpiration(
+			this.user.id,
+			(data) => {
+				let date = new Date(data);
+				this.tokenValidity.expiration = date.toLocaleDateString(this.$i18n.locale);
+			},
+			(error) => console.error(error)
+		);
     },
     openTokenTooltip() {
       this.tokenTooltipDisplayed = !this.tokenTooltipDisplayed;
@@ -627,9 +705,13 @@ export default {
     },
   },
   created() {
-    this.isCurrentUser = this.$store.state.auth.user.id == this.$route.params.id;
+    this.isCurrentUser =
+      this.$store.state.auth.user.id == this.$route.params.id;
     if (this.$route.params.id) {
-      if (!this.isCurrentUser && !this.$store.state.auth.authorities["SHOW_USER"]) {
+      if (
+        !this.isCurrentUser &&
+        !this.$store.state.auth.authorities["SHOW_USER"]
+      ) {
         this.$router.replace("/");
       } else {
         this.userService.findById(
@@ -693,6 +775,6 @@ export default {
 }
 
 .user-token-expiration span:first-child() {
-	margin-right: 1rem;
+  margin-right: 1rem;
 }
 </style>
