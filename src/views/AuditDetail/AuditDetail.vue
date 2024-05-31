@@ -218,36 +218,20 @@ import IconClose from '../../components/icons/IconClose'
 		created() {
 			this.sharecode = typeof this.$route.params.sharecode !== 'undefined' ? this.$route.params.sharecode : null;
 
-			this.projectService.findByAuditId(
+			this.auditService.findById(
 				this.$route.params.id,
 				this.sharecode,
-				(project) => {
-					this.project = project;
+				(audit) => {
+					this.audit = audit;
 
-					this.projectService.getCurrentUserAuthorities(
-						this.project.id,
-						(authorities) => {				
-							if(authorities.includes("SHOW_AUDIT")) {
-								this.getReferences();
-								this.getLogLevels();
-								this.refreshPages();
-								this.timer = setInterval(this.refreshPages, 3000);
-								this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
-								this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
-								this.getParameters();
-							} else {
-								this.$router.replace('/forbidden');
-							}
-						},
-						(error) => {
-							console.log(error);
-						}
-					)
+					if(audit.private) this.getProject();
+					else this.loadAudit(false);
 				},
 				(error) => {
 					console.error(error);
+					this.$router.replace('/notfound');
 				}
-			);
+			)
 		},
 		beforeDestroy () {
 			clearInterval(this.timer)
@@ -307,7 +291,7 @@ import IconClose from '../../components/icons/IconClose'
 				)
 			},
 
-			getAudit(){
+			getAudit() {
 				this.auditService.findById(
 					this.$route.params.id,
 					this.sharecode,
@@ -317,9 +301,45 @@ import IconClose from '../../components/icons/IconClose'
 					(error) => {
 						console.error(error);
 					}
+				)
+			},
+
+			getProject() {
+				this.projectService.findByAuditId(
+					this.$route.params.id,
+					this.sharecode,
+					(project) => {
+						this.project = project;
+
+						this.projectService.getCurrentUserAuthorities(
+							this.project.id,
+							(authorities) => {
+								if(authorities.includes("SHOW_AUDIT")) {
+									this.loadAudit(true);
+								} else {
+									this.$router.replace('/forbidden');
+								}
+							},
+							(error) => {
+								console.log(error);
+							}
+						)
+					},
+					(error) => {
+						console.error(error);
+						this.$router.replace('/notfound');
+					}
 				);
-        		this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
-        		this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
+			},
+
+			loadAudit(refresh) {
+				this.getReferences();
+				this.getLogLevels();
+				if(refresh) this.refreshPages();
+				this.timer = setInterval(this.refreshPages, 3000);
+				this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
+				this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
+				this.getParameters();
 			},
 
             async loadPages(page, size, name){
@@ -363,7 +383,7 @@ import IconClose from '../../components/icons/IconClose'
 						console.error(error);
 					}
 				);
-				
+
 				return status;
 			},
 
@@ -388,9 +408,9 @@ import IconClose from '../../components/icons/IconClose'
             },
 
 			refreshPages(){
-				if(this.audit && (this.audit.status === 'DONE' || this.audit.status === 'ERROR')){
+				if(this.audit && (this.audit.status === 'DONE' || this.audit.status === 'ERROR')) {
 					clearInterval(this.timer)
-				}else{
+				} else {
 					this.getAudit();
 				}
 			},
@@ -476,7 +496,7 @@ import IconClose from '../../components/icons/IconClose'
 							path:
 									"/contracts/" + this.project.contract.id,
 						});
-				
+
 						result.push({
 							name: this.project.name,
 							path: "/projects/" + this.project.id,
