@@ -226,7 +226,7 @@ import IconClose from '../../components/icons/IconClose'
 					this.audit = audit;
 
 					if(audit.private) this.getProject();
-					else this.loadAudit(false);
+					else this.loadAudit(true, false);
 				},
 				(error) => {
 					console.error(error);
@@ -298,7 +298,7 @@ import IconClose from '../../components/icons/IconClose'
 					this.sharecode,
 					(audit) => {
 						this.audit = audit;
-						this.loadAudit(false);
+						this.loadAudit(false, false);
 					},
 					(error) => {
 						console.error(error);
@@ -317,7 +317,7 @@ import IconClose from '../../components/icons/IconClose'
 							this.project.id,
 							(authorities) => {
 								if(authorities.includes("SHOW_AUDIT")) {
-									this.loadAudit(true);
+									this.loadAudit(true, true);
 								} else {
 									this.$router.replace('/forbidden');
 								}
@@ -334,15 +334,15 @@ import IconClose from '../../components/icons/IconClose'
 				);
 			},
 
-			loadAudit(refresh) {
-				if(refresh) {
+			loadAudit(firstLoad, refresh) {
+				if(firstLoad) {
 					this.getLogLevels();
-					this.refreshPages();
 					this.getReferences();
 					this.getParameters();
-
 					this.timer = setInterval(this.refreshPages, 3000);
 				}
+
+				if(refresh) this.refreshPages();
 
 				this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
 				this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
