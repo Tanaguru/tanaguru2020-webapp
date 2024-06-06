@@ -38,22 +38,22 @@
 					</section>
 
 					<section class="section-logs">
-
 						<h2>{{ $t('auditDetail.pages') }} ({{pageTotal}})</h2>
 
 						<div class="form-block form-block--half">
-						<label class="label" for="search-page">{{$t('action.search')}} : </label>
-						<input
-							class="input"
-							type="search"
-							name="search-page"
-							id="search-page"
-							v-model="search"
-							aria-describedby="search-explanation"
-							autocomplete="off"
-							@input="fireAriaLive"
-						>
+							<label class="label" for="search-page">{{$t('action.search')}} : </label>
+							<input
+								class="input"
+								type="search"
+								name="search-page"
+								id="search-page"
+								v-model="search"
+								aria-describedby="search-explanation"
+								autocomplete="off"
+								@input="fireAriaLive"
+							>
 						</div>
+
 						<p class='screen-reader-text' id="search-explanation">{{$t('auditDetail.infoSearch')}} : {{ pageTotal }}</p>
 
 						<div aria-live="polite" class='screen-reader-text'>
@@ -92,6 +92,7 @@
 									</div>
 								</div>
 							</div>
+
 							<div class="form-column">
 								<div class="form-block">
 									<button
@@ -120,12 +121,12 @@
                         :element-by-page="auditLogPageSize"
                         :total-elements="auditLogTotal"
                     	/>
+
 						<pagination
 							:current-page="auditLogCurrentPage"
 							:total-pages="auditLogTotalPage"
 							@changePage="(page) => {loadAuditLogs(page, auditLogPageSize, firstToLast, this.levelsToDisplay)}"
 						/>
-
 					</section>
                 </div>
 			</Tab>
@@ -297,6 +298,7 @@ import IconClose from '../../components/icons/IconClose'
 					this.sharecode,
 					(audit) => {
 						this.audit = audit;
+						this.loadAudit(false);
 					},
 					(error) => {
 						console.error(error);
@@ -333,13 +335,17 @@ import IconClose from '../../components/icons/IconClose'
 			},
 
 			loadAudit(refresh) {
-				this.getReferences();
-				this.getLogLevels();
-				if(refresh) this.refreshPages();
-				this.timer = setInterval(this.refreshPages, 3000);
+				if(refresh) {
+					this.getLogLevels();
+					this.refreshPages();
+					this.getReferences();
+					this.getParameters();
+
+					this.timer = setInterval(this.refreshPages, 3000);
+				}
+
 				this.loadPages(this.pageCurrentPage, this.auditPagePageSize, this.search);
 				this.loadAuditLogs(this.auditLogCurrentPage, this.auditLogPageSize, this.firstToLast, this.levelsToDisplay);
-				this.getParameters();
 			},
 
             async loadPages(page, size, name){
