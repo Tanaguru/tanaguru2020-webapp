@@ -185,4 +185,30 @@ export default class UserService extends Service{
               error(err);
           });
     }
+
+    generateToken(user_id, expiration, then, error){
+        return this.axios({
+            url: this.controllerName + '/token/' + user_id + '/' + expiration,
+            method: 'get',
+        })
+        .then(resp => {
+            then(resp.data)
+        })
+        .catch(err => {
+            error(err);
+        });
+    }
+
+    getTokenExpiration(user_id, then, error){
+        return this.axios({
+            url: this.controllerName + '/token-expiration/' + user_id,
+            method: 'get',
+        })
+        .then(resp => {
+            then(resp.data)
+        })
+        .catch(err => {
+            error(err);
+        });
+    }
 }

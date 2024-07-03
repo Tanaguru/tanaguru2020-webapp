@@ -1,7 +1,7 @@
 <template>
 	<main id="page" role="main">
 		<div id="frame-container">
-			<iframe ref="iframe" :title="moduleData.name" :src="moduleData.url"></iframe>
+			<iframe v-if="moduleData" ref="iframe" :title="moduleData.name" :src="moduleData.url"></iframe>
 		</div>
 	</main>
 </template>
@@ -11,15 +11,6 @@ import router from "@/router/index";
 
 export default {
 	name: "ExternalModule",
-	data() {
-		return {
-			moduleData: null
-		}
-	},
-	created() {
-		let moduleName = this.$route.params.name;
-		this.moduleData = this.$store.getters.getModuleByName(moduleName)
-	},
 	mounted() {
 		window.addEventListener('message', this.onMessage, false)
 		this.onLocaleChangeUpdateIframeLocale();
@@ -64,6 +55,12 @@ export default {
 		setIframeLocale(locale){
 			locale = locale ? locale : this.$i18n.locale;
 			this.$refs.iframe.contentWindow.postMessage({'name': 'init-locale','locale': locale}, '*')
+		}
+	},
+	computed: {
+		moduleData() {
+			let moduleName = this.$route.params.name;
+			return this.$store.getters.getModuleByName(moduleName)
 		}
 	}
 }

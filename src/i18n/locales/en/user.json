@@ -8,5 +8,12 @@
 	"myProfile": "My profile",
 	"userToken": "User token",
 	"myToken": "My User token",
-	"tokenDesc": "This token allows you to authenticate yourself on the API."
+	"tokenDesc": "This token allows you to authenticate yourself on the API.",
+	"tokenGenerate": "Generate token",
+	"tokenRenew": "Renew token",
+	"tokenExpiration": "expires on",
+	"tokenExpirationLabel": "token expiration (required field, format: mm/dd/yyyy)",
+	"tokenExpirationErrorFormat": "Please enter a date in month/day/year format. For example: 31/12/2020.",
+	"tokenExpirationErrorPeriod": "The date entered has already passed. Please enter a future date.",
+	"tokenExpirationError": "Something went wrong, please try again. If the problem persists, please contact an administrator."
 }
