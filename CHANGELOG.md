@@ -61,3 +61,7 @@ Improvements :
 - users can generate a user token
 - define the default reference in administration
 - users can subscribe/unsubscribe to project emails
+
+## 2.2.0
+- generate user token with free expiration date
+- many UX fixes (audit logs, user token, modules)
