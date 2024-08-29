@@ -254,7 +254,7 @@
 					</p>
 
 					<fieldset>
-						<legend>Générer un nouveau token</legend>
+						<legend>{{ $t("user.tokenExpirationLegend") }}</legend>
 
 						<div class="form-row form-token">
 							<div class="form-column">
@@ -266,7 +266,7 @@
 									<input
 										v-bind:class="{ 'has-error': tokenValidity.error}"
 										class="input"
-										type="text"
+										type="date"
 										name="token-validity"
 										id="token-validity"
 										v-model=" tokenValidity.computedExpiration"
@@ -596,17 +596,7 @@ export default {
 			const now = Date.now();
 
 			try {
-				const targetDate = this.tokenValidity.computedExpiration.split(
-					"/"
-				);
-				const year = targetDate[2];
-				const month =
-					"fr" === this.$i18n.locale ? targetDate[1] : targetDate[0];
-				const day =
-					"fr" === this.$i18n.locale ? targetDate[0] : targetDate[1];
-				const expiration = new Date(
-					month + "/" + day + "/" + year + " 02:00:00"
-				);
+				const expiration = new Date(this.tokenValidity.computedExpiration);
 
 				if (isNaN(expiration)) {
 					this.tokenValidity.error = this.$i18n.t(
@@ -672,7 +662,6 @@ export default {
 		},
 		copyToken() {
 			let elementToken = document.getElementById("user_token");
-			elementToken.select();
 
 			try {
 				navigator.clipboard.writeText(elementToken.value);
@@ -683,18 +672,12 @@ export default {
 					"resultAudit.copyLink.sucessHelp"
 				);
 
-				setTimeout(() => {
-					this.tokenTooltipDisplayed = !this.tokenTooltipDisplayed;
-					this.userToken = "";
-				}, 400);
 			} catch (err) {
 				this.copyButtonText = this.$i18n.t("resultAudit.copyLink.fail");
 				this.screenReaderInfo = this.$i18n.t(
 					"resultAudit.copyLink.failHelp"
 				);
 			}
-
-			elementToken.closest("#user-token-container").focus();
 		},
 		loadContracts(page, size) {
 			this.contractService.findByUserId(
