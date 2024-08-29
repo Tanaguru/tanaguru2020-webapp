@@ -248,7 +248,7 @@
 				<div id="user-token-container" class="form-block" tabindex="-1">
 					<p aria-live="polite">
 						<span v-if="tokenValidity.expiration" class="user-token-expiration">
-							<span>token: ******</span>
+							<span>Token: ******</span>
 							<span>{{ $t("user.tokenExpiration") + " " + tokenValidity.expiration }}</span>
 						</span>
 					</p>
@@ -592,6 +592,7 @@ export default {
 		},
 		generateToken() {
 			this.userToken = null;
+			this.tokenTooltipDisplayed = false;
 			const now = Date.now();
 
 			try {
