@@ -249,7 +249,17 @@
 					<p aria-live="polite">
 						<span v-if="tokenValidity.expiration" class="user-token-expiration">
 							<span>Token: ******</span>
+
 							<span>{{ $t("user.tokenExpiration") + " " + tokenValidity.expiration }}</span>
+
+							<button
+								class="btn btn--icon btn--nude btn-delete"
+								@click="deleteToken">
+								<icon-base-decorative>
+									<icon-delete/>
+								</icon-base-decorative>
+								<span>{{ $t('action.delete') }}</span>
+							</button>
 						</span>
 					</p>
 
@@ -368,6 +378,7 @@
 import IconBaseDecorative from "../../components//icons/IconBaseDecorative";
 import IconArrowBlue from "../../components//icons/IconArrowBlue";
 import IconPlus from "../../components/icons/IconPlus";
+import IconDelete from '@/components/icons/IconDelete'
 import Breadcrumbs from "../../components/Breadcrumbs";
 import ProfileContractTable from "./ProfileContractTable";
 import BackToTop from "../../components/BackToTop";
@@ -381,6 +392,7 @@ export default {
 		IconBaseDecorative,
 		IconArrowBlue,
 		IconPlus,
+		IconDelete,
 		ProfileContractTable,
 		Breadcrumbs,
 		BackToTop,
@@ -614,8 +626,7 @@ export default {
 							this.tokenValidity.error = null;
 							this.userToken = data;
 							this.getTokenExpiration();
-							this.tokenTooltipDisplayed = !this
-								.tokenTooltipDisplayed;
+							this.tokenTooltipDisplayed = true;
 							this.screenReaderInfo = "";
 							this.copyButtonText = this.$i18n.t("action.copy");
 
@@ -676,6 +687,20 @@ export default {
 				this.copyButtonText = this.$i18n.t("resultAudit.copyLink.fail");
 				this.screenReaderInfo = this.$i18n.t(
 					"resultAudit.copyLink.failHelp"
+				);
+			}
+		},
+		deleteToken() {
+			if(this.tokenValidity.expiration) {
+				this.userService.deleteToken(
+					this.user.id,
+					data => {
+						this.tokenValidity.expiration = null;
+						this.tokenValidity.error = null;
+						this.userToken = null;
+						this.tokenTooltipDisplayed = false;
+					},
+					error => console.error(error)
 				);
 			}
 		},
@@ -770,7 +795,9 @@ export default {
 	min-height: 50px;
 }
 
-.user-token-expiration span:first-child() {
-	margin-right: 1rem;
+.user-token-expiration {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 1rem;
 }
 </style>

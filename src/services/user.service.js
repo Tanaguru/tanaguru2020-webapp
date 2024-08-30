@@ -211,4 +211,17 @@ export default class UserService extends Service{
             error(err);
         });
     }
+
+    deleteToken(user_id, then, error){
+        return this.axios({
+            url: this.controllerName + '/token/' + user_id,
+            method: 'delete',
+        })
+        .then(resp => {
+            then()
+        })
+        .catch(err => {
+            error(err);
+        });
+    }
 }
