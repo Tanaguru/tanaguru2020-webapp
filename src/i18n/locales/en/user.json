@@ -12,8 +12,9 @@
 	"tokenGenerate": "Generate token",
 	"tokenRenew": "Renew token",
 	"tokenExpiration": "expires on",
-	"tokenExpirationLabel": "token expiration (required field, format: mm/dd/yyyy)",
-	"tokenExpirationErrorFormat": "Please enter a date in month/day/year format. For example: 31/12/2020.",
+	"tokenExpirationLegend": "Generate new token",
+	"tokenExpirationLabel": "Token expiration (required field)",
+	"tokenExpirationErrorFormat": "Please enter a valid date in month/day/year format. For example: 12/31/2020.",
 	"tokenExpirationErrorPeriod": "The date entered has already passed. Please enter a future date.",
 	"tokenExpirationError": "Something went wrong, please try again. If the problem persists, please contact an administrator."
 }

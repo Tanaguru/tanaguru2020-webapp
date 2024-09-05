@@ -248,13 +248,23 @@
 				<div id="user-token-container" class="form-block" tabindex="-1">
 					<p aria-live="polite">
 						<span v-if="tokenValidity.expiration" class="user-token-expiration">
-							<span>token: ******</span>
+							<span>Token: ******</span>
+
 							<span>{{ $t("user.tokenExpiration") + " " + tokenValidity.expiration }}</span>
+
+							<button
+								class="btn btn--icon btn--nude btn-delete"
+								@click="deleteToken">
+								<icon-base-decorative>
+									<icon-delete/>
+								</icon-base-decorative>
+								<span>{{ $t('action.delete') }}</span>
+							</button>
 						</span>
 					</p>
 
 					<fieldset>
-						<legend>Générer un nouveau token</legend>
+						<legend>{{ $t("user.tokenExpirationLegend") }}</legend>
 
 						<div class="form-row form-token">
 							<div class="form-column">
@@ -266,7 +276,7 @@
 									<input
 										v-bind:class="{ 'has-error': tokenValidity.error}"
 										class="input"
-										type="text"
+										type="date"
 										name="token-validity"
 										id="token-validity"
 										v-model=" tokenValidity.computedExpiration"
@@ -368,6 +378,7 @@
 import IconBaseDecorative from "../../components//icons/IconBaseDecorative";
 import IconArrowBlue from "../../components//icons/IconArrowBlue";
 import IconPlus from "../../components/icons/IconPlus";
+import IconDelete from '@/components/icons/IconDelete'
 import Breadcrumbs from "../../components/Breadcrumbs";
 import ProfileContractTable from "./ProfileContractTable";
 import BackToTop from "../../components/BackToTop";
@@ -381,6 +392,7 @@ export default {
 		IconBaseDecorative,
 		IconArrowBlue,
 		IconPlus,
+		IconDelete,
 		ProfileContractTable,
 		Breadcrumbs,
 		BackToTop,
@@ -592,20 +604,11 @@ export default {
 		},
 		generateToken() {
 			this.userToken = null;
+			this.tokenTooltipDisplayed = false;
 			const now = Date.now();
 
 			try {
-				const targetDate = this.tokenValidity.computedExpiration.split(
-					"/"
-				);
-				const year = targetDate[2];
-				const month =
-					"fr" === this.$i18n.locale ? targetDate[1] : targetDate[0];
-				const day =
-					"fr" === this.$i18n.locale ? targetDate[0] : targetDate[1];
-				const expiration = new Date(
-					month + "/" + day + "/" + year + " 02:00:00"
-				);
+				const expiration = new Date(this.tokenValidity.computedExpiration);
 
 				if (isNaN(expiration)) {
 					this.tokenValidity.error = this.$i18n.t(
@@ -623,8 +626,7 @@ export default {
 							this.tokenValidity.error = null;
 							this.userToken = data;
 							this.getTokenExpiration();
-							this.tokenTooltipDisplayed = !this
-								.tokenTooltipDisplayed;
+							this.tokenTooltipDisplayed = true;
 							this.screenReaderInfo = "";
 							this.copyButtonText = this.$i18n.t("action.copy");
 
@@ -671,7 +673,6 @@ export default {
 		},
 		copyToken() {
 			let elementToken = document.getElementById("user_token");
-			elementToken.select();
 
 			try {
 				navigator.clipboard.writeText(elementToken.value);
@@ -682,18 +683,26 @@ export default {
 					"resultAudit.copyLink.sucessHelp"
 				);
 
-				setTimeout(() => {
-					this.tokenTooltipDisplayed = !this.tokenTooltipDisplayed;
-					this.userToken = "";
-				}, 400);
 			} catch (err) {
 				this.copyButtonText = this.$i18n.t("resultAudit.copyLink.fail");
 				this.screenReaderInfo = this.$i18n.t(
 					"resultAudit.copyLink.failHelp"
 				);
 			}
-
-			elementToken.closest("#user-token-container").focus();
+		},
+		deleteToken() {
+			if(this.tokenValidity.expiration) {
+				this.userService.deleteToken(
+					this.user.id,
+					data => {
+						this.tokenValidity.expiration = null;
+						this.tokenValidity.error = null;
+						this.userToken = null;
+						this.tokenTooltipDisplayed = false;
+					},
+					error => console.error(error)
+				);
+			}
 		},
 		loadContracts(page, size) {
 			this.contractService.findByUserId(
@@ -786,7 +795,9 @@ export default {
 	min-height: 50px;
 }
 
-.user-token-expiration span:first-child() {
-	margin-right: 1rem;
+.user-token-expiration {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 1rem;
 }
 </style>
