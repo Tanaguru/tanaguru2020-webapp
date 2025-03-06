@@ -28,12 +28,5 @@
     "to": "to",
     "keyFigures": "Key figures",
     "legendTab": "Table of key figures",
-    "legendTabPeriod": "Table of the number of resources audited per period",
-    "bugDescription": "Following a bug in the API, audits linked to deleted projects (prior to version 2.0.1) are still stored in the database.",
-    "bugWarningVersion": "This database cleanup feature will only be available in the current version of Tanaguru Engine (2.0.1).",
-    "bugWarningDuration": "Depending on the number of audits to be deleted, database cleanup may take some time. However, cleaning is performed asynchronously in the background.",
-    "auditsIncorrectlyDeleted": "Number of audits incorrectly deleted",
-    "dbClean": "clean database",
-    "purging": "Database cleanup is underway...",
-    "purged": "The database cleanup is complete."
+    "legendTabPeriod": "Table of the number of resources audited per period"
 }
