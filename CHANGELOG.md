@@ -62,9 +62,15 @@ Improvements :
 - define the default reference in administration
 - users can subscribe/unsubscribe to project emails
 
+## 2.1.0
+- Add temporary purge feature
+
 ## 2.2.0
 - generate user token with free expiration date
 - many UX fixes (audit logs, user token, modules)
 
 ## 2.2.1
 - improves user token UX
+
+## 2.3.0
+- Remove temporary purge feature (2.1.0)
